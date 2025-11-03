@@ -209,7 +209,7 @@ export default function SobrePage() {
                 <h3 className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-2">
                   Felipe Caltabiano Távora de Castro
                 </h3>
-                <p className="text-accent font-semibold mb-4">Co-Founder & CEO</p>
+                <p className="text-accent font-semibold mb-4">Co-Founder</p>
                 <p className="text-muted-foreground">
                   Visão estratégica e liderança em infraestrutura de pagamentos B2B
                 </p>
