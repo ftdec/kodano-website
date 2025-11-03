@@ -1,0 +1,76 @@
+"use client";
+
+import { Suspense, useState, useEffect } from "react";
+import { Canvas } from "@react-three/fiber";
+import { PaymentPipeline } from "./PaymentPipeline";
+
+// Device detection hook
+function useDeviceCapabilities() {
+  const [capabilities, setCapabilities] = useState({
+    isMobile: false,
+    isLowEnd: false,
+    pixelRatio: 1,
+  });
+
+  useEffect(() => {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+
+    // Detect low-end devices
+    const isLowEnd = isMobile && (
+      navigator.hardwareConcurrency ? navigator.hardwareConcurrency < 4 : true
+    );
+
+    // Adaptive pixel ratio
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+
+    setCapabilities({
+      isMobile,
+      isLowEnd,
+      pixelRatio,
+    });
+  }, []);
+
+  return capabilities;
+}
+
+// PRD 5.2: Main canvas component com Pipeline de Pagamentos
+export function HeroCanvas() {
+  const { isMobile, isLowEnd, pixelRatio } = useDeviceCapabilities();
+
+  // PRD 5.2: 60-90 objetos simultâneos máx
+  const maxPackets = isLowEnd ? 6 : isMobile ? 8 : 12;
+
+  return (
+    <div className="absolute inset-0 z-0">
+      <Canvas
+        camera={{ position: [0, 0, 12], fov: 50 }}
+        dpr={pixelRatio}
+        gl={{
+          alpha: true,
+          antialias: !isMobile,
+          powerPreference: "high-performance",
+        }}
+        performance={{ min: 0.5 }}
+        frameloop="always"
+      >
+        <Suspense fallback={null}>
+          {/* PRD 5.2: Luz ambiente 0.5; directional 0.5; sem bloom */}
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[10, 10, 5]} intensity={0.5} color="#FFFFFF" />
+
+          {/* PRD 5.1: Animação do Pipeline de Pagamentos */}
+          <PaymentPipeline maxPackets={maxPackets} />
+        </Suspense>
+      </Canvas>
+    </div>
+  );
+}
+
+// Fallback component for non-WebGL browsers
+export function HeroCanvasFallback() {
+  return (
+    <div className="absolute inset-0 z-0 aurora-gradient opacity-30" />
+  );
+}

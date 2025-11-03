@@ -1,0 +1,309 @@
+/* Kodano Aurora Design System v4.0 - CSS Layer */
+
+/* Aurora Gradients */
+@keyframes aurora-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes aurora-glow {
+  0%, 100% {
+    opacity: 0.5;
+    filter: blur(40px);
+  }
+  50% {
+    opacity: 0.8;
+    filter: blur(60px);
+  }
+}
+
+@keyframes aurora-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+/* Aurora gradient backgrounds */
+.aurora-gradient {
+  background: linear-gradient(135deg, #003E4E 0%, #00A6B4 50%, #B6E0F9 100%);
+  background-size: 200% 200%;
+  animation: aurora-flow 8s ease infinite;
+}
+
+.aurora-gradient-radial {
+  background: radial-gradient(circle at 50% 50%, #B6E0F9 0%, #00A6B4 40%, #003E4E 100%);
+  background-size: 200% 200%;
+  animation: aurora-flow 12s ease infinite;
+}
+
+.aurora-gradient-conic {
+  background: conic-gradient(from 180deg at 50% 50%, #003E4E 0deg, #00A6B4 120deg, #B6E0F9 240deg, #003E4E 360deg);
+  animation: spin 20s linear infinite;
+}
+
+/* Aurora text gradient */
+.aurora-text {
+  background: linear-gradient(135deg, #00A6B4 0%, #B6E0F9 50%, #00A6B4 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: aurora-flow 6s ease infinite;
+}
+
+/* Aurora glow effects */
+.aurora-glow {
+  position: relative;
+}
+
+.aurora-glow::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle, rgba(182, 224, 249, 0.3) 0%, transparent 70%);
+  animation: aurora-glow 4s ease-in-out infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.aurora-glow-strong::before {
+  background: radial-gradient(circle, rgba(0, 166, 180, 0.5) 0%, transparent 70%);
+  animation: aurora-glow 3s ease-in-out infinite;
+}
+
+/* Aurora border animation */
+@keyframes aurora-border {
+  0% {
+    border-color: #003E4E;
+  }
+  33% {
+    border-color: #00A6B4;
+  }
+  66% {
+    border-color: #B6E0F9;
+  }
+  100% {
+    border-color: #003E4E;
+  }
+}
+
+.aurora-border {
+  border: 2px solid transparent;
+  background: linear-gradient(#0A0A0F, #0A0A0F) padding-box,
+              linear-gradient(135deg, #003E4E, #00A6B4, #B6E0F9) border-box;
+  animation: aurora-flow 8s ease infinite;
+}
+
+/* Aurora particles */
+@keyframes float-up {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(50px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.aurora-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #B6E0F9 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float-up 15s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Glass morphism Aurora */
+.aurora-glass {
+  background: rgba(10, 10, 15, 0.6);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(182, 224, 249, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 166, 180, 0.15);
+}
+
+.aurora-glass-strong {
+  background: rgba(0, 62, 78, 0.4);
+  backdrop-filter: blur(20px) saturate(200%);
+  border: 1px solid rgba(0, 166, 180, 0.3);
+  box-shadow: 0 12px 48px rgba(0, 166, 180, 0.25);
+}
+
+/* Aurora depth layers */
+.aurora-depth-1 {
+  transform: translateZ(10px);
+}
+
+.aurora-depth-2 {
+  transform: translateZ(50px);
+}
+
+.aurora-depth-3 {
+  transform: translateZ(100px);
+}
+
+/* Aurora scroll effects */
+.aurora-parallax-slow {
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.aurora-parallax-medium {
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.aurora-parallax-fast {
+  transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Aurora button styles */
+.aurora-button {
+  position: relative;
+  background: linear-gradient(135deg, #00A6B4 0%, #003E4E 100%);
+  border: none;
+  color: white;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.aurora-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(182, 224, 249, 0.4) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  border-radius: 50%;
+}
+
+.aurora-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.aurora-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 166, 180, 0.4);
+}
+
+/* Aurora card styles */
+.aurora-card {
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid rgba(0, 166, 180, 0.2);
+  border-radius: 1rem;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.aurora-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(182, 224, 249, 0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.aurora-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 166, 180, 0.5);
+  box-shadow: 0 12px 32px rgba(0, 166, 180, 0.25);
+}
+
+.aurora-card:hover::after {
+  opacity: 1;
+}
+
+/* Cursor trail effect */
+.aurora-cursor-trail {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(182, 224, 249, 0.6) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: screen;
+  animation: aurora-pulse 2s ease-in-out infinite;
+}
+
+/* Magnetic button effect */
+.aurora-magnetic {
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+/* Utility classes */
+.aurora-perspective {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.aurora-blur-bg {
+  backdrop-filter: blur(40px);
+}
+
+.aurora-blur-md {
+  backdrop-filter: blur(20px);
+}
+
+.aurora-blur-sm {
+  backdrop-filter: blur(10px);
+}
+
+/* Responsive Aurora effects */
+@media (prefers-reduced-motion: reduce) {
+  .aurora-gradient,
+  .aurora-text,
+  .aurora-glow::before,
+  .aurora-particle,
+  .aurora-button::before {
+    animation: none !important;
+  }
+
+  .aurora-card,
+  .aurora-button {
+    transition: none !important;
+  }
+}
+
+/* Dark mode specific */
+@media (prefers-color-scheme: dark) {
+  .aurora-glass {
+    background: rgba(10, 10, 15, 0.7);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .aurora-glass {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(0, 62, 78, 0.2);
+  }
+}

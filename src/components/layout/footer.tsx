@@ -1,0 +1,166 @@
+import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
+import { BRAND, SOCIAL_LINKS } from "@/lib/constants/brand";
+import { FOOTER_LINKS } from "@/lib/constants/navigation";
+import { Linkedin, Twitter, Github, Instagram, Shield } from "lucide-react";
+
+export function Footer() {
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <footer className="border-t border-border bg-background">
+      <div className="mx-auto max-w-screen-xl px-4 md:px-6 py-12 md:py-16">
+        {/* Main Footer Content - 4 colunas conforme PRD 4.2 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          {/* Brand Column */}
+          <div className="col-span-2 md:col-span-1">
+            <Link
+              href="/"
+              className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-primary"
+            >
+              {BRAND.name}
+            </Link>
+            <p className="mt-4 text-sm text-muted-foreground max-w-xs">
+              {BRAND.description}
+            </p>
+            <div className="flex items-center space-x-4 mt-6">
+              <a
+                href={SOCIAL_LINKS.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="h-5 w-5" />
+              </a>
+              <a
+                href={SOCIAL_LINKS.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+                aria-label="Twitter"
+              >
+                <Twitter className="h-5 w-5" />
+              </a>
+              <a
+                href={SOCIAL_LINKS.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+                aria-label="GitHub"
+              >
+                <Github className="h-5 w-5" />
+              </a>
+              <a
+                href={SOCIAL_LINKS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Produtos */}
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Produtos</h3>
+            <ul className="space-y-3">
+              {FOOTER_LINKS.produtos.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Soluções */}
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Soluções</h3>
+            <ul className="space-y-3">
+              {FOOTER_LINKS.solucoes.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Recursos */}
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Recursos</h3>
+            <ul className="space-y-3">
+              {FOOTER_LINKS.recursos.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Empresa */}
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Empresa</h3>
+            <ul className="space-y-3">
+              {FOOTER_LINKS.empresa.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <Separator className="my-8" />
+
+        {/* Bottom Footer */}
+        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <p className="text-sm text-muted-foreground">
+            © {currentYear} {BRAND.name}. Todos os direitos reservados.
+          </p>
+          <div className="flex items-center space-x-6">
+            <Link
+              href="/privacidade"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Privacidade
+            </Link>
+            <Link
+              href="/termos"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Termos de Uso
+            </Link>
+            <Link
+              href="/cookies"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Cookies
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
