@@ -139,7 +139,7 @@ kodano-website/
 
 Desenvolvido pelos fundadores da Kodano:
 - **Felipe Caltabiano Távora de Castro** - Co-Founder
-- **Marcelo Kodaira Almeida** - Co-Founder
+- **Marcelo de Almeida** - Co-Founder
 
 ---
 

@@ -222,7 +222,7 @@ export default function SobrePage() {
                   <Users className="h-12 w-12 text-accent" />
                 </div>
                 <h3 className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-2">
-                  Marcelo Kodaira Almeida
+                  Marcelo de Almeida
                 </h3>
                 <p className="text-accent font-semibold mb-4">Co-Founder</p>
                 <p className="text-muted-foreground">
