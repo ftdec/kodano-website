@@ -188,6 +188,52 @@ export default function SobrePage() {
         </div>
       </section>
 
+      {/* Founders Section */}
+      <section className="py-20 md:py-32 bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
+              Fundadores
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Conheça os fundadores por trás da Kodano
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <Card className="border-border text-center">
+              <CardContent className="pt-8">
+                <div className="inline-flex w-24 h-24 rounded-full bg-accent/10 items-center justify-center mb-4">
+                  <Users className="h-12 w-12 text-accent" />
+                </div>
+                <h3 className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-2">
+                  Felipe Caltabiano Távora de Castro
+                </h3>
+                <p className="text-accent font-semibold mb-4">Co-Founder & CEO</p>
+                <p className="text-muted-foreground">
+                  Visão estratégica e liderança em infraestrutura de pagamentos B2B
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border text-center">
+              <CardContent className="pt-8">
+                <div className="inline-flex w-24 h-24 rounded-full bg-accent/10 items-center justify-center mb-4">
+                  <Users className="h-12 w-12 text-accent" />
+                </div>
+                <h3 className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-2">
+                  Marcelo Kodaira Almeida
+                </h3>
+                <p className="text-accent font-semibold mb-4">Co-Founder</p>
+                <p className="text-muted-foreground">
+                  Expertise em tecnologia e desenvolvimento de soluções escaláveis
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Team Section */}
       <section className="py-20 md:py-32 bg-accent/5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">

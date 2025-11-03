@@ -137,7 +137,9 @@ kodano-website/
 
 ## 👥 Time
 
-Desenvolvido por **Felipe Caltabiano Távora de Castro** - CEO, Kodano
+Desenvolvido pelos fundadores da Kodano:
+- **Felipe Caltabiano Távora de Castro** - Co-Founder & CEO
+- **Marcelo Kodaira Almeida** - Co-Founder
 
 ---
 
