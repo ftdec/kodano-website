@@ -12,42 +12,31 @@ import {
 import { motion } from "framer-motion";
 import { RevealOnScroll } from "@/components/ui/parallax";
 
+// PRD v2.0 Section 5.2: 4 Features principais
 const features = [
   {
-    title: "Segurança de nível bancário",
+    title: "Processamento inteligente",
     description:
-      "Compliance total com PCI-DSS, certificações internacionais e proteção avançada contra fraudes.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Infraestrutura escalável",
-    description:
-      "Processe milhões de transações com 99.99% de uptime e latência ultra-baixa.",
+      "Roteamento automático entre adquirentes para reduzir custos e aumentar aprovação.",
     icon: TrendingUp,
   },
   {
-    title: "Integração em minutos",
+    title: "Integração total",
     description:
-      "SDKs completos, documentação clara e APIs RESTful para começar rapidamente.",
+      "Cartão, Pix e boleto em uma única API modular.",
     icon: Zap,
   },
   {
-    title: "Custos transparentes",
+    title: "White-label completo",
     description:
-      "Sem taxas ocultas, modelo white-label disponível e preços competitivos.",
-    icon: DollarSign,
-  },
-  {
-    title: "Developer Experience",
-    description:
-      "Webhooks, sandbox completo, logs em tempo real e suporte técnico dedicado.",
+      "Sua marca, suas regras — nós operamos nos bastidores.",
     icon: Code,
   },
   {
-    title: "Suporte 24/7",
+    title: "Segurança certificada",
     description:
-      "Time especializado disponível sempre que você precisar, em português.",
-    icon: Clock,
+      "PCI DSS Nível 1 + tokenização e monitoramento antifraude.",
+    icon: ShieldCheck,
   },
 ];
 
@@ -72,8 +61,8 @@ export function FeaturesSection() {
           </div>
         </RevealOnScroll>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Features Grid - PRD: 4 cards em grid 2x2 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {features.map((feature, index) => (
             <motion.div
               key={index}

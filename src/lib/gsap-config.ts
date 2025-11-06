@@ -125,7 +125,7 @@ export const auroraAnimations = {
       y: () => window.innerHeight * speed,
       ease: "none",
       scrollTrigger: {
-        trigger: element,
+        trigger: element as gsap.DOMTarget,
         start: "top bottom",
         end: "bottom top",
         scrub: true,
@@ -136,7 +136,7 @@ export const auroraAnimations = {
   // Pin section
   pinSection: (section: gsap.TweenTarget, pinSpacing = true) => {
     return ScrollTrigger.create({
-      trigger: section,
+      trigger: section as gsap.DOMTarget,
       start: "top top",
       end: "+=100%",
       pin: true,
@@ -150,6 +150,12 @@ export const auroraAnimations = {
     element: gsap.TweenTarget,
     options?: gsap.TweenVars & { scrollTrigger?: ScrollTrigger.Vars }
   ) => {
+    const scrollTriggerConfig = Object.assign(
+      {},
+      auroraGSAPConfig.scrollTrigger,
+      options?.scrollTrigger || {}
+    );
+
     return gsap.fromTo(
       element,
       {
@@ -161,11 +167,7 @@ export const auroraAnimations = {
         y: 0,
         duration: auroraGSAPConfig.duration.medium,
         ease: auroraGSAPConfig.ease,
-        scrollTrigger: {
-          trigger: element,
-          ...auroraGSAPConfig.scrollTrigger,
-          ...options?.scrollTrigger,
-        },
+        scrollTrigger: Object.assign({ trigger: element }, scrollTriggerConfig),
         ...options,
       }
     );
@@ -224,7 +226,7 @@ export const auroraAnimations = {
         }
       },
       scrollTrigger: {
-        trigger: element,
+        trigger: element as gsap.DOMTarget,
         start: "top 80%",
       },
     });

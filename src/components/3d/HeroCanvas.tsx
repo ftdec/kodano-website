@@ -56,11 +56,11 @@ export function HeroCanvas() {
         frameloop="always"
       >
         <Suspense fallback={null}>
-          {/* PRD 5.2: Luz ambiente 0.5; directional 0.5; sem bloom */}
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[10, 10, 5]} intensity={0.5} color="#FFFFFF" />
+          {/* PRD v2.0: Luz ambiente 0.6; directional 0.4 */}
+          <ambientLight intensity={0.6} />
+          <directionalLight position={[10, 10, 5]} intensity={0.4} color="#FFFFFF" />
 
-          {/* PRD 5.1: Animação do Pipeline de Pagamentos */}
+          {/* PRD v2.0: Animação do Pipeline de Pagamentos */}
           <PaymentPipeline maxPackets={maxPackets} />
         </Suspense>
       </Canvas>

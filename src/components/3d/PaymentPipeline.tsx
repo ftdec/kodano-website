@@ -11,12 +11,12 @@ type PaymentStatus = "pending" | "approved" | "review" | "denied";
 
 // PRD 5.1: 5 etapas do pipeline de pagamentos
 const PIPELINE_STAGES = [
-  { id: "pedido", label: "Pedido", position: [-6, 0, 0] },
-  { id: "tokenizacao", label: "Tokenização", position: [-3, 0, 0] },
-  { id: "antifraude", label: "Antifraude", position: [0, 0, 0] },
-  { id: "autorizacao", label: "Autorização", position: [3, 0, 0] },
-  { id: "liquidacao", label: "Liquidação", position: [6, 0, 0] },
-] as const;
+  { id: "pedido", label: "Pedido", position: [-6, 0, 0] as [number, number, number] },
+  { id: "tokenizacao", label: "Tokenização", position: [-3, 0, 0] as [number, number, number] },
+  { id: "antifraude", label: "Antifraude", position: [0, 0, 0] as [number, number, number] },
+  { id: "autorizacao", label: "Autorização", position: [3, 0, 0] as [number, number, number] },
+  { id: "liquidacao", label: "Liquidação", position: [6, 0, 0] as [number, number, number] },
+];
 
 // Ícones simples usando geometrias
 function PaymentIcon({
@@ -142,14 +142,12 @@ function ConnectionLine({
   }, [points]);
 
   return (
-    <line geometry={lineGeometry}>
-      <lineBasicMaterial
-        color="#00A6B4"
-        transparent
-        opacity={0.2}
-        linewidth={2}
-      />
-    </line>
+    <primitive object={new THREE.Line(lineGeometry, new THREE.LineBasicMaterial({
+      color: "#00A6B4",
+      transparent: true,
+      opacity: 0.2,
+      linewidth: 2
+    }))} />
   );
 }
 

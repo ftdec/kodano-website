@@ -75,6 +75,7 @@ export function HeroSection() {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
+  // PRD v2.0: Lazy-load Canvas após 30% do Hero no viewport
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -83,7 +84,7 @@ export function HeroSection() {
           observer.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.3 } // PRD: 30% no viewport
     );
 
     if (heroRef.current) {
@@ -130,27 +131,27 @@ export function HeroSection() {
             </span>
           </motion.div>
 
-          {/* PRD 15: Hero H1 - Above the fold: margens mínimas */}
+          {/* PRD v2.0: Hero H1 - "Infraestrutura invisível que move o comércio moderno" */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-5xl sm:text-6xl md:text-6xl font-extrabold font-[family-name:var(--font-poppins)] tracking-tight text-slate-900 dark:text-white mb-3 leading-tight"
           >
-            Infraestrutura de pagamentos B2B{" "}
+            Infraestrutura invisível que move o{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003E4E] via-[#00A6B4] to-[#003E4E] animate-gradient">
-              que move seu negócio
+              comércio moderno
             </span>
           </motion.h1>
 
-          {/* PRD 15: Subtitle - Above the fold: margens mínimas */}
+          {/* PRD v2.0: Subtitle - "APIs rápidas, segurança bancária e performance em escala" */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mx-auto mt-2 max-w-2xl text-lg text-slate-600 dark:text-slate-300 mb-4"
           >
-            APIs rápidas, compliance bancário e performance escalável.
+            APIs rápidas, segurança bancária e performance em escala — o gateway B2B criado para quem quer crescer com autonomia.
           </motion.p>
 
           {/* CTA Buttons - Above the fold: margens mínimas */}
@@ -162,23 +163,22 @@ export function HeroSection() {
           >
             <Button
               size="lg"
-              className="text-base px-8 group bg-[#003E4E] hover:bg-[#00A6B4] text-white transition-all duration-300"
+              className="text-base px-8 group bg-[#053B3F] hover:bg-[#00A6B4] text-white transition-all duration-300 rounded-full"
               asChild
             >
               <Link href="/contato">
-                Solicitar demonstração
+                Fale com nosso time
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="text-base px-8 group border-white/20 hover:bg-white/10 hover:border-[#00A6B4] transition-all duration-300"
+              className="text-base px-8 group border-[#053B3F] hover:bg-white/10 hover:border-[#00A6B4] transition-all duration-300 rounded-full text-[#053B3F] dark:text-white"
               asChild
             >
               <Link href="/desenvolvedores">
-                <FileText className="mr-2 h-5 w-5" />
-                Ver documentação técnica
+                Ver documentação
               </Link>
             </Button>
           </motion.div>

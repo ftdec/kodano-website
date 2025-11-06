@@ -1,24 +1,26 @@
 import { MainLayout } from "@/components/layout/main-layout";
 import { HeroSection } from "@/components/sections/hero";
 import { LogoWall } from "@/components/sections/logo-wall";
-import { ThreePillarsSection } from "@/components/sections/three-pillars";
-import { HowItWorksSection } from "@/components/sections/how-it-works";
-import { ProductsModalSection } from "@/components/sections/products-modal";
-import { ComparisonSection } from "@/components/sections/comparison";
 import { FeaturesSection } from "@/components/sections/features";
+import { IntegrationsSection } from "@/components/sections/integrations";
+import { TestimonialsSection } from "@/components/sections/testimonials";
+import { HowItWorksSection } from "@/components/sections/how-it-works";
 import { StatsSection } from "@/components/sections/stats";
 import { CTASection } from "@/components/sections/cta";
 
+/**
+ * PRD v2.0 - Kodano Home Page
+ * "Infraestrutura invisível que move o comércio moderno"
+ */
 export default function Home() {
   return (
     <MainLayout>
       <HeroSection />
       <LogoWall />
-      <ThreePillarsSection />
-      <HowItWorksSection />
-      <ProductsModalSection />
-      <ComparisonSection />
       <FeaturesSection />
+      <IntegrationsSection />
+      <TestimonialsSection />
+      <HowItWorksSection />
       <StatsSection />
       <CTASection />
     </MainLayout>

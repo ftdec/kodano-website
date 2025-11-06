@@ -12,8 +12,8 @@ interface UseScrollTriggerOptions extends ScrollTrigger.Vars {
 
 export function useScrollTrigger(
   options: UseScrollTriggerOptions
-): RefObject<HTMLElement> {
-  const ref = useRef<HTMLElement>(null);
+): RefObject<HTMLElement | null> {
+  const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -35,8 +35,8 @@ export function useScrollTrigger(
 export function useScrollAnimation(
   animation: (element: HTMLElement) => gsap.core.Animation,
   options?: Omit<ScrollTrigger.Vars, "trigger">
-): RefObject<HTMLElement> {
-  const ref = useRef<HTMLElement>(null);
+): RefObject<HTMLElement | null> {
+  const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -61,8 +61,8 @@ export function useScrollAnimation(
 // Hook for reveal animations on scroll
 export function useScrollReveal(
   options?: Partial<ScrollTrigger.Vars>
-): RefObject<HTMLElement> {
-  const ref = useRef<HTMLElement>(null);
+): RefObject<HTMLElement | null> {
+  const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!ref.current) return;
