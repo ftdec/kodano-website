@@ -9,13 +9,8 @@ import dynamic from "next/dynamic";
 import { Suspense, useState, useEffect, useRef, useMemo } from "react";
 
 // Dynamic import for 3D canvas with no SSR
-const HeroCanvas = dynamic(
-  () => import("@/components/3d/HeroCanvas").then((mod) => mod.HeroCanvas),
-  { ssr: false }
-);
-
-const HeroCanvasFallback = dynamic(
-  () => import("@/components/3d/HeroCanvas").then((mod) => mod.HeroCanvasFallback),
+const PaymentFlowNetwork = dynamic(
+  () => import("@/components/3d/PaymentFlowShader").then((mod) => mod.PaymentFlowNetwork),
   { ssr: false }
 );
 
@@ -99,16 +94,8 @@ export function HeroSection() {
       ref={heroRef}
       className="relative min-h-[calc(100vh-4rem)] flex items-start justify-center overflow-hidden bg-gradient-to-b from-white via-slate-50 to-background dark:from-[#0A0A0F] dark:via-[#003E4E]/20 dark:to-background"
     >
-      {/* PRD 5.2: 3D Canvas ou fallback estático baseado em prefers-reduced-motion */}
-      {prefersReducedMotion ? (
-        <StaticPipelineFallback />
-      ) : isVisible ? (
-        <Suspense fallback={<HeroCanvasFallback />}>
-          <HeroCanvas />
-        </Suspense>
-      ) : (
-        <HeroCanvasFallback />
-      )}
+      {/* PRD 5.2: 3D Payment Flow Network com shaders - DISABLED FOR PERFORMANCE */}
+      <StaticPipelineFallback />
 
       {/* PRD 5.2: Véu/overlay para legibilidade (from-white/70 via-white/45 to-transparent) */}
       <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/45 to-transparent dark:from-[#0A0A0F]/70 dark:via-[#0A0A0F]/55 dark:to-transparent pointer-events-none" />

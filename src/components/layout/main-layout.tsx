@@ -1,4 +1,4 @@
-import { Header } from "./header";
+import { NavbarV2 } from "./navbar-v2";
 import { Footer } from "./footer";
 
 interface MainLayoutProps {
@@ -8,8 +8,8 @@ interface MainLayoutProps {
 export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
-      <Header />
-      <main className="flex-1 pt-16 md:pt-20">{children}</main>
+      <NavbarV2 />
+      <main className="flex-1 pt-16">{children}</main>
       <Footer />
     </div>
   );

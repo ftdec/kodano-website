@@ -1,6 +1,12 @@
 "use client";
 
 import { MainLayout } from "@/components/layout/main-layout";
+import { DevelopersHero } from "@/components/sections/developers-hero";
+import { APIReference } from "@/components/sections/api-reference";
+import { CodeExamples } from "@/components/sections/code-examples";
+import { SDKSection } from "@/components/sections/sdk-section";
+import { WebhooksSection } from "@/components/sections/webhooks";
+import { SandboxSection } from "@/components/sections/sandbox";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -108,8 +114,16 @@ const sdks = [
 export default function DesenvolvedoresPage() {
   return (
     <MainLayout>
+      <DevelopersHero />
+      <APIReference />
+      <CodeExamples />
+      <SDKSection />
+      <WebhooksSection />
+      <SandboxSection />
+
+      {/* Legacy sections below - can be removed later */}
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+      <section className="relative py-20 md:py-32 bg-gradient-to-br from-primary/5 via-background to-accent/5" style={{ display: 'none' }}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <Badge className="mb-6" variant="secondary">
