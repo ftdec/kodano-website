@@ -81,13 +81,19 @@ export function InfrastructureSection() {
           className="mb-16"
         >
           <div className="relative rounded-2xl border border-border bg-card/50 backdrop-blur-sm p-8 h-[500px]">
-            <Suspense fallback={
-              <div className="flex items-center justify-center h-full">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-kodano-cyan"></div>
-              </div>
-            }>
-              <InfrastructureMap />
-            </Suspense>
+            {/* DISABLED FOR PERFORMANCE - InfrastructureMap */}
+            <div className="flex items-center justify-center h-full opacity-20 dark:opacity-10">
+              <svg width="600" height="400" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="300" cy="200" r="150" stroke="#00A6B4" strokeWidth="1" fill="none" opacity="0.3" />
+                <circle cx="200" cy="150" r="5" fill="#00A6B4" />
+                <circle cx="400" cy="150" r="5" fill="#00A6B4" />
+                <circle cx="300" cy="100" r="5" fill="#00A6B4" />
+                <circle cx="300" cy="300" r="5" fill="#00A6B4" />
+                <text x="300" y="380" textAnchor="middle" fill="#00A6B4" fontSize="14" fontWeight="600">
+                  Global Infrastructure
+                </text>
+              </svg>
+            </div>
 
             {/* Map Legend */}
             <div className="absolute bottom-4 left-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 border border-border">
@@ -164,7 +170,7 @@ export function InfrastructureSection() {
               Disaster Recovery
             </h3>
             <p className="text-sm text-muted-foreground">
-              Backup em tempo real com RTO < 5 minutos e RPO < 1 minuto.
+              Backup em tempo real com RTO menor que 5 minutos e RPO menor que 1 minuto.
             </p>
           </div>
         </motion.div>
