@@ -155,6 +155,20 @@
   animation: gradient 8s ease infinite;
 }
 
+/* Infinite scroll animation for logos */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
 /* Regras globais para evitar overflow horizontal */
 html,
 body {
