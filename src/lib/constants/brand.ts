@@ -31,7 +31,7 @@ export const KEY_FEATURES = [
   {
     title: "Infraestrutura escalável",
     description:
-      "Processe milhões de transações com 99.99% de uptime e latência ultra-baixa.",
+      "Processe milhões de transações com latência ultra-baixa.",
     icon: "trending-up",
   },
   {
@@ -54,9 +54,3 @@ export const KEY_FEATURES = [
   },
 ] as const;
 
-export const STATS = {
-  transactionsProcessed: "10M+",
-  uptime: "99.99%",
-  customers: "500+",
-  countries: "12",
-} as const;

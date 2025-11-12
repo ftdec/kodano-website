@@ -1,108 +1,108 @@
 "use client";
 
+import { Metadata } from "next";
 import { MainLayout } from "@/components/layout/main-layout";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { Check, ArrowRight, HelpCircle } from "lucide-react";
-import { VolumeCalculator } from "@/components/pricing/VolumeCalculator";
+import { Check, ArrowRight, HelpCircle, Percent, Calendar } from "lucide-react";
 import { FAQStructuredData } from "@/components/seo/structured-data";
 
-// PRD 6.4: Planos claros, calculadora por volume, FAQ
-const plans = [
+const pricingModels = [
   {
-    name: "Starter",
-    price: "Grátis",
-    description: "Para começar e testar",
+    name: "Modelo A",
+    subtitle: "Pay as you use",
+    description: "Taxa variável sobre o GMV processado via Kodano",
     features: [
-      "Até R$ 10.000/mês em transações",
-      "Todos os métodos de pagamento",
-      "API completa e SDKs",
-      "Sandbox ilimitado",
-      "Webhooks",
-      "Suporte por email",
-      "Dashboard básico",
+      "Sem mensalidade",
+      "Taxa % sobre o GMV processado",
+      "Acesso completo ao Dashboard",
+      "API unificada",
+      "Motor de orquestração",
+      "Suporte técnico",
+      "Fee via split automático",
     ],
-    cta: "Começar grátis",
     highlighted: false,
   },
   {
-    name: "Growth",
-    price: "2,9%",
-    priceDetail: "+ R$ 0,39 por transação",
-    description: "Para empresas em crescimento",
+    name: "Modelo B",
+    subtitle: "Fixo mensal + variável reduzida",
+    description: "Assinatura em reais + % menor sobre o GMV",
     features: [
-      "Volume ilimitado",
-      "Todos os recursos do Starter",
-      "Split de pagamentos (Connect)",
-      "Assinaturas (Billing)",
-      "Checkout personalizado",
-      "Proteção contra fraudes (Radar)",
+      "Assinatura mensal fixa",
+      "Taxa % reduzida sobre GMV",
+      "Acesso completo ao Dashboard",
+      "API unificada",
+      "Motor de orquestração",
       "Suporte prioritário",
-      "Relatórios avançados",
-      "SLA de 99.9%",
+      "Fee via split automático",
     ],
-    cta: "Começar agora",
     highlighted: true,
   },
   {
-    name: "Enterprise",
-    price: "Customizado",
-    description: "Para grandes volumes",
+    name: "Planos tailor-made",
+    subtitle: "Contratos B2B individualizados",
+    description: "Soluções customizadas para grandes volumes",
     features: [
-      "Todos os recursos do Growth",
+      "Contrato personalizado",
       "Taxas negociadas",
-      "White-label completo",
+      "Acesso completo ao Dashboard",
+      "API unificada",
+      "Motor de orquestração",
       "Gerente de conta dedicado",
       "SLA customizado",
-      "Infraestrutura dedicada",
-      "Integração customizada",
-      "Consultoria técnica",
-      "Treinamento do time",
     ],
-    cta: "Falar com vendas",
     highlighted: false,
   },
 ];
 
 const faqs = [
   {
-    question: "Existe taxa de setup ou mensalidade?",
+    question: "A Kodano é regulada pelo BC?",
     answer:
-      "Não! Você só paga pelas transações processadas. Sem taxas escondidas, sem mensalidades.",
+      "Não. Provedora SaaS, sem custódia/liquidação/antecipação. Fora do escopo de instituição de pagamento.",
   },
   {
-    question: "Quando recebo meu dinheiro?",
+    question: "Como vocês cobram?",
     answer:
-      "O padrão é D+2 (2 dias úteis). Para clientes Enterprise, oferecemos D+1 ou D+0.",
+      "% sobre GMV processado via Kodano; ou modelo fixo + variável reduzida. Planos tailor-made para grandes volumes.",
   },
   {
-    question: "Posso mudar de plano a qualquer momento?",
+    question: "Quem liquida?",
     answer:
-      "Sim! Você pode fazer upgrade ou downgrade a qualquer momento sem custos adicionais.",
+      "A adquirente diretamente para a empresa. A Kodano não custodia valores.",
   },
   {
-    question: "Existe contrato de fidelidade?",
+    question: "Como é o acesso ao Dashboard?",
     answer:
-      "Não. Trabalhamos sem contratos de permanência. Você pode cancelar quando quiser.",
+      "Todos os planos incluem o Dashboard completo com taxas, aprovação, conciliação e relatórios.",
   },
   {
-    question: "Como funciona o período de teste?",
+    question: "Vocês oferecem antecipação?",
     answer:
-      "Você pode testar gratuitamente em nosso ambiente sandbox por tempo ilimitado.",
+      "Não. A antecipação é da adquirente. A Kodano apenas orquestra e roteia transações.",
   },
   {
-    question: "Há taxa para chargebacks?",
+    question: "Como funciona o fee via split automático?",
     answer:
-      "Sim, R$ 15,00 por chargeback recebido, conforme padrão do mercado.",
+      "O fee da Kodano é descontado automaticamente pelas adquirentes parceiras em tempo real, sem intermediação financeira pela Kodano.",
+  },
+  {
+    question: "Há taxa de setup?",
+    answer:
+      "Não há taxa de setup. Você paga apenas conforme o modelo escolhido (pay-as-you-use ou fixo+variável).",
+  },
+  {
+    question: "Posso mudar de modelo?",
+    answer:
+      "Sim, modelos podem ser ajustados conforme seu crescimento. Fale com vendas para avaliar a melhor opção.",
   },
 ];
 
 export default function PrecosPage() {
   return (
     <MainLayout>
-      {/* PRD 8: FAQ Structured Data para SEO */}
       <FAQStructuredData questions={faqs} />
 
       {/* Hero Section */}
@@ -110,78 +110,60 @@ export default function PrecosPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
-              Preços{" "}
+              Modelos de cobrança{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-                simples e transparentes
+                simples e alinhados
               </span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Comece grátis e escale conforme cresce. Sem taxas escondidas, sem
-              surpresas.
+              Sem números na página. Dois caminhos principais ou planos tailor-made para grandes volumes.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Pricing Cards */}
+      {/* Pricing Models */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {plans.map((plan, index) => (
+            {pricingModels.map((model, index) => (
               <Card
                 key={index}
                 className={`relative ${
-                  plan.highlighted
+                  model.highlighted
                     ? "border-accent shadow-2xl scale-105 md:scale-110"
                     : "border-border"
                 }`}
               >
-                {plan.highlighted && (
+                {model.highlighted && (
                   <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">
                     Mais popular
                   </Badge>
                 )}
                 <CardHeader>
                   <h3 className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-2">
-                    {plan.name}
+                    {model.name}
                   </h3>
-                  <div className="mb-4">
-                    <div className="flex items-baseline">
-                      <span className="text-4xl font-bold text-foreground">
-                        {plan.price}
-                      </span>
-                    </div>
-                    {plan.priceDetail && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {plan.priceDetail}
-                      </p>
-                    )}
-                  </div>
-                  <p className="text-muted-foreground">{plan.description}</p>
+                  <p className="text-accent font-semibold mb-2">{model.subtitle}</p>
+                  <p className="text-muted-foreground text-sm">{model.description}</p>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-3 mb-8">
-                    {plan.features.map((feature, idx) => (
+                    {model.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start">
                         <Check className="h-5 w-5 text-accent mr-3 mt-0.5 flex-shrink-0" />
-                        <span className="text-foreground">{feature}</span>
+                        <span className="text-foreground text-sm">{feature}</span>
                       </li>
                     ))}
                   </ul>
                   <Button
                     className="w-full"
-                    variant={plan.highlighted ? "default" : "outline"}
+                    variant={model.highlighted ? "default" : "outline"}
                     size="lg"
                     asChild
                   >
-                    <Link
-                      href={
-                        plan.name === "Enterprise"
-                          ? "/contato"
-                          : "/desenvolvedores"
-                      }
-                    >
-                      {plan.cta}
+                    <Link href="/contato">
+                      Solicitar uma proposta
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
@@ -190,35 +172,25 @@ export default function PrecosPage() {
             ))}
           </div>
 
-          {/* Additional Info */}
-          <div className="mt-16 text-center">
-            <p className="text-muted-foreground mb-4">
-              Todos os planos incluem:
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Badge variant="secondary">99.9% uptime</Badge>
-              <Badge variant="secondary">Suporte em português</Badge>
-              <Badge variant="secondary">Sem taxa de setup</Badge>
-              <Badge variant="secondary">Sem contrato de fidelidade</Badge>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PRD 6.4: Calculadora de Volume */}
-      <section className="py-20 bg-gradient-to-br from-accent/5 to-primary/5">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
-                Calcule seus custos
-              </h2>
-              <p className="text-lg text-muted-foreground">
-                Descubra quanto você vai economizar com a Kodano
-              </p>
-            </div>
-
-            <VolumeCalculator />
+          {/* Important Note */}
+          <div className="mt-16 max-w-4xl mx-auto">
+            <Card className="border-accent/20 bg-accent/5">
+              <CardContent className="pt-6">
+                <div className="flex items-start space-x-4">
+                  <div className="inline-flex p-3 rounded-xl bg-accent/20">
+                    <Percent className="h-6 w-6 text-accent" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold font-[family-name:var(--font-poppins)] text-foreground mb-2">
+                      Fee via split automático
+                    </h3>
+                    <p className="text-muted-foreground">
+                      O fee da Kodano é descontado automaticamente pelas adquirentes parceiras (tempo real), <strong>sem intermediação financeira</strong> pela Kodano. A liquidação permanece direta entre adquirente e empresa.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -268,14 +240,14 @@ export default function PrecosPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
-              Comece gratuitamente hoje
+              Solicite uma proposta personalizada
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Teste todos os recursos sem compromisso
+              Modelos de preço são B2B e tailor-made; fale com vendas para encontrar a melhor opção para seu negócio.
             </p>
             <Button size="lg" asChild>
-              <Link href="/desenvolvedores">
-                Criar conta grátis
+              <Link href="/contato">
+                Solicitar uma proposta
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>

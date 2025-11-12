@@ -47,7 +47,7 @@ const testimonials = [
   },
   {
     quote:
-      "O split de pagamentos do Connect transformou nosso marketplace. Gerenciar 500+ sellers nunca foi tão fácil.",
+      "O split de pagamentos do Connect transformou nosso marketplace. Gerenciar sellers nunca foi tão fácil.",
     author: "Carla Mendes",
     role: "Product Manager",
     company: "ShopConnect",
@@ -55,7 +55,7 @@ const testimonials = [
   },
   {
     quote:
-      "99.99% de uptime não é marketing, é realidade. Em 2 anos, nunca tivemos problemas de indisponibilidade.",
+      "Alta disponibilidade não é marketing, é realidade. Em 2 anos, nunca tivemos problemas de indisponibilidade.",
     author: "Roberto Lima",
     role: "CFO",
     company: "PayFlow B2B",
@@ -84,7 +84,7 @@ const caseStudies = [
   {
     company: "MarketHub",
     industry: "Marketplace",
-    challenge: "Split complexo entre 500+ sellers com diferentes comissões",
+    challenge: "Split complexo entre múltiplos sellers com diferentes comissões",
     solution: "Kodano Connect com regras customizadas de split",
     results: [
       "Onboarding de sellers reduzido de 3 dias para 2 horas",
@@ -93,7 +93,7 @@ const caseStudies = [
     ],
     metrics: {
       icon: Users,
-      value: "500+",
+      value: "Múltiplos",
       label: "Sellers ativos",
     },
   },
@@ -130,7 +130,7 @@ export default function ClientesPage() {
               na Kodano
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Mais de 500 empresas processam milhões em transações todos os dias
+              Empresas processam milhões em transações todos os dias
               com nossa plataforma.
             </p>
           </div>
@@ -254,39 +254,6 @@ export default function ClientesPage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-2">
-                  500+
-                </div>
-                <p className="text-muted-foreground">Empresas ativas</p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-2">
-                  R$ 100M+
-                </div>
-                <p className="text-muted-foreground">Processado/mês</p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-2">
-                  99.99%
-                </div>
-                <p className="text-muted-foreground">Uptime</p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-2">
-                  4.9/5
-                </div>
-                <p className="text-muted-foreground">Satisfação</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="py-20 bg-gradient-to-br from-primary/10 via-accent/10 to-background">

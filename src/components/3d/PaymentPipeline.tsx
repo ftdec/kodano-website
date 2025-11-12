@@ -2,7 +2,7 @@
 
 import { useRef, useMemo, useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
-import { RoundedBox, Text, Html } from "@react-three/drei";
+import { RoundedBox, Html } from "@react-three/drei";
 import * as THREE from "three";
 
 // PRD 5.1: Tipos de pagamento que fluem pelo pipeline
@@ -26,13 +26,6 @@ function PaymentIcon({
   method: PaymentMethod;
   position: [number, number, number]
 }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 2) * 0.1;
-  });
-
   // Cores por método de pagamento
   const colors = {
     card: "#00A6B4",
@@ -41,7 +34,7 @@ function PaymentIcon({
   };
 
   return (
-    <mesh ref={meshRef} position={position}>
+    <mesh position={position}>
       <boxGeometry args={[0.3, 0.2, 0.05]} />
       <meshStandardMaterial
         color={colors[method]}
@@ -151,14 +144,18 @@ function ConnectionLine({
   );
 }
 
-// Pacote que flui pelo pipeline
+// Pacote que flui pelo pipeline com movimento suave e ondulado
 function FlowingPacket({
   method,
-  progress
+  progress,
+  id
 }: {
   method: PaymentMethod;
-  progress: number
+  progress: number;
+  id: number;
 }) {
+  const groupRef = useRef<THREE.Group>(null);
+  
   // Interpolar posição ao longo do pipeline
   const stageIndex = Math.floor(progress * (PIPELINE_STAGES.length - 1));
   const localProgress = (progress * (PIPELINE_STAGES.length - 1)) % 1;
@@ -166,13 +163,35 @@ function FlowingPacket({
   const currentStage = PIPELINE_STAGES[Math.min(stageIndex, PIPELINE_STAGES.length - 1)];
   const nextStage = PIPELINE_STAGES[Math.min(stageIndex + 1, PIPELINE_STAGES.length - 1)];
 
-  const position: [number, number, number] = [
-    THREE.MathUtils.lerp(currentStage.position[0], nextStage.position[0], localProgress),
-    THREE.MathUtils.lerp(currentStage.position[1], nextStage.position[1], localProgress),
-    THREE.MathUtils.lerp(currentStage.position[2], nextStage.position[2], localProgress) + 0.2,
-  ];
+  // Movimento base horizontal
+  const baseX = THREE.MathUtils.lerp(currentStage.position[0], nextStage.position[0], localProgress);
+  const baseY = THREE.MathUtils.lerp(currentStage.position[1], nextStage.position[1], localProgress);
+  const baseZ = THREE.MathUtils.lerp(currentStage.position[2], nextStage.position[2], localProgress);
 
-  return <PaymentIcon method={method} position={position} />;
+  // Animação suave com rotação e movimento vertical ondulado
+  useFrame((state) => {
+    if (!groupRef.current) return;
+    
+    // Movimento vertical ondulado (onda senoidal)
+    const waveOffset = Math.sin(state.clock.elapsedTime * 2 + id * 0.5) * 0.3;
+    
+    // Rotação suave contínua
+    groupRef.current.rotation.y = state.clock.elapsedTime * 0.5 + id * 0.3;
+    groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 1.5 + id * 0.2) * 0.2;
+    
+    // Posição com onda vertical
+    groupRef.current.position.set(
+      baseX,
+      baseY + waveOffset,
+      baseZ + 0.2
+    );
+  });
+
+  return (
+    <group ref={groupRef}>
+      <PaymentIcon method={method} position={[0, 0, 0]} />
+    </group>
+  );
 }
 
 // Componente principal do Pipeline
@@ -205,13 +224,14 @@ export function PaymentPipeline({
     return () => clearInterval(interval);
   }, [packets.length, maxPackets]);
 
-  // Atualizar progresso dos pacotes
+  // Atualizar progresso dos pacotes com velocidade variável
   useFrame((state, delta) => {
     setPackets((prev) =>
       prev
         .map((packet) => ({
           ...packet,
-          progress: packet.progress + delta * 0.15, // Velocidade do fluxo
+          // Velocidade variável baseada na posição (mais rápido no meio)
+          progress: packet.progress + delta * (0.12 + Math.sin(packet.progress * Math.PI) * 0.06),
         }))
         .filter((packet) => packet.progress < 1) // Remover pacotes que completaram
     );
@@ -254,12 +274,13 @@ export function PaymentPipeline({
         />
       ))}
 
-      {/* Pacotes fluindo */}
+      {/* Pacotes fluindo com animação melhorada */}
       {packets.map((packet) => (
         <FlowingPacket
           key={packet.id}
           method={packet.method}
           progress={packet.progress}
+          id={packet.id}
         />
       ))}
     </group>

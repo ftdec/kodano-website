@@ -1,33 +1,33 @@
 export const NAVIGATION_ITEMS = [
   {
-    label: "Soluções",
-    href: "/solucoes",
-    description: "Casos de uso por setor",
+    label: "Como Funciona",
+    href: "/como-funciona",
+    description: "Como a Kodano opera",
   },
   {
     label: "Produtos",
     href: "/produtos",
-    description: "Nossa infraestrutura de pagamentos",
+    description: "Plataforma Kodano",
+  },
+  {
+    label: "Para Empresas",
+    href: "/solucoes",
+    description: "Soluções B2B",
+  },
+  {
+    label: "Para Adquirentes",
+    href: "/adquirentes",
+    description: "Parcerias",
   },
   {
     label: "Preços",
     href: "/precos",
-    description: "Planos e custos transparentes",
+    description: "Modelos de cobrança",
   },
   {
-    label: "Desenvolvedores",
-    href: "/desenvolvedores",
-    description: "Documentação e APIs",
-  },
-  {
-    label: "Segurança",
-    href: "/seguranca",
-    description: "Compliance e certificações",
-  },
-  {
-    label: "Clientes",
-    href: "/clientes",
-    description: "Cases de sucesso",
+    label: "Recursos",
+    href: "/recursos",
+    description: "Materiais técnicos",
   },
   {
     label: "Sobre",

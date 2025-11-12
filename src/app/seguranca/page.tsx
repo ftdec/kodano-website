@@ -202,21 +202,6 @@ export default function SegurancaPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <Card className="border-border text-center">
                 <CardContent className="pt-6">
-                  <Globe className="h-12 w-12 text-accent mx-auto mb-4" />
-                  <div className="text-4xl font-bold text-foreground mb-2">
-                    99.99%
-                  </div>
-                  <p className="text-lg font-semibold text-foreground mb-1">
-                    Uptime SLA
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Garantia contratual com compensação
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border text-center">
-                <CardContent className="pt-6">
                   <Server className="h-12 w-12 text-accent mx-auto mb-4" />
                   <div className="text-4xl font-bold text-foreground mb-2">
                     5

@@ -1,41 +1,47 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { UserPlus, Key, CreditCard, BarChart3, ArrowRight } from "lucide-react";
+import { Handshake, Users, Zap, ArrowRight, TrendingUp } from "lucide-react";
 
 const steps = [
   {
     number: "01",
-    icon: UserPlus,
-    title: "Crie sua conta",
-    description: "Cadastro rápido e simples, sem burocracia. Comece em minutos.",
+    icon: Handshake,
+    title: "Negocia",
+    description: "A Kodano fecha MPAs com adquirentes (Price Books, rebates, SLAs).",
+    color: "from-blue-500/20 to-cyan-500/20",
   },
   {
     number: "02",
-    icon: Key,
-    title: "Gere suas API Keys",
-    description: "Acesse suas credenciais de teste e produção no painel.",
+    icon: Zap,
+    title: "Integra",
+    description: "Conectores homologados com APIs unificadas.",
+    color: "from-purple-500/20 to-pink-500/20",
   },
   {
     number: "03",
-    icon: CreditCard,
-    title: "Integre cartões e Pix",
-    description: "Use nossos SDKs e comece a aceitar pagamentos rapidamente.",
+    icon: TrendingUp,
+    title: "Orquestra",
+    description: "Motor de decisão escolhe a melhor rota por transação.",
+    color: "from-green-500/20 to-emerald-500/20",
   },
   {
     number: "04",
-    icon: BarChart3,
-    title: "Monitore tudo em tempo real",
-    description: "Dashboard completo com métricas, analytics e relatórios.",
+    icon: Users,
+    title: "Liquida direto",
+    description: "Dinheiro vai da adquirente para a empresa; a Kodano não custodia.",
+    color: "from-orange-500/20 to-amber-500/20",
   },
 ];
 
 export function HowItWorksSection() {
   return (
-    <section className="py-20 md:py-32 bg-accent/5">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-20 md:py-32 bg-accent/5 overflow-hidden">
+      {/* Simplified background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-accent/3 via-transparent to-primary/3" />
+
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
@@ -45,57 +51,47 @@ export function HowItWorksSection() {
             </span>
           </h2>
           <p className="text-lg text-muted-foreground">
-            Comece a aceitar pagamentos em 4 passos simples
+            Uma integração, múltiplas adquirentes. Roteamento inteligente para menor custo e maior aprovação.
           </p>
         </div>
 
         {/* Steps Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mb-12">
           {steps.map((step, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="relative"
-            >
-              {/* Connector Line (hidden on last item) */}
-              {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-accent/50 to-transparent -translate-y-1/2" />
-              )}
-
-              <div className="relative">
+            <div key={index} className="relative flex">
+              <div className="relative flex-1 flex flex-col">
                 {/* Number Badge */}
-                <div className="absolute -top-4 -left-4 w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center z-10">
+                <div className="absolute -top-4 -left-4 w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center z-10 border-2 border-accent/30">
                   <span className="text-lg font-bold text-accent">
                     {step.number}
                   </span>
                 </div>
 
                 {/* Card */}
-                <div className="border border-border bg-background rounded-2xl p-6 hover:border-accent transition-all hover:shadow-lg">
-                  <div className="mb-4 inline-flex p-3 rounded-xl bg-accent/10">
+                <div className="border border-border bg-background rounded-2xl p-6 hover:border-accent transition-all hover:shadow-lg h-full flex flex-col group">
+                  <div className="mb-4 inline-flex p-3 rounded-xl bg-accent/10 group-hover:bg-accent/20 transition-colors">
                     <step.icon className="h-6 w-6 text-accent" />
                   </div>
+                  
                   <h3 className="text-xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-3">
                     {step.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  
+                  <p className="text-muted-foreground leading-relaxed flex-grow">
                     {step.description}
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* CTA */}
         <div className="text-center">
-          <Button size="lg" variant="outline" asChild>
-            <Link href="/desenvolvedores">
-              Ver documentação técnica
-              <ArrowRight className="ml-2 h-5 w-5" />
+          <Button size="lg" variant="outline" asChild className="group">
+            <Link href="/como-funciona">
+              Ver detalhes completos
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>
         </div>

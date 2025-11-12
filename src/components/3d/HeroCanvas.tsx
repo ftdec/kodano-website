@@ -2,7 +2,6 @@
 
 import { Suspense, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import { PaymentPipeline } from "./PaymentPipeline";
 
 // Device detection hook
 function useDeviceCapabilities() {
@@ -60,8 +59,7 @@ export function HeroCanvas() {
           <ambientLight intensity={0.6} />
           <directionalLight position={[10, 10, 5]} intensity={0.4} color="#FFFFFF" />
 
-          {/* PRD v2.0: Animação do Pipeline de Pagamentos */}
-          <PaymentPipeline maxPackets={maxPackets} />
+          {/* Background decorativo - logo removido, agora está abaixo do título */}
         </Suspense>
       </Canvas>
     </div>

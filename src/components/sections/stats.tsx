@@ -1,59 +1,51 @@
 "use client";
 
-import { AnimatedCounter } from "@/components/ui/animated-counter";
+import { TrendingUp, Shield, DollarSign } from "lucide-react";
 
 const stats = [
   {
-    value: 10,
-    suffix: "M+",
-    label: "Transações processadas",
-    description: "Mensalmente",
-    decimals: 0,
+    icon: TrendingUp,
+    label: "Aumenta aprovação de pagamentos",
+    description: "",
   },
   {
-    value: 99.99,
-    suffix: "%",
-    label: "Uptime garantido",
-    description: "SLA com compensação",
-    decimals: 2,
+    icon: DollarSign,
+    label: "Reduz custos efetivos",
+    description: "",
   },
   {
-    value: 500,
-    suffix: "+",
-    label: "Empresas atendidas",
-    description: "Em toda América Latina",
-    decimals: 0,
-  },
-  {
-    value: 12,
-    suffix: "",
-    label: "Países suportados",
-    description: "Expansão contínua",
-    decimals: 0,
+    icon: Shield,
+    label: "Alta disponibilidade garantida",
+    description: "",
   },
 ];
 
 export function StatsSection() {
   return (
-    <section className="py-20 md:py-32 bg-background">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+    <section className="relative py-20 md:py-32 bg-background overflow-hidden">
+      {/* Simplified background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-accent/3 via-transparent to-primary/3" />
+
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {stats.map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className="text-4xl md:text-5xl lg:text-6xl font-bold font-[family-name:var(--font-poppins)] text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-2">
-                <AnimatedCounter
-                  end={stat.value}
-                  suffix={stat.suffix}
-                  decimals={stat.decimals}
-                  duration={2.5}
-                />
+            <div
+              key={index}
+              className="text-center relative group"
+            >
+              {/* Icon */}
+              <div className="inline-flex p-3 rounded-xl bg-accent/10 mb-4 group-hover:bg-accent/20 transition-colors">
+                <stat.icon className="h-6 w-6 text-accent" />
               </div>
+
               <div className="text-lg font-semibold text-foreground mb-1">
                 {stat.label}
               </div>
-              <div className="text-sm text-muted-foreground">
-                {stat.description}
-              </div>
+              {stat.description && (
+                <div className="text-sm text-muted-foreground">
+                  {stat.description}
+                </div>
+              )}
             </div>
           ))}
         </div>

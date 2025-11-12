@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BRAND } from "@/lib/constants/brand";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Contato - Kodano",
-  description: "Entre em contato com a Kodano. Estamos prontos para ajudar.",
+  title: "Contato - Fale com o nosso time",
+  description: "Envie seus dados e nosso time retorna com uma avaliação rápida de ganhos potenciais (economia/aprovação/latência).",
 };
 
 export default function ContatoPage() {
@@ -20,14 +20,13 @@ export default function ContatoPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
-              Vamos{" "}
+              Fale com o{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-                conversar
+                nosso time
               </span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Nossa equipe está pronta para ajudar você a encontrar a melhor
-              solução de pagamentos para seu negócio.
+              Envie seus dados e nosso time retorna com uma avaliação rápida de <strong>ganhos potenciais</strong> (economia/aprovação/latência).
             </p>
           </div>
         </div>
@@ -116,8 +115,7 @@ export default function ContatoPage() {
                     Envie sua mensagem
                   </h2>
                   <p className="text-muted-foreground">
-                    Preencha o formulário abaixo e entraremos em contato em até
-                    24 horas.
+                    Preencha o formulário abaixo e entraremos em contato em até 24 horas.
                   </p>
                 </CardHeader>
                 <CardContent>
@@ -125,14 +123,15 @@ export default function ContatoPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <Label htmlFor="name">Nome completo</Label>
-                        <Input id="name" placeholder="João Silva" />
+                        <Input id="name" placeholder="João Silva" required />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="email">Email corporativo</Label>
+                        <Label htmlFor="email">E-mail corporativo</Label>
                         <Input
                           id="email"
                           type="email"
                           placeholder="joao@empresa.com"
+                          required
                         />
                       </div>
                     </div>
@@ -140,24 +139,46 @@ export default function ContatoPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <Label htmlFor="company">Empresa</Label>
-                        <Input id="company" placeholder="Minha Empresa Ltda" />
+                        <Input id="company" placeholder="Minha Empresa Ltda" required />
                       </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="website">Site</Label>
+                        <Input
+                          id="website"
+                          type="url"
+                          placeholder="https://www.empresa.com.br"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="volume">Volume mensal estimado</Label>
+                        <Input
+                          id="volume"
+                          placeholder="Ex: R$ 1.000.000/mês"
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="acquirers">Adquirentes atuais</Label>
+                        <Input
+                          id="acquirers"
+                          placeholder="Ex: Adquirente A, Adquirente B"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <Label htmlFor="phone">Telefone</Label>
                         <Input
                           id="phone"
                           type="tel"
                           placeholder="(11) 99999-9999"
+                          required
                         />
                       </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="volume">Volume mensal esperado</Label>
-                      <Input
-                        id="volume"
-                        placeholder="Ex: R$ 100.000/mês"
-                      />
                     </div>
 
                     <div className="space-y-2">
@@ -175,6 +196,7 @@ export default function ContatoPage() {
                         type="checkbox"
                         id="terms"
                         className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                        required
                       />
                       <Label htmlFor="terms" className="text-sm font-normal">
                         Concordo em receber comunicações da Kodano e aceito os{" "}
@@ -195,9 +217,17 @@ export default function ContatoPage() {
                       </Label>
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full">
-                      Enviar mensagem
-                    </Button>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <Button type="submit" size="lg" className="flex-1">
+                        Solicitar demonstração
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                      <Button type="button" size="lg" variant="outline" className="flex-1 hover:bg-accent/10 hover:border-accent hover:text-accent" asChild>
+                        <a href={`mailto:${BRAND.email}`}>
+                          Falar com vendas
+                        </a>
+                      </Button>
+                    </div>
                   </form>
                 </CardContent>
               </Card>
@@ -222,7 +252,9 @@ export default function ContatoPage() {
                   <p className="text-muted-foreground mb-4">
                     Explore nossa documentação completa e comece a integrar
                   </p>
-                  <Button variant="outline">Acessar docs</Button>
+                  <Button variant="outline" asChild>
+                    <a href="/desenvolvedores">Acessar docs</a>
+                  </Button>
                 </CardHeader>
               </Card>
 
@@ -234,7 +266,9 @@ export default function ContatoPage() {
                   <p className="text-muted-foreground mb-4">
                     Verifique o status em tempo real da nossa plataforma
                   </p>
-                  <Button variant="outline">Ver status</Button>
+                  <Button variant="outline" asChild>
+                    <a href="/status">Ver status</a>
+                  </Button>
                 </CardHeader>
               </Card>
             </div>
