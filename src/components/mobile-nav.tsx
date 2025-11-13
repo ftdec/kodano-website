@@ -101,6 +101,7 @@ export function MobileNav() {
   return (
     <header
       className="lg:hidden sticky top-0 z-50 w-full bg-white"
+      style={{ position: "sticky" }}
       data-mobile-nav
     >
       {/* Navbar Sticky */}
@@ -135,15 +136,15 @@ export function MobileNav() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute left-0 right-0 top-full bg-white shadow-lg rounded-b-xl overflow-hidden"
+            className="absolute left-0 right-0 top-full bg-white shadow-lg rounded-b-xl"
             style={{
-              maxHeight: "45vh",
+              maxHeight: "50vh",
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.10)",
             }}
           >
-            <div className="overflow-y-auto max-h-[45vh]">
+            <div className="overflow-y-auto" style={{ maxHeight: "50vh" }}>
               {/* Conteúdo do Menu */}
-              <nav className="p-4 space-y-1">
+              <nav className="p-4 pb-4 space-y-1">
                 {menuItems.map((item, index) => (
                   <MobileNavLink
                     key={item.href}
@@ -154,15 +155,15 @@ export function MobileNav() {
                   />
                 ))}
 
-                {/* CTA Opcional */}
-                <div className="pt-4 mt-4 border-t border-gray-100">
+                {/* CTA */}
+                <div className="pt-4 mt-4 border-t border-gray-100 pb-2">
                   <motion.div whileTap={{ scale: 0.98 }}>
                     <Link
                       href="/contato"
                       onClick={closeMenu}
-                      className="block w-full px-4 py-3 text-base font-semibold text-white text-center rounded-lg bg-[#1B4FFD] hover:bg-[#1B4FFD]/90 active:bg-[#1B4FFD]/80 transition-all duration-200"
+                      className="block w-full px-4 py-3 text-base font-semibold text-white text-center rounded-lg bg-[#002A35] hover:bg-[#00C8DC] active:bg-[#002A35]/90 transition-all duration-200"
                     >
-                      Fale com um especialista
+                      Fale conosco
                     </Link>
                   </motion.div>
                 </div>
