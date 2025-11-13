@@ -2,11 +2,22 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Zap, Package, Building2, Handshake, DollarSign, Info, Mail, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NAVIGATION_ITEMS } from "@/lib/constants/navigation";
 import { Logo } from "./logo";
 import { Button } from "@/components/ui/button";
+
+// Ícones para cada item de navegação
+const navigationIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  "/como-funciona": Zap,
+  "/produtos": Package,
+  "/solucoes": Building2,
+  "/adquirentes": Handshake,
+  "/precos": DollarSign,
+  "/sobre": Info,
+  "/contato": Mail,
+};
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -91,18 +102,30 @@ export function Header() {
             </Button>
 
             {/* Mobile Menu Button */}
-            <button
+            <motion.button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-border hover:bg-accent/10 transition-colors"
+              className="lg:hidden relative inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 border border-border/50 hover:border-accent/50 transition-all group"
               aria-label="Toggle menu"
               aria-expanded={isMobileMenuOpen}
+              whileTap={{ scale: 0.95 }}
             >
-              {isMobileMenuOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
+              <motion.div
+                animate={isMobileMenuOpen ? { rotate: 90 } : { rotate: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-5 w-5 text-foreground" />
+                ) : (
+                  <Menu className="h-5 w-5 text-foreground" />
+                )}
+              </motion.div>
+              {!isMobileMenuOpen && (
+                <motion.div
+                  className="absolute inset-0 rounded-xl bg-gradient-to-br from-accent/20 to-primary/20 opacity-0 group-hover:opacity-100 blur-sm"
+                  transition={{ duration: 0.3 }}
+                />
               )}
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
@@ -111,61 +134,128 @@ export function Header() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop */}
+            {/* Backdrop com gradiente animado */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/60 backdrop-blur-md z-40 lg:hidden"
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
-            {/* Menu Panel */}
+            {/* Menu Panel - Glassmorphism */}
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
-              className="fixed top-16 left-0 right-0 z-50 lg:hidden border-t border-border bg-background backdrop-blur-xl shadow-lg"
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              transition={{ 
+                duration: 0.4, 
+                ease: [0.22, 1, 0.36, 1],
+                type: "spring",
+                stiffness: 300,
+                damping: 30
+              }}
+              className="fixed top-16 left-0 right-0 z-50 lg:hidden border-t border-border/50 bg-background/95 backdrop-blur-2xl shadow-2xl"
             >
-              <div className="container mx-auto px-4 sm:px-6 py-6">
-                <nav className="flex flex-col space-y-1">
-                  {NAVIGATION_ITEMS.map((item, index) => (
-                    <motion.div
-                      key={item.href}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <Link
-                        href={item.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center min-h-[48px] px-4 py-3 text-base font-medium text-slate-900 dark:text-slate-50 hover:text-accent hover:bg-accent/10 rounded-lg transition-all"
+              {/* Decorative gradient line */}
+              <div className="h-1 bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+              
+              <div className="container mx-auto px-4 sm:px-6 py-8">
+                <nav className="flex flex-col space-y-2">
+                  {NAVIGATION_ITEMS.map((item, index) => {
+                    const Icon = navigationIcons[item.href] || Package;
+                    return (
+                      <motion.div
+                        key={item.href}
+                        initial={{ opacity: 0, x: -30, scale: 0.9 }}
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        transition={{ 
+                          delay: index * 0.06,
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 25
+                        }}
                       >
-                        {item.label}
-                      </Link>
-                    </motion.div>
-                  ))}
+                        <Link
+                          href={item.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="group relative flex items-center gap-4 min-h-[56px] px-5 py-4 text-base font-medium text-slate-900 dark:text-slate-50 rounded-xl transition-all overflow-hidden"
+                        >
+                          {/* Background gradient on hover */}
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 opacity-0 group-hover:opacity-100 rounded-xl"
+                            transition={{ duration: 0.3 }}
+                          />
+                          
+                          {/* Animated border */}
+                          <motion.div
+                            className="absolute inset-0 border-2 border-accent/0 group-hover:border-accent/30 rounded-xl"
+                            transition={{ duration: 0.3 }}
+                          />
+                          
+                          {/* Icon container */}
+                          <motion.div
+                            className="relative z-10 flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 group-hover:from-primary/30 group-hover:to-accent/30 transition-all"
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                          >
+                            <Icon className="h-5 w-5 text-accent" />
+                          </motion.div>
+                          
+                          {/* Text container */}
+                          <div className="relative z-10 flex-1">
+                            <div className="font-semibold">{item.label}</div>
+                            {item.description && (
+                              <div className="text-xs text-muted-foreground mt-0.5">
+                                {item.description}
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Arrow icon */}
+                          <motion.div
+                            className="relative z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                            initial={false}
+                          >
+                            <ArrowRight className="h-5 w-5 text-accent" />
+                          </motion.div>
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
                   
+                  {/* CTA Button */}
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: NAVIGATION_ITEMS.length * 0.05 }}
-                    className="pt-4 border-t border-border"
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ 
+                      delay: NAVIGATION_ITEMS.length * 0.06 + 0.1,
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 25
+                    }}
+                    className="pt-6 border-t border-border/50 mt-4"
                   >
                     <Button
                       asChild
                       variant="kodano"
                       rounded="full"
                       size="lg"
-                      className="w-full"
+                      className="w-full group relative overflow-hidden"
                     >
                       <Link
                         href="/contato"
                         onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center justify-center gap-2"
                       >
-                        Fale conosco
+                        <span>Fale conosco</span>
+                        <motion.div
+                          initial={{ x: -10, opacity: 0 }}
+                          whileHover={{ x: 0, opacity: 1 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <ArrowRight className="h-4 w-4" />
+                        </motion.div>
                       </Link>
                     </Button>
                   </motion.div>
