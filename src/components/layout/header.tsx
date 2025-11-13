@@ -117,7 +117,7 @@ export function Header() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
@@ -127,7 +127,7 @@ export function Header() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
-              className="lg:hidden border-t border-border bg-background/95 backdrop-blur-xl shadow-lg"
+              className="fixed top-16 left-0 right-0 z-50 lg:hidden border-t border-border bg-background backdrop-blur-xl shadow-lg"
             >
               <div className="container mx-auto px-4 sm:px-6 py-6">
                 <nav className="flex flex-col space-y-1">
@@ -141,7 +141,7 @@ export function Header() {
                       <Link
                         href={item.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center min-h-[48px] px-4 py-3 text-base font-medium text-foreground hover:text-accent hover:bg-accent/5 rounded-lg transition-all"
+                        className="flex items-center min-h-[48px] px-4 py-3 text-base font-medium text-slate-900 dark:text-slate-50 hover:text-accent hover:bg-accent/10 rounded-lg transition-all"
                       >
                         {item.label}
                       </Link>

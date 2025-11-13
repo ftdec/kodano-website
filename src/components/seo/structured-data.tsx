@@ -5,8 +5,8 @@ export function OrganizationStructuredData() {
     name: "Kodano",
     description:
       "Infraestrutura de pagamentos segura, escalável e flexível para empresas B2B",
-    url: "https://kodano.com",
-    logo: "https://kodano.com/kodano-logo.png",
+    url: "https://kodano.com.br",
+    logo: "https://kodano.com.br/kodano-logo.png",
     foundingDate: "2024",
     email: "contato@kodano.com",
     telephone: "+55-11-99999-9999",
@@ -128,7 +128,7 @@ export function ProductStructuredData({
     "@type": "Product",
     name,
     description,
-    image: image || "https://kodano.com/og-image.png",
+    image: image || "https://kodano.com.br/og-image.png",
     brand: {
       "@type": "Brand",
       name: "Kodano",

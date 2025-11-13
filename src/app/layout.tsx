@@ -19,7 +19,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'),
   title: {
     default: "Kodano — Orquestração multiadquirente para empresas (SaaS de pagamentos, sem custódia)",
     template: "%s | Kodano",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    url: "https://kodano.com",
+    url: "https://kodano.com.br",
     title: "Kodano — Orquestração multiadquirente para empresas",
     description: "Plataforma SaaS que negocia, integra e roteia transações entre múltiplas adquirentes — sem tocar no dinheiro.",
     siteName: "Kodano",
