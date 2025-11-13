@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/layout/logo";
 import { MobileNavLink } from "./mobile-nav-link";
@@ -143,15 +143,17 @@ export function MobileNav() {
               <div className="h-full flex flex-col overflow-y-auto">
                 {/* Conteúdo do Menu */}
                 <nav className="flex-1 px-4 pt-8 pb-6 space-y-1">
-                  {menuItems.map((item, index) => (
-                    <MobileNavLink
-                      key={item.href}
-                      href={item.href}
-                      label={item.label}
-                      index={index}
-                      onClose={closeMenu}
-                    />
-                  ))}
+                  {menuItems.map((item, index) => {
+                    return (
+                      <MobileNavLink
+                        key={item.href}
+                        href={item.href}
+                        label={item.label}
+                        index={index}
+                        onClose={closeMenu}
+                      />
+                    );
+                  })}
                 </nav>
 
                 {/* CTA Fixo no Final */}

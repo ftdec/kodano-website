@@ -80,7 +80,11 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/kodano-logo.png",
+    icon: [
+      { url: "/kodano-logo.png", sizes: "any" },
+      { url: "/kodano-logo.png", type: "image/png", sizes: "32x32" },
+      { url: "/kodano-logo.png", type: "image/png", sizes: "16x16" },
+    ],
     shortcut: "/kodano-logo.png",
     apple: "/kodano-logo.png",
   },
