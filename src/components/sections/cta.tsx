@@ -24,17 +24,24 @@ export function CTASection() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="text-base px-8 group bg-primary hover:bg-accent" asChild>
+            <Button
+              size="lg"
+              variant="kodano"
+              rounded="full"
+              className="group"
+              asChild
+            >
               <Link href="/contato">
                 Solicitar demonstração
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            
+
             <Button
               size="lg"
-              variant="outline"
-              className="text-base px-8 hover:bg-accent/10 hover:border-accent hover:text-accent"
+              variant="kodano-outline"
+              rounded="full"
+              className="group"
               asChild
             >
               <Link href="/contato">

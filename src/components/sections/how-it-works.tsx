@@ -88,7 +88,13 @@ export function HowItWorksSection() {
 
         {/* CTA */}
         <div className="text-center">
-          <Button size="lg" variant="outline" asChild className="group">
+          <Button
+            size="lg"
+            variant="kodano-outline"
+            rounded="full"
+            className="group"
+            asChild
+          >
             <Link href="/como-funciona">
               Ver detalhes completos
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />

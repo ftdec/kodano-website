@@ -93,13 +93,14 @@ export function ProductsSection() {
                   {product.description}
                 </p>
                 <Button
-                  variant="ghost"
-                  className="group/btn p-0 h-auto hover:bg-transparent"
+                  variant="link"
+                  size="sm"
+                  className="p-0 h-auto"
                   asChild
                 >
-                  <Link href={product.href}>
+                  <Link href={product.href} className="group">
                     Saiba mais
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
               </CardContent>
@@ -109,10 +110,16 @@ export function ProductsSection() {
 
         {/* CTA */}
         <div className="text-center">
-          <Button size="lg" asChild>
+          <Button
+            size="lg"
+            variant="kodano"
+            rounded="full"
+            className="group"
+            asChild
+          >
             <Link href="/produtos">
               Ver todos os produtos
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>
         </div>

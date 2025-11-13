@@ -83,7 +83,13 @@ export function IntegrationsSection() {
 
         {/* Call to action */}
         <div className="mt-12 text-center">
-          <Button size="lg" asChild className="group">
+          <Button
+            size="lg"
+            variant="kodano"
+            rounded="full"
+            className="group"
+            asChild
+          >
             <Link href="/contato">
               Solicitar demonstração
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />

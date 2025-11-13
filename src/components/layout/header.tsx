@@ -83,7 +83,9 @@ export function Header() {
             <Button
               asChild
               size="sm"
-              className="hidden lg:flex rounded-full bg-primary hover:bg-accent text-white transition-all shadow-sm hover:shadow-md"
+              variant="kodano"
+              rounded="full"
+              className="hidden lg:flex"
             >
               <Link href="/contato">Solicitar demonstração</Link>
             </Button>
@@ -154,8 +156,10 @@ export function Header() {
                   >
                     <Button
                       asChild
-                      className="w-full rounded-full bg-primary hover:bg-accent text-white"
+                      variant="kodano"
+                      rounded="full"
                       size="lg"
+                      className="w-full"
                     >
                       <Link
                         href="/contato"

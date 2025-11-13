@@ -333,7 +333,9 @@ export function HeroSection() {
           >
             <Button
               size="lg"
-              className="text-base px-8 group bg-[#002A35] hover:bg-[#00C8DC] text-white transition-all duration-300 rounded-full shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-accent/30"
+              variant="kodano"
+              rounded="full"
+              className="group"
               asChild
             >
               <Link href="/contato">
@@ -341,11 +343,12 @@ export function HeroSection() {
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            
+
             <Button
               size="lg"
-              variant="outline"
-              className="text-base px-8 group border-[#002A35] hover:bg-accent/10 hover:border-[#00C8DC] hover:text-[#00C8DC] transition-all duration-300 rounded-full text-[#002A35] dark:text-white dark:hover:text-accent backdrop-blur-sm"
+              variant="kodano-outline"
+              rounded="full"
+              className="group"
               asChild
             >
               <Link href="/contato">

@@ -202,10 +202,16 @@ export function ProductsModalSection() {
 
           {/* CTA */}
           <div className="text-center">
-            <Button size="lg" asChild>
+            <Button
+              size="lg"
+              variant="kodano"
+              rounded="full"
+              className="group"
+              asChild
+            >
               <Link href="/produtos">
                 Ver todos os produtos
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
           </div>
@@ -281,13 +287,25 @@ export function ProductsModalSection() {
 
                 {/* CTAs */}
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                  <Button size="lg" className="flex-1" asChild>
+                  <Button
+                    size="lg"
+                    variant="kodano"
+                    rounded="lg"
+                    className="flex-1 group"
+                    asChild
+                  >
                     <Link href="/desenvolvedores">
                       Ver documentação
-                      <ArrowRight className="ml-2 h-5 w-5" />
+                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="flex-1" asChild>
+                  <Button
+                    size="lg"
+                    variant="kodano-outline"
+                    rounded="lg"
+                    className="flex-1"
+                    asChild
+                  >
                     <Link href={`/produtos#${selectedProduct.id}`}>
                       Página completa
                     </Link>
