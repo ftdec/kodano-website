@@ -123,38 +123,54 @@ export function Header() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop com gradiente animado */}
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/60 backdrop-blur-md z-40 lg:hidden"
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
-            {/* Menu Panel */}
+            {/* Menu Panel - Rollout from top */}
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
-              className="absolute top-full left-0 right-0 z-50 lg:hidden border-t border-border bg-background backdrop-blur-xl shadow-lg"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ 
+                duration: 0.3,
+                ease: [0.4, 0, 0.2, 1]
+              }}
+              className="absolute top-full left-0 right-0 z-50 lg:hidden bg-background border-t border-border overflow-hidden"
             >
-              
-              <div className="container mx-auto px-4 sm:px-6 py-6">
-                <nav className="flex flex-col space-y-1">
+              {/* Close Button */}
+              <div className="flex justify-end px-4 pt-4 pb-2">
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border hover:bg-accent/10 hover:border-accent/50 transition-colors"
+                  aria-label="Fechar menu"
+                >
+                  <X className="h-5 w-5 text-foreground" />
+                </button>
+              </div>
+
+              <div className="px-4 pb-6">
+                <nav className="flex flex-col space-y-0">
                   {NAVIGATION_ITEMS.map((item, index) => (
                     <motion.div
                       key={item.href}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05 }}
+                      transition={{ 
+                        delay: index * 0.04,
+                        duration: 0.2
+                      }}
                     >
                       <Link
                         href={item.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center min-h-[48px] px-4 py-3 text-base font-medium text-slate-900 dark:text-slate-50 hover:text-accent hover:bg-accent/10 rounded-lg transition-all"
+                        className="block px-4 py-3 text-base font-medium text-foreground hover:text-accent hover:bg-accent/5 rounded-lg transition-colors active:bg-accent/10"
                       >
                         {item.label}
                       </Link>
@@ -163,10 +179,13 @@ export function Header() {
                   
                   {/* CTA Button */}
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: NAVIGATION_ITEMS.length * 0.05 }}
-                    className="pt-4 border-t border-border mt-4"
+                    transition={{ 
+                      delay: NAVIGATION_ITEMS.length * 0.04 + 0.1,
+                      duration: 0.2
+                    }}
+                    className="pt-4 mt-4 border-t border-border"
                   >
                     <Button
                       asChild
@@ -174,11 +193,9 @@ export function Header() {
                       rounded="full"
                       size="lg"
                       className="w-full"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <Link
-                        href="/contato"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
+                      <Link href="/contato">
                         Fale conosco
                       </Link>
                     </Button>
