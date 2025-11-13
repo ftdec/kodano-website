@@ -199,7 +199,7 @@ export const auroraAnimations = {
     tl.to(element, {
       y: -8,
       scale: 1.02,
-      boxShadow: "0 12px 32px rgba(0, 166, 180, 0.25)",
+      boxShadow: "0 12px 32px rgba(0, 200, 220, 0.25)",
       duration: 0.3,
       ease: "power2.out",
     });

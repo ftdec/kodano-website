@@ -20,7 +20,7 @@ export function Logo({ className = "", showText = true }: LogoProps) {
           alt=""
           width={44}
           height={44}
-          className="object-contain brightness-110 contrast-125"
+          className="object-contain"
           priority
         />
       </div>

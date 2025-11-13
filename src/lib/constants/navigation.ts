@@ -25,11 +25,6 @@ export const NAVIGATION_ITEMS = [
     description: "Modelos de cobrança",
   },
   {
-    label: "Recursos",
-    href: "/recursos",
-    description: "Materiais técnicos",
-  },
-  {
     label: "Sobre",
     href: "/sobre",
     description: "Conheça a Kodano",

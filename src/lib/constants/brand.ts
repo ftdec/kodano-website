@@ -9,8 +9,9 @@ export const BRAND = {
 } as const;
 
 export const COLORS = {
-  tealDark: "#003E4E",
-  cyan: "#00A6B4",
+  tealDark: "#002A35",      // Azul-petróleo escuro (forma angular)
+  tealLight: "#00C8DC",     // Azul-petróleo claro/ciano brilhante (forma curva)
+  cyan: "#00D4E8",          // Ciano vibrante
   white: "#FFFFFF",
 } as const;
 

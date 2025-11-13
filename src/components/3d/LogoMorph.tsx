@@ -96,8 +96,8 @@ function LogoCenter() {
         map={logoTexture}
         transparent
         opacity={0.95}
-        emissive="#00A6B4"
-        emissiveIntensity={0.3}
+        emissive="#00C8DC"
+        emissiveIntensity={0.4}
       />
     </mesh>
   );
@@ -175,11 +175,11 @@ function MorphingParticle({
     <mesh ref={meshRef} position={initialPosition}>
       <boxGeometry args={[0.3, 0.3, 0.3]} />
       <meshStandardMaterial
-        color="#00A6B4"
+        color="#00C8DC"
         transparent
         opacity={0}
-        emissive="#00A6B4"
-        emissiveIntensity={0.6}
+        emissive="#00C8DC"
+        emissiveIntensity={0.7}
       />
     </mesh>
   );

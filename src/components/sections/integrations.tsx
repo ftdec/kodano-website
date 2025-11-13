@@ -34,16 +34,16 @@ const integrations = [
 
 export function IntegrationsSection() {
   return (
-    <section className="relative py-20 md:py-32 bg-gradient-to-br from-slate-50 via-background to-slate-50 dark:from-[#0A0A0F] dark:via-background dark:to-[#0A0A0F] overflow-hidden">
+    <section className="relative pt-12 pb-20 md:pt-16 md:pb-32 bg-gradient-to-br from-slate-50 via-background to-slate-50 dark:from-[#000000] dark:via-background dark:to-[#000000] overflow-hidden">
       {/* Simplified background */}
       <div className="absolute inset-0 bg-gradient-to-br from-accent/3 via-transparent to-primary/3" />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
+        <div className="max-w-3xl mx-auto text-center mb-16 -mt-4">
+          <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6 leading-tight">
             Uma integração,{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#053B3F] to-[#00A6B4]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#053B3F] to-[#00A6B4] inline-block mt-1">
               múltiplas adquirentes
             </span>
           </h2>

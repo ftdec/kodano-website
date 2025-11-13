@@ -26,10 +26,10 @@ function PaymentIcon({
   method: PaymentMethod;
   position: [number, number, number]
 }) {
-  // Cores por método de pagamento
+  // Cores por método de pagamento - Baseado no novo logo
   const colors = {
-    card: "#00A6B4",
-    pix: "#32BCAD",
+    card: "#00C8DC",      // Ciano principal do logo
+    pix: "#00D4E8",       // Ciano vibrante do logo
     boleto: "#FF6B35",
   };
 

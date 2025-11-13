@@ -179,23 +179,6 @@ export const produtosMegaMenu: MegaMenuSection[] = [
       },
     ],
   },
-  {
-    title: "Recursos",
-    items: [
-      {
-        title: "APIs",
-        description: "RESTful e webhooks",
-        icon: Code2,
-        href: "/desenvolvedores",
-      },
-      {
-        title: "Playground",
-        description: "Teste antes de integrar",
-        icon: Zap,
-        href: "/desenvolvedores#playground",
-      },
-    ],
-  },
 ];
 
 export const solucoesMegaMenu: MegaMenuSection[] = [

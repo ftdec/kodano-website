@@ -28,8 +28,8 @@ export default function HeroScene() {
           {nodes.map((pos, i) => (
             <Sphere key={i} args={[0.08, 16, 16]} position={pos}>
               <meshStandardMaterial
-                color="#00A6B4"
-                emissive="#00A6B4"
+                color="#00C8DC"
+                emissive="#00C8DC"
                 emissiveIntensity={0.6}
                 transparent
                 opacity={0.12}
@@ -38,12 +38,12 @@ export default function HeroScene() {
           ))}
 
           {/* PRD: Linhas conectando os nós do fluxo */}
-          <Line points={nodes} color="#00A6B4" lineWidth={1.2} />
+          <Line points={nodes} color="#00C8DC" lineWidth={1.2} />
         </Float>
       </Canvas>
 
       {/* PRD: Overlay gradiente translúcido from-white/70 via-white/45 to-transparent */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/70 via-white/45 to-transparent dark:from-[#0A0A0F]/70 dark:via-[#0A0A0F]/55 dark:to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/70 via-white/45 to-transparent dark:from-[#000000]/70 dark:via-[#000000]/55 dark:to-transparent" />
     </div>
   );
 }

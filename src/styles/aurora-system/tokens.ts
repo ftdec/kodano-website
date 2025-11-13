@@ -2,28 +2,30 @@
 // Inspirado no Stripe Design System
 
 export const auroraColors = {
-  // Primary Colors
-  tealDark: "#003E4E",
-  cyan: "#00A6B4",
-  iridescent: "#B6E0F9",
-  deepBlack: "#0A0A0F",
+  // Primary Colors - Baseado no novo logo
+  tealDark: "#002A35",      // Azul-petróleo escuro (forma angular)
+  tealLight: "#00C8DC",     // Azul-petróleo claro/ciano (forma curva)
+  cyan: "#00D4E8",          // Ciano vibrante
+  iridescent: "#B6E0F9",    // Ciano muito claro para gradientes
+  deepBlack: "#000000",     // Preto sólido do fundo do logo
 
-  // Gradients
-  auroraGradient: "linear-gradient(135deg, #003E4E 0%, #00A6B4 50%, #B6E0F9 100%)",
-  deepGradient: "linear-gradient(180deg, #0A0A0F 0%, #003E4E 100%)",
+  // Gradients - Refletindo o logo
+  auroraGradient: "linear-gradient(135deg, #002A35 0%, #00C8DC 50%, #00D4E8 100%)",
+  deepGradient: "linear-gradient(180deg, #000000 0%, #002A35 100%)",
+  logoGradient: "linear-gradient(135deg, #00C8DC 0%, #002A35 100%)", // Gradiente do logo
 
   // Semantic Colors
-  primary: "#00A6B4",
-  secondary: "#003E4E",
-  accent: "#B6E0F9",
-  background: "#0A0A0F",
+  primary: "#00C8DC",       // Ciano principal (forma curva)
+  secondary: "#002A35",      // Teal escuro (forma angular)
+  accent: "#00D4E8",        // Ciano vibrante para destaques
+  background: "#000000",    // Preto sólido
   foreground: "#FFFFFF",
 
   // Status Colors
   success: "#00D68F",
   warning: "#FFAB00",
   error: "#FF6B6B",
-  info: "#00A6B4",
+  info: "#00C8DC",          // Usando a cor principal do logo
 } as const;
 
 export const auroraTypography = {
@@ -90,9 +92,10 @@ export const auroraShadows = {
   xl: "0 20px 40px rgba(0, 0, 0, 0.4)",
   "2xl": "0 25px 50px rgba(0, 0, 0, 0.45)",
 
-  // Colored shadows
-  glow: "0 0 20px rgba(0, 166, 180, 0.5)",
-  auroraGlow: "0 0 40px rgba(182, 224, 249, 0.6)",
+  // Colored shadows - Ajustados para o novo logo
+  glow: "0 0 20px rgba(0, 200, 220, 0.5)",
+  auroraGlow: "0 0 40px rgba(0, 212, 232, 0.6)",
+  logoGlow: "0 0 30px rgba(0, 200, 220, 0.4)",
 } as const;
 
 export const auroraAnimations = {

@@ -47,9 +47,10 @@
 :root {
   --radius: 0.625rem;
 
-  /* Kodano Brand Colors */
-  --kodano-teal-dark: #003E4E; /* Azul-esverdeado escuro */
-  --kodano-cyan: #00A6B4; /* Ciano suave */
+  /* Kodano Brand Colors - Baseado no novo logo */
+  --kodano-teal-dark: #002A35; /* Azul-petróleo escuro (forma angular) */
+  --kodano-teal-light: #00C8DC; /* Azul-petróleo claro/ciano (forma curva) */
+  --kodano-cyan: #00D4E8; /* Ciano vibrante */
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -58,12 +59,12 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
 
-  /* Primary usando Kodano Teal Dark (#003E4E) - OKLCH aproximado */
-  --primary: oklch(0.26 0.08 210);
+  /* Primary usando Kodano Teal Light (#00C8DC) - OKLCH aproximado */
+  --primary: oklch(0.72 0.12 200);
   --primary-foreground: oklch(0.985 0 0);
 
-  /* Accent usando Kodano Cyan (#00A6B4) - OKLCH aproximado */
-  --accent: oklch(0.65 0.12 200);
+  /* Accent usando Kodano Cyan (#00D4E8) - OKLCH aproximado */
+  --accent: oklch(0.78 0.13 200);
   --accent-foreground: oklch(1 0 0);
 
   --secondary: oklch(0.97 0 0);
@@ -73,15 +74,15 @@
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.65 0.12 200);
-  --chart-1: oklch(0.65 0.12 200);
-  --chart-2: oklch(0.26 0.08 210);
+  --ring: oklch(0.72 0.12 200);
+  --chart-1: oklch(0.72 0.12 200);
+  --chart-2: oklch(0.22 0.08 210);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.26 0.08 210);
+  --sidebar-primary: oklch(0.72 0.12 200);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
@@ -90,21 +91,21 @@
 }
 
 .dark {
-  /* Dark mode com Kodano Teal Dark como base */
-  --background: oklch(0.18 0.06 210);
+  /* Dark mode com preto sólido do logo como base */
+  --background: oklch(0.05 0 0);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.22 0.06 210);
+  --card: oklch(0.12 0.04 210);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.22 0.06 210);
+  --popover: oklch(0.12 0.04 210);
   --popover-foreground: oklch(0.985 0 0);
 
-  /* Primary usando Kodano Cyan no dark mode */
-  --primary: oklch(0.65 0.12 200);
-  --primary-foreground: oklch(0.145 0 0);
+  /* Primary usando Kodano Teal Light no dark mode */
+  --primary: oklch(0.72 0.12 200);
+  --primary-foreground: oklch(0.05 0 0);
 
-  /* Accent usando tom mais claro do cyan */
-  --accent: oklch(0.75 0.12 200);
-  --accent-foreground: oklch(0.145 0 0);
+  /* Accent usando Kodano Cyan vibrante */
+  --accent: oklch(0.78 0.13 200);
+  --accent-foreground: oklch(0.05 0 0);
 
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
@@ -113,20 +114,20 @@
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.65 0.12 200);
-  --chart-1: oklch(0.65 0.12 200);
-  --chart-2: oklch(0.26 0.08 210);
+  --ring: oklch(0.72 0.12 200);
+  --chart-1: oklch(0.72 0.12 200);
+  --chart-2: oklch(0.22 0.08 210);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.22 0.06 210);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.65 0.12 200);
+  --sidebar-primary: oklch(0.72 0.12 200);
   --sidebar-primary-foreground: oklch(0.145 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.65 0.12 200);
+  --sidebar-ring: oklch(0.72 0.12 200);
 }
 
 @layer base {
