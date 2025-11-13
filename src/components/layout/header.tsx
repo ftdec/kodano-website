@@ -133,7 +133,7 @@ export function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
-            {/* Menu Panel - Rollout from top */}
+            {/* Menu Panel - Fixed para acompanhar scroll */}
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
@@ -142,7 +142,7 @@ export function Header() {
                 duration: 0.3,
                 ease: [0.4, 0, 0.2, 1]
               }}
-              className="absolute top-full left-0 right-0 z-50 lg:hidden bg-background border-t border-border overflow-hidden"
+              className="fixed top-16 left-0 right-0 z-50 lg:hidden bg-background border-t border-border overflow-hidden max-h-[calc(100vh-4rem)] overflow-y-auto"
             >
               {/* Close Button */}
               <div className="flex justify-end px-4 pt-4 pb-2">
