@@ -100,8 +100,7 @@ export function MobileNav() {
 
   return (
     <header
-      className="lg:hidden sticky top-0 z-50 w-full bg-white"
-      style={{ position: "sticky" }}
+      className="lg:hidden relative z-50 w-full bg-white"
       data-mobile-nav
     >
       {/* Navbar Sticky */}
