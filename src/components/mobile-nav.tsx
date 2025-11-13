@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/layout/logo";
 import { MobileNavLink } from "./mobile-nav-link";
@@ -17,28 +17,28 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
         animate={isOpen ? "open" : "closed"}
       >
         <motion.span
-          className="block w-full h-0.5 bg-white rounded-full origin-center"
+          className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
           variants={{
             closed: { rotate: 0, y: 0 },
             open: { rotate: 45, y: 8 },
           }}
-          transition={{ type: "spring", stiffness: 140, damping: 18 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
         />
         <motion.span
-          className="block w-full h-0.5 bg-white rounded-full origin-center"
+          className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
           variants={{
             closed: { opacity: 1, scale: 1 },
             open: { opacity: 0, scale: 0 },
           }}
-          transition={{ type: "spring", stiffness: 140, damping: 18 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
         />
         <motion.span
-          className="block w-full h-0.5 bg-white rounded-full origin-center"
+          className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
           variants={{
             closed: { rotate: 0, y: 0 },
             open: { rotate: -45, y: -8 },
           }}
-          transition={{ type: "spring", stiffness: 140, damping: 18 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
         />
       </motion.div>
     </div>
@@ -48,142 +48,129 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const lastScrollY = useRef(0);
+  const scrollThreshold = 20;
 
   // Menu items na ordem exata especificada
   const menuItems = NAVIGATION_ITEMS.slice(0, 6);
 
-  // Scroll lock quando menu está aberto
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [isOpen]);
-
-  // Detectar scroll para sombra na barra
+  // Detectar scroll para sombra na barra e fechar menu
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 4);
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 4);
+
+      // Fechar menu se usuário scrollar > 20px para baixo
+      if (isOpen && currentScrollY > lastScrollY.current + scrollThreshold) {
+        setIsOpen(false);
+      }
+
+      lastScrollY.current = currentScrollY;
     };
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isOpen]);
+
+  // Fechar menu ao clicar fora
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const navElement = document.querySelector('[data-mobile-nav]');
+      const dropdownElement = document.querySelector('[data-mobile-dropdown]');
+
+      if (
+        navElement &&
+        dropdownElement &&
+        !navElement.contains(target) &&
+        !dropdownElement.contains(target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
 
   const closeMenu = () => setIsOpen(false);
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <>
-      {/* Barra Superior Fixa - Apenas Mobile */}
-      <motion.header
-        className="lg:hidden fixed top-0 left-0 right-0 z-50 w-full"
-        initial={{ y: 0 }}
-        animate={{ y: 0 }}
+    <header
+      className="lg:hidden sticky top-0 z-50 w-full bg-white"
+      data-mobile-nav
+    >
+      {/* Navbar Sticky */}
+      <div
+        className={`w-full px-4 sm:px-6 h-16 flex items-center justify-between transition-shadow duration-200 ${
+          isScrolled ? "shadow-sm" : ""
+        }`}
       >
-        <motion.div
-          className="w-full px-4 sm:px-6 h-16 flex items-center justify-between"
-          animate={{
-            backgroundColor: isScrolled
-              ? "rgba(11, 11, 11, 0.95)"
-              : "rgba(11, 11, 11, 0.8)",
-            boxShadow: isScrolled
-              ? "0 1px 3px rgba(0, 0, 0, 0.3)"
-              : "none",
-          }}
-          transition={{ duration: 0.2 }}
+        {/* Logo */}
+        <div className="flex items-center shrink-0">
+          <Logo />
+        </div>
+
+        {/* Botão Hambúrguer */}
+        <motion.button
+          onClick={toggleMenu}
+          className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
+          aria-label="Toggle menu"
+          aria-expanded={isOpen}
+          whileTap={{ scale: 0.95 }}
         >
-          {/* Logo */}
-          <div className="flex items-center shrink-0">
-            <Logo />
-          </div>
+          <HamburgerIcon isOpen={isOpen} />
+        </motion.button>
+      </div>
 
-          {/* Botão Hambúrguer */}
-          <motion.button
-            onClick={() => setIsOpen(!isOpen)}
-            className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors"
-            aria-label="Toggle menu"
-            aria-expanded={isOpen}
-            whileTap={{ scale: 0.95 }}
-          >
-            <HamburgerIcon isOpen={isOpen} />
-          </motion.button>
-        </motion.div>
-      </motion.header>
-
-      {/* Overlay com Blur */}
+      {/* Dropdown - Abre abaixo da navbar usando absolute top-full */}
       <AnimatePresence>
         {isOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 backdrop-blur-sm z-[60] lg:hidden"
-              style={{ backgroundColor: "rgba(0, 0, 0, 0.55)" }}
-              onClick={closeMenu}
-            />
+          <motion.div
+            data-mobile-dropdown
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute left-0 right-0 top-full bg-white shadow-lg rounded-b-xl overflow-hidden"
+            style={{
+              maxHeight: "45vh",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.10)",
+            }}
+          >
+            <div className="overflow-y-auto max-h-[45vh]">
+              {/* Conteúdo do Menu */}
+              <nav className="p-4 space-y-1">
+                {menuItems.map((item, index) => (
+                  <MobileNavLink
+                    key={item.href}
+                    href={item.href}
+                    label={item.label}
+                    index={index}
+                    onClose={closeMenu}
+                  />
+                ))}
 
-            {/* Painel Rollout */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{
-                type: "spring",
-                stiffness: 140,
-                damping: 18,
-              }}
-              className="fixed top-16 left-0 right-0 z-[70] lg:hidden bg-[#0B0B0B] rounded-b-[24px] overflow-hidden"
-              style={{ height: "87.5vh", maxHeight: "87.5vh", minHeight: "85vh" }}
-            >
-              <div className="h-full flex flex-col overflow-y-auto">
-                {/* Conteúdo do Menu */}
-                <nav className="flex-1 px-4 pt-8 pb-6 space-y-1">
-                  {menuItems.map((item, index) => {
-                    return (
-                      <MobileNavLink
-                        key={item.href}
-                        href={item.href}
-                        label={item.label}
-                        index={index}
-                        onClose={closeMenu}
-                      />
-                    );
-                  })}
-                </nav>
-
-                {/* CTA Fixo no Final */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: menuItems.length * 0.05 + 0.1,
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 20,
-                  }}
-                  className="px-4 pb-6 pt-4 border-t border-white/10"
-                >
+                {/* CTA Opcional */}
+                <div className="pt-4 mt-4 border-t border-gray-100">
                   <motion.div whileTap={{ scale: 0.98 }}>
                     <Link
                       href="/contato"
                       onClick={closeMenu}
-                      className="block w-full px-6 py-4 text-base font-semibold text-white text-center rounded-xl bg-[#1B4FFD] hover:bg-[#1B4FFD]/90 active:bg-[#1B4FFD]/80 transition-all duration-200 shadow-lg shadow-[#1B4FFD]/20"
+                      className="block w-full px-4 py-3 text-base font-semibold text-white text-center rounded-lg bg-[#1B4FFD] hover:bg-[#1B4FFD]/90 active:bg-[#1B4FFD]/80 transition-all duration-200"
                     >
                       Fale com um especialista
                     </Link>
                   </motion.div>
-                </motion.div>
-              </div>
-            </motion.div>
-          </>
+                </div>
+              </nav>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </header>
   );
 }
-

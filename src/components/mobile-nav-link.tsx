@@ -14,24 +14,23 @@ interface MobileNavLinkProps {
 export function MobileNavLink({ href, label, index, onClose }: MobileNavLinkProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{
-        delay: index * 0.05,
-        type: "spring",
-        stiffness: 200,
-        damping: 20,
+        delay: index * 0.02,
+        duration: 0.15,
+        ease: "easeOut",
       }}
     >
       <Link
         href={href}
         onClick={onClose}
-        className="block min-h-[48px] px-6 py-3 text-base font-medium text-white/90 hover:text-white transition-colors duration-200 active:bg-white/5 rounded-lg -mx-2"
+        className="block min-h-[48px] px-4 py-3 text-base font-medium text-[#111111] hover:opacity-80 active:opacity-80 transition-opacity duration-200 rounded-lg -mx-2"
       >
         <motion.span
           className="block"
-          whileHover={{ x: 4 }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ duration: 0.1 }}
         >
           {label}
         </motion.span>
@@ -39,4 +38,3 @@ export function MobileNavLink({ href, label, index, onClose }: MobileNavLinkProp
     </motion.div>
   );
 }
-
