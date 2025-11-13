@@ -6,8 +6,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { Check, ArrowRight, HelpCircle, Percent, Calendar } from "lucide-react";
-import { FAQStructuredData } from "@/components/seo/structured-data";
+import { Check, ArrowRight, Percent, Calendar } from "lucide-react";
 
 const pricingModels = [
   {
@@ -57,53 +56,9 @@ const pricingModels = [
   },
 ];
 
-const faqs = [
-  {
-    question: "A Kodano é regulada pelo BC?",
-    answer:
-      "Não. Provedora SaaS, sem custódia/liquidação/antecipação. Fora do escopo de instituição de pagamento.",
-  },
-  {
-    question: "Como vocês cobram?",
-    answer:
-      "% sobre GMV processado via Kodano; ou modelo fixo + variável reduzida. Planos tailor-made para grandes volumes.",
-  },
-  {
-    question: "Quem liquida?",
-    answer:
-      "A adquirente diretamente para a empresa. A Kodano não custodia valores.",
-  },
-  {
-    question: "Como é o acesso ao Dashboard?",
-    answer:
-      "Todos os planos incluem o Dashboard completo com taxas, aprovação, conciliação e relatórios.",
-  },
-  {
-    question: "Vocês oferecem antecipação?",
-    answer:
-      "Não. A antecipação é da adquirente. A Kodano apenas orquestra e roteia transações.",
-  },
-  {
-    question: "Como funciona o fee via split automático?",
-    answer:
-      "O fee da Kodano é descontado automaticamente pelas adquirentes parceiras em tempo real, sem intermediação financeira pela Kodano.",
-  },
-  {
-    question: "Há taxa de setup?",
-    answer:
-      "Não há taxa de setup. Você paga apenas conforme o modelo escolhido (pay-as-you-use ou fixo+variável).",
-  },
-  {
-    question: "Posso mudar de modelo?",
-    answer:
-      "Sim, modelos podem ser ajustados conforme seu crescimento. Fale com vendas para avaliar a melhor opção.",
-  },
-];
-
 export default function PrecosPage() {
   return (
     <MainLayout>
-      <FAQStructuredData questions={faqs} />
 
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 bg-gradient-to-br from-primary/5 via-background to-accent/5">
@@ -111,7 +66,7 @@ export default function PrecosPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
               Modelos de cobrança{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
                 simples e alinhados
               </span>
             </h1>
@@ -163,7 +118,7 @@ export default function PrecosPage() {
                     asChild
                   >
                     <Link href="/contato">
-                      Solicitar uma proposta
+                      Fale conosco
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
@@ -195,46 +150,6 @@ export default function PrecosPage() {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-20 md:py-32 bg-accent/5">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
-                Perguntas frequentes
-              </h2>
-            </div>
-
-            <div className="space-y-6">
-              {faqs.map((faq, index) => (
-                <Card key={index} className="border-border">
-                  <CardHeader>
-                    <div className="flex items-start">
-                      <HelpCircle className="h-6 w-6 text-accent mr-3 mt-0.5 flex-shrink-0" />
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2">
-                          {faq.question}
-                        </h3>
-                        <p className="text-muted-foreground">{faq.answer}</p>
-                      </div>
-                    </div>
-                  </CardHeader>
-                </Card>
-              ))}
-            </div>
-
-            <div className="mt-12 text-center">
-              <p className="text-muted-foreground mb-4">
-                Ainda tem dúvidas?
-              </p>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="/contato">Falar com nosso time</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-20 md:py-32 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -247,7 +162,7 @@ export default function PrecosPage() {
             </p>
             <Button size="lg" asChild>
               <Link href="/contato">
-                Solicitar uma proposta
+                Fale conosco
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>

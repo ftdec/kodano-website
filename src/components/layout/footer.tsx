@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { BRAND, SOCIAL_LINKS } from "@/lib/constants/brand";
 import { FOOTER_LINKS } from "@/lib/constants/navigation";
@@ -16,9 +17,22 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link
               href="/"
-              className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-primary"
+              className="flex items-center gap-3 group"
+              aria-label="Kodano - Início"
             >
-              {BRAND.name}
+              <div className="relative w-10 h-10 md:w-11 md:h-11 shrink-0 transition-transform group-hover:scale-110 flex items-center justify-center">
+                <Image
+                  src="/kodano-logo.png"
+                  alt=""
+                  width={44}
+                  height={44}
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <span className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#00A6B4] to-[#002A35] bg-[length:200%_100%] animate-gradient whitespace-nowrap flex items-center leading-none">
+                {BRAND.name}
+              </span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground max-w-xs">
               {BRAND.description}

@@ -87,7 +87,7 @@ export function Header() {
               rounded="full"
               className="hidden lg:flex"
             >
-              <Link href="/contato">Solicitar demonstração</Link>
+              <Link href="/contato">Fale conosco</Link>
             </Button>
 
             {/* Mobile Menu Button */}
@@ -165,7 +165,7 @@ export function Header() {
                         href="/contato"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        Solicitar demonstração
+                        Fale conosco
                       </Link>
                     </Button>
                   </motion.div>

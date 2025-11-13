@@ -159,15 +159,15 @@ export function VolumeCalculator() {
             </p>
           </div>
 
-          <div className="p-4 rounded-lg bg-green-500/10 backdrop-blur-sm border border-green-500/20">
-            <p className="text-xs text-green-600 dark:text-green-400 mb-1 flex items-center">
+          <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20">
+            <p className="text-xs text-accent dark:text-accent mb-1 flex items-center">
               <TrendingDown className="h-3 w-3 mr-1" />
               Economia vs. mercado
             </p>
-            <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+            <p className="text-2xl font-bold text-accent dark:text-accent">
               {formatCurrency(savings)}
             </p>
-            <p className="text-xs text-green-600/70 dark:text-green-400/70">
+            <p className="text-xs text-accent/70 dark:text-accent/70">
               {savingsPercentage.toFixed(1)}% mais barato
             </p>
           </div>

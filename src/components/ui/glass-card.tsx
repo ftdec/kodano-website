@@ -121,13 +121,13 @@ export function GlassBadge({
   ...props
 }: GlassBadgeProps) {
   const colors = {
-    blue: "bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400",
+    blue: "bg-primary/10 border-primary/30 text-primary dark:text-accent",
     green:
-      "bg-green-500/10 border-green-500/30 text-green-600 dark:text-green-400",
+      "bg-accent/10 border-accent/30 text-accent dark:text-primary",
     purple:
-      "bg-purple-500/10 border-purple-500/30 text-purple-600 dark:text-purple-400",
+      "bg-primary/15 border-primary/30 text-primary dark:text-accent",
     orange:
-      "bg-orange-500/10 border-orange-500/30 text-orange-600 dark:text-orange-400",
+      "bg-accent/15 border-accent/30 text-accent dark:text-primary",
     red: "bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400",
   };
 

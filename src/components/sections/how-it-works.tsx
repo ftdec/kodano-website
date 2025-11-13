@@ -10,28 +10,28 @@ const steps = [
     icon: Handshake,
     title: "Negocia",
     description: "A Kodano fecha MPAs com adquirentes (Price Books, rebates, SLAs).",
-    color: "from-blue-500/20 to-cyan-500/20",
+    color: "from-primary/20 to-accent/20",
   },
   {
     number: "02",
     icon: Zap,
     title: "Integra",
     description: "Conectores homologados com APIs unificadas.",
-    color: "from-purple-500/20 to-pink-500/20",
+    color: "from-accent/20 to-primary/20",
   },
   {
     number: "03",
     icon: TrendingUp,
     title: "Orquestra",
     description: "Motor de decisão escolhe a melhor rota por transação.",
-    color: "from-green-500/20 to-emerald-500/20",
+    color: "from-primary/20 via-accent/20 to-primary/20",
   },
   {
     number: "04",
     icon: Users,
     title: "Liquida direto",
     description: "Dinheiro vai da adquirente para a empresa; a Kodano não custodia.",
-    color: "from-orange-500/20 to-amber-500/20",
+    color: "from-accent/20 to-primary/20",
   },
 ];
 
@@ -46,7 +46,7 @@ export function HowItWorksSection() {
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
             Como{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
               funciona
             </span>
           </h2>

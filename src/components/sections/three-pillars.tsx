@@ -11,21 +11,21 @@ const pillars = [
     title: "Segurança e Compliance",
     description:
       "PCI DSS, LGPD e autenticação 3DS2. Proteção total para suas transações.",
-    color: "from-blue-500/10 to-cyan-500/10",
+    color: "from-primary/10 to-accent/10",
   },
   {
     icon: Zap,
     title: "Escalabilidade e Performance",
     description:
       "Infraestrutura AWS global e redundante. Processe milhões com latência ultra-baixa.",
-    color: "from-purple-500/10 to-pink-500/10",
+    color: "from-accent/10 to-primary/10",
   },
   {
     icon: Palette,
     title: "White Label Personalizável",
     description:
       "Checkout e painel sob sua marca. Customização completa da experiência.",
-    color: "from-green-500/10 to-emerald-500/10",
+    color: "from-primary/15 via-accent/10 to-primary/15",
   },
 ];
 
@@ -38,7 +38,7 @@ export function ThreePillarsSection() {
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
               Três pilares da{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
                 Kodano
               </span>
             </h2>

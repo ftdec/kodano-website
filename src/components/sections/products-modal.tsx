@@ -32,7 +32,7 @@ const products = [
     description:
       "Processe pagamentos online com cartões, Pix, boleto e carteiras digitais",
     icon: CreditCard,
-    color: "from-blue-500/10 to-cyan-500/10",
+    color: "from-primary/10 to-accent/10",
     features: [
       "Cartões de crédito e débito",
       "Pix com confirmação instantânea",
@@ -54,7 +54,7 @@ const products = [
     tagline: "Split para marketplaces",
     description: "Plataforma de split de pagamentos para marketplaces e SaaS",
     icon: Share2,
-    color: "from-purple-500/10 to-pink-500/10",
+    color: "from-accent/10 to-primary/10",
     features: [
       "Onboarding automatizado de sellers",
       "Split configurável",
@@ -78,7 +78,7 @@ const products = [
     tagline: "Assinaturas recorrentes",
     description: "Gestão completa de assinaturas e cobranças recorrentes",
     icon: Receipt,
-    color: "from-green-500/10 to-emerald-500/10",
+    color: "from-primary/15 via-accent/10 to-primary/15",
     features: [
       "Planos fixos ou por uso",
       "Trials gratuitos",
@@ -152,7 +152,7 @@ export function ProductsModalSection() {
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
               Produtos projetados para{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
                 crescer com você
               </span>
             </h2>

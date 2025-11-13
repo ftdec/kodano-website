@@ -25,7 +25,7 @@ export function Logo({ className = "", showText = true }: LogoProps) {
         />
       </div>
       {showText && (
-        <span className="text-xl md:text-[22px] font-semibold tracking-tight font-[family-name:var(--font-poppins)] text-foreground group-hover:text-foreground/80 transition-colors whitespace-nowrap flex items-center leading-none">
+        <span className="text-xl md:text-[22px] font-semibold tracking-tight font-[family-name:var(--font-poppins)] text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient whitespace-nowrap flex items-center leading-none">
           Kodano
         </span>
       )}

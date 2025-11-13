@@ -89,7 +89,7 @@ export default function SolucoesPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
               Menor custo efetivo, maior aprovação e{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
                 liquidação previsível
               </span>
             </h1>
@@ -106,7 +106,7 @@ export default function SolucoesPage() {
           <div className="max-w-4xl mx-auto mb-16">
             <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6 text-center">
               Benefícios{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
                 mensuráveis
               </span>
             </h2>
@@ -140,7 +140,7 @@ export default function SolucoesPage() {
           <div className="max-w-4xl mx-auto mb-16">
             <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6 text-center">
               Soluções por{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
                 vertical
               </span>
             </h2>
@@ -175,12 +175,12 @@ export default function SolucoesPage() {
               Pronto para otimizar seus pagamentos?
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Solicite uma demonstração e veja os ganhos potenciais para seu negócio
+              Fale conosco e veja os ganhos potenciais para seu negócio
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" asChild>
                 <Link href="/contato">
-                  Solicitar uma demonstração
+                  Fale conosco
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>

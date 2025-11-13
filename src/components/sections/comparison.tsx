@@ -83,7 +83,7 @@ const comparisonData = [
 const renderValue = (value: boolean | string) => {
   if (typeof value === "boolean") {
     return value ? (
-      <Check className="h-5 w-5 text-green-500 mx-auto" />
+      <Check className="h-5 w-5 text-accent mx-auto" />
     ) : (
       <X className="h-5 w-5 text-red-500 mx-auto" />
     );
@@ -99,7 +99,7 @@ export function ComparisonSection() {
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
             Por que escolher a{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
               Kodano
             </span>
             ?

@@ -16,7 +16,7 @@ const products = [
     description:
       "Aceite pagamentos online com cartões, Pix, boleto e carteiras digitais",
     icon: CreditCard,
-    color: "from-blue-500/10 to-cyan-500/10",
+    color: "from-primary/10 to-accent/10",
     href: "/produtos#payments",
   },
   {
@@ -24,7 +24,7 @@ const products = [
     description:
       "Plataforma de split de pagamentos para marketplaces e SaaS",
     icon: Share2,
-    color: "from-purple-500/10 to-pink-500/10",
+    color: "from-accent/10 to-primary/10",
     href: "/produtos#connect",
   },
   {
@@ -32,7 +32,7 @@ const products = [
     description:
       "Gestão completa de assinaturas e cobranças recorrentes",
     icon: Receipt,
-    color: "from-green-500/10 to-emerald-500/10",
+    color: "from-primary/15 via-accent/10 to-primary/15",
     href: "/produtos#billing",
   },
   {
@@ -40,7 +40,7 @@ const products = [
     description:
       "Página de checkout otimizada e personalizável para sua marca",
     icon: ShoppingCart,
-    color: "from-orange-500/10 to-amber-500/10",
+    color: "from-accent/15 to-primary/10",
     href: "/produtos#checkout",
   },
   {
@@ -61,7 +61,7 @@ export function ProductsSection() {
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
             Produtos projetados para{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
               crescer com você
             </span>
           </h2>

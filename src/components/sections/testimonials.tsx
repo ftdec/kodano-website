@@ -8,17 +8,17 @@ const metrics = [
   {
     icon: TrendingUp,
     label: "Aumenta aprovação de pagamentos",
-    color: "from-green-500 to-emerald-500",
+    color: "from-primary to-accent",
   },
   {
     icon: Zap,
     label: "Reduz custos efetivos",
-    color: "from-blue-500 to-cyan-500",
+    color: "from-accent to-primary",
   },
   {
     icon: Shield,
     label: "Alta disponibilidade garantida",
-    color: "from-purple-500 to-pink-500",
+    color: "from-primary via-accent to-primary",
   },
 ];
 
@@ -34,7 +34,7 @@ export function TestimonialsSection() {
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
               Resultados{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
                 mensuráveis
               </span>
             </h2>
@@ -49,11 +49,11 @@ export function TestimonialsSection() {
               <div key={index} className="relative h-full flex">
                 <div className="relative bg-background/80 backdrop-blur-sm border border-border rounded-2xl p-8 hover:border-accent transition-all hover:shadow-lg group w-full flex flex-col">
                   <div className="relative z-10 flex flex-col h-full">
-                    <div className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${metric.color} mb-6 flex-shrink-0`}>
-                      <metric.icon className="h-6 w-6 text-white" />
+                    <div className={`flex items-center justify-center p-3 rounded-xl bg-gradient-to-br ${metric.color} mb-6 flex-shrink-0 w-fit mx-auto`}>
+                      <metric.icon className="h-5 w-5 text-white" />
                     </div>
                     
-                    <p className="text-lg font-semibold text-foreground flex-grow flex items-center">
+                    <p className="text-lg font-semibold text-foreground flex-grow flex items-center justify-center text-center">
                       {metric.label}
                     </p>
                   </div>

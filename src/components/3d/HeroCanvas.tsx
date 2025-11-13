@@ -50,9 +50,11 @@ export function HeroCanvas() {
           alpha: true,
           antialias: !isMobile,
           powerPreference: "high-performance",
+          stencil: false,
+          depth: false,
         }}
         performance={{ min: 0.5 }}
-        frameloop="always"
+        frameloop="demand"
       >
         <Suspense fallback={null}>
           {/* PRD v2.0: Luz ambiente 0.6; directional 0.4 */}

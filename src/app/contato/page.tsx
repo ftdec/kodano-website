@@ -21,7 +21,7 @@ export default function ContatoPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
               Fale com o{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
                 nosso time
               </span>
             </h1>
@@ -219,7 +219,7 @@ export default function ContatoPage() {
 
                     <div className="flex flex-col sm:flex-row gap-4">
                       <Button type="submit" size="lg" className="flex-1">
-                        Solicitar demonstração
+                        Fale conosco
                         <ArrowRight className="ml-2 h-5 w-5" />
                       </Button>
                       <Button type="button" size="lg" variant="outline" className="flex-1 hover:bg-accent/10 hover:border-accent hover:text-accent" asChild>

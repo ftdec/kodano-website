@@ -74,7 +74,7 @@ export default function ComoFuncionaPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
               Como a Kodano{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
                 opera
               </span>
               {" "}— ponta a ponta
@@ -123,7 +123,7 @@ export default function ComoFuncionaPage() {
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
                 Por que as adquirentes{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
                   aceitam
                 </span>
               </h2>
@@ -160,12 +160,12 @@ export default function ComoFuncionaPage() {
               Pronto para começar?
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Solicite uma demonstração e veja como a Kodano pode otimizar seus pagamentos
+              Fale conosco e veja como a Kodano pode otimizar seus pagamentos
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" asChild>
                 <Link href="/contato">
-                  Solicitar uma demonstração
+                  Fale conosco
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>

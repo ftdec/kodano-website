@@ -26,6 +26,30 @@ export function ApiStatus({ compact = false, className = "" }: ApiStatusProps) {
     { name: "Webhooks", status: "operational", uptime: 99.97, responseTime: 89 },
     { name: "Dashboard", status: "operational", uptime: 100, responseTime: 234 },
   ]);
+  const [currentTime, setCurrentTime] = useState<string>("");
+  const [isMounted, setIsMounted] = useState(false);
+  const [uptimeData, setUptimeData] = useState<number[]>([]);
+
+  useEffect(() => {
+    setIsMounted(true);
+    // Set initial time
+    setCurrentTime(new Date().toLocaleTimeString("pt-BR"));
+    
+    // Update time every second
+    const interval = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString("pt-BR"));
+    }, 1000);
+
+    // Generate deterministic uptime data based on index
+    const data = Array.from({ length: 90 }).map((_, i) => {
+      // Use a deterministic function instead of Math.random()
+      const seed = i * 0.1;
+      return Math.sin(seed) * 0.5 + 0.5;
+    });
+    setUptimeData(data);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const getStatusIcon = (status: ServiceStatus) => {
     switch (status) {
@@ -96,7 +120,7 @@ export function ApiStatus({ compact = false, className = "" }: ApiStatusProps) {
               {allOperational ? "Todos os sistemas operacionais" : "Problemas detectados"}
             </h3>
             <p className="text-sm text-muted-foreground">
-              Última atualização: {new Date().toLocaleTimeString("pt-BR")}
+              Última atualização: {isMounted ? currentTime : "--:--:--"}
             </p>
           </div>
         </div>
@@ -149,15 +173,25 @@ export function ApiStatus({ compact = false, className = "" }: ApiStatusProps) {
       <div className="mt-6 p-4 rounded-lg border border-border bg-muted/10">
         <h4 className="text-sm font-medium text-foreground mb-3">Últimos 90 dias</h4>
         <div className="flex items-end gap-1 h-16">
-          {Array.from({ length: 90 }).map((_, i) => (
-            <div
-              key={i}
-              className={`flex-1 ${
-                Math.random() > 0.02 ? "bg-green-500" : "bg-red-500"
-              } rounded-sm`}
-              style={{ height: `${Math.random() * 20 + 80}%` }}
-            />
-          ))}
+          {isMounted && uptimeData.length > 0 ? (
+            uptimeData.map((value, i) => (
+              <div
+                key={i}
+                className={`flex-1 ${
+                  value > 0.02 ? "bg-green-500" : "bg-red-500"
+                } rounded-sm`}
+                style={{ height: `${value * 20 + 80}%` }}
+              />
+            ))
+          ) : (
+            Array.from({ length: 90 }).map((_, i) => (
+              <div
+                key={i}
+                className="flex-1 bg-muted rounded-sm"
+                style={{ height: "90%" }}
+              />
+            ))
+          )}
         </div>
         <p className="text-xs text-muted-foreground mt-2">
           Cada barra representa a disponibilidade em um dia

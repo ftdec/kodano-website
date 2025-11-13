@@ -43,7 +43,7 @@ export function IntegrationsSection() {
         <div className="max-w-3xl mx-auto text-center mb-16 -mt-4">
           <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6 leading-tight">
             Uma integração,{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#053B3F] to-[#00A6B4] inline-block mt-1">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient inline-block mt-1">
               múltiplas adquirentes
             </span>
           </h2>
@@ -91,7 +91,7 @@ export function IntegrationsSection() {
             asChild
           >
             <Link href="/contato">
-              Solicitar demonstração
+              Fale conosco
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>

@@ -10,21 +10,21 @@ const features = [
     description:
       "Roteamento por taxa efetiva, aprovação e latência.",
     icon: TrendingUp,
-    gradient: "from-green-500/20 to-emerald-500/20",
+    gradient: "from-primary/20 to-accent/20",
   },
   {
     title: "Governança multiadquirente",
     description:
       "Dados, relatórios e conciliação centralizados.",
     icon: Zap,
-    gradient: "from-blue-500/20 to-cyan-500/20",
+    gradient: "from-accent/20 to-primary/20",
   },
   {
     title: "Integração única",
     description:
       "Uma API, todas as adquirentes.",
     icon: Code,
-    gradient: "from-purple-500/20 to-pink-500/20",
+    gradient: "from-primary/20 via-accent/20 to-primary/20",
   },
 ];
 
@@ -39,7 +39,7 @@ export function FeaturesSection() {
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
             Por que escolher a{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#004A5A] to-[#002A35] bg-[length:200%_100%] animate-gradient">
               Kodano
             </span>
           </h2>
