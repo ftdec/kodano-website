@@ -6,26 +6,27 @@ import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Para Adquirentes - Kodano",
-  description: "Uma parceria que amplia o alcance e o volume da sua adquirência.",
+  title: "Para Empresas - Kodano",
+  description: "Tecnologia que impulsiona empresas que crescem com consistência.",
 };
 
 const beneficios = [
-  "Acesso a novos clientes",
-  "Mais volume processado",
-  "Integração simples",
-  "Roteamento transparente",
-  "Competitividade ampliada",
+  "Mais aprovação",
+  "Menor custo por transação",
+  "Painel unificado",
+  "Simplificação operacional",
+  "Suporte próximo",
 ];
 
-const fluxo = [
-  "Integramos adquirente",
-  "Empresas têm acesso imediato",
-  "Roteamento por performance",
-  "Performance gera volume",
+const casosDeUso = [
+  "E-commerce",
+  "Assinaturas",
+  "Marketplaces",
+  "Apps",
+  "Serviços digitais",
 ];
 
-export default function AdquirentesPage() {
+export default function ParaEmpresasPage() {
   return (
     <MainLayout>
       {/* Hero Section */}
@@ -33,10 +34,10 @@ export default function AdquirentesPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6">
-              Uma parceria que amplia o alcance e o volume da sua adquirência.
+              Tecnologia que impulsiona empresas que crescem com consistência.
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Conecta adquirentes a mais empresas.
+              Eficiência, estabilidade, clareza.
             </p>
           </div>
         </div>
@@ -68,22 +69,21 @@ export default function AdquirentesPage() {
         </div>
       </section>
 
-      {/* Fluxo */}
+      {/* Casos de uso */}
       <section className="py-20 md:py-32 bg-accent/5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto mb-16">
             <h2 className="text-3xl md:text-5xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6 text-center">
-              Fluxo
+              Casos de uso
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            {fluxo.map((passo, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {casosDeUso.map((caso, index) => (
               <Card key={index} className="border-border">
                 <CardContent className="pt-6 text-center">
-                  <div className="text-3xl font-bold text-accent mb-4">{index + 1}</div>
                   <h3 className="text-lg font-semibold font-[family-name:var(--font-poppins)] text-foreground">
-                    {passo}
+                    {caso}
                   </h3>
                 </CardContent>
               </Card>
@@ -108,3 +108,4 @@ export default function AdquirentesPage() {
     </MainLayout>
   );
 }
+

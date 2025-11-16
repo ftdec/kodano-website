@@ -80,7 +80,7 @@ export function Header() {
                 rounded="full"
                 className="hidden lg:flex"
               >
-                <Link href="/contato">Fale conosco</Link>
+                <Link href="/fale-conosco">Fale Conosco</Link>
               </Button>
             </div>
           </div>

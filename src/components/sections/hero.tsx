@@ -141,8 +141,8 @@ export function HeroSection() {
               className="group"
               asChild
             >
-              <Link href="/contato">
-                Fale conosco
+              <Link href="/fale-conosco">
+                Fale Conosco
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>

@@ -11,7 +11,7 @@ export const NAVIGATION_ITEMS = [
   },
   {
     label: "Para Empresas",
-    href: "/solucoes",
+    href: "/para-empresas",
     description: "Soluções B2B",
   },
   {
@@ -30,8 +30,8 @@ export const NAVIGATION_ITEMS = [
     description: "Conheça a Kodano",
   },
   {
-    label: "Contato",
-    href: "/contato",
+    label: "Fale Conosco",
+    href: "/fale-conosco",
     description: "Fale conosco",
   },
 ];
@@ -59,8 +59,6 @@ export const FOOTER_LINKS = {
   ],
   empresa: [
     { label: "Sobre", href: "/sobre" },
-    { label: "Clientes", href: "/clientes" },
-    { label: "Contato", href: "/contato" },
-    { label: "Carreiras", href: "/carreiras" },
+    { label: "Fale Conosco", href: "/fale-conosco" },
   ],
 };

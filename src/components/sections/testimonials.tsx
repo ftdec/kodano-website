@@ -71,8 +71,8 @@ export function TestimonialsSection() {
               className="group"
               asChild
             >
-              <Link href="/contato">
-                Veja como podemos ajudar seu negócio
+              <Link href="/fale-conosco">
+                Fale Conosco
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>

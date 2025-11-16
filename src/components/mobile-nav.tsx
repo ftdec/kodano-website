@@ -158,11 +158,11 @@ export function MobileNav() {
                 <div className="pt-4 mt-4 border-t border-gray-100 pb-2">
                   <motion.div whileTap={{ scale: 0.98 }}>
                     <Link
-                      href="/contato"
+                      href="/fale-conosco"
                       onClick={closeMenu}
-                      className="block w-full px-4 py-3 text-base font-semibold text-white text-center rounded-lg bg-[#002A35] hover:bg-[#00C8DC] active:bg-[#002A35]/90 transition-all duration-200"
+                      className="block w-full px-4 py-3 text-base font-semibold text-white text-center rounded-lg bg-[#0D1B2A] hover:bg-[#415A77] active:bg-[#0D1B2A]/90 transition-all duration-200"
                     >
-                      Fale conosco
+                      Fale Conosco
                     </Link>
                   </motion.div>
                 </div>
