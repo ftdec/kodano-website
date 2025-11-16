@@ -230,24 +230,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const Comp = asChild ? Slot : motion.button;
     const isDisabled = disabled || loading;
     const showShimmer = shimmer && variant !== "link" && variant !== "ghost";
 
     // Determine if button should have motion
     const hasMotion = !asChild && !variant?.includes("link");
 
-    return (
-      <Comp
-        ref={ref}
-        className={cn(buttonVariants({ variant, size, loading, fullWidth, className }))}
-        disabled={isDisabled}
-        variants={hasMotion ? buttonMotionVariants : undefined}
-        initial={hasMotion ? "rest" : undefined}
-        whileHover={hasMotion && !isDisabled ? "hover" : undefined}
-        whileTap={hasMotion && !isDisabled ? "tap" : undefined}
-        {...props}
-      >
+    const buttonContent = (
+      <>
         {/* Loading spinner */}
         {loading && (
           <motion.div
@@ -290,7 +280,34 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
         {/* Focus ring enhancement */}
         <span className="absolute inset-0 rounded-inherit ring-0 ring-offset-0 ring-offset-background transition-all duration-200" />
-      </Comp>
+      </>
+    );
+
+    if (asChild) {
+      return (
+        <Slot
+          ref={ref}
+          className={cn(buttonVariants({ variant, size, loading, fullWidth, className }))}
+          {...props}
+        >
+          {buttonContent}
+        </Slot>
+      );
+    }
+
+    return (
+      <motion.button
+        ref={ref}
+        className={cn(buttonVariants({ variant, size, loading, fullWidth, className }))}
+        disabled={isDisabled}
+        variants={hasMotion ? buttonMotionVariants : undefined}
+        initial={hasMotion ? "rest" : undefined}
+        whileHover={hasMotion && !isDisabled ? "hover" : undefined}
+        whileTap={hasMotion && !isDisabled ? "tap" : undefined}
+        {...props}
+      >
+        {buttonContent}
+      </motion.button>
     );
   }
 );
