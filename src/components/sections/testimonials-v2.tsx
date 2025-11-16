@@ -222,7 +222,7 @@ function TestimonialCard({
 // ============================================================================
 
 interface CarouselProps {
-  testimonials: TestimonialCardProps[];
+  testimonials: Omit<TestimonialCardProps, "index">[];
   autoPlay?: boolean;
   interval?: number;
 }
