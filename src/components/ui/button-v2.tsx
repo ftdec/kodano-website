@@ -190,7 +190,7 @@ const spinnerMotion = {
     rotate: 360,
     transition: {
       duration: 1,
-      ease: "linear",
+      ease: "linear" as const,
       repeat: Infinity,
     },
   },
