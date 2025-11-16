@@ -4,7 +4,7 @@
  */
 
 import * as React from "react";
-import { motion, HTMLMotionProps, Variants } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ArrowRight, Sparkles } from "lucide-react";
 
@@ -68,7 +68,7 @@ const shineVariants = {
 // BASE CARD COMPONENT
 // ============================================================================
 
-interface CardProps extends HTMLMotionProps<"div"> {
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   hoverable?: boolean;
   glowOnHover?: boolean;
   shineOnHover?: boolean;
@@ -98,7 +98,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         initial={hoverable ? "default" : undefined}
         whileHover={hoverable ? "hover" : undefined}
         whileTap={hoverable ? "tap" : undefined}
-        {...props}
+        {...(props as any)}
       >
         {/* Glow effect */}
         {glowOnHover && (
