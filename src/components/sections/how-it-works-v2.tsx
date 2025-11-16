@@ -494,11 +494,11 @@ export function HowItWorksSection({
   const backgroundY = useTransform(scrollYProgress, [0, 1], [50, -50]);
 
   return (
-    <SectionContainer
-      ref={sectionRef}
-      spacing="xl"
-      className={cn("relative overflow-hidden", className)}
-    >
+    <div ref={sectionRef}>
+      <SectionContainer
+        spacing="xl"
+        className={cn("relative overflow-hidden", className)}
+      >
       {/* Animated background */}
       <motion.div
         style={{ y: backgroundY }}
@@ -649,7 +649,8 @@ export function HowItWorksSection({
           </motion.button>
         </motion.div>
       )}
-    </SectionContainer>
+      </SectionContainer>
+    </div>
   );
 }
 
