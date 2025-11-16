@@ -505,7 +505,8 @@ export function TestimonialsSection({
   const isInView = useInView(sectionRef, { once: true, margin: "-200px" });
 
   return (
-    <SectionContainer ref={sectionRef} spacing="xl" background="muted" className={className}>
+    <div ref={sectionRef}>
+      <SectionContainer spacing="xl" background="muted" className={className}>
       {/* Header */}
       <SectionHeader
         badge={subtitle}
@@ -571,7 +572,8 @@ export function TestimonialsSection({
           <Star className="h-4 w-4" />
         </motion.a>
       </motion.div>
-    </SectionContainer>
+      </SectionContainer>
+    </div>
   );
 }
 
