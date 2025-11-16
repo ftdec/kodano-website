@@ -181,12 +181,14 @@ function BenefitCard({
           variant === "large" ? "h-14 w-14" : "h-12 w-12"
         )}
       >
-        {React.cloneElement(icon as React.ReactElement, {
-          className: cn(
-            "text-accent",
-            variant === "large" ? "h-7 w-7" : "h-6 w-6"
-          ),
-        })}
+        {React.isValidElement(icon)
+          ? React.cloneElement(icon, {
+              className: cn(
+                "text-accent",
+                variant === "large" ? "h-7 w-7" : "h-6 w-6"
+              ),
+            } as any)
+          : icon}
       </motion.div>
 
       {/* Content */}

@@ -280,26 +280,28 @@ function SimpleCTA({ title, description, primaryCTA, secondaryCTA }: SimpleCTAPr
         transition={{ delay: 0.3 }}
         className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
       >
-        <Button
-          size="lg"
-          variant="kodano"
-          href={primaryCTA.href}
-          className="group"
-        >
-          {primaryCTA.label}
-          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </Button>
-
-        {secondaryCTA && (
+        <Link href={primaryCTA.href}>
           <Button
             size="lg"
-            variant="outline"
-            href={secondaryCTA.href}
+            variant="kodano"
             className="group"
           >
-            {secondaryCTA.label}
-            <ExternalLink className="ml-2 h-4 w-4" />
+            {primaryCTA.label}
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
+        </Link>
+
+        {secondaryCTA && (
+          <Link href={secondaryCTA.href}>
+            <Button
+              size="lg"
+              variant="outline"
+              className="group"
+            >
+              {secondaryCTA.label}
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         )}
       </motion.div>
 
