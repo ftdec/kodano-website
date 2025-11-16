@@ -80,7 +80,7 @@ function TestimonialCard({
       scale: 1,
       transition: {
         delay: index * 0.1 + 0.3 + i * 0.05,
-        type: "spring",
+        type: "spring" as const,
         stiffness: 400,
       },
     }),
