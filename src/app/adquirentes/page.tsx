@@ -60,7 +60,7 @@ function BenefitItem({ text, delay = 0 }: { text: string; delay?: number }) {
     >
       <motion.div
         whileHover={{ x: 4 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
+        transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
       >
         <Card className="border-border/50 hover:border-accent/50 transition-all duration-300 group">
           <CardContent className="pt-6">
@@ -93,7 +93,7 @@ function FlowStep({ number, text, delay = 0 }: { number: number; text: string; d
     >
       <motion.div
         whileHover={{ y: -6, scale: 1.02 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] as const }}
       >
         <Card className="border-border/50 hover:border-accent/50 transition-all duration-300 h-full group">
           <CardContent className="pt-10 pb-10 text-center">
