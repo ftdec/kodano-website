@@ -136,9 +136,10 @@ export function prefersReducedMotion(): boolean {
 }
 
 /**
- * Applies animation delay based on index for staggered effects
+ * Calculates animation delay in milliseconds based on index for staggered effects
+ * @deprecated Use staggerDelay from "./motion" instead
  */
-export function staggerDelay(index: number, base = 50): number {
+export function staggerDelayMs(index: number, base = 50): number {
   return index * base;
 }
 
@@ -146,7 +147,7 @@ export function staggerDelay(index: number, base = 50): number {
  * Creates CSS animation delay string
  */
 export function animationDelay(index: number, base = 50): string {
-  return `${staggerDelay(index, base)}ms`;
+  return `${staggerDelayMs(index, base)}ms`;
 }
 
 // ============================================================================
@@ -513,7 +514,7 @@ export const utils = {
   },
   animation: {
     prefersReducedMotion,
-    staggerDelay,
+    staggerDelayMs,
     animationDelay,
   },
   format: {
@@ -554,18 +555,8 @@ export const utils = {
   },
 } as const;
 
-// Also export individually for convenience
-export {
-  // Most used utilities
-  hexToRgba,
-  prefersReducedMotion,
-  formatNumber,
-  formatCurrency,
-  debounce,
-  throttle,
-  isValidEmail,
-  mergeRefs,
-};
+// All utility functions are already exported when declared,
+// so no need for additional named exports
 
 // Import React for createContext utility
 import React from "react";

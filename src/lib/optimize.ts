@@ -4,7 +4,7 @@
  */
 
 import dynamic from "next/dynamic";
-import { ComponentType, lazy } from "react";
+import React, { ComponentType, lazy } from "react";
 
 // ============================================================================
 // DYNAMIC IMPORT CONFIGURATIONS
@@ -23,7 +23,9 @@ export function dynamicImport<T extends ComponentType<any>>(
 ) {
   return dynamic(importFn, {
     ssr: options?.ssr ?? true,
-    loading: options?.loading || (() => null),
+    loading: options?.loading
+      ? () => React.createElement(options.loading as ComponentType)
+      : () => null,
   });
 }
 
@@ -31,41 +33,43 @@ export function dynamicImport<T extends ComponentType<any>>(
 // LAZY LOADED COMPONENTS
 // ============================================================================
 
+// Placeholder lazy loaded components - uncomment when implementing these features
+
 // Heavy chart components
-export const LazyChartComponent = dynamicImport(
-  () => import("@/components/charts/advanced-chart"),
-  { ssr: false }
-);
+// export const LazyChartComponent = dynamicImport(
+//   () => import("@/components/charts/advanced-chart"),
+//   { ssr: false }
+// );
 
 // Animation-heavy components
-export const LazyParticleBackground = dynamicImport(
-  () => import("@/components/backgrounds/particle-background"),
-  { ssr: false }
-);
+// export const LazyParticleBackground = dynamicImport(
+//   () => import("@/components/backgrounds/particle-background"),
+//   { ssr: false }
+// );
 
-export const Lazy3DScene = dynamicImport(
-  () => import("@/components/3d/scene"),
-  { ssr: false }
-);
+// export const Lazy3DScene = dynamicImport(
+//   () => import("@/components/3d/scene"),
+//   { ssr: false }
+// );
 
 // Form components (load on interaction)
-export const LazyComplexForm = dynamicImport(
-  () => import("@/components/forms/complex-form")
-);
+// export const LazyComplexForm = dynamicImport(
+//   () => import("@/components/forms/complex-form")
+// );
 
-export const LazyFileUploader = dynamicImport(
-  () => import("@/components/forms/file-uploader"),
-  { ssr: false }
-);
+// export const LazyFileUploader = dynamicImport(
+//   () => import("@/components/forms/file-uploader"),
+//   { ssr: false }
+// );
 
 // Modal components
-export const LazyVideoModal = dynamicImport(
-  () => import("@/components/modals/video-modal")
-);
+// export const LazyVideoModal = dynamicImport(
+//   () => import("@/components/modals/video-modal")
+// );
 
-export const LazyImageGallery = dynamicImport(
-  () => import("@/components/gallery/image-gallery")
-);
+// export const LazyImageGallery = dynamicImport(
+//   () => import("@/components/gallery/image-gallery")
+// );
 
 // ============================================================================
 // PRELOAD STRATEGIES

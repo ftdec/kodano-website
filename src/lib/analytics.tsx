@@ -21,6 +21,11 @@ interface AnalyticsEvent {
   properties?: Record<string, any>;
 }
 
+// Internal type for stored events with timestamp
+interface StoredAnalyticsEvent extends AnalyticsEvent {
+  timestamp: number;
+}
+
 interface PageViewEvent {
   url: string;
   title: string;
@@ -126,7 +131,7 @@ class GoogleAnalytics {
 class CustomAnalytics {
   private endpoint: string;
   private sessionId: string;
-  private events: AnalyticsEvent[] = [];
+  private events: StoredAnalyticsEvent[] = [];
   private flushInterval: NodeJS.Timeout | null = null;
 
   constructor(endpoint: string) {
@@ -175,10 +180,11 @@ class CustomAnalytics {
   }
 
   track(event: AnalyticsEvent) {
-    this.events.push({
+    const storedEvent: StoredAnalyticsEvent = {
       ...event,
       timestamp: Date.now(),
-    });
+    };
+    this.events.push(storedEvent);
   }
 
   trackPageView(pageView: PageViewEvent) {

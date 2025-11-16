@@ -54,7 +54,7 @@ class WebVitalsObserver {
     };
 
     // Only track if user is in sample
-    if (Math.random() > this.config.sampleRate) {
+    if (Math.random() > this.config!.sampleRate!) {
       return;
     }
 
@@ -121,7 +121,7 @@ class WebVitalsObserver {
 
     try {
       const observer = new PerformanceObserver((list) => {
-        const firstEntry = list.getEntries()[0];
+        const firstEntry = list.getEntries()[0] as any;
         this.metrics.FID = Math.round(firstEntry.processingStart - firstEntry.startTime);
         this.logMetric("FID", this.metrics.FID);
       });
