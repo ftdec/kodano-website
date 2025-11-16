@@ -304,7 +304,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         initial={hasMotion ? "rest" : undefined}
         whileHover={hasMotion && !isDisabled ? "hover" : undefined}
         whileTap={hasMotion && !isDisabled ? "tap" : undefined}
-        {...props}
+        {...(props as any)}
       >
         {buttonContent}
       </motion.button>
