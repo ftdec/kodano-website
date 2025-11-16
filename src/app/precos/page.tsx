@@ -6,6 +6,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { MainLayout } from "@/components/layout/main-layout";
 import { PricingCard } from "@/components/ui/card-v2";
 import { CTASection } from "@/components/sections/cta-v2";
@@ -419,9 +420,11 @@ export default function PrecosPage() {
           <p className="text-muted-foreground">
             Criamos planos personalizados para grandes volumes e necessidades específicas.
           </p>
-          <Button variant="outline" size="sm" href="/contato" className="mt-4">
-            Falar com especialista
-          </Button>
+          <Link href="/contato">
+            <Button variant="outline" size="sm" className="mt-4">
+              Falar com especialista
+            </Button>
+          </Link>
         </motion.div>
 
         {/* Feature Comparison */}

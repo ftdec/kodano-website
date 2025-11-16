@@ -6,6 +6,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { MainLayout } from "@/components/layout/main-layout";
 import { FeaturesSection } from "@/components/sections/features-v2";
 import { BenefitsSection } from "@/components/sections/benefits-v2";
@@ -349,14 +350,18 @@ export default function ProdutosPage() {
               transition={{ delay: 0.3 }}
               className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center"
             >
-              <Button size="lg" variant="kodano" href="/demo">
-                Ver Demonstração
-                <Zap className="ml-2 h-5 w-5" />
-              </Button>
-              <Button size="lg" variant="outline" href="/documentacao">
-                Documentação Técnica
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              <Link href="/demo">
+                <Button size="lg" variant="kodano">
+                  Ver Demonstração
+                  <Zap className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link href="/documentacao">
+                <Button size="lg" variant="outline">
+                  Documentação Técnica
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
             </motion.div>
           </div>
         </div>

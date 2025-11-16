@@ -99,8 +99,8 @@ export default function Home() {
         title="Pagamentos inteligentes para empresas que exigem eficiência"
         subtitle="Plataforma de Orquestração de Pagamentos"
         description="Orquestração que aumenta aprovação, reduz custos e traz clareza operacional. Processe pagamentos com a infraestrutura mais avançada do mercado."
-        primaryCTA={{ label: "Começar Agora", href: "/cadastro" }}
-        secondaryCTA={{ label: "Ver Demonstração", href: "/demo" }}
+        primaryCta={{ label: "Começar Agora", href: "/cadastro" }}
+        secondaryCta={{ label: "Ver Demonstração", href: "/demo" }}
         showDashboard={true}
         showMetrics={true}
       />

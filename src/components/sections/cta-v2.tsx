@@ -6,6 +6,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import Link from "next/link";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
@@ -595,14 +596,18 @@ export function CTASection({
               </ul>
 
               <div className="mt-8 flex gap-4">
-                <Button size="lg" variant="kodano" href={primaryCTA.href}>
-                  {primaryCTA.label}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-                {secondaryCTA && (
-                  <Button size="lg" variant="outline" href={secondaryCTA.href}>
-                    {secondaryCTA.label}
+                <Link href={primaryCTA.href}>
+                  <Button size="lg" variant="kodano">
+                    {primaryCTA.label}
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
+                </Link>
+                {secondaryCTA && (
+                  <Link href={secondaryCTA.href}>
+                    <Button size="lg" variant="outline">
+                      {secondaryCTA.label}
+                    </Button>
+                  </Link>
                 )}
               </div>
             </motion.div>
