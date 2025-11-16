@@ -228,59 +228,37 @@ export function HeaderV2() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Enhanced navigation items with descriptions
-  const enhancedNavItems: NavItem[] = [
-    {
-      href: "/",
-      label: "Home",
-    },
-    {
-      href: "/como-funciona",
-      label: "Como Funciona",
-      description: "Entenda nossa plataforma",
-    },
-    {
-      href: "/produtos",
-      label: "Produtos",
-      items: [
-        {
-          href: "/produtos#orquestracao",
-          label: "Orquestração Inteligente",
-          description: "Roteamento automático para múltiplos adquirentes",
-        },
-        {
-          href: "/produtos#checkout",
-          label: "Checkout Transparente",
-          description: "Experiência de pagamento otimizada",
-        },
-        {
-          href: "/produtos#antifraude",
-          label: "Antifraude Avançado",
-          description: "Proteção em tempo real com machine learning",
-        },
-        {
-          href: "/produtos#dashboard",
-          label: "Dashboard Unificado",
-          description: "Visão completa de todas as transações",
-        },
-      ],
-    },
-    {
-      href: "/para-empresas",
-      label: "Para Empresas",
-      description: "Soluções para seu negócio",
-    },
-    {
-      href: "/precos",
-      label: "Preços",
-      description: "Planos transparentes",
-    },
-    {
-      href: "/sobre",
-      label: "Sobre",
-      description: "Conheça a Kodano",
-    },
-  ];
+  // Use navigation items from constants with enhanced dropdown for Produtos
+  const enhancedNavItems: NavItem[] = NAVIGATION_ITEMS.map(item => {
+    if (item.label === "Produtos") {
+      return {
+        ...item,
+        items: [
+          {
+            href: "/produtos#orquestracao",
+            label: "Orquestração Inteligente",
+            description: "Roteamento automático para múltiplos adquirentes",
+          },
+          {
+            href: "/produtos#checkout",
+            label: "Checkout Transparente",
+            description: "Experiência de pagamento otimizada",
+          },
+          {
+            href: "/produtos#antifraude",
+            label: "Antifraude Avançado",
+            description: "Proteção em tempo real com machine learning",
+          },
+          {
+            href: "/produtos#dashboard",
+            label: "Dashboard Unificado",
+            description: "Visão completa de todas as transações",
+          },
+        ],
+      };
+    }
+    return item;
+  });
 
   return (
     <>
@@ -342,15 +320,6 @@ export function HeaderV2() {
 
             {/* CTA Section */}
             <div className="flex items-center gap-4 shrink-0">
-              {/* Secondary action (optional) */}
-              <Link
-                href="/desenvolvedores"
-                className="hidden xl:flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Desenvolvedores
-                <ArrowRight className="h-3 w-3" />
-              </Link>
-
               {/* Primary CTA with enhanced animation */}
               <motion.div
                 whileHover={{ scale: 1.05 }}

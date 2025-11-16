@@ -226,7 +226,7 @@ function ContactForm() {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Email inválido";
     }
-    if (!formData.phone) newErrors.phone = "Telefone é obrigatório";
+    if (!formData.phone) newErrors.phone = "Telefone / WhatsApp é obrigatório";
     if (!formData.volume) newErrors.volume = "Selecione o volume mensal";
 
     setErrors(newErrors);
@@ -303,7 +303,7 @@ function ContactForm() {
         </FormField>
 
         <FormField
-          label="Telefone"
+          label="Telefone / WhatsApp"
           icon={<Phone className="h-4 w-4" />}
           required
           error={errors.phone}

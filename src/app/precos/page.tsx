@@ -37,31 +37,31 @@ function FeatureComparisonTable() {
     {
       category: "Básico",
       items: [
-        { name: "Processamento de pagamentos", starter: true, growth: true, enterprise: true },
-        { name: "Dashboard em tempo real", starter: true, growth: true, enterprise: true },
-        { name: "API RESTful", starter: true, growth: true, enterprise: true },
-        { name: "Webhooks", starter: true, growth: true, enterprise: true },
-        { name: "Suporte por email", starter: true, growth: true, enterprise: true },
+        { name: "Processamento de pagamentos", payAsYouGo: true, fixed: true },
+        { name: "Dashboard em tempo real", payAsYouGo: true, fixed: true },
+        { name: "API RESTful", payAsYouGo: true, fixed: true },
+        { name: "Webhooks", payAsYouGo: true, fixed: true },
+        { name: "Suporte por email", payAsYouGo: true, fixed: true },
       ],
     },
     {
       category: "Avançado",
       items: [
-        { name: "Multi-adquirência", starter: false, growth: true, enterprise: true },
-        { name: "Roteamento inteligente", starter: false, growth: true, enterprise: true },
-        { name: "Antifraude com ML", starter: false, growth: true, enterprise: true },
-        { name: "Recuperação de vendas", starter: false, growth: true, enterprise: true },
-        { name: "Suporte prioritário", starter: false, growth: true, enterprise: true },
+        { name: "Multi-adquirência", payAsYouGo: false, fixed: true },
+        { name: "Roteamento inteligente", payAsYouGo: false, fixed: true },
+        { name: "Antifraude com ML", payAsYouGo: false, fixed: true },
+        { name: "Recuperação de vendas", payAsYouGo: false, fixed: true },
+        { name: "Suporte prioritário 24/7", payAsYouGo: false, fixed: true },
       ],
     },
     {
-      category: "Enterprise",
+      category: "Premium",
       items: [
-        { name: "SLA garantido", starter: false, growth: false, enterprise: true },
-        { name: "Gerente de conta dedicado", starter: false, growth: false, enterprise: true },
-        { name: "Customizações", starter: false, growth: false, enterprise: true },
-        { name: "Treinamento personalizado", starter: false, growth: false, enterprise: true },
-        { name: "API privada", starter: false, growth: false, enterprise: true },
+        { name: "Taxa reduzida (1,9%)", payAsYouGo: false, fixed: true },
+        { name: "Gerente de sucesso dedicado", payAsYouGo: false, fixed: true },
+        { name: "Relatórios customizados", payAsYouGo: false, fixed: true },
+        { name: "API privada", payAsYouGo: false, fixed: true },
+        { name: "Treinamento personalizado", payAsYouGo: false, fixed: true },
       ],
     },
   ];
@@ -80,13 +80,10 @@ function FeatureComparisonTable() {
             <tr className="border-b bg-muted/50">
               <th className="px-6 py-4 text-left text-sm font-semibold">Recursos</th>
               <th className="px-6 py-4 text-center text-sm font-semibold">
-                <span className="text-muted-foreground">Starter</span>
+                <span className="text-muted-foreground">Pay as You Go</span>
               </th>
               <th className="px-6 py-4 text-center text-sm font-semibold">
-                <span className="text-accent">Growth</span>
-              </th>
-              <th className="px-6 py-4 text-center text-sm font-semibold">
-                <span className="text-primary">Enterprise</span>
+                <span className="text-accent">Plano Fixo</span>
               </th>
             </tr>
           </thead>
@@ -109,21 +106,14 @@ function FeatureComparisonTable() {
                   >
                     <td className="px-6 py-4 text-sm">{item.name}</td>
                     <td className="px-6 py-4 text-center">
-                      {item.starter ? (
+                      {item.payAsYouGo ? (
                         <Check className="mx-auto h-5 w-5 text-green-500" />
                       ) : (
                         <X className="mx-auto h-5 w-5 text-gray-300" />
                       )}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {item.growth ? (
-                        <Check className="mx-auto h-5 w-5 text-green-500" />
-                      ) : (
-                        <X className="mx-auto h-5 w-5 text-gray-300" />
-                      )}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {item.enterprise ? (
+                      {item.fixed ? (
                         <Check className="mx-auto h-5 w-5 text-green-500" />
                       ) : (
                         <X className="mx-auto h-5 w-5 text-gray-300" />
@@ -261,69 +251,49 @@ function VolumeCalculator() {
 export default function PrecosPage() {
   const plans = [
     {
-      title: "Starter",
-      description: "Perfeito para começar sua jornada de pagamentos",
+      title: "Pay as You Go",
+      description: "Pague apenas pelo que usar, sem mensalidades",
       price: {
-        amount: "Grátis",
-        period: "sempre",
+        amount: "2,9%",
+        period: "por transação",
       },
       features: [
-        "Até 100 transações/mês",
-        "Dashboard básico",
-        "API completa",
-        "Suporte por email",
-        "1 adquirente",
+        "Sem mensalidade fixa",
+        "Pague apenas pelo que usar",
+        "Dashboard completo em tempo real",
+        "API RESTful completa",
+        "Suporte técnico por email",
+        "Webhooks em tempo real",
+        "Relatórios básicos",
       ],
       cta: {
-        label: "Começar Grátis",
-        href: "/cadastro",
+        label: "Fale Conosco",
+        href: "/fale-conosco",
       },
       popular: false,
     },
     {
-      title: "Growth",
-      description: "Para empresas em crescimento que precisam escalar",
+      title: "Plano Fixo Mensal",
+      description: "Mensalidade fixa com taxas reduzidas para alto volume",
       price: {
-        amount: "R$ 299",
-        period: "mês",
+        amount: "R$ 1.990",
+        period: "mês + 1,9% por transação",
       },
       features: [
-        "Transações ilimitadas",
-        "Multi-adquirência",
-        "Roteamento inteligente",
-        "Antifraude avançado",
+        "Taxa reduzida por transação (1,9%)",
+        "Multi-adquirência ilimitada",
+        "Roteamento inteligente com IA",
+        "Antifraude avançado com ML",
         "Suporte prioritário 24/7",
-        "Webhooks em tempo real",
+        "Gerente de sucesso dedicado",
         "Relatórios customizados",
+        "API privada e webhooks premium",
       ],
       cta: {
-        label: "Teste Grátis 30 dias",
-        href: "/cadastro?plan=growth",
+        label: "Fale Conosco",
+        href: "/fale-conosco",
       },
       popular: true,
-    },
-    {
-      title: "Enterprise",
-      description: "Soluções customizadas para grandes operações",
-      price: {
-        amount: "Customizado",
-        period: "",
-      },
-      features: [
-        "Volume ilimitado",
-        "SLA garantido 99.99%",
-        "Gerente de conta dedicado",
-        "Customizações ilimitadas",
-        "Treinamento personalizado",
-        "API privada",
-        "Suporte white-glove",
-        "Integração assistida",
-      ],
-      cta: {
-        label: "Falar com Vendas",
-        href: "/contato",
-      },
-      popular: false,
     },
   ];
 
@@ -391,7 +361,7 @@ export default function PrecosPage() {
 
       {/* Pricing Cards */}
       <SectionContainer spacing="xl">
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-8 max-w-5xl mx-auto lg:grid-cols-2">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.title}

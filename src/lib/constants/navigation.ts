@@ -16,7 +16,7 @@ export const NAVIGATION_ITEMS = [
   },
   {
     label: "Para Adquirentes",
-    href: "/adquirentes",
+    href: "/para-adquirentes",
     description: "Parcerias",
   },
   {
@@ -28,11 +28,6 @@ export const NAVIGATION_ITEMS = [
     label: "Sobre",
     href: "/sobre",
     description: "Conheça a Kodano",
-  },
-  {
-    label: "Fale Conosco",
-    href: "/fale-conosco",
-    description: "Fale conosco",
   },
 ];
 
