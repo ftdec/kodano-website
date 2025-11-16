@@ -6,7 +6,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion, HTMLMotionProps } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
@@ -201,7 +201,7 @@ const spinnerMotion = {
 // ============================================================================
 
 export interface ButtonProps
-  extends Omit<HTMLMotionProps<"button">, "size">,
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "size">,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
