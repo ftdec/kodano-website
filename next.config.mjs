@@ -7,9 +7,6 @@ const nextConfig = {
   // Enable React strict mode for better error detection
   reactStrictMode: true,
 
-  // Enable SWC minification for faster builds
-  swcMinify: true,
-
   // Optimize production builds
   productionBrowserSourceMaps: false,
 
@@ -21,8 +18,17 @@ const nextConfig = {
   // ============================================================================
 
   images: {
-    // Use Next.js Image Optimization API
-    domains: ["kodano.com", "cdn.kodano.com"],
+    // Use Next.js Image Optimization API with remotePatterns
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'kodano.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.kodano.com',
+      },
+    ],
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -30,89 +36,11 @@ const nextConfig = {
   },
 
   // ============================================================================
-  // WEBPACK OPTIMIZATIONS
+  // TURBOPACK CONFIGURATION (Next.js 16)
   // ============================================================================
 
-  webpack: (config, { isServer, dev }) => {
-    // Production optimizations
-    if (!dev) {
-      // Enable module concatenation
-      config.optimization.concatenateModules = true;
-
-      // Split chunks optimally
-      config.optimization.splitChunks = {
-        chunks: "all",
-        minSize: 20000,
-        minRemainingSize: 0,
-        minChunks: 1,
-        maxAsyncRequests: 30,
-        maxInitialRequests: 30,
-        cacheGroups: {
-          // Framework chunks
-          framework: {
-            name: "framework",
-            test: /[\\/]node_modules[\\/](react|react-dom|scheduler|prop-types|use-sync-external-store)[\\/]/,
-            priority: 40,
-            reuseExistingChunk: true,
-          },
-          // Library chunks
-          lib: {
-            test: /[\\/]node_modules[\\/]/,
-            name(module) {
-              const packageName = module.context.match(
-                /[\\/]node_modules[\\/](.*?)([\\/]|$)/
-              )?.[1];
-              return `npm.${packageName?.replace("@", "")}`;
-            },
-            priority: 30,
-          },
-          // Common components
-          commons: {
-            name: "commons",
-            minChunks: 2,
-            priority: 20,
-            reuseExistingChunk: true,
-          },
-          // Shared modules
-          shared: {
-            name(module, chunks) {
-              return `shared-${crypto
-                .createHash("md5")
-                .update(chunks.map((c) => c.name).join("_"))
-                .digest("hex")
-                .substring(0, 8)}`;
-            },
-            priority: 10,
-            minChunks: 2,
-            reuseExistingChunk: true,
-          },
-        },
-      };
-
-      // Minimize main bundle
-      config.optimization.minimize = true;
-
-      // Use content hash for better caching
-      config.optimization.moduleIds = "deterministic";
-      config.optimization.chunkIds = "deterministic";
-    }
-
-    // Bundle analyzer (only in analyze mode)
-    if (process.env.ANALYZE === "true") {
-      const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-      config.plugins.push(
-        new BundleAnalyzerPlugin({
-          analyzerMode: "static",
-          reportFilename: isServer
-            ? "../analyze/server.html"
-            : "./analyze/client.html",
-          openAnalyzer: false,
-        })
-      );
-    }
-
-    return config;
-  },
+  // Empty turbopack config to silence the error
+  turbopack: {},
 
   // ============================================================================
   // EXPERIMENTAL FEATURES
@@ -136,10 +64,10 @@ const nextConfig = {
       "@radix-ui/react-toast",
       "@radix-ui/react-tooltip",
     ],
-
-    // Server components optimizations
-    serverComponentsExternalPackages: ["sharp", "bcrypt"],
   },
+
+  // Server components optimizations (moved from experimental)
+  serverExternalPackages: ["sharp", "bcrypt"],
 
   // ============================================================================
   // HEADERS AND SECURITY
@@ -302,16 +230,6 @@ const nextConfig = {
     // During production builds, ignore TypeScript errors
     // (should be caught in CI/CD)
     ignoreBuildErrors: false,
-  },
-
-  // ============================================================================
-  // ESLINT
-  // ============================================================================
-
-  eslint: {
-    // During production builds, ignore ESLint errors
-    // (should be caught in CI/CD)
-    ignoreDuringBuilds: false,
   },
 
   // ============================================================================
