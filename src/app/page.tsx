@@ -101,7 +101,7 @@ export default function Home() {
         description="Orquestração que aumenta aprovação, reduz custos e traz clareza operacional. Processe pagamentos com a infraestrutura mais avançada do mercado."
         primaryCta={{ label: "Começar Agora", href: "/cadastro" }}
         secondaryCta={{ label: "Ver Demonstração", href: "/demo" }}
-        showDashboard={true}
+        showVisual={true}
         showMetrics={true}
       />
 

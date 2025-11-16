@@ -102,7 +102,7 @@ function BenefitCard({
       rotate: 0,
       transition: {
         delay: index * 0.1 + 0.2,
-        type: "spring",
+        type: "spring" as const,
         stiffness: 200,
         damping: 20,
       },
