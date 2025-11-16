@@ -58,7 +58,7 @@ const floatingVariants = {
     y: [-10, 10, -10],
     transition: {
       duration: 6,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
       repeat: Infinity,
     },
   },
