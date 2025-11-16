@@ -157,7 +157,7 @@ const buttonMotionVariants = {
   hover: {
     scale: 1.02,
     transition: {
-      type: "spring",
+      type: "spring" as const,
       stiffness: 400,
       damping: 25,
     },
@@ -165,7 +165,7 @@ const buttonMotionVariants = {
   tap: {
     scale: 0.98,
     transition: {
-      type: "spring",
+      type: "spring" as const,
       stiffness: 400,
       damping: 25,
     },
