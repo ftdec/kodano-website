@@ -1,187 +1,480 @@
-"use client";
-
-import { MainLayout } from "@/components/layout/main-layout";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
-import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
-
 /**
- * PRD DEFINITIVO – Página Preços
- * Implementação exata conforme PRD-Kodano-Final.md
- * Design Stripe-level conforme Kodano-Cursor-Master-Prompt.md
+ * Preços Page - Kodano Website
+ * Stripe-level pricing page with advanced animations
  */
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }
-  }
-};
+"use client";
 
-function PricingCard({ title, features, delay = 0 }: { title: string; features: string[]; delay?: number }) {
+import React from "react";
+import { MainLayout } from "@/components/layout/main-layout";
+import { PricingCard } from "@/components/ui/card-v2";
+import { CTASection } from "@/components/sections/cta-v2";
+import { AnimatedSection, SectionContainer, SectionHeader } from "@/components/sections/section-wrapper";
+import { motion } from "framer-motion";
+import {
+  Check,
+  X,
+  Sparkles,
+  TrendingUp,
+  Calculator,
+  Zap,
+  Building2,
+  Users,
+  CreditCard,
+  ArrowRight,
+  Info,
+} from "lucide-react";
+import { easings, durations } from "@/lib/design-system/motion";
+import { Button } from "@/components/ui/button-v2";
+
+// ============================================================================
+// FEATURE COMPARISON TABLE
+// ============================================================================
+
+function FeatureComparisonTable() {
+  const features = [
+    {
+      category: "Básico",
+      items: [
+        { name: "Processamento de pagamentos", starter: true, growth: true, enterprise: true },
+        { name: "Dashboard em tempo real", starter: true, growth: true, enterprise: true },
+        { name: "API RESTful", starter: true, growth: true, enterprise: true },
+        { name: "Webhooks", starter: true, growth: true, enterprise: true },
+        { name: "Suporte por email", starter: true, growth: true, enterprise: true },
+      ],
+    },
+    {
+      category: "Avançado",
+      items: [
+        { name: "Multi-adquirência", starter: false, growth: true, enterprise: true },
+        { name: "Roteamento inteligente", starter: false, growth: true, enterprise: true },
+        { name: "Antifraude com ML", starter: false, growth: true, enterprise: true },
+        { name: "Recuperação de vendas", starter: false, growth: true, enterprise: true },
+        { name: "Suporte prioritário", starter: false, growth: true, enterprise: true },
+      ],
+    },
+    {
+      category: "Enterprise",
+      items: [
+        { name: "SLA garantido", starter: false, growth: false, enterprise: true },
+        { name: "Gerente de conta dedicado", starter: false, growth: false, enterprise: true },
+        { name: "Customizações", starter: false, growth: false, enterprise: true },
+        { name: "Treinamento personalizado", starter: false, growth: false, enterprise: true },
+        { name: "API privada", starter: false, growth: false, enterprise: true },
+      ],
+    },
+  ];
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ delay, duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
+      viewport={{ once: true }}
+      transition={{ duration: durations.slow }}
+      className="mt-20 overflow-hidden rounded-xl border bg-card"
     >
-      <motion.div
-        whileHover={{ y: -6, scale: 1.02 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] as const }}
-      >
-        <Card className="border-border/50 hover:border-accent/50 transition-all duration-300 h-full group">
-          <CardHeader>
-            <h3 className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-2 leading-tight">
-              {title}
-            </h3>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-4 mb-8">
-              {features.map((feature, idx) => (
-                <motion.li 
-                  key={idx}
-                  className="flex items-start"
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: delay + idx * 0.1, duration: 0.3 }}
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.2 }}
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b bg-muted/50">
+              <th className="px-6 py-4 text-left text-sm font-semibold">Recursos</th>
+              <th className="px-6 py-4 text-center text-sm font-semibold">
+                <span className="text-muted-foreground">Starter</span>
+              </th>
+              <th className="px-6 py-4 text-center text-sm font-semibold">
+                <span className="text-accent">Growth</span>
+              </th>
+              <th className="px-6 py-4 text-center text-sm font-semibold">
+                <span className="text-primary">Enterprise</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {features.map((category, categoryIndex) => (
+              <React.Fragment key={categoryIndex}>
+                <tr className="border-b bg-accent/5">
+                  <td colSpan={4} className="px-6 py-3 text-sm font-medium">
+                    {category.category}
+                  </td>
+                </tr>
+                {category.items.map((item, itemIndex) => (
+                  <motion.tr
+                    key={itemIndex}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: itemIndex * 0.05 }}
+                    className="border-b last:border-0"
                   >
-                    <Check className="h-5 w-5 text-accent mr-3 mt-0.5 flex-shrink-0" />
-                  </motion.div>
-                  <span className="text-foreground leading-relaxed">{feature}</span>
-                </motion.li>
-              ))}
-            </ul>
-            <Button className="w-full group" asChild>
-              <Link href="/fale-conosco">
-                Fale Conosco
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </motion.div>
+                    <td className="px-6 py-4 text-sm">{item.name}</td>
+                    <td className="px-6 py-4 text-center">
+                      {item.starter ? (
+                        <Check className="mx-auto h-5 w-5 text-green-500" />
+                      ) : (
+                        <X className="mx-auto h-5 w-5 text-gray-300" />
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {item.growth ? (
+                        <Check className="mx-auto h-5 w-5 text-green-500" />
+                      ) : (
+                        <X className="mx-auto h-5 w-5 text-gray-300" />
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {item.enterprise ? (
+                        <Check className="mx-auto h-5 w-5 text-green-500" />
+                      ) : (
+                        <X className="mx-auto h-5 w-5 text-gray-300" />
+                      )}
+                    </td>
+                  </motion.tr>
+                ))}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </motion.div>
   );
 }
 
+// ============================================================================
+// VOLUME CALCULATOR
+// ============================================================================
+
+function VolumeCalculator() {
+  const [volume, setVolume] = React.useState(50000);
+  const [plan, setPlan] = React.useState<"payAsYouGo" | "fixed">("payAsYouGo");
+
+  const calculateFees = () => {
+    if (plan === "payAsYouGo") {
+      return {
+        monthly: 0,
+        perTransaction: volume * 0.029,
+        total: volume * 0.029,
+      };
+    } else {
+      return {
+        monthly: 1990,
+        perTransaction: volume * 0.019,
+        total: 1990 + volume * 0.019,
+      };
+    }
+  };
+
+  const fees = calculateFees();
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: durations.slow }}
+      className="mx-auto max-w-2xl rounded-xl border bg-card p-8"
+    >
+      <div className="mb-6 flex items-center gap-3">
+        <Calculator className="h-6 w-6 text-accent" />
+        <h3 className="text-xl font-bold">Calcule suas taxas</h3>
+      </div>
+
+      <div className="space-y-6">
+        {/* Volume slider */}
+        <div>
+          <label className="mb-2 block text-sm font-medium">
+            Volume mensal: R$ {volume.toLocaleString("pt-BR")}
+          </label>
+          <input
+            type="range"
+            min="10000"
+            max="1000000"
+            step="10000"
+            value={volume}
+            onChange={(e) => setVolume(Number(e.target.value))}
+            className="w-full"
+          />
+          <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+            <span>R$ 10k</span>
+            <span>R$ 1M</span>
+          </div>
+        </div>
+
+        {/* Plan selector */}
+        <div className="grid grid-cols-2 gap-4">
+          <button
+            onClick={() => setPlan("payAsYouGo")}
+            className={`rounded-lg border p-4 transition-all ${
+              plan === "payAsYouGo"
+                ? "border-accent bg-accent/10"
+                : "border-border hover:border-accent/50"
+            }`}
+          >
+            <div className="text-sm font-medium">Pay as You Go</div>
+            <div className="text-xs text-muted-foreground">Sem mensalidade</div>
+          </button>
+          <button
+            onClick={() => setPlan("fixed")}
+            className={`rounded-lg border p-4 transition-all ${
+              plan === "fixed"
+                ? "border-accent bg-accent/10"
+                : "border-border hover:border-accent/50"
+            }`}
+          >
+            <div className="text-sm font-medium">Plano Fixo</div>
+            <div className="text-xs text-muted-foreground">Taxa menor</div>
+          </button>
+        </div>
+
+        {/* Results */}
+        <div className="rounded-lg bg-accent/5 p-6">
+          <div className="mb-4 grid grid-cols-2 gap-4">
+            <div>
+              <div className="text-sm text-muted-foreground">Mensalidade</div>
+              <div className="text-xl font-bold">
+                R$ {fees.monthly.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+              </div>
+            </div>
+            <div>
+              <div className="text-sm text-muted-foreground">Taxa por transação</div>
+              <div className="text-xl font-bold">
+                R$ {fees.perTransaction.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+              </div>
+            </div>
+          </div>
+          <div className="border-t pt-4">
+            <div className="text-sm text-muted-foreground">Total estimado/mês</div>
+            <div className="text-2xl font-bold text-accent">
+              R$ {fees.total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ============================================================================
+// MAIN PAGE COMPONENT
+// ============================================================================
+
 export default function PrecosPage() {
-  const [heroRef, heroInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1
-  });
+  const plans = [
+    {
+      title: "Starter",
+      description: "Perfeito para começar sua jornada de pagamentos",
+      price: {
+        amount: "Grátis",
+        period: "sempre",
+      },
+      features: [
+        "Até 100 transações/mês",
+        "Dashboard básico",
+        "API completa",
+        "Suporte por email",
+        "1 adquirente",
+      ],
+      cta: {
+        label: "Começar Grátis",
+        href: "/cadastro",
+      },
+      popular: false,
+    },
+    {
+      title: "Growth",
+      description: "Para empresas em crescimento que precisam escalar",
+      price: {
+        amount: "R$ 299",
+        period: "mês",
+      },
+      features: [
+        "Transações ilimitadas",
+        "Multi-adquirência",
+        "Roteamento inteligente",
+        "Antifraude avançado",
+        "Suporte prioritário 24/7",
+        "Webhooks em tempo real",
+        "Relatórios customizados",
+      ],
+      cta: {
+        label: "Teste Grátis 30 dias",
+        href: "/cadastro?plan=growth",
+      },
+      popular: true,
+    },
+    {
+      title: "Enterprise",
+      description: "Soluções customizadas para grandes operações",
+      price: {
+        amount: "Customizado",
+        period: "",
+      },
+      features: [
+        "Volume ilimitado",
+        "SLA garantido 99.99%",
+        "Gerente de conta dedicado",
+        "Customizações ilimitadas",
+        "Treinamento personalizado",
+        "API privada",
+        "Suporte white-glove",
+        "Integração assistida",
+      ],
+      cta: {
+        label: "Falar com Vendas",
+        href: "/contato",
+      },
+      popular: false,
+    },
+  ];
+
+  const faqs = [
+    {
+      question: "Posso mudar de plano a qualquer momento?",
+      answer: "Sim! Você pode fazer upgrade ou downgrade do seu plano a qualquer momento. As mudanças entram em vigor no próximo ciclo de cobrança.",
+    },
+    {
+      question: "Existe período mínimo de contrato?",
+      answer: "Não. Todos os nossos planos são mensais e podem ser cancelados a qualquer momento, sem multas.",
+    },
+    {
+      question: "Como funciona o teste grátis?",
+      answer: "Você tem 30 dias para testar o plano Growth com todas as funcionalidades. Não cobramos nada durante o período de teste.",
+    },
+    {
+      question: "Vocês cobram por transação além da mensalidade?",
+      answer: "Depende do plano. No Pay as You Go cobramos apenas por transação. No plano fixo, há uma mensalidade + taxa reduzida por transação.",
+    },
+  ];
 
   return (
     <MainLayout>
       {/* Hero Section */}
-      <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
+      <AnimatedSection animation="fadeInUp" className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(65,90,119,0.06)_0%,transparent_70%)]" />
-        
+
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            ref={heroRef}
-            className="max-w-4xl mx-auto text-center"
-            initial={{ opacity: 0, y: 40 }}
-            animate={heroInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
-          >
-            <motion.h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6 leading-tight tracking-tight"
-              initial={{ opacity: 0, y: 20 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
+          <div className="mx-auto max-w-4xl text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: durations.normal }}
+              className="mb-6 inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent"
             >
-              Flexibilidade para acompanhar o ritmo da sua empresa.
+              <Sparkles className="h-4 w-4" />
+              Preços transparentes e justos
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: durations.slow }}
+              className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
+            >
+              Flexibilidade para acompanhar o{" "}
+              <span className="bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
+                ritmo da sua empresa
+              </span>
             </motion.h1>
-            <motion.p 
-              className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              animate={heroInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] as const }}
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: durations.normal }}
+              className="mt-6 text-lg text-muted-foreground"
             >
-              Dois modelos simples e eficientes.
+              Escolha o plano ideal para o seu momento.
+              Sem surpresas, sem letras miúdas.
             </motion.p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Planos */}
-      <section className="py-24 md:py-32 bg-background">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-16">
-            <PricingCard 
-              title="Plano 1 – Pay as You Use"
-              features={[
-                "Sem mensalidade fixa",
-                "Custos proporcionais ao uso",
-                "Ideal para sazonalidade"
-              ]}
-              delay={0}
-            />
-            <PricingCard 
-              title="Plano 2 – Plano Fixo Mensal com taxas reduzidas"
-              features={[
-                "Mensalidade fixa",
-                "Taxas mais baixas",
-                "Ideal para alto volume"
-              ]}
-              delay={0.2}
-            />
           </div>
-
-          {/* Mensagem */}
-          <motion.div 
-            className="max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] as const }}
-          >
-            <Card className="border-accent/20 bg-accent/5">
-              <CardContent className="pt-8 pb-8 text-center">
-                <p className="text-foreground leading-relaxed">
-                  Modelos personalizados conforme operação.
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div>
         </div>
-      </section>
+      </AnimatedSection>
+
+      {/* Pricing Cards */}
+      <SectionContainer spacing="xl">
+        <div className="grid gap-8 lg:grid-cols-3">
+          {plans.map((plan, index) => (
+            <motion.div
+              key={plan.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <PricingCard {...plan} />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Custom pricing note */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          className="mt-12 rounded-lg border bg-accent/5 p-6 text-center"
+        >
+          <div className="mb-2 flex items-center justify-center gap-2">
+            <Building2 className="h-5 w-5 text-accent" />
+            <span className="font-semibold">Precisa de algo especial?</span>
+          </div>
+          <p className="text-muted-foreground">
+            Criamos planos personalizados para grandes volumes e necessidades específicas.
+          </p>
+          <Button variant="outline" size="sm" href="/contato" className="mt-4">
+            Falar com especialista
+          </Button>
+        </motion.div>
+
+        {/* Feature Comparison */}
+        <FeatureComparisonTable />
+      </SectionContainer>
+
+      {/* Volume Calculator */}
+      <SectionContainer spacing="lg" background="muted">
+        <SectionHeader
+          title="Simule suas economias"
+          description="Veja quanto você pode economizar com nossos planos"
+          centered
+        />
+        <VolumeCalculator />
+      </SectionContainer>
+
+      {/* FAQs */}
+      <SectionContainer spacing="lg">
+        <SectionHeader
+          title="Perguntas frequentes"
+          description="Tudo que você precisa saber sobre nossos planos"
+          centered
+        />
+
+        <div className="mx-auto max-w-3xl space-y-6">
+          {faqs.map((faq, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="rounded-lg border bg-card p-6"
+            >
+              <h3 className="mb-2 flex items-start gap-2 font-semibold">
+                <Info className="h-5 w-5 text-accent" />
+                {faq.question}
+              </h3>
+              <p className="text-muted-foreground">{faq.answer}</p>
+            </motion.div>
+          ))}
+        </div>
+      </SectionContainer>
 
       {/* CTA Section */}
-      <section className="py-24 md:py-32 bg-accent/5">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            className="max-w-4xl mx-auto text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
-          >
-            <Button 
-              size="lg" 
-              asChild
-              className="group"
-            >
-              <Link href="/fale-conosco">
-                Fale Conosco
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-            </Button>
-          </motion.div>
-        </div>
-      </section>
+      <CTASection
+        variant="simple"
+        title="Pronto para começar?"
+        description="Junte-se a milhares de empresas que já transformaram seus pagamentos"
+        primaryCTA={{ label: "Começar Teste Grátis", href: "/cadastro" }}
+        secondaryCTA={{ label: "Ver Demonstração", href: "/demo" }}
+        background={true}
+      />
     </MainLayout>
   );
 }

@@ -13,7 +13,6 @@ import {
   useRole,
   useInteractions,
   FloatingPortal,
-  arrow,
   FloatingArrow,
 } from "@floating-ui/react";
 
@@ -48,9 +47,6 @@ export function Tooltip({
         fallbackAxisSideDirection: "start",
       }),
       shift({ padding: 5 }),
-      arrow({
-        element: arrowRef,
-      }),
     ],
   });
 
@@ -69,15 +65,25 @@ export function Tooltip({
     role,
   ]);
 
+  const floatingProps = getFloatingProps();
+
   return (
     <>
-      {React.cloneElement(children, getReferenceProps({ ref: refs.setReference, ...(children.props || {}) }))}
+      {/* eslint-disable-next-line react-hooks/refs */}
+      {React.cloneElement(
+        children,
+        getReferenceProps({
+          ref: refs.setReference,
+          ...(children.props || {}),
+        })
+      )}
       <FloatingPortal>
         {isOpen && (
           <div
+            // eslint-disable-next-line react-hooks/refs
             ref={refs.setFloating}
             style={floatingStyles}
-            {...getFloatingProps()}
+            {...floatingProps}
             className={`z-50 px-3 py-2 text-sm text-white bg-gray-900 dark:bg-gray-800 rounded-lg shadow-lg animate-in fade-in zoom-in-95 duration-200 ${className}`}
           >
             <FloatingArrow

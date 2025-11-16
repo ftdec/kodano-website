@@ -1,7 +1,6 @@
 // src/components/hero/Hero.tsx
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import Link from "next/link";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 

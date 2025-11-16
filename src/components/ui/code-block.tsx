@@ -34,7 +34,7 @@ export function CodeBlock({
       setCopied(true);
       toast.success("Código copiado!");
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch {
       toast.error("Erro ao copiar código");
     }
   };

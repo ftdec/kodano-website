@@ -9,7 +9,7 @@ import { MobileNav } from "@/components/mobile-nav";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [, setActiveDropdown] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {

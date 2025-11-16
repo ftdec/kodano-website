@@ -45,16 +45,17 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.5rem; /* 8px - Stripe standard */
 
-  /* Kodano Brand Colors - Cores Oficiais do PRD */
-  --kodano-primary: #0D1B2A; /* Cor primária */
-  --kodano-secondary: #1B263B; /* Cor secundária */
-  --kodano-blue-medium: #415A77; /* Azul médio */
-  --kodano-blue-light: #778DA9; /* Azul claro */
-  --kodano-gray-light: #E0E1DD; /* Cinza claro */
-  --kodano-white: #FFFFFF; /* Branco */
+  /* ===== Kodano Design System v5.0 - Brand Colors (PRD) ===== */
+  --kodano-primary: #0D1B2A;
+  --kodano-secondary: #1B263B;
+  --kodano-blue-medium: #415A77;
+  --kodano-blue-light: #778DA9;
+  --kodano-gray-light: #E0E1DD;
+  --kodano-white: #FFFFFF;
 
+  /* ===== Light Mode Colors ===== */
   --background: #FFFFFF;
   --foreground: #0D1B2A;
   --card: #FFFFFF;
@@ -62,75 +63,99 @@
   --popover: #FFFFFF;
   --popover-foreground: #0D1B2A;
 
-  /* Primary usando cor primária oficial */
+  /* Primary - Deep blue-black */
   --primary: #0D1B2A;
   --primary-foreground: #FFFFFF;
 
-  /* Accent usando azul médio */
+  /* Secondary - Light gray */
+  --secondary: #E0E1DD;
+  --secondary-foreground: #0D1B2A;
+
+  /* Accent - Medium blue */
   --accent: #415A77;
   --accent-foreground: #FFFFFF;
 
-  --secondary: #E0E1DD;
-  --secondary-foreground: #0D1B2A;
+  /* Muted - Light blue */
   --muted: #E0E1DD;
   --muted-foreground: #415A77;
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: #E0E1DD;
+
+  /* Status colors */
+  --destructive: #B91C1C;
+  --destructive-foreground: #FFFFFF;
+
+  /* UI elements */
+  --border: rgba(225, 225, 221, 0.5); /* Gray light with opacity */
   --input: #E0E1DD;
   --ring: #415A77;
+
+  /* Chart colors */
   --chart-1: #0D1B2A;
   --chart-2: #1B263B;
   --chart-3: #415A77;
   --chart-4: #778DA9;
   --chart-5: #E0E1DD;
+
+  /* Sidebar */
   --sidebar: #FFFFFF;
   --sidebar-foreground: #0D1B2A;
   --sidebar-primary: #0D1B2A;
   --sidebar-primary-foreground: #FFFFFF;
   --sidebar-accent: #E0E1DD;
   --sidebar-accent-foreground: #0D1B2A;
-  --sidebar-border: #E0E1DD;
+  --sidebar-border: rgba(225, 225, 221, 0.5);
   --sidebar-ring: #415A77;
 }
 
 .dark {
-  /* Dark mode com preto sólido do logo como base */
-  --background: oklch(0.05 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.12 0.04 210);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.12 0.04 210);
-  --popover-foreground: oklch(0.985 0 0);
+  /* ===== Dark Mode - Premium dark theme ===== */
+  --background: #000000; /* Pure black for OLED */
+  --foreground: #FFFFFF;
+  --card: #0A0A0A; /* Slightly elevated black */
+  --card-foreground: #FFFFFF;
+  --popover: #0A0A0A;
+  --popover-foreground: #FFFFFF;
 
-  /* Primary usando Kodano Teal Light no dark mode */
-  --primary: oklch(0.72 0.12 200);
-  --primary-foreground: oklch(0.05 0 0);
+  /* Primary - Inverted to light blue for contrast */
+  --primary: #778DA9;
+  --primary-foreground: #000000;
 
-  /* Accent usando Kodano Cyan vibrante */
-  --accent: oklch(0.78 0.13 200);
-  --accent-foreground: oklch(0.05 0 0);
+  /* Secondary - Dark variant */
+  --secondary: #1B263B;
+  --secondary-foreground: #FFFFFF;
 
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.72 0.12 200);
-  --chart-1: oklch(0.72 0.12 200);
-  --chart-2: oklch(0.22 0.08 210);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.22 0.06 210);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.72 0.12 200);
-  --sidebar-primary-foreground: oklch(0.145 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.72 0.12 200);
+  /* Accent - Medium blue stays visible */
+  --accent: #415A77;
+  --accent-foreground: #FFFFFF;
+
+  /* Muted colors */
+  --muted: #1B263B;
+  --muted-foreground: #778DA9;
+
+  /* Status colors - adjusted for dark */
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+
+  /* UI elements */
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #778DA9;
+
+  /* Chart colors - adjusted for dark */
+  --chart-1: #778DA9;
+  --chart-2: #415A77;
+  --chart-3: #8B5CF6;
+  --chart-4: #F59E0B;
+  --chart-5: #10B981;
+
+  /* Sidebar */
+  --sidebar: #0A0A0A;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #778DA9;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1B263B;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #778DA9;
 }
 
 @layer base {
@@ -142,7 +167,9 @@
   }
 }
 
-/* Animações customizadas */
+/* ===== Stripe-Level Animations ===== */
+
+/* Gradient animation */
 @keyframes gradient {
   0%, 100% {
     background-size: 200% 200%;
@@ -154,8 +181,169 @@
   }
 }
 
+/* Shimmer effect (for loading states) */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Fade in animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Slide animations */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Pulse animation (for attention) */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Float animation (for decorative elements) */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Animation utility classes */
 .animate-gradient {
   animation: gradient 8s ease infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.32, 0, 0.67, 0) both;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Stagger delays for list animations */
+.stagger-1 { animation-delay: 50ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 150ms; }
+.stagger-4 { animation-delay: 200ms; }
+.stagger-5 { animation-delay: 250ms; }
+.stagger-6 { animation-delay: 300ms; }
+
+/* Transition utilities */
+.transition-stripe {
+  transition-property: all;
+  transition-duration: 250ms;
+  transition-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
+}
+
+.transition-stripe-fast {
+  transition-property: all;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
+}
+
+.transition-stripe-slow {
+  transition-property: all;
+  transition-duration: 350ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Hover lift effect */
+.hover-lift {
+  transition: transform 250ms cubic-bezier(0.32, 0, 0.67, 0);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Regras globais para evitar overflow horizontal */

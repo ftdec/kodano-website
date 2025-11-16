@@ -10,7 +10,6 @@ import {
   Calendar,
   Building2,
   ArrowRight,
-  Check,
   TrendingDown,
   TrendingUp,
   Clock,

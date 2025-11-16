@@ -1,45 +1,41 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 
 // Device detection hook
 function useDeviceCapabilities() {
-  const [capabilities, setCapabilities] = useState({
-    isMobile: false,
-    isLowEnd: false,
-    pixelRatio: 1,
-  });
-
-  useEffect(() => {
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
+  const [capabilities] = useState(() => {
+    // Initialize state with computed values
+    const isMobile = typeof navigator !== 'undefined'
+      ? /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      : false;
 
     // Detect low-end devices
     const isLowEnd = isMobile && (
-      navigator.hardwareConcurrency ? navigator.hardwareConcurrency < 4 : true
+      typeof navigator !== 'undefined' && navigator.hardwareConcurrency
+        ? navigator.hardwareConcurrency < 4
+        : true
     );
 
     // Adaptive pixel ratio
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+    const pixelRatio = typeof window !== 'undefined'
+      ? Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2)
+      : 1;
 
-    setCapabilities({
+    return {
       isMobile,
       isLowEnd,
       pixelRatio,
-    });
-  }, []);
+    };
+  });
 
   return capabilities;
 }
 
 // PRD 5.2: Main canvas component com Pipeline de Pagamentos
 export function HeroCanvas() {
-  const { isMobile, isLowEnd, pixelRatio } = useDeviceCapabilities();
-
-  // PRD 5.2: 60-90 objetos simultâneos máx
-  const maxPackets = isLowEnd ? 6 : isMobile ? 8 : 12;
+  const { pixelRatio, isMobile } = useDeviceCapabilities();
 
   return (
     <div className="absolute inset-0 z-0">

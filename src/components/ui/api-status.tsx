@@ -19,7 +19,7 @@ interface ApiStatusProps {
 }
 
 export function ApiStatus({ compact = false, className = "" }: ApiStatusProps) {
-  const [services, setServices] = useState<Service[]>([
+  const [services] = useState<Service[]>([
     { name: "API Payments", status: "operational", uptime: 99.99, responseTime: 145 },
     { name: "API Connect", status: "operational", uptime: 99.98, responseTime: 152 },
     { name: "API Billing", status: "operational", uptime: 99.99, responseTime: 138 },
@@ -31,6 +31,7 @@ export function ApiStatus({ compact = false, className = "" }: ApiStatusProps) {
   const [uptimeData, setUptimeData] = useState<number[]>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
     // Set initial time
     setCurrentTime(new Date().toLocaleTimeString("pt-BR"));

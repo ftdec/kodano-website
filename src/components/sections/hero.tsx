@@ -69,10 +69,10 @@ export function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
-  const [isMounted, setIsMounted] = useState(false);
-  const metricsRef = useRef<HTMLDivElement>(null);
+  const [, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 
@@ -33,6 +33,7 @@ export function AnimatedCounter({
 
   useEffect(() => {
     if (inView && !hasAnimated) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHasAnimated(true);
     }
   }, [inView, hasAnimated]);

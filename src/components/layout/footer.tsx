@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { BRAND, SOCIAL_LINKS } from "@/lib/constants/brand";
 import { FOOTER_LINKS } from "@/lib/constants/navigation";
-import { Linkedin, Twitter, Github, Instagram, Shield } from "lucide-react";
+import { Linkedin, Twitter, Github, Instagram } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();

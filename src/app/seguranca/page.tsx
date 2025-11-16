@@ -3,8 +3,6 @@
 import { MainLayout } from "@/components/layout/main-layout";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
 import {
   Shield,
   Lock,
@@ -13,7 +11,6 @@ import {
   Server,
   AlertTriangle,
   CheckCircle2,
-  Globe,
 } from "lucide-react";
 
 const certifications = [

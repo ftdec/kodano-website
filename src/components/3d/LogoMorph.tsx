@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useMemo, useState, useEffect } from "react";
+import { useRef, useMemo, useState } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useTexture, Text } from "@react-three/drei";
+import { useTexture } from "@react-three/drei";
 import * as THREE from "three";
 
 // Componente que morfa formas geométricas no logo da Kodano
@@ -13,19 +13,25 @@ export function LogoMorph() {
   // Criar partículas que se juntam para formar o logo
   const particleCount = 80;
   const particles = useMemo(() => {
+    // Deterministic pseudo-random function based on index
+    const pseudoRandom = (seed: number) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
+
     return Array.from({ length: particleCount }, (_, i) => ({
       id: i,
       // Posição inicial aleatória em uma esfera grande
       initialPosition: [
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 10,
+        (pseudoRandom(i * 1.1) - 0.5) * 10,
+        (pseudoRandom(i * 2.2) - 0.5) * 10,
+        (pseudoRandom(i * 3.3) - 0.5) * 10,
       ] as [number, number, number],
       // Posição final (formando o logo em formato circular)
       targetPosition: [
         Math.cos((i / particleCount) * Math.PI * 2) * 1.5,
         Math.sin((i / particleCount) * Math.PI * 2) * 1.5,
-        (Math.random() - 0.5) * 0.5,
+        (pseudoRandom(i * 4.4) - 0.5) * 0.5,
       ] as [number, number, number],
       delay: (i / particleCount) * 1.5,
     }));

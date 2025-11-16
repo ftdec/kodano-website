@@ -10,8 +10,6 @@ import {
   ShoppingCart,
   Shield,
   BookOpen,
-  Code2,
-  Zap,
   Building,
   GraduationCap,
   Heart,

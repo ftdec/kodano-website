@@ -211,18 +211,10 @@ export function MultiFileEditor({
   className = "",
   onRun,
 }: MultiFileEditorProps) {
-  const [files, setFiles] = useState(initialFiles);
+  const [files] = useState(initialFiles);
   const [activeFileIndex, setActiveFileIndex] = useState(0);
 
   const activeFile = files[activeFileIndex];
-
-  const handleCodeChange = (content: string) => {
-    setFiles((prev) =>
-      prev.map((file, index) =>
-        index === activeFileIndex ? { ...file, content } : file
-      )
-    );
-  };
 
   const handleRun = (code: string) => {
     // Update current file
