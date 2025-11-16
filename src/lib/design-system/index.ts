@@ -16,6 +16,10 @@ export { default as motion } from "./motion";
 export * from "./utils";
 export { utils } from "./utils";
 
+// GPU acceleration utilities
+export * from "./gpu";
+export { default as gpu } from "./gpu";
+
 // Type exports
 export type { DesignTokens } from "./tokens";
 
