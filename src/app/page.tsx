@@ -65,7 +65,7 @@ function AnimatedSection({ children, className = "" }: { children: React.ReactNo
 }
 
 function BenefitCard({ icon: Icon, title, description, delay = 0 }: { 
-  icon: React.ElementType; 
+  icon: React.ComponentType<{ className?: string }>; 
   title: string; 
   description: string;
   delay?: number;
