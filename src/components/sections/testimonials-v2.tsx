@@ -230,7 +230,7 @@ interface CarouselProps {
 function Carousel({ testimonials, autoPlay = true, interval = 5000 }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
-  const intervalRef = useRef<NodeJS.Timeout>();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const dragX = useMotionValue(0);
   const animatedX = useSpring(dragX, { stiffness: 300, damping: 30 });
