@@ -42,9 +42,9 @@ function ArchitectureDiagram() {
     { id: 1, label: "Sua Aplicação", icon: <Code2 />, x: 10, y: 50 },
     { id: 2, label: "API Kodano", icon: <Cpu />, x: 40, y: 50 },
     { id: 3, label: "Orquestrador", icon: <Network />, x: 70, y: 50 },
-    { id: 4, label: "Adquirente A", icon: <CreditCard />, x: 90, y: 20 },
-    { id: 5, label: "Adquirente B", icon: <CreditCard />, x: 90, y: 50 },
-    { id: 6, label: "Adquirente C", icon: <CreditCard />, x: 90, y: 80 },
+    { id: 4, label: "Antifraude", icon: <Shield />, x: 90, y: 20 },
+    { id: 5, label: "Processamento", icon: <CreditCard />, x: 90, y: 50 },
+    { id: 6, label: "Dashboard", icon: <BarChart3 />, x: 90, y: 80 },
   ];
 
   return (
@@ -164,8 +164,8 @@ function ProcessTimeline() {
     },
     {
       time: "50ms",
-      title: "Roteamento inteligente",
-      description: "Escolhemos o melhor adquirente em tempo real",
+      title: "Processamento inteligente",
+      description: "Otimizamos a transação em tempo real",
       icon: <TrendingUp className="h-5 w-5" />,
     },
     {
@@ -235,7 +235,7 @@ export default function ComoFuncionaPage() {
     {
       icon: <RefreshCw />,
       title: "Retry Automático",
-      description: "Se uma transação falha, tentamos automaticamente com outro adquirente, aumentando suas aprovações em até 23%.",
+      description: "Se uma transação falha, tentamos automaticamente com configurações otimizadas, aumentando suas aprovações em até 23%.",
     },
     {
       icon: <Shield />,
@@ -244,8 +244,8 @@ export default function ComoFuncionaPage() {
     },
     {
       icon: <Globe />,
-      title: "Multi-adquirência Global",
-      description: "Opere com múltiplos adquirentes em diferentes países, tudo através de uma única integração.",
+      title: "Processamento Global",
+      description: "Processe pagamentos em diferentes países e moedas, tudo através de uma única integração moderna.",
     },
     {
       icon: <Activity />,
@@ -294,8 +294,8 @@ export default function ComoFuncionaPage() {
               transition={{ delay: 0.2, duration: durations.normal }}
               className="mt-6 text-lg text-muted-foreground"
             >
-              A rota certa, no momento certo. Nossa tecnologia simplifica a gestão
-              de múltiplos adquirentes e maximiza suas aprovações automaticamente.
+              A rota certa, no momento certo. Nossa tecnologia simplifica o processamento
+              de pagamentos e maximiza suas aprovações automaticamente.
             </motion.p>
 
             <motion.div

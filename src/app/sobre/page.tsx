@@ -48,7 +48,7 @@ export default function SobrePage() {
               animate={heroInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] as const }}
             >
-              Kodano simplifica a gestão de múltiplas adquirentes e transforma complexidade em eficiência.
+              Kodano simplifica pagamentos com tecnologia de ponta e serviços especializados que transformam complexidade em eficiência.
             </motion.p>
           </motion.div>
         </div>

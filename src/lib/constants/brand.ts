@@ -2,7 +2,7 @@ export const BRAND = {
   name: "Kodano",
   tagline: "Gateway de Pagamentos B2B",
   description:
-    "Infraestrutura de pagamentos segura, escalável e flexível para empresas. Integração simples, custos transparentes e compliance bancário.",
+    "Subadquirente digital com APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades. Integração simples, segurança bancária e compliance total.",
   url: "https://kodano.com",
   email: "contato@kodano.com",
   phone: "+55 11 99999-9999",

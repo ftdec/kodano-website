@@ -237,7 +237,7 @@ export function HeaderV2() {
           {
             href: "/produtos#orquestracao",
             label: "Orquestração Inteligente",
-            description: "Roteamento automático para múltiplos adquirentes",
+            description: "Otimização automática de funcionalidades avançadas",
           },
           {
             href: "/produtos#checkout",

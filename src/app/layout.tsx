@@ -21,18 +21,18 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'),
   title: {
-    default: "Kodano — Orquestração multiadquirente para empresas (SaaS de pagamentos, sem custódia)",
+    default: "Kodano — Subadquirente com tecnologia avançada para empresas (SaaS de pagamentos, sem custódia)",
     template: "%s | Kodano",
   },
-  description: "Plataforma SaaS que negocia, integra e roteia transações entre múltiplas adquirentes — sem tocar no dinheiro. Reduza custo efetivo, aumente aprovação e tenha liquidação previsível com uma API unificada.",
+  description: "Subadquirente digital que oferece APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades. Antifraude avançado, checkout otimizado e suporte especializado — sem custódia.",
   keywords: [
-    "orquestração multiadquirente",
+    "subadquirente",
+    "facilitador de pagamentos",
     "plataforma SaaS pagamentos",
-    "roteamento transações",
-    "multi-acquirer",
-    "API unificada pagamentos",
-    "governança multiadquirente",
-    "MDR efetivo",
+    "APIs de pagamento",
+    "gateway de pagamentos B2B",
+    "orquestração de funcionalidades",
+    "taxas competitivas",
     "aprovação transações",
     "liquidação previsível",
     "PCI-ready",
@@ -49,8 +49,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     url: "https://kodano.com.br",
-    title: "Kodano — Orquestração multiadquirente para empresas",
-    description: "Plataforma SaaS que negocia, integra e roteia transações entre múltiplas adquirentes — sem tocar no dinheiro.",
+    title: "Kodano — Subadquirente com tecnologia avançada",
+    description: "Subadquirente digital que oferece APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades.",
     siteName: "Kodano",
     images: [
       {
@@ -63,8 +63,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kodano — Orquestração multiadquirente para empresas",
-    description: "Plataforma SaaS que negocia, integra e roteia transações entre múltiplas adquirentes.",
+    title: "Kodano — Subadquirente com tecnologia avançada",
+    description: "Subadquirente digital com APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades.",
     images: ["/og-image.png"],
     creator: "@kodano",
   },

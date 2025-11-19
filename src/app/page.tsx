@@ -25,8 +25,8 @@ export default function Home() {
       {/* Hero Section */}
       <HeroSection
         title="Pagamentos inteligentes para empresas modernas"
-        subtitle="Plataforma de Orquestração de Pagamentos"
-        description="Maximize aprovação, reduza custos e tenha controle total sobre seus pagamentos com a infraestrutura mais avançada do Brasil."
+        subtitle="Subadquirente Digital com Tecnologia Avançada"
+        description="Maximize aprovação, reduza custos e tenha controle total com APIs modernas e orquestração inteligente de funcionalidades."
         primaryCta={{ label: "Começar Agora", href: "/fale-conosco" }}
         secondaryCta={{ label: "Ver Demonstração", href: "/como-funciona" }}
         showVisual={true}

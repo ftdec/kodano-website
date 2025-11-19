@@ -165,7 +165,7 @@ function IntegrationShowcase() {
       <div className="mb-8 text-center">
         <h3 className="mb-2 text-2xl font-bold">Integração com os Principais Players</h3>
         <p className="text-muted-foreground">
-          Conecte-se com múltiplos adquirentes e maximize suas aprovações
+          Conecte-se aos principais processadores e maximize suas aprovações
         </p>
       </div>
 
@@ -219,8 +219,8 @@ export default function ProdutosPage() {
       title: "Orquestração Inteligente",
       description: "Roteamento automático que escolhe o melhor caminho para cada transação, maximizando aprovações e reduzindo custos.",
       features: [
-        "Roteamento por performance em tempo real",
-        "Fallback automático entre adquirentes",
+        "Otimização por performance em tempo real",
+        "Retry automático inteligente",
         "Machine Learning para otimização",
         "Split de pagamentos nativo",
       ],
@@ -298,8 +298,8 @@ export default function ProdutosPage() {
     },
     {
       icon: <Globe className="h-6 w-6 text-accent" />,
-      title: "Multi-adquirência Global",
-      description: "Opere com múltiplos adquirentes em diferentes países simultaneamente.",
+      title: "Processamento Global",
+      description: "Processe pagamentos em diferentes países e moedas com suporte completo.",
       badge: "Premium",
       highlight: true,
     },

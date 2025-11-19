@@ -20,7 +20,7 @@ import {
 export const metadata: Metadata = {
   title: "Para Empresas - Kodano",
   description:
-    "Menor custo efetivo, maior aprovação e liquidação previsível. Sem trocar de adquirente: você adiciona a Kodano como camada de orquestração.",
+    "Menor custo efetivo, maior aprovação e liquidação previsível. Subadquirente digital com tecnologia avançada e orquestração inteligente de funcionalidades.",
 };
 
 const benefits = [
@@ -41,13 +41,13 @@ const benefits = [
   },
   {
     icon: FileText,
-    title: "Conciliação multiadquirente",
+    title: "Conciliação unificada",
     description: "E auditoria centralizada",
   },
   {
     icon: Zap,
     title: "Time-to-market",
-    description: "Uma integração, várias adquirentes",
+    description: "Uma integração, recursos completos",
   },
 ];
 
@@ -93,7 +93,7 @@ export default function SolucoesPage() {
               </span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Otimize seus pagamentos sem trocar de adquirente. Uma integração, múltiplas adquirentes.
+              Subadquirente digital com APIs modernas, taxas competitivas e tecnologia superior.
             </p>
           </div>
         </div>

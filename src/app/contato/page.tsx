@@ -161,10 +161,10 @@ export default function ContatoPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="acquirers">Adquirentes atuais</Label>
+                        <Label htmlFor="acquirers">Solução de pagamentos atual</Label>
                         <Input
                           id="acquirers"
-                          placeholder="Ex: Adquirente A, Adquirente B"
+                          placeholder="Ex: Gateway próprio, outro subadquirente"
                         />
                       </div>
                     </div>

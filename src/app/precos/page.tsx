@@ -47,8 +47,8 @@ function FeatureComparisonTable() {
     {
       category: "Avançado",
       items: [
-        { name: "Multi-adquirência", payAsYouGo: false, fixed: true },
-        { name: "Roteamento inteligente", payAsYouGo: false, fixed: true },
+        { name: "Processamento ilimitado", payAsYouGo: false, fixed: true },
+        { name: "Otimização inteligente", payAsYouGo: false, fixed: true },
         { name: "Antifraude com ML", payAsYouGo: false, fixed: true },
         { name: "Recuperação de vendas", payAsYouGo: false, fixed: true },
         { name: "Suporte prioritário 24/7", payAsYouGo: false, fixed: true },
@@ -281,8 +281,8 @@ export default function PrecosPage() {
       },
       features: [
         "Taxa reduzida por transação (1,9%)",
-        "Multi-adquirência ilimitada",
-        "Roteamento inteligente com IA",
+        "Processamento ilimitado",
+        "Otimização inteligente com IA",
         "Antifraude avançado com ML",
         "Suporte prioritário 24/7",
         "Gerente de sucesso dedicado",

@@ -374,7 +374,7 @@ export function FeaturesSection({
   const comparisonItems = [
     { label: "Taxa de aprovação", kodano: "98%", others: "75%" },
     { label: "Tempo de processamento", kodano: "< 200ms", others: "1-3s" },
-    { label: "Múltiplos adquirentes", kodano: true, others: false },
+    { label: "Funcionalidades avançadas", kodano: true, others: false },
     { label: "Antifraude com ML", kodano: true, others: false },
     { label: "Dashboard unificado", kodano: true, others: false },
     { label: "API REST completa", kodano: true, others: true },

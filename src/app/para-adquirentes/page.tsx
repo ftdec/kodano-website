@@ -9,8 +9,8 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
 /**
- * PRD DEFINITIVO – Página Para Adquirentes
- * Implementação exata conforme PRD-Kodano-Final.md
+ * PRD DEFINITIVO – Página Para Parceiros
+ * Implementação para integradores, plataformas SaaS e desenvolvedores
  * Design Stripe-level conforme Kodano-Cursor-Master-Prompt.md
  */
 
@@ -35,18 +35,18 @@ const staggerContainer = {
 };
 
 const beneficios = [
-  "Acesso a novos clientes",
-  "Mais volume processado",
-  "Integração simples",
-  "Roteamento transparente",
-  "Competitividade ampliada",
+  "APIs modernas e documentadas",
+  "Suporte técnico dedicado",
+  "Comissões atrativas",
+  "White-label disponível",
+  "Recursos avançados inclusos",
 ];
 
 const fluxo = [
-  "Integramos adquirente",
-  "Empresas têm acesso imediato",
-  "Roteamento por performance",
-  "Performance gera volume",
+  "Integração via API",
+  "Clientes processam pagamentos",
+  "Você recebe comissões",
+  "Crescimento conjunto",
 ];
 
 function BenefitItem({ text, delay = 0 }: { text: string; delay?: number }) {
@@ -116,7 +116,7 @@ function FlowStep({ number, text, delay = 0 }: { number: number; text: string; d
   );
 }
 
-export default function AdquirentesPage() {
+export default function ParceirosPage() {
   const [heroRef, heroInView] = useInView({
     triggerOnce: true,
     threshold: 0.1
@@ -137,21 +137,21 @@ export default function AdquirentesPage() {
             animate={heroInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
           >
-            <motion.h1 
+            <motion.h1
               className="text-4xl md:text-5xl lg:text-6xl font-bold font-[family-name:var(--font-poppins)] text-foreground mb-6 leading-tight tracking-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={heroInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
             >
-              Uma parceria que amplia o alcance e o volume da sua adquirência.
+              Integre pagamentos na sua plataforma e gere receita recorrente.
             </motion.h1>
-            <motion.p 
+            <motion.p
               className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={heroInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] as const }}
             >
-              Conecta adquirentes a mais empresas.
+              Programa de parceria para integradores, plataformas SaaS e desenvolvedores.
             </motion.p>
           </motion.div>
         </div>

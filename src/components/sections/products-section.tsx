@@ -58,10 +58,10 @@ const products = [
   {
     icon: <Layers className="h-6 w-6 text-blue-500" />,
     title: "Orquestração Inteligente",
-    description: "Roteamento automático para múltiplos adquirentes com fallback e retry inteligente.",
+    description: "Processamento otimizado com funcionalidades avançadas e retry inteligente.",
     features: [
-      "Multi-adquirência",
-      "Roteamento por regras",
+      "Processamento completo",
+      "Otimização por regras",
       "Retry automático",
     ],
     href: "/produtos#orquestracao",

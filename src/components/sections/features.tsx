@@ -13,7 +13,7 @@ const features = [
     gradient: "from-primary/20 to-accent/20",
   },
   {
-    title: "Governança multiadquirente",
+    title: "Governança unificada",
     description:
       "Dados, relatórios e conciliação centralizados.",
     icon: Zap,
@@ -22,7 +22,7 @@ const features = [
   {
     title: "Integração única",
     description:
-      "Uma API, todas as adquirentes.",
+      "Uma API, recursos completos.",
     icon: Code,
     gradient: "from-primary/20 via-accent/20 to-primary/20",
   },
