@@ -10,7 +10,7 @@ import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePres
 import Link from "next/link";
 import { Button } from "@/components/ui/button-v2";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Play, ChevronDown, Sparkles } from "lucide-react";
+import { ArrowRight, Play, ChevronDown, Sparkles, Zap } from "lucide-react";
 import { easings, durations } from "@/lib/design-system/motion";
 
 // ============================================================================
@@ -190,130 +190,182 @@ function HeroMetrics() {
 }
 
 // ============================================================================
-// HERO VISUAL COMPONENT
+// HERO VISUAL COMPONENT - ANIMATED PAYMENT FLOW
 // ============================================================================
 
 function HeroVisual() {
-  const [isPlaying, setIsPlaying] = useState(false);
-
   return (
     <motion.div
       variants={floatingVariants}
       initial="initial"
       animate="animate"
-      className="relative"
+      className="relative mx-auto max-w-2xl"
     >
-      {/* Main visual container */}
-      <div className="relative mx-auto max-w-2xl">
-        {/* Dashboard mockup */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            delay: 0.4,
-            duration: durations.slower,
-            ease: easings.emphasized,
-          }}
-          className="relative overflow-hidden rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl shadow-2xl"
-        >
-          {/* Header bar */}
-          <div className="flex items-center justify-between border-b border-border/50 bg-card/50 px-4 py-3">
-            <div className="flex gap-1.5">
-              <div className="h-3 w-3 rounded-full bg-red-500" />
-              <div className="h-3 w-3 rounded-full bg-yellow-500" />
-              <div className="h-3 w-3 rounded-full bg-green-500" />
-            </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <span>Dashboard Kodano</span>
-              <Sparkles className="h-3 w-3" />
-            </div>
-          </div>
+      {/* Animated payment flow visualization */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+          delay: 0.4,
+          duration: durations.slower,
+          ease: easings.emphasized,
+        }}
+        className="relative h-[400px] overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-card/80 via-card/60 to-card/80 backdrop-blur-xl shadow-2xl"
+      >
+        {/* Animated background grid */}
+        <div className="absolute inset-0 opacity-10">
+          <div
+            className="h-full w-full"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(65, 90, 119, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(65, 90, 119, 0.3) 1px, transparent 1px)
+              `,
+              backgroundSize: "40px 40px",
+            }}
+          />
+        </div>
 
-          {/* Dashboard content */}
-          <div className="p-6">
-            {/* Stats cards */}
-            <div className="grid grid-cols-3 gap-4">
-              {[1, 2, 3].map((i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: 0.6 + i * 0.1,
-                    duration: durations.normal,
-                  }}
-                  className="rounded-lg bg-background/50 p-4"
-                >
-                  <div className="h-2 w-16 rounded bg-accent/20" />
-                  <div className="mt-2 h-4 w-12 rounded bg-accent/40" />
-                </motion.div>
-              ))}
-            </div>
+        {/* Animated payment nodes */}
+        {Array.from({ length: 12 }).map((_, i) => {
+          const angle = (i / 12) * Math.PI * 2;
+          const radius = 120;
+          const centerX = 200;
+          const centerY = 200;
+          const x = centerX + Math.cos(angle) * radius;
+          const y = centerY + Math.sin(angle) * radius;
 
-            {/* Chart area */}
+          return (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8, duration: durations.slow }}
-              className="mt-6 rounded-lg bg-background/50 p-6"
-            >
-              <div className="h-32">
-                <svg className="h-full w-full" viewBox="0 0 400 128">
-                  <motion.path
-                    d="M0,64 Q100,32 200,48 T400,64"
-                    fill="none"
-                    stroke="url(#gradient)"
-                    strokeWidth="2"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{
-                      delay: 1,
-                      duration: 2,
-                      ease: easings.emphasized,
-                    }}
-                  />
-                  <defs>
-                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.2" />
-                      <stop offset="50%" stopColor="var(--color-accent)" stopOpacity="1" />
-                      <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0.2" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
-            </motion.div>
+              key={i}
+              className="absolute h-3 w-3 rounded-full bg-accent"
+              style={{
+                left: `${x}px`,
+                top: `${y}px`,
+                transform: "translate(-50%, -50%)",
+              }}
+              animate={{
+                scale: [1, 1.5, 1],
+                opacity: [0.4, 1, 0.4],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.15,
+                ease: "easeInOut",
+              }}
+            />
+          );
+        })}
+
+        {/* Central hub */}
+        <motion.div
+          className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-accent to-primary"
+          animate={{
+            scale: [1, 1.1, 1],
+            rotate: [0, 360],
+          }}
+          transition={{
+            scale: {
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
+            rotate: {
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear",
+            },
+          }}
+        >
+          <div className="absolute inset-2 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center">
+            <Zap className="h-8 w-8 text-accent" />
           </div>
         </motion.div>
 
-        {/* Play button overlay */}
-        <AnimatePresence>
-          {!isPlaying && (
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsPlaying(true)}
-              className="absolute inset-0 flex items-center justify-center"
-            >
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/90 shadow-xl backdrop-blur-sm">
-                <Play className="ml-1 h-8 w-8 text-primary" fill="currentColor" />
-              </div>
-            </motion.button>
-          )}
-        </AnimatePresence>
+        {/* Animated connection lines */}
+        {Array.from({ length: 6 }).map((_, i) => {
+          const angle = (i / 6) * Math.PI * 2;
+          const radius = 120;
+          const centerX = 200;
+          const centerY = 200;
+          const x = centerX + Math.cos(angle) * radius;
+          const y = centerY + Math.sin(angle) * radius;
 
-        {/* Floating badges */}
+          return (
+            <motion.svg
+              key={`line-${i}`}
+              className="absolute inset-0 h-full w-full"
+              style={{ zIndex: 0 }}
+            >
+              <motion.line
+                x1={centerX}
+                y1={centerY}
+                x2={x}
+                y2={y}
+                stroke="url(#lineGradient)"
+                strokeWidth="2"
+                strokeDasharray="5,5"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{
+                  pathLength: [0, 1, 0],
+                  opacity: [0, 0.5, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  delay: i * 0.3,
+                  ease: "easeInOut",
+                }}
+              />
+              <defs>
+                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0" />
+                  <stop offset="50%" stopColor="var(--color-accent)" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+            </motion.svg>
+          );
+        })}
+
+        {/* Floating particles */}
+        {Array.from({ length: 20 }).map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute h-1 w-1 rounded-full bg-accent/40"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, Math.sin(i) * 20, 0],
+              opacity: [0, 1, 0],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+
+        {/* Status badges */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 1.2, duration: durations.normal }}
-          className="absolute -left-4 top-8 rounded-lg bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-600 backdrop-blur-sm"
+          className="absolute left-4 top-4 rounded-lg bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-600 backdrop-blur-sm border border-green-500/20"
         >
           <span className="flex items-center gap-1">
-            <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
-            API Online
+            <motion.div
+              className="h-1.5 w-1.5 rounded-full bg-green-500"
+              animate={{ scale: [1, 1.3, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+            Sistema Online
           </span>
         </motion.div>
 
@@ -321,14 +373,18 @@ function HeroVisual() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 1.4, duration: durations.normal }}
-          className="absolute -right-4 bottom-8 rounded-lg bg-blue-500/10 px-3 py-1.5 text-xs font-medium text-blue-600 backdrop-blur-sm"
+          className="absolute right-4 bottom-4 rounded-lg bg-blue-500/10 px-3 py-1.5 text-xs font-medium text-blue-600 backdrop-blur-sm border border-blue-500/20"
         >
           <span className="flex items-center gap-1">
-            <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-            API Online
+            <motion.div
+              className="h-1.5 w-1.5 rounded-full bg-blue-500"
+              animate={{ scale: [1, 1.3, 1] }}
+              transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+            />
+            Processando
           </span>
         </motion.div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
