@@ -391,7 +391,7 @@ function DashboardDemo() {
   return (
     <div className="grid grid-cols-3 gap-4">
       <div className="rounded-lg bg-accent/10 p-3">
-        <div className="text-2xl font-bold text-accent">R$ 45.2k</div>
+        <div className="text-2xl font-bold text-accent">Alto volume</div>
         <div className="text-xs text-muted-foreground">Volume hoje</div>
       </div>
       <div className="rounded-lg bg-purple-500/10 p-3">
@@ -442,7 +442,7 @@ const kodano = new Kodano({
       language: "javascript",
       snippet: `// Processe um pagamento
 const payment = await kodano.payments.create({
-  amount: 10000, // R$ 100,00
+  amount: 10000, // Valor em centavos
   currency: 'BRL',
   method: 'credit_card',
   customer: { id: 'customer_123' },

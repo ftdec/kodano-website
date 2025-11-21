@@ -368,7 +368,7 @@ async function createPayment() {
   try {
     // Criar um novo pagamento
     const payment = await kodano.payments.create({
-      amount: 10000, // R$ 100,00 em centavos
+      amount: 10000, // Valor em centavos
       currency: 'BRL',
       method: 'credit_card',
       customer: 'cus_abc123',

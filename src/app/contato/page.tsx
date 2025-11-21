@@ -156,7 +156,7 @@ export default function ContatoPage() {
                         <Label htmlFor="volume">Volume mensal estimado</Label>
                         <Input
                           id="volume"
-                          placeholder="Ex: R$ 1.000.000/mês"
+                          placeholder="Ex: Volume mensal estimado"
                           required
                         />
                       </div>

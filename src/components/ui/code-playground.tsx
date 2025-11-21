@@ -97,7 +97,7 @@ const kodano = new Kodano(process.env.KODANO_SECRET_KEY);
 
 // Criar um pagamento
 const payment = await kodano.payments.create({
-  amount: 10000, // R$ 100,00 em centavos
+  amount: 10000, // Valor em centavos
   currency: 'BRL',
   method: 'credit_card',
   customer: 'cus_abc123',
@@ -120,7 +120,7 @@ kodano.api_key = "sk_test_..."
 
 # Criar um pagamento
 payment = kodano.Payment.create(
-    amount=10000,  # R$ 100,00 em centavos
+    amount=10000,  # Valor em centavos
     currency="BRL",
     method="credit_card",
     customer="cus_abc123",
@@ -145,7 +145,7 @@ require_once('vendor/autoload.php');
 
 // Criar um pagamento
 $payment = \\Kodano\\Payment::create([
-    'amount' => 10000, // R$ 100,00 em centavos
+    'amount' => 10000, // Valor em centavos
     'currency' => 'BRL',
     'method' => 'credit_card',
     'customer' => 'cus_abc123',

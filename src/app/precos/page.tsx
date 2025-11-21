@@ -35,8 +35,8 @@ export default function PrecosPage() {
       title: "Pay as You Go",
       description: "Pague apenas pelo que usar, sem mensalidades",
       price: {
-        amount: "2,9%",
-        period: "por transação",
+        amount: "Sob consulta",
+        period: "",
       },
       features: [
         "Sem mensalidade fixa",
@@ -57,11 +57,11 @@ export default function PrecosPage() {
       title: "Plano Fixo Mensal",
       description: "Mensalidade fixa com taxas reduzidas para alto volume",
       price: {
-        amount: "R$ 1.990",
-        period: "mês + 1,9% por transação",
+        amount: "Sob consulta",
+        period: "",
       },
       features: [
-        "Taxa reduzida por transação (1,9%)",
+        "Taxa reduzida por transação",
         "Processamento ilimitado",
         "Otimização inteligente com IA",
         "Antifraude avançado com ML",
@@ -92,8 +92,8 @@ export default function PrecosPage() {
       answer: "Você tem 30 dias para testar o plano Growth com todas as funcionalidades. Não cobramos nada durante o período de teste.",
     },
     {
-      question: "Vocês cobram por transação além da mensalidade?",
-      answer: "Depende do plano. No Pay as You Go cobramos apenas por transação. No plano fixo, há uma mensalidade + taxa reduzida por transação.",
+      question: "Como funciona a cobrança?",
+      answer: "Entre em contato conosco para conhecer nossos modelos de cobrança e encontrar o plano ideal para sua empresa.",
     },
   ];
 

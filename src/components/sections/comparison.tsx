@@ -7,12 +7,6 @@ import { Check, X } from "lucide-react";
 
 const comparisonData = [
   {
-    feature: "Taxa por transação",
-    kodano: "2,9% + R$ 0,39",
-    competitors: "3,5% - 5,0%",
-    kodanoHighlight: true,
-  },
-  {
     feature: "APIs modernas (RESTful)",
     kodano: true,
     competitors: "Limitado",

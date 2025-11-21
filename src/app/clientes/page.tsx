@@ -212,7 +212,7 @@ function TrustBadges() {
     { icon: <Shield className="h-6 w-6" />, label: "PCI DSS Level 1", value: "Certificado" },
     { icon: <Users className="h-6 w-6" />, label: "Clientes Ativos", value: "5,000+" },
     { icon: <TrendingUp className="h-6 w-6" />, label: "Crescimento Anual", value: "300%" },
-    { icon: <DollarSign className="h-6 w-6" />, label: "Volume Processado", value: "R$ 2B+" },
+    { icon: <DollarSign className="h-6 w-6" />, label: "Volume Processado", value: "Alto volume" },
   ];
 
   return (
@@ -281,8 +281,8 @@ export default function ClientesPage() {
       rating: 5,
       highlight: "ROI Imediato",
       metrics: [
-        { label: "Economia", value: "R$ 150k" },
-        { label: "ROI", value: "300%" },
+        { label: "Economia", value: "Significativa" },
+        { label: "ROI", value: "Alto" },
       ],
     },
     {
@@ -331,7 +331,7 @@ export default function ClientesPage() {
       ],
       metrics: {
         icon: <TrendingUp className="h-6 w-6" />,
-        value: "R$ 2.5M",
+        value: "Alto volume",
         label: "MRR processado",
       },
     },
@@ -361,12 +361,12 @@ export default function ClientesPage() {
       results: [
         "-85% fraudes",
         "0% falsos positivos",
-        "R$ 150k economizados",
+        "Economia significativa",
       ],
       metrics: {
         icon: <Shield className="h-6 w-6" />,
-        value: "R$ 150k",
-        label: "Economizados",
+        value: "Significativa",
+        label: "Economia",
       },
     },
   ];

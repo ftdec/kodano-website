@@ -41,7 +41,7 @@ const products = [
       "Tokenização segura",
       "3D Secure automático",
     ],
-    pricing: "2,9% + R$ 0,39 por transação",
+    pricing: "Sob consulta",
     code: `const payment = await kodano.payments.create({
   amount: 10000,
   currency: 'BRL',
@@ -132,7 +132,7 @@ const products = [
       "Análise comportamental",
       "Proteção contra chargebacks",
     ],
-    pricing: "A partir de R$ 0,10 por análise",
+    pricing: "Sob consulta",
     code: `const analysis = await kodano.radar.analyze({
   transaction: transactionId,
   rules: ['high_risk_location'],

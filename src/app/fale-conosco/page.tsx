@@ -209,12 +209,12 @@ function ContactForm() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const volumeOptions = [
-    "Até R$ 10.000/mês",
-    "R$ 10.000 - R$ 50.000/mês",
-    "R$ 50.000 - R$ 150.000/mês",
-    "R$ 150.000 - R$ 500.000/mês",
-    "R$ 500.000 - R$ 1M/mês",
-    "Acima de R$ 1M/mês",
+    "Baixo volume",
+    "Volume médio",
+    "Alto volume",
+    "Volume muito alto",
+    "Volume empresarial",
+    "Volume corporativo",
   ];
 
   const validateForm = () => {
