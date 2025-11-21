@@ -199,7 +199,7 @@ function HeroVisual() {
       variants={floatingVariants}
       initial="initial"
       animate="animate"
-      className="relative mx-auto max-w-2xl"
+      className="relative w-full"
     >
       {/* Animated payment flow visualization */}
       <motion.div
@@ -210,7 +210,7 @@ function HeroVisual() {
           duration: durations.slower,
           ease: easings.emphasized,
         }}
-        className="relative h-[400px] overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-card/80 via-card/60 to-card/80 backdrop-blur-xl shadow-2xl"
+        className="relative aspect-square max-w-full overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-card/80 via-card/60 to-card/80 backdrop-blur-xl shadow-2xl"
       >
         {/* Animated background grid */}
         <div className="absolute inset-0 opacity-10">
@@ -226,79 +226,32 @@ function HeroVisual() {
           />
         </div>
 
-        {/* Animated payment nodes */}
-        {Array.from({ length: 12 }).map((_, i) => {
-          const angle = (i / 12) * Math.PI * 2;
-          const radius = 120;
-          const centerX = 200;
-          const centerY = 200;
-          const x = centerX + Math.cos(angle) * radius;
-          const y = centerY + Math.sin(angle) * radius;
-
-          return (
-            <motion.div
-              key={i}
-              className="absolute h-3 w-3 rounded-full bg-accent"
-              style={{
-                left: `${x}px`,
-                top: `${y}px`,
-                transform: "translate(-50%, -50%)",
-              }}
-              animate={{
-                scale: [1, 1.5, 1],
-                opacity: [0.4, 1, 0.4],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                delay: i * 0.15,
-                ease: "easeInOut",
-              }}
-            />
-          );
-        })}
-
-        {/* Central hub */}
-        <motion.div
-          className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-accent to-primary"
-          animate={{
-            scale: [1, 1.1, 1],
-            rotate: [0, 360],
-          }}
-          transition={{
-            scale: {
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            },
-            rotate: {
-              duration: 20,
-              repeat: Infinity,
-              ease: "linear",
-            },
-          }}
+        {/* SVG Container for responsive animation */}
+        <svg
+          className="absolute inset-0 h-full w-full"
+          viewBox="0 0 400 400"
+          preserveAspectRatio="xMidYMid meet"
         >
-          <div className="absolute inset-2 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center">
-            <Zap className="h-8 w-8 text-accent" />
-          </div>
-        </motion.div>
+          <defs>
+            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0" />
+              <stop offset="50%" stopColor="var(--color-accent)" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
+            </linearGradient>
+          </defs>
 
-        {/* Animated connection lines */}
-        {Array.from({ length: 6 }).map((_, i) => {
-          const angle = (i / 6) * Math.PI * 2;
-          const radius = 120;
-          const centerX = 200;
-          const centerY = 200;
-          const x = centerX + Math.cos(angle) * radius;
-          const y = centerY + Math.sin(angle) * radius;
+          {/* Animated connection lines */}
+          {Array.from({ length: 6 }).map((_, i) => {
+            const angle = (i / 6) * Math.PI * 2;
+            const radius = 120;
+            const centerX = 200;
+            const centerY = 200;
+            const x = centerX + Math.cos(angle) * radius;
+            const y = centerY + Math.sin(angle) * radius;
 
-          return (
-            <motion.svg
-              key={`line-${i}`}
-              className="absolute inset-0 h-full w-full"
-              style={{ zIndex: 0 }}
-            >
+            return (
               <motion.line
+                key={`line-${i}`}
                 x1={centerX}
                 y1={centerY}
                 x2={x}
@@ -318,16 +271,95 @@ function HeroVisual() {
                   ease: "easeInOut",
                 }}
               />
-              <defs>
-                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0" />
-                  <stop offset="50%" stopColor="var(--color-accent)" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-            </motion.svg>
-          );
-        })}
+            );
+          })}
+
+          {/* Animated payment nodes */}
+          {Array.from({ length: 12 }).map((_, i) => {
+            const angle = (i / 12) * Math.PI * 2;
+            const radius = 120;
+            const centerX = 200;
+            const centerY = 200;
+            const x = centerX + Math.cos(angle) * radius;
+            const y = centerY + Math.sin(angle) * radius;
+
+            return (
+              <motion.circle
+                key={i}
+                cx={x}
+                cy={y}
+                r="6"
+                fill="var(--color-accent)"
+                animate={{
+                  r: [6, 9, 6],
+                  opacity: [0.4, 1, 0.4],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  delay: i * 0.15,
+                  ease: "easeInOut",
+                }}
+              />
+            );
+          })}
+
+          {/* Central hub */}
+          <motion.circle
+            cx="200"
+            cy="200"
+            r="40"
+            fill="url(#hubGradient)"
+            animate={{
+              r: [40, 44, 40],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <defs>
+            <linearGradient id="hubGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="var(--color-accent)" />
+              <stop offset="100%" stopColor="var(--color-primary)" />
+            </linearGradient>
+          </defs>
+          <motion.circle
+            cx="200"
+            cy="200"
+            r="32"
+            fill="var(--background)"
+            fillOpacity="0.8"
+          />
+        </svg>
+
+        {/* Central hub icon overlay */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
+          <motion.div
+            className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-accent to-primary"
+            animate={{
+              scale: [1, 1.1, 1],
+              rotate: [0, 360],
+            }}
+            transition={{
+              scale: {
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              },
+              rotate: {
+                duration: 20,
+                repeat: Infinity,
+                ease: "linear",
+              },
+            }}
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm">
+              <Zap className="h-6 w-6 text-accent" />
+            </div>
+          </motion.div>
+        </div>
 
         {/* Floating particles */}
         {Array.from({ length: 20 }).map((_, i) => (
@@ -436,18 +468,18 @@ export function HeroSection({
       {/* Main content */}
       <motion.div
         style={{ y, opacity }}
-        className="container relative z-10 mx-auto px-4 py-24 sm:px-6 lg:px-8"
+        className="container relative z-10 mx-auto px-4 py-16 sm:px-6 lg:px-8 sm:py-24"
       >
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="mx-auto max-w-6xl"
+          className="mx-auto max-w-7xl"
         >
           {/* Hero content */}
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-8 items-center">
+          <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center min-h-[600px]">
             {/* Left column - Text content */}
-            <div className="text-center lg:text-left">
+            <div className="text-center lg:text-left space-y-6">
               {/* Badge */}
               <motion.div variants={itemVariants} className="inline-block">
                 <span className="inline-flex items-center gap-1 rounded-full bg-accent/10 px-3 py-1 text-sm font-medium text-accent">
@@ -459,7 +491,7 @@ export function HeroSection({
               {/* Title */}
               <motion.h1
                 variants={titleVariants}
-                className="mt-6 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-6xl lg:text-7xl"
+                className="bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl lg:text-6xl xl:text-7xl leading-tight"
               >
                 <AnimatedText text={title} />
               </motion.h1>
@@ -468,7 +500,7 @@ export function HeroSection({
               {description && (
                 <motion.p
                   variants={itemVariants}
-                  className="mt-6 text-lg text-muted-foreground sm:text-xl"
+                  className="text-base text-muted-foreground sm:text-lg lg:text-xl max-w-2xl mx-auto lg:mx-0"
                 >
                   {description}
                 </motion.p>
@@ -477,7 +509,7 @@ export function HeroSection({
               {/* CTAs */}
               <motion.div
                 variants={itemVariants}
-                className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start"
+                className="flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start pt-2"
               >
                 {primaryCta && (
                   <Button
@@ -514,8 +546,10 @@ export function HeroSection({
 
             {/* Right column - Visual */}
             {showVisual && (
-              <div className="relative lg:pl-8">
-                <HeroVisual />
+              <div className="relative flex items-center justify-center lg:pl-8">
+                <div className="w-full max-w-lg">
+                  <HeroVisual />
+                </div>
               </div>
             )}
           </div>

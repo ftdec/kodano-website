@@ -74,7 +74,7 @@ export default function PrecosPage() {
         label: "Fale Conosco",
         href: "/fale-conosco",
       },
-      popular: true,
+      popular: false,
     },
   ];
 
