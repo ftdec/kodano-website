@@ -309,71 +309,147 @@ export default function Home() {
         </section>
 
         {/* CONTACT */}
-        <section id="contact" className="scroll-mt-28 py-24 px-6 bg-secondary/20">
-          <div className="container max-w-2xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="bg-background border border-border/60 rounded-3xl shadow-xl shadow-foreground/5 p-8 md:p-10"
-            >
-              {isSuccess ? (
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mb-6">
-                    <CheckCircle2 className="w-8 h-8 text-green-500" />
+        <section id="contact" className="scroll-mt-28 py-24 px-6 relative overflow-hidden">
+          {/* Background Gradients */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-secondary/20 to-background" />
+            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px]" />
+            <div className="absolute top-20 left-[-100px] w-[300px] h-[300px] bg-blue-500/5 rounded-full blur-[80px]" />
+          </div>
+
+          <div className="container max-w-6xl mx-auto relative z-10">
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
+
+              {/* Left Column: Content */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="space-y-8 pt-4"
+              >
+                <div className="space-y-6">
+                  <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-primary/5 border border-primary/10 backdrop-blur-xl">
+                    <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
+                    <span className="text-xs font-semibold uppercase tracking-[0.35em] text-primary">Fale Conosco</span>
                   </div>
-                  <h3 className="text-2xl font-bold mb-2">Mensagem enviada!</h3>
-                  <p className="text-muted-foreground">
-                    Obrigado pelo contato. Retornaremos em breve.
+
+                  <h2 className="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight">
+                    Vamos escalar sua <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">operação financeira?</span>
+                  </h2>
+
+                  <p className="text-lg text-muted-foreground leading-relaxed max-w-md">
+                    Nossa equipe de especialistas está pronta para desenhar a arquitetura ideal para o seu negócio.
                   </p>
                 </div>
-              ) : (
-                <>
-                  <div className="space-y-6 text-center mb-8">
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">Contato</p>
-                    <h2 className="text-3xl md:text-4xl font-bold leading-tight">Fale com nosso time</h2>
-                    <p className="text-lg text-muted-foreground">
-                      Entenda como podemos aumentar suas aprovações e simplificar seus fluxos de pagamento. Respondemos em até 1 dia útil.
-                    </p>
+
+                <div className="space-y-6 pt-4">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mt-1">
+                      <CheckCircle2 className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg">Resposta em 24h</h4>
+                      <p className="text-muted-foreground text-sm">Nosso time comercial analisa seu perfil rapidamente.</p>
+                    </div>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <InputGroup>
-                      <InputGroupInput
-                        type="email"
-                        placeholder="seu@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    </InputGroup>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mt-1">
+                      <Shield className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg">Consultoria Técnica</h4>
+                      <p className="text-muted-foreground text-sm">Acesso direto aos nossos arquitetos de solução.</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
 
-                    <InputGroup>
-                      <InputGroupTextarea
-                        placeholder="Conte-nos sobre sua empresa, volume mensal de transações, principais desafios com pagamentos e como podemos ajudar. Quanto mais detalhes, melhor poderemos avaliar seu caso."
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        required
-                        rows={6}
-                        className="min-h-[140px]"
-                      />
-                    </InputGroup>
+              {/* Right Column: Form */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-[2rem] p-8 md:p-10 shadow-2xl shadow-black/5"
+              >
+                {isSuccess ? (
+                  <div className="flex flex-col items-center justify-center py-16 text-center h-full min-h-[400px]">
+                    <div className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mb-6 animate-in zoom-in duration-300">
+                      <CheckCircle2 className="w-10 h-10 text-green-500" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-3">Mensagem enviada!</h3>
+                    <p className="text-muted-foreground max-w-xs mx-auto">
+                      Recebemos seu contato e retornaremos em breve para o email informado.
+                    </p>
+                    <Button
+                      variant="outline"
+                      className="mt-8"
+                      onClick={() => setIsSuccess(false)}
+                    >
+                      Enviar nova mensagem
+                    </Button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2 mb-6">
+                      <h3 className="text-2xl font-semibold">Envie uma mensagem</h3>
+                      <p className="text-sm text-muted-foreground">Preencha os dados abaixo para iniciar a conversa.</p>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <label htmlFor="email" className="text-sm font-medium ml-1">Email Corporativo</label>
+                        <InputGroup>
+                          <InputGroupInput
+                            id="email"
+                            type="email"
+                            placeholder="nome@empresa.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className="h-12"
+                          />
+                        </InputGroup>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label htmlFor="message" className="text-sm font-medium ml-1">Como podemos ajudar?</label>
+                        <InputGroup>
+                          <InputGroupTextarea
+                            id="message"
+                            placeholder="Descreva seu volume atual e principais desafios..."
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            required
+                            rows={5}
+                            className="min-h-[120px] resize-none"
+                          />
+                        </InputGroup>
+                      </div>
+                    </div>
 
                     <Button
                       type="submit"
                       variant="primary"
                       size="lg"
-                      className="w-full"
+                      className="w-full h-12 text-base mt-2"
                       loading={isSubmitting}
                       rightIcon={<Send className="w-4 h-4" />}
                     >
-                      Enviar mensagem
+                      Solicitar Contato
                     </Button>
+
+                    <p className="text-xs text-center text-muted-foreground mt-4">
+                      Ao enviar, você concorda com nossa Política de Privacidade.
+                    </p>
                   </form>
-                </>
-              )}
-            </motion.div>
+                )}
+              </motion.div>
+
+            </div>
           </div>
         </section>
 
