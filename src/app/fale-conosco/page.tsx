@@ -155,15 +155,15 @@ function ContactInfoCards() {
     },
     {
       icon: <Calendar className="h-5 w-5" />,
-      title: "Agendar reunião",
-      value: "30 min",
-      description: "Demonstração ao vivo",
-      action: "/demo",
+      title: "Fale Conosco",
+      value: "",
+      description: "Entre em contato",
+      action: "/fale-conosco",
     },
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="space-y-4">
       {cards.map((card, index) => (
         <motion.a
           key={index}
@@ -172,19 +172,19 @@ function ContactInfoCards() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
           whileHover={{ scale: 1.02, y: -2 }}
-          className="group rounded-lg border bg-card p-4 transition-all hover:shadow-md"
+          className="group flex items-start gap-4 rounded-lg border bg-background p-4 transition-all hover:border-accent hover:shadow-md"
         >
-          <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent">
-              {card.icon}
-            </div>
-            <div className="flex-1">
-              <h3 className="font-medium">{card.title}</h3>
-              <p className="text-sm font-bold text-accent">{card.value}</p>
-              <p className="text-xs text-muted-foreground">{card.description}</p>
-            </div>
-            <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 transition-all group-hover:opacity-100" />
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
+            {card.icon}
           </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="mb-1 font-semibold text-foreground">{card.title}</h3>
+            {card.value && (
+              <p className="mb-1 text-sm font-bold text-accent">{card.value}</p>
+            )}
+            <p className="text-xs text-muted-foreground">{card.description}</p>
+          </div>
+          <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-all group-hover:opacity-100 group-hover:translate-x-1" />
         </motion.a>
       ))}
     </div>
@@ -483,9 +483,12 @@ export default function FaleConoscoPage() {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: durations.slow }}
+              className="rounded-lg border bg-card p-6"
             >
-              <h3 className="mb-4 text-lg font-semibold">Outras formas de contato</h3>
-              <ContactInfoCards />
+              <h3 className="mb-6 text-lg font-semibold">Outras formas de contato</h3>
+              <div className="space-y-4">
+                <ContactInfoCards />
+              </div>
             </motion.div>
 
             {/* Office info */}
@@ -499,7 +502,7 @@ export default function FaleConoscoPage() {
                 <MapPin className="h-5 w-5 text-accent" />
                 <h3 className="font-semibold">Nosso escritório</h3>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 Av. Paulista, 1234 - 10º andar
                 <br />
                 São Paulo, SP - 01310-100
@@ -520,8 +523,7 @@ export default function FaleConoscoPage() {
         variant="simple"
         title="Prefere uma demonstração ao vivo?"
         description="Agende uma chamada com nossos especialistas e veja a plataforma em ação"
-        primaryCTA={{ label: "Agendar Demonstração", href: "/demo" }}
-        secondaryCTA={{ label: "Documentação", href: "/documentacao" }}
+        primaryCTA={{ label: "Fale Conosco", href: "/fale-conosco" }}
         background={true}
       />
     </MainLayout>

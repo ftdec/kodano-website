@@ -364,7 +364,6 @@ function Carousel({ testimonials, autoPlay = true, interval = 5000 }: CarouselPr
 function StatsBar() {
   const stats = [
     { icon: <Building2 className="h-5 w-5" />, value: "5000+", label: "Empresas" },
-    { icon: <TrendingUp className="h-5 w-5" />, value: "98%", label: "Satisfação" },
     { icon: <MessageSquare className="h-5 w-5" />, value: "10M+", label: "Transações/mês" },
     { icon: <Heart className="h-5 w-5" />, value: "4.9/5", label: "Avaliação" },
   ];
@@ -409,16 +408,15 @@ function StatsBar() {
 
 const defaultTestimonials: Omit<TestimonialCardProps, "index">[] = [
   {
-    quote: "A Kodano transformou completamente nossa operação de pagamentos. A taxa de aprovação aumentou 23% e o tempo de processamento caiu drasticamente.",
+    quote: "A Kodano transformou completamente nossa operação de pagamentos. O tempo de processamento caiu drasticamente e a integração foi muito simples.",
     author: {
       name: "Carlos Silva",
       role: "CEO",
       company: "TechStore Brasil",
     },
     rating: 5,
-    highlight: "Taxa +23%",
+    highlight: "Integração rápida",
     metrics: [
-      { label: "Taxa Aprovação", value: "+23%" },
       { label: "Tempo Resposta", value: "-65%" },
     ],
   },

@@ -20,11 +20,11 @@ interface ApiStatusProps {
 
 export function ApiStatus({ compact = false, className = "" }: ApiStatusProps) {
   const [services] = useState<Service[]>([
-    { name: "API Payments", status: "operational", uptime: 99.99, responseTime: 145 },
-    { name: "API Connect", status: "operational", uptime: 99.98, responseTime: 152 },
-    { name: "API Billing", status: "operational", uptime: 99.99, responseTime: 138 },
-    { name: "Webhooks", status: "operational", uptime: 99.97, responseTime: 89 },
-    { name: "Dashboard", status: "operational", uptime: 100, responseTime: 234 },
+    { name: "API Payments", status: "operational", uptime: 0, responseTime: 145 },
+    { name: "API Connect", status: "operational", uptime: 0, responseTime: 152 },
+    { name: "API Billing", status: "operational", uptime: 0, responseTime: 138 },
+    { name: "Webhooks", status: "operational", uptime: 0, responseTime: 89 },
+    { name: "Dashboard", status: "operational", uptime: 0, responseTime: 234 },
   ]);
   const [currentTime, setCurrentTime] = useState<string>("");
   const [isMounted, setIsMounted] = useState(false);
@@ -155,9 +155,6 @@ export function ApiStatus({ compact = false, className = "" }: ApiStatusProps) {
                   <span className="font-mono">{service.responseTime}ms</span>
                 </span>
               )}
-              <span className="flex items-center gap-1">
-                Uptime: <span className="font-mono text-green-600 dark:text-green-400">{service.uptime}%</span>
-              </span>
               <span className={`px-2 py-1 rounded text-xs font-medium ${
                 service.status === "operational"
                   ? "bg-green-500/10 text-green-700 dark:text-green-400"

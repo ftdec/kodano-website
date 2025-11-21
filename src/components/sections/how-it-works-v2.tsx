@@ -6,6 +6,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import Link from "next/link";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
@@ -319,8 +320,11 @@ function Timeline({ steps, activeStep }: TimelineProps) {
               {activeStep > index ? (
                 <CheckCircle className="h-6 w-6 text-white" />
               ) : (
-                <span className="text-sm font-bold">
-                  {activeStep === index ? index + 1 : ""}
+                <span className={cn(
+                  "text-lg font-bold",
+                  activeStep >= index ? "text-white" : "text-foreground"
+                )}>
+                  {step.number}
                 </span>
               )}
             </motion.div>
@@ -389,10 +393,6 @@ function DashboardDemo() {
       <div className="rounded-lg bg-accent/10 p-3">
         <div className="text-2xl font-bold text-accent">R$ 45.2k</div>
         <div className="text-xs text-muted-foreground">Volume hoje</div>
-      </div>
-      <div className="rounded-lg bg-green-500/10 p-3">
-        <div className="text-2xl font-bold text-green-500">98.5%</div>
-        <div className="text-xs text-muted-foreground">Taxa aprovação</div>
       </div>
       <div className="rounded-lg bg-purple-500/10 p-3">
         <div className="text-2xl font-bold text-purple-500">1,234</div>
@@ -638,15 +638,16 @@ export function HowItWorksSection({
           transition={{ delay: 0.4, duration: durations.slow }}
           className="mt-16 text-center"
         >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="group inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 font-medium text-white"
-          >
-            <Play className="h-5 w-5" />
-            Ver demonstração completa
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </motion.button>
+          <Link href="/fale-conosco">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="group inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 font-medium text-white"
+            >
+              Fale Conosco
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </motion.button>
+          </Link>
         </motion.div>
       )}
       </SectionContainer>

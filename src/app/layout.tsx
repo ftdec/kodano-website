@@ -54,9 +54,9 @@ export const metadata: Metadata = {
     siteName: "Kodano",
     images: [
       {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
+        url: "/kodano-logo.png",
+        width: 1024,
+        height: 1024,
         alt: "Kodano - Gateway de Pagamentos B2B",
       },
     ],
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kodano — Subadquirente com tecnologia avançada",
     description: "Subadquirente digital com APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades.",
-    images: ["/og-image.png"],
+    images: ["/kodano-logo.png"],
     creator: "@kodano",
   },
   robots: {

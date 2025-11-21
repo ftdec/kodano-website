@@ -71,7 +71,7 @@ const sdks = [
     name: "Node.js",
     lang: "JavaScript/TypeScript",
     install: "npm install @kodano/node",
-    stars: "1.2k",
+    stars: "",
   },
   {
     name: "Python",

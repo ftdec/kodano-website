@@ -123,13 +123,15 @@ function ProductDetailCard({
         )}
 
         {/* CTA */}
-        <motion.div
-          className="mt-6 flex items-center gap-2 text-accent"
-          whileHover={{ x: 5 }}
-        >
-          <span className="font-medium">Saiba mais</span>
-          <ArrowRight className="h-4 w-4" />
-        </motion.div>
+        <Link href="/fale-conosco">
+          <motion.div
+            className="mt-6 flex items-center gap-2 text-accent cursor-pointer"
+            whileHover={{ x: 5 }}
+          >
+            <span className="font-medium">Fale conosco</span>
+            <ArrowRight className="h-4 w-4" />
+          </motion.div>
+        </Link>
 
         {/* Hover gradient */}
         <motion.div
@@ -224,10 +226,6 @@ export default function ProdutosPage() {
         "Machine Learning para otimização",
         "Split de pagamentos nativo",
       ],
-      metrics: [
-        { label: "Aumento aprovação", value: "+23%" },
-        { label: "Redução custos", value: "-15%" },
-      ],
     },
     {
       icon: <CreditCard className="h-7 w-7 text-accent" />,
@@ -238,10 +236,6 @@ export default function ProdutosPage() {
         "Tokenização segura",
         "Recuperação de carrinho",
         "Multi-idioma e multi-moeda",
-      ],
-      metrics: [
-        { label: "Conversão", value: "+18%" },
-        { label: "Tempo checkout", value: "-40%" },
       ],
     },
     {
@@ -254,10 +248,6 @@ export default function ProdutosPage() {
         "Regras personalizadas",
         "Whitelist/Blacklist automático",
       ],
-      metrics: [
-        { label: "Redução fraude", value: "-87%" },
-        { label: "Falsos positivos", value: "-65%" },
-      ],
     },
     {
       icon: <BarChart3 className="h-7 w-7 text-accent" />,
@@ -268,10 +258,6 @@ export default function ProdutosPage() {
         "Relatórios customizáveis",
         "Alertas inteligentes",
         "API de dados completa",
-      ],
-      metrics: [
-        { label: "Dados em", value: "<100ms" },
-        { label: "Uptime", value: "99.99%" },
       ],
     },
   ];
@@ -350,16 +336,10 @@ export default function ProdutosPage() {
               transition={{ delay: 0.3 }}
               className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center"
             >
-              <Link href="/demo">
+              <Link href="/fale-conosco">
                 <Button size="lg" variant="kodano">
-                  Ver Demonstração
+                  Fale Conosco
                   <Zap className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="/documentacao">
-                <Button size="lg" variant="outline">
-                  Documentação Técnica
-                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
             </motion.div>
@@ -383,10 +363,6 @@ export default function ProdutosPage() {
         </div>
       </SectionContainer>
 
-      {/* Integration Showcase */}
-      <SectionContainer spacing="lg" background="muted">
-        <IntegrationShowcase />
-      </SectionContainer>
 
       {/* Additional Features */}
       <FeaturesSection
@@ -411,7 +387,7 @@ export default function ProdutosPage() {
       <CTASection
         variant="form"
         title="Quer conhecer nossos produtos em detalhes?"
-        description="Cadastre-se para receber uma demonstração personalizada"
+        description="Entre em contato e descubra como podemos ajudar sua operação"
         background={true}
       />
     </MainLayout>

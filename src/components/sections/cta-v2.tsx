@@ -187,48 +187,8 @@ function ContactCard({ icon, title, description, action, href, index }: ContactC
 // ============================================================================
 
 function FloatingMetrics() {
-  const metrics = [
-    { value: "98%", label: "Taxa de Aprovação", icon: <TrendingUp className="h-4 w-4" /> },
-    { value: "<200ms", label: "Latência", icon: <Zap className="h-4 w-4" /> },
-    { value: "99.99%", label: "Uptime", icon: <Shield className="h-4 w-4" /> },
-  ];
-
-  return (
-    <div className="absolute -top-20 left-1/2 hidden -translate-x-1/2 gap-4 lg:flex">
-      {metrics.map((metric, index) => (
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, y: 20, scale: 0.8 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{
-            delay: 0.5 + index * 0.1,
-            type: "spring",
-            stiffness: 200,
-          }}
-          className="relative"
-        >
-          <motion.div
-            animate={{
-              y: [0, -10, 0],
-            }}
-            transition={{
-              duration: 3,
-              delay: index * 0.2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="flex items-center gap-3 rounded-lg border bg-card/80 px-4 py-3 shadow-lg backdrop-blur-sm"
-          >
-            <div className="text-accent">{metric.icon}</div>
-            <div>
-              <div className="text-lg font-bold">{metric.value}</div>
-              <div className="text-xs text-muted-foreground">{metric.label}</div>
-            </div>
-          </motion.div>
-        </motion.div>
-      ))}
-    </div>
-  );
+  // Métricas removidas - não podemos exibir informações falsas
+  return null;
 }
 
 // ============================================================================
@@ -357,10 +317,10 @@ function ContactCTA({ title, description }: ContactCTAProps) {
     },
     {
       icon: <Calendar className="h-5 w-5 text-accent" />,
-      title: "Agendar Demo",
-      description: "30 min com especialista",
-      action: "Escolher horário",
-      href: "/demo",
+      title: "Fale Conosco",
+      description: "Entre em contato",
+      action: "Enviar mensagem",
+      href: "/fale-conosco",
     },
   ];
 

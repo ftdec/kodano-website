@@ -10,16 +10,6 @@ export const NAVIGATION_ITEMS = [
     description: "Plataforma Kodano",
   },
   {
-    label: "Para Empresas",
-    href: "/para-empresas",
-    description: "Soluções B2B",
-  },
-  {
-    label: "Para Adquirentes",
-    href: "/para-adquirentes",
-    description: "Parcerias",
-  },
-  {
     label: "Preços",
     href: "/precos",
     description: "Modelos de cobrança",

@@ -313,7 +313,7 @@ export default function ClientesPage() {
         company: "PayFlow B2B",
       },
       rating: 5,
-      highlight: "99.99% Uptime",
+      highlight: "Alta disponibilidade",
     },
   ];
 

@@ -72,7 +72,7 @@ const defaultFeatures = [
   {
     icon: <Zap className="h-6 w-6 text-yellow-500" />,
     title: "Processamento Ultrarrápido",
-    description: "Transações processadas em menos de 200ms com nossa infraestrutura otimizada.",
+    description: "Transações processadas rapidamente com nossa infraestrutura otimizada.",
     badge: "Novo",
     highlight: false,
   },
@@ -372,8 +372,6 @@ export function FeaturesSection({
   const isInView = useInView(sectionRef, { once: true, margin: "-200px" });
 
   const comparisonItems = [
-    { label: "Taxa de aprovação", kodano: "98%", others: "75%" },
-    { label: "Tempo de processamento", kodano: "< 200ms", others: "1-3s" },
     { label: "Funcionalidades avançadas", kodano: true, others: false },
     { label: "Antifraude com ML", kodano: true, others: false },
     { label: "Dashboard unificado", kodano: true, others: false },
@@ -440,39 +438,32 @@ export function FeaturesSection({
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ delay: 0.6, duration: durations.slow }}
-            className="mt-20 grid grid-cols-2 gap-8 sm:grid-cols-4"
+            className="mt-20 grid grid-cols-1 gap-8 sm:grid-cols-1"
           >
-            <AnimatedMetric value={98} suffix="%" label="Taxa de Aprovação" />
-            <AnimatedMetric value={200} suffix="ms" label="Tempo de Resposta" />
-            <AnimatedMetric value={99.99} suffix="%" label="Uptime Garantido" />
             <AnimatedMetric value={24} suffix="/7" label="Suporte Disponível" />
           </motion.div>
         )}
 
         {/* Feature comparison table */}
         {showComparison && (
-          <FeatureComparison
-            title="Compare com a Concorrência"
-            items={comparisonItems}
-          />
-        )}
-
-        {/* Interactive demo CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.8, duration: durations.slow }}
-          className="mt-16 text-center"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="group inline-flex items-center gap-2 text-accent hover:text-accent/80"
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.8, duration: durations.slow }}
+            className="mt-16 text-center"
           >
-            <span className="font-medium">Veja uma demonstração interativa</span>
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </motion.button>
-        </motion.div>
+            <Link href="/fale-conosco">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="group inline-flex items-center gap-2 text-accent hover:text-accent/80"
+              >
+                <span className="font-medium">Fale conosco</span>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </motion.button>
+            </Link>
+          </motion.div>
+        )}
       </div>
     </section>
   );

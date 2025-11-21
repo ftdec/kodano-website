@@ -185,43 +185,8 @@ function AnimatedText({ text, className, delay = 0 }: AnimatedTextProps) {
 // ============================================================================
 
 function HeroMetrics() {
-  const metrics = [
-    { label: "Aprovação", value: "98%", trend: "+12%" },
-    { label: "Transações/seg", value: "1.2k", trend: "+25%" },
-    { label: "Uptime", value: "99.99%", trend: "Estável" },
-  ];
-
-  return (
-    <motion.div
-      variants={itemVariants}
-      className="mt-12 grid grid-cols-3 gap-6 rounded-xl border border-border/50 bg-card/30 backdrop-blur-sm p-6"
-    >
-      {metrics.map((metric, index) => (
-        <motion.div
-          key={metric.label}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            delay: 0.6 + index * 0.1,
-            duration: durations.normal,
-            ease: easings.spring,
-          }}
-          className="text-center"
-        >
-          <motion.p
-            className="text-2xl font-bold text-foreground"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 + index * 0.1 }}
-          >
-            {metric.value}
-          </motion.p>
-          <p className="mt-1 text-xs text-muted-foreground">{metric.label}</p>
-          <p className="mt-1 text-xs font-medium text-accent">{metric.trend}</p>
-        </motion.div>
-      ))}
-    </motion.div>
-  );
+  // Métricas removidas - não podemos exibir informações falsas
+  return null;
 }
 
 // ============================================================================
@@ -360,7 +325,7 @@ function HeroVisual() {
         >
           <span className="flex items-center gap-1">
             <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-            1.2k req/s
+            API Online
           </span>
         </motion.div>
       </div>

@@ -319,16 +319,14 @@ function AnimatedCounter({
 const defaultBenefits = [
   {
     icon: <TrendingUp />,
-    title: "Taxa de Aprovação 98%",
+    title: "Roteamento Inteligente",
     description: "Maximize suas conversões com nossa tecnologia de roteamento inteligente que escolhe o melhor adquirente.",
-    metrics: { value: "+23%", label: "vs média" },
     features: ["Roteamento automático", "Retry inteligente", "Fallback configurável"],
   },
   {
     icon: <Zap />,
     title: "Performance Ultrarrápida",
     description: "Processe milhares de transações por segundo com latência mínima.",
-    metrics: { value: "<200ms", label: "latência" },
   },
   {
     icon: <Shield />,
@@ -377,10 +375,8 @@ export function BenefitsSection({
   className,
 }: BenefitsSectionProps) {
   const stats = [
-    { value: 98, suffix: "%", label: "Taxa de Aprovação" },
     { value: 200, suffix: "ms", label: "Tempo de Resposta" },
-    { value: 99.99, suffix: "%", label: "Uptime" },
-    { value: 5, suffix: "M+", label: "Transações/mês" },
+    { value: 24, suffix: "/7", label: "Suporte Disponível" },
   ];
 
   const renderGrid = () => {

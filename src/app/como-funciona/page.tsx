@@ -304,16 +304,10 @@ export default function ComoFuncionaPage() {
               transition={{ delay: 0.3 }}
               className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center"
             >
-              <Link href="/demo">
+              <Link href="/fale-conosco">
                 <Button size="lg" variant="kodano">
-                  Ver Demonstração
+                  Fale Conosco
                   <Zap className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="/documentacao">
-                <Button size="lg" variant="outline">
-                  Documentação Técnica
-                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
             </motion.div>
@@ -353,40 +347,7 @@ export default function ComoFuncionaPage() {
               description="Veja como processamos transações em tempo recorde sem comprometer a segurança"
               centered={false}
             />
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="mt-8 space-y-4"
-            >
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-500/10">
-                  <Zap className="h-6 w-6 text-green-500" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">&lt; 200ms</div>
-                  <div className="text-sm text-muted-foreground">Tempo médio de resposta</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10">
-                  <TrendingUp className="h-6 w-6 text-blue-500" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">98.5%</div>
-                  <div className="text-sm text-muted-foreground">Taxa de aprovação</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-500/10">
-                  <Shield className="h-6 w-6 text-purple-500" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">99.99%</div>
-                  <div className="text-sm text-muted-foreground">Uptime garantido</div>
-                </div>
-              </div>
-            </motion.div>
+            {/* Métricas removidas - não podemos exibir informações falsas */}
           </div>
 
           <div>
@@ -412,7 +373,7 @@ export default function ComoFuncionaPage() {
         subtitle="Teste na prática"
         description="Experimente nossa plataforma e veja como é simples transformar seus pagamentos"
         primaryCTA={{ label: "Começar Teste Grátis", href: "/cadastro" }}
-        secondaryCTA={{ label: "Agendar Demo", href: "/demo" }}
+        secondaryCTA={{ label: "Fale Conosco", href: "/fale-conosco" }}
         background={true}
       />
     </MainLayout>
