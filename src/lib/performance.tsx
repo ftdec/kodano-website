@@ -5,7 +5,7 @@
 
 "use client";
 
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 
 // ============================================================================
@@ -137,7 +137,7 @@ class WebVitalsObserver {
     if (!("PerformanceObserver" in window)) return;
 
     let clsValue = 0;
-    let clsEntries: PerformanceEntry[] = [];
+    const clsEntries: PerformanceEntry[] = [];
 
     const updateCLS = () => {
       const sessionValue = clsEntries.reduce((acc, entry: any) => acc + entry.value, 0);
@@ -380,24 +380,25 @@ interface PerformanceBudget {
 
 export function usePerformanceBudget(budget: PerformanceBudget) {
   const { metrics } = usePerformance();
-  const [violations, setViolations] = useState<string[]>([]);
 
-  useEffect(() => {
-    const newViolations: string[] = [];
+  const violations = useMemo(() => {
+    const violations: string[] = [];
 
     Object.entries(budget).forEach(([key, threshold]) => {
       const value = metrics[key as keyof PerformanceMetrics];
       if (value !== null && value !== undefined && value > threshold) {
-        newViolations.push(`${key} (${value}ms) exceeds budget (${threshold}ms)`);
+        violations.push(`${key} (${value}ms) exceeds budget (${threshold}ms)`);
       }
     });
 
-    setViolations(newViolations);
-
-    if (newViolations.length > 0 && process.env.NODE_ENV === "development") {
-      console.warn("[Performance Budget Violations]", newViolations);
-    }
+    return violations;
   }, [metrics, budget]);
+
+  useEffect(() => {
+    if (violations.length > 0 && process.env.NODE_ENV === "development") {
+      console.warn("[Performance Budget Violations]", violations);
+    }
+  }, [violations]);
 
   return violations;
 }

@@ -16,16 +16,11 @@ import {
   Check,
   X,
   Sparkles,
-  TrendingUp,
   Calculator,
-  Zap,
   Building2,
-  Users,
-  CreditCard,
-  ArrowRight,
   Info,
 } from "lucide-react";
-import { easings, durations } from "@/lib/design-system/motion";
+import { durations } from "@/lib/design-system/motion";
 import { Button } from "@/components/ui/button-v2";
 
 // ============================================================================

@@ -12,13 +12,11 @@ import { CTASection } from "@/components/sections/cta-v2";
 import { AnimatedSection, SectionContainer, SectionHeader } from "@/components/sections/section-wrapper";
 import { motion } from "framer-motion";
 import {
-  Quote,
   TrendingUp,
   Users,
   DollarSign,
   ArrowRight,
   CheckCircle,
-  BarChart3,
   Shield,
   Zap,
   Star,

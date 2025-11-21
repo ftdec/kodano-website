@@ -6,6 +6,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send, CheckCircle2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button-v2";
@@ -32,16 +33,16 @@ export default function FaleConoscoPage() {
       {/* MINIMAL HEADER */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
         <div className="container max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-kodano-blue-medium flex items-center justify-center text-white font-bold text-lg">
               K
             </div>
             <span className="font-bold text-xl tracking-tight">Kodano</span>
-          </a>
+          </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-            <a href="/" className="flex items-center gap-2 hover:text-foreground transition-colors">
+            <Link href="/" className="flex items-center gap-2 hover:text-foreground transition-colors">
               <ArrowLeft className="w-4 h-4" /> Voltar para Home
-            </a>
+            </Link>
           </nav>
         </div>
       </header>

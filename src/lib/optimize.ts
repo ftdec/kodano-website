@@ -4,7 +4,7 @@
  */
 
 import dynamic from "next/dynamic";
-import React, { ComponentType, lazy } from "react";
+import React, { ComponentType } from "react";
 
 // ============================================================================
 // DYNAMIC IMPORT CONFIGURATIONS

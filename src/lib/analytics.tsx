@@ -18,7 +18,7 @@ interface AnalyticsEvent {
   action?: string;
   label?: string;
   value?: number;
-  properties?: Record<string, any>;
+  properties?: Record<string, unknown>;
 }
 
 // Internal type for stored events with timestamp
@@ -37,7 +37,7 @@ interface UserProperties {
   email?: string;
   plan?: string;
   company?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // ============================================================================
@@ -46,8 +46,8 @@ interface UserProperties {
 
 declare global {
   interface Window {
-    gtag?: (...args: any[]) => void;
-    dataLayer?: any[];
+    gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
   }
 }
 
@@ -72,8 +72,8 @@ class GoogleAnalytics {
 
     // Initialize dataLayer
     window.dataLayer = window.dataLayer || [];
-    window.gtag = function () {
-      window.dataLayer?.push(arguments);
+    window.gtag = function (...args) {
+      window.dataLayer?.push(args);
     };
 
     window.gtag("js", new Date());
@@ -194,7 +194,7 @@ class CustomAnalytics {
     });
   }
 
-  trackClick(element: string, properties?: Record<string, any>) {
+  trackClick(element: string, properties?: Record<string, unknown>) {
     this.track({
       event: "click",
       category: "interaction",
@@ -204,7 +204,7 @@ class CustomAnalytics {
     });
   }
 
-  trackForm(formName: string, action: "start" | "complete" | "error", properties?: Record<string, any>) {
+  trackForm(formName: string, action: "start" | "complete" | "error", properties?: Record<string, unknown>) {
     this.track({
       event: `form_${action}`,
       category: "form",
@@ -214,7 +214,7 @@ class CustomAnalytics {
     });
   }
 
-  trackError(error: Error, properties?: Record<string, any>) {
+  trackError(error: Error, properties?: Record<string, unknown>) {
     this.track({
       event: "error",
       category: "error",
@@ -242,8 +242,8 @@ class CustomAnalytics {
 interface AnalyticsContextValue {
   track: (event: AnalyticsEvent) => void;
   trackPageView: (pageView: PageViewEvent) => void;
-  trackClick: (element: string, properties?: Record<string, any>) => void;
-  trackForm: (formName: string, action: "start" | "complete" | "error", properties?: Record<string, any>) => void;
+  trackClick: (element: string, properties?: Record<string, unknown>) => void;
+  trackForm: (formName: string, action: "start" | "complete" | "error", properties?: Record<string, unknown>) => void;
   trackTiming: (category: string, variable: string, value: number, label?: string) => void;
   setUserProperties: (properties: UserProperties) => void;
 }
@@ -326,7 +326,7 @@ export function AnalyticsProvider({
     customRef.current?.trackPageView(pageView);
   }, []);
 
-  const trackClick = React.useCallback((element: string, properties?: Record<string, any>) => {
+  const trackClick = React.useCallback((element: string, properties?: Record<string, unknown>) => {
     track({
       event: "click",
       category: "interaction",
@@ -336,7 +336,7 @@ export function AnalyticsProvider({
     });
   }, [track]);
 
-  const trackForm = React.useCallback((formName: string, action: "start" | "complete" | "error", properties?: Record<string, any>) => {
+  const trackForm = React.useCallback((formName: string, action: "start" | "complete" | "error", properties?: Record<string, unknown>) => {
     track({
       event: `form_${action}`,
       category: "form",
@@ -387,7 +387,7 @@ export function useTrackClick(element: string) {
   const { trackClick } = useAnalytics();
 
   return React.useCallback(
-    (properties?: Record<string, any>) => {
+    (properties?: Record<string, unknown>) => {
       trackClick(element, properties);
     },
     [trackClick, element]
@@ -398,11 +398,11 @@ export function useTrackForm(formName: string) {
   const { trackForm } = useAnalytics();
 
   return {
-    trackStart: (properties?: Record<string, any>) =>
+    trackStart: (properties?: Record<string, unknown>) =>
       trackForm(formName, "start", properties),
-    trackComplete: (properties?: Record<string, any>) =>
+    trackComplete: (properties?: Record<string, unknown>) =>
       trackForm(formName, "complete", properties),
-    trackError: (error: string, properties?: Record<string, any>) =>
+    trackError: (error: string, properties?: Record<string, unknown>) =>
       trackForm(formName, "error", { error, ...properties }),
   };
 }
@@ -411,7 +411,7 @@ export function useTrackForm(formName: string) {
 // CONVERSION TRACKING
 // ============================================================================
 
-export function trackConversion(type: string, value?: number, properties?: Record<string, any>) {
+export function trackConversion(type: string, value?: number, properties?: Record<string, unknown>) {
   if (typeof window === "undefined") return;
 
   // Google Analytics conversion
@@ -423,8 +423,8 @@ export function trackConversion(type: string, value?: number, properties?: Recor
   });
 
   // Facebook Pixel (if available)
-  if ((window as any).fbq) {
-    (window as any).fbq("track", type, {
+  if ((window as any).fbq) { // eslint-disable-line @typescript-eslint/no-explicit-any
+    (window as any).fbq("track", type, { // eslint-disable-line @typescript-eslint/no-explicit-any
       value: value,
       currency: "BRL",
       ...properties,
@@ -474,14 +474,17 @@ export function setupErrorTracking() {
 export function useABTest(testName: string, variants: string[]): string {
   const [variant, setVariant] = React.useState<string>("");
   const { track } = useAnalytics();
+  const hasAssignedRef = React.useRef(false);
 
   useEffect(() => {
+    if (hasAssignedRef.current) return;
+
     // Get or assign variant
     const storageKey = `ab-test-${testName}`;
     let assignedVariant = localStorage.getItem(storageKey);
 
     if (!assignedVariant) {
-      // Randomly assign variant
+      // Randomly assign variant - this only happens once per test
       assignedVariant = variants[Math.floor(Math.random() * variants.length)];
       localStorage.setItem(storageKey, assignedVariant);
 
@@ -494,6 +497,7 @@ export function useABTest(testName: string, variants: string[]): string {
       });
     }
 
+    hasAssignedRef.current = true;
     setVariant(assignedVariant);
   }, [testName, variants, track]);
 

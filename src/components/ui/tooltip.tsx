@@ -69,7 +69,6 @@ export function Tooltip({
 
   return (
     <>
-      {/* eslint-disable-next-line react-hooks/refs */}
       {React.cloneElement(
         children,
         getReferenceProps({
@@ -80,7 +79,6 @@ export function Tooltip({
       <FloatingPortal>
         {isOpen && (
           <div
-            // eslint-disable-next-line react-hooks/refs
             ref={refs.setFloating}
             style={floatingStyles}
             {...floatingProps}

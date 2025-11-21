@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Volume2, VolumeX, Eye, EyeOff, Keyboard, Settings } from "lucide-react";
+import { Keyboard, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button-v2";
 
@@ -39,7 +39,7 @@ interface AriaLiveRegionProps {
 
 const AccessibilityContext = React.createContext<{
   preferences: AccessibilityPreferences;
-  updatePreference: (key: keyof AccessibilityPreferences, value: any) => void;
+  updatePreference: (key: keyof AccessibilityPreferences, value: AccessibilityPreferences[keyof AccessibilityPreferences]) => void;
   resetPreferences: () => void;
 }>({
   preferences: {
@@ -129,7 +129,7 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
   }, [preferences]);
 
   const updatePreference = useCallback(
-    (key: keyof AccessibilityPreferences, value: any) => {
+    (key: keyof AccessibilityPreferences, value: AccessibilityPreferences[keyof AccessibilityPreferences]) => {
       setPreferences((prev) => ({ ...prev, [key]: value }));
     },
     []

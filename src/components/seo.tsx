@@ -25,7 +25,7 @@ interface SEOProps {
   twitterCreator?: string;
   noindex?: boolean;
   nofollow?: boolean;
-  jsonLd?: Record<string, any>;
+  jsonLd?: Record<string, unknown>;
   alternates?: { [lang: string]: string };
 }
 

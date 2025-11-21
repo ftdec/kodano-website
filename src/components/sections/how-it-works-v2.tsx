@@ -9,21 +9,15 @@ import React, { useRef, useState } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
-  Code2,
   CreditCard,
-  Settings,
-  TrendingUp,
   CheckCircle,
   ArrowRight,
   Play,
   Zap,
-  Shield,
-  Globe,
-  Terminal,
-  Smartphone,
-  Monitor,
   Copy,
   Check,
+  Settings,
+  TrendingUp,
 } from "lucide-react";
 import { easings, durations } from "@/lib/design-system/motion";
 import { SectionContainer, SectionHeader } from "./section-wrapper";

@@ -18,7 +18,6 @@ import {
   Shield,
   TrendingUp,
   Globe,
-  Settings,
   CreditCard,
   BarChart3,
   RefreshCw,
@@ -30,7 +29,7 @@ import {
   Cpu,
   Network,
 } from "lucide-react";
-import { easings, durations } from "@/lib/design-system/motion";
+import { durations } from "@/lib/design-system/motion";
 import { Button } from "@/components/ui/button-v2";
 
 // ============================================================================

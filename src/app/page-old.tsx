@@ -12,7 +12,6 @@ import { BenefitsSection } from "@/components/sections/benefits-v2";
 import { HowItWorksSection } from "@/components/sections/how-it-works-v2";
 import { ProductsSection } from "@/components/sections/products-section";
 import { CTASection } from "@/components/sections/cta-v2";
-import { motion } from "framer-motion";
 
 // ============================================================================
 // HOMEPAGE COMPONENT
