@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { ChevronDown, ArrowRight } from "lucide-react";
 
 // Import our design system
-import { motion, easings, durations } from "@/lib/design-system/motion";
+import { easings, durations } from "@/lib/design-system/motion";
 
 // ============================================================================
 // TYPES

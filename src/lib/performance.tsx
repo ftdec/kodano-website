@@ -121,7 +121,7 @@ class WebVitalsObserver {
 
     try {
       const observer = new PerformanceObserver((list) => {
-        const firstEntry = list.getEntries()[0] as any;
+        const firstEntry = list.getEntries()[0] as PerformanceEventTiming;
         this.metrics.FID = Math.round(firstEntry.processingStart - firstEntry.startTime);
         this.logMetric("FID", this.metrics.FID);
       });
@@ -137,10 +137,10 @@ class WebVitalsObserver {
     if (!("PerformanceObserver" in window)) return;
 
     let clsValue = 0;
-    const clsEntries: PerformanceEntry[] = [];
+    const clsEntries: (PerformanceEntry & { value: number })[] = [];
 
     const updateCLS = () => {
-      const sessionValue = clsEntries.reduce((acc, entry: any) => acc + entry.value, 0);
+      const sessionValue = clsEntries.reduce((acc: number, entry) => acc + entry.value, 0);
 
       if (sessionValue > clsValue) {
         clsValue = sessionValue;
@@ -152,7 +152,7 @@ class WebVitalsObserver {
     try {
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
-          clsEntries.push(entry);
+          clsEntries.push(entry as PerformanceEntry & { value: number });
         }
         updateCLS();
       });
@@ -408,7 +408,7 @@ export function usePerformanceBudget(budget: PerformanceBudget) {
 // ============================================================================
 
 interface LazyComponentProps {
-  loader: () => Promise<{ default: React.ComponentType<any> }>;
+  loader: () => Promise<{ default: React.ComponentType<unknown> }>;
   fallback?: React.ReactNode;
   delay?: number;
   onLoad?: () => void;
@@ -422,7 +422,7 @@ export function LazyComponent({
   onLoad,
   onError,
 }: LazyComponentProps) {
-  const [Component, setComponent] = useState<React.ComponentType<any> | null>(null);
+  const [Component, setComponent] = useState<React.ComponentType<unknown> | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

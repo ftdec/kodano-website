@@ -190,7 +190,7 @@ class CustomAnalytics {
   trackPageView(pageView: PageViewEvent) {
     this.track({
       event: "page_view",
-      properties: pageView,
+      properties: pageView as unknown as Record<string, unknown>,
     });
   }
 
@@ -472,13 +472,9 @@ export function setupErrorTracking() {
 // ============================================================================
 
 export function useABTest(testName: string, variants: string[]): string {
-  const [variant, setVariant] = React.useState<string>("");
   const { track } = useAnalytics();
-  const hasAssignedRef = React.useRef(false);
 
-  useEffect(() => {
-    if (hasAssignedRef.current) return;
-
+  const [variant] = React.useState<string>(() => {
     // Get or assign variant
     const storageKey = `ab-test-${testName}`;
     let assignedVariant = localStorage.getItem(storageKey);
@@ -497,9 +493,8 @@ export function useABTest(testName: string, variants: string[]): string {
       });
     }
 
-    hasAssignedRef.current = true;
-    setVariant(assignedVariant);
-  }, [testName, variants, track]);
+    return assignedVariant;
+  });
 
   return variant;
 }

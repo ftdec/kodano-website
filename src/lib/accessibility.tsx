@@ -466,7 +466,7 @@ export function AccessibilityPanel() {
                     <select
                       value={preferences.colorBlindMode}
                       onChange={(e) =>
-                        updatePreference("colorBlindMode", e.target.value)
+                        updatePreference("colorBlindMode", e.target.value as "none" | "protanopia" | "deuteranopia" | "tritanopia")
                       }
                       className="mt-2 w-full rounded-md border px-3 py-2 text-sm"
                     >

@@ -5,13 +5,15 @@
 
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Zap, Shield, BarChart3, Layers } from "lucide-react";
+import { ArrowRight, Zap, Shield, BarChart3, Layers, Send, CheckCircle2 } from "lucide-react";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Footer } from "@/components/layout/footer";
+import { Button } from "@/components/ui/button-v2";
+import { InputGroup, InputGroupInput, InputGroupTextarea } from "@/components/ui/input-group";
 import { cn } from "@/lib/utils";
 
 const orchestrationFeatures = [
@@ -58,6 +60,24 @@ const orchestrationFeatures = [
 ] as const;
 
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setIsSubmitting(false);
+    setIsSuccess(true);
+    setEmail("");
+    setMessage("");
+    // Reset success state after 5 seconds
+    setTimeout(() => setIsSuccess(false), 5000);
+  };
+
   return (
     <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-x-hidden font-sans selection:bg-primary/20">
 
@@ -173,10 +193,7 @@ export default function Home() {
                   <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">Tecnologia proprietária</span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-heading font-semibold leading-[1.2] text-balance">
-                  Orquestração feita com{" "}
-                  <span className="text-transparent bg-gradient-to-r from-[#415A77] via-[#1B263B] to-[#778DA9] bg-clip-text">
-                    precisão cirúrgica
-                  </span>
+                  Orquestração feita com precisão cirúrgica
                 </h2>
                 <p className="text-lg text-muted-foreground/80 leading-relaxed text-balance">
                   A rota certa, no momento certo. Automatizamos regras complexas de aprovação, retentativas e conciliação em uma camada inteligente que se integra com seus adquirentes sem atrito operacional.
@@ -228,6 +245,10 @@ export default function Home() {
         <section id="process" className="py-32 px-6">
           <div className="container max-w-5xl mx-auto">
             <div className="text-center mb-20">
+              <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/70 dark:bg-white/5 border border-border/60 backdrop-blur-xl mb-6">
+                <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
+                <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">Processo Simplificado</span>
+              </div>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Como Funciona</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Do setup à primeira transação em poucos passos.
@@ -289,28 +310,70 @@ export default function Home() {
 
         {/* CONTACT */}
         <section id="contact" className="scroll-mt-28 py-24 px-6 bg-secondary/20">
-          <div className="container max-w-4xl mx-auto">
-            <div className="bg-background/90 border border-border/60 rounded-3xl shadow-xl shadow-foreground/5 p-8 md:p-12">
-              <div className="space-y-6 text-center">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold mb-3">Contato</p>
-                  <h2 className="text-3xl md:text-4xl font-bold leading-tight mb-3">Fale com nosso time</h2>
-                  <p className="text-lg text-muted-foreground">
-                    Entenda como podemos aumentar suas aprovações e simplificar seus fluxos de pagamento. Respondemos em até 1 dia útil.
+          <div className="container max-w-2xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-background border border-border/60 rounded-3xl shadow-xl shadow-foreground/5 p-8 md:p-10"
+            >
+              {isSuccess ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mb-6">
+                    <CheckCircle2 className="w-8 h-8 text-green-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">Mensagem enviada!</h3>
+                  <p className="text-muted-foreground">
+                    Obrigado pelo contato. Retornaremos em breve.
                   </p>
                 </div>
+              ) : (
+                <>
+                  <div className="space-y-6 text-center mb-8">
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-semibold">Contato</p>
+                    <h2 className="text-3xl md:text-4xl font-bold leading-tight">Fale com nosso time</h2>
+                    <p className="text-lg text-muted-foreground">
+                      Entenda como podemos aumentar suas aprovações e simplificar seus fluxos de pagamento. Respondemos em até 1 dia útil.
+                    </p>
+                  </div>
 
-                <div className="flex justify-center">
-                  <a
-                    href="mailto:contato@kodano.com.br"
-                    className="inline-flex h-12 items-center justify-center px-6 rounded-full bg-foreground text-white font-medium hover:opacity-90 transition-opacity gap-2 shadow-md shadow-foreground/10"
-                  >
-                    Enviar um e-mail
-                    <ArrowRight className="w-4 h-4" />
-                  </a>
-                </div>
-              </div>
-            </div>
+                  <form onSubmit={handleSubmit} className="space-y-5">
+                    <InputGroup>
+                      <InputGroupInput
+                        type="email"
+                        placeholder="seu@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                    </InputGroup>
+
+                    <InputGroup>
+                      <InputGroupTextarea
+                        placeholder="Conte-nos sobre sua empresa, volume mensal de transações, principais desafios com pagamentos e como podemos ajudar. Quanto mais detalhes, melhor poderemos avaliar seu caso."
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        required
+                        rows={6}
+                        className="min-h-[140px]"
+                      />
+                    </InputGroup>
+
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      size="lg"
+                      className="w-full"
+                      loading={isSubmitting}
+                      rightIcon={<Send className="w-4 h-4" />}
+                    >
+                      Enviar mensagem
+                    </Button>
+                  </form>
+                </>
+              )}
+            </motion.div>
           </div>
         </section>
 

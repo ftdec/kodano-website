@@ -14,7 +14,7 @@ import React, { ComponentType } from "react";
  * Dynamic import with loading state
  * Use for heavy components that aren't needed immediately
  */
-export function dynamicImport<T extends ComponentType<any>>(
+export function dynamicImport<T extends ComponentType<unknown>>(
   importFn: () => Promise<{ default: T }>,
   options?: {
     ssr?: boolean;
@@ -80,7 +80,7 @@ export function dynamicImport<T extends ComponentType<any>>(
  * Reduces perceived loading time
  */
 export function preloadOnInteraction(
-  importFn: () => Promise<any>
+  importFn: () => Promise<unknown>
 ): {
   onMouseEnter: () => void;
   onFocus: () => void;
@@ -104,7 +104,7 @@ export function preloadOnInteraction(
  * Preload component when idle
  * Uses requestIdleCallback for non-critical resources
  */
-export function preloadWhenIdle(importFn: () => Promise<any>) {
+export function preloadWhenIdle(importFn: () => Promise<unknown>) {
   if (typeof window !== "undefined" && "requestIdleCallback" in window) {
     requestIdleCallback(() => importFn());
   } else {
@@ -117,7 +117,7 @@ export function preloadWhenIdle(importFn: () => Promise<any>) {
  * Preload component after delay
  * Useful for components likely to be needed soon
  */
-export function preloadAfterDelay(importFn: () => Promise<any>, delay = 2000) {
+export function preloadAfterDelay(importFn: () => Promise<unknown>, delay = 2000) {
   if (typeof window !== "undefined") {
     setTimeout(() => importFn(), delay);
   }
@@ -129,7 +129,7 @@ export function preloadAfterDelay(importFn: () => Promise<any>, delay = 2000) {
  */
 export function preloadWhenVisible(
   element: HTMLElement | null,
-  importFn: () => Promise<any>,
+  importFn: () => Promise<unknown>,
   options?: IntersectionObserverInit
 ) {
   if (!element || typeof window === "undefined") return;
@@ -315,7 +315,7 @@ export function measureRenderTime(componentName: string) {
 /**
  * Debounce expensive operations
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   fn: T,
   delay: number
 ): (...args: Parameters<T>) => void {
@@ -330,7 +330,7 @@ export function debounce<T extends (...args: any[]) => any>(
 /**
  * Throttle frequent events
  */
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   fn: T,
   limit: number
 ): (...args: Parameters<T>) => void {
@@ -363,8 +363,8 @@ export const treeShake = <T>(condition: boolean, module: T): T | null => {
  * Conditional module loading based on environment
  */
 export const loadForEnvironment = async (
-  production: () => Promise<any>,
-  development: () => Promise<any>
+  production: () => Promise<unknown>,
+  development: () => Promise<unknown>
 ) => {
   if (process.env.NODE_ENV === "production") {
     return production();
