@@ -6,6 +6,7 @@
 "use client";
 
 import React, { useRef } from "react";
+import Link from "next/link";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import { FeatureCard } from "@/components/ui/card-v2";
 import { cn } from "@/lib/utils";
