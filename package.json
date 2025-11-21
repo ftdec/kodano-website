@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:dev": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "p-old": "prettier --write .",
+    "p": "bunx prettier --list-different . | xargs bunx prettier --write",
+    "check": "bun lint && bun typecheck && (prettier --list-different . | xargs prettier --write) && echo 'All linting errors and prettier warnings fixed'"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.16",
