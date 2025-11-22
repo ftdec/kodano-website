@@ -452,7 +452,6 @@ export default function ClientesPage() {
         subtitle="Transforme seus pagamentos"
         description="Junte-se a milhares de empresas que já revolucionaram suas operações de pagamento"
         primaryCTA={{ label: "Falar com Vendas", href: "/contato" }}
-        secondaryCTA={{ label: "Começar Grátis", href: "/cadastro" }}
         background={true}
       />
     </MainLayout>

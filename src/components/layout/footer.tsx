@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { BRAND, SOCIAL_LINKS } from "@/lib/constants/brand";
-import { FOOTER_LINKS } from "@/lib/constants/navigation";
 import { Linkedin, Twitter, Github, Instagram } from "lucide-react";
 
 export function Footer() {
@@ -11,10 +10,10 @@ export function Footer() {
   return (
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-screen-xl px-4 md:px-6 py-12 md:py-16">
-        {/* Main Footer Content - 4 colunas conforme PRD 4.2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {/* Brand Column */}
-          <div className="col-span-2 md:col-span-1">
+          <div>
             <Link
               href="/"
               className="flex items-center gap-3 group"
@@ -77,71 +76,18 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Produtos */}
+          {/* Fale Conosco */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Produtos</h3>
+            <h3 className="font-semibold text-foreground mb-4">Fale Conosco</h3>
             <ul className="space-y-3">
-              {FOOTER_LINKS.produtos.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Soluções */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Soluções</h3>
-            <ul className="space-y-3">
-              {FOOTER_LINKS.solucoes.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Recursos */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Recursos</h3>
-            <ul className="space-y-3">
-              {FOOTER_LINKS.recursos.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Empresa */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Empresa</h3>
-            <ul className="space-y-3">
-              {FOOTER_LINKS.empresa.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link
+                  href="/fale-conosco"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Fale Conosco
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

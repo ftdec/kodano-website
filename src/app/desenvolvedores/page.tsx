@@ -411,11 +411,11 @@ createPayment();`}
               Pronto para começar?
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Crie sua conta grátis e comece a aceitar pagamentos hoje
+              Entre em contato conosco e comece a aceitar pagamentos hoje
             </p>
             <Button size="lg" asChild>
-              <Link href="/contato">
-                Criar conta grátis
+              <Link href="/fale-conosco">
+                Fale Conosco
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>

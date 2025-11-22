@@ -283,6 +283,60 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       </>
     );
 
+    // For asChild, extract text content from Link children
+    // When using asChild with Link, children is the Link element itself
+    // We need to extract the actual text/content from the Link
+    const getLinkContent = () => {
+      if (React.isValidElement(children) && children.props?.children) {
+        // Extract children from the Link element (or any child element)
+        return children.props.children;
+      }
+      return children;
+    };
+
+    const linkContent = asChild ? getLinkContent() : children;
+
+    // For asChild, we need to wrap content properly
+    const asChildContent = (
+      <>
+        {/* Loading spinner */}
+        {loading && (
+          <motion.div
+            variants={spinnerMotion}
+            animate="animate"
+            className="absolute inset-0 flex items-center justify-center bg-inherit rounded-inherit"
+          >
+            <Loader2 className="size-4 animate-spin" />
+          </motion.div>
+        )}
+
+        {/* Content wrapper - simpler for asChild */}
+        <span className={cn("relative z-10 inline-flex items-center justify-center gap-2", loading && "invisible")}>
+          {leftIcon && <span className="shrink-0">{leftIcon}</span>}
+          {loading && loadingText ? loadingText : linkContent}
+          {rightIcon && <span className="shrink-0">{rightIcon}</span>}
+        </span>
+
+        {/* Shimmer effect overlay */}
+        {showShimmer && (
+          <motion.span
+            className="absolute inset-0 -z-10 block rounded-inherit"
+            style={{
+              background:
+                "linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%)",
+              backgroundSize: "200% 100%",
+            }}
+            variants={shimmerMotion}
+            initial="initial"
+            whileHover="hover"
+          />
+        )}
+
+        {/* Focus ring enhancement */}
+        <span className="absolute inset-0 rounded-inherit ring-0 ring-offset-0 ring-offset-background transition-all duration-200" />
+      </>
+    );
+
     if (asChild) {
       return (
         <Slot
@@ -290,7 +344,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className={cn(buttonVariants({ variant, size, loading, fullWidth, className }))}
           {...props}
         >
-          {buttonContent}
+          {asChildContent}
         </Slot>
       );
     }

@@ -20,7 +20,6 @@ import {
   Users,
   CreditCard,
   ArrowRight,
-  Info,
 } from "lucide-react";
 import { easings, durations } from "@/lib/design-system/motion";
 import { Button } from "@/components/ui/button-v2";
@@ -78,24 +77,6 @@ export default function PrecosPage() {
     },
   ];
 
-  const faqs = [
-    {
-      question: "Posso mudar de plano a qualquer momento?",
-      answer: "Sim! Você pode fazer upgrade ou downgrade do seu plano a qualquer momento. As mudanças entram em vigor no próximo ciclo de cobrança.",
-    },
-    {
-      question: "Existe período mínimo de contrato?",
-      answer: "Não. Todos os nossos planos são mensais e podem ser cancelados a qualquer momento, sem multas.",
-    },
-    {
-      question: "Como funciona o teste grátis?",
-      answer: "Você tem 30 dias para testar o plano Growth com todas as funcionalidades. Não cobramos nada durante o período de teste.",
-    },
-    {
-      question: "Como funciona a cobrança?",
-      answer: "Entre em contato conosco para conhecer nossos modelos de cobrança e encontrar o plano ideal para sua empresa.",
-    },
-  ];
 
   return (
     <MainLayout>
@@ -142,7 +123,7 @@ export default function PrecosPage() {
 
       {/* Pricing Cards */}
       <SectionContainer spacing="xl">
-        <div className="grid gap-8 max-w-5xl mx-auto lg:grid-cols-2">
+        <div className="grid gap-8 max-w-5xl mx-auto lg:grid-cols-2 items-stretch">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.title}
@@ -150,6 +131,7 @@ export default function PrecosPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
+              className="h-full"
             >
               <PricingCard {...plan} />
             </motion.div>
@@ -180,41 +162,12 @@ export default function PrecosPage() {
 
       </SectionContainer>
 
-      {/* FAQs */}
-      <SectionContainer spacing="lg">
-        <SectionHeader
-          title="Perguntas frequentes"
-          description="Tudo que você precisa saber sobre nossos planos"
-          centered
-        />
-
-        <div className="mx-auto max-w-3xl space-y-6">
-          {faqs.map((faq, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="rounded-lg border bg-card p-6"
-            >
-              <h3 className="mb-2 flex items-start gap-2 font-semibold">
-                <Info className="h-5 w-5 text-accent" />
-                {faq.question}
-              </h3>
-              <p className="text-muted-foreground">{faq.answer}</p>
-            </motion.div>
-          ))}
-        </div>
-      </SectionContainer>
-
       {/* CTA Section */}
       <CTASection
         variant="simple"
         title="Pronto para começar?"
         description="Junte-se a milhares de empresas que já transformaram seus pagamentos"
-        primaryCTA={{ label: "Começar Teste Grátis", href: "/cadastro" }}
-        secondaryCTA={{ label: "Fale Conosco", href: "/fale-conosco" }}
+        primaryCTA={{ label: "Fale Conosco", href: "/fale-conosco" }}
         background={true}
       />
     </MainLayout>

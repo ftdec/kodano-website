@@ -5,7 +5,7 @@
 
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button-v2";
@@ -98,6 +98,7 @@ function AnimatedBackground() {
         style={{
           x: backgroundX,
           y: backgroundY,
+          willChange: 'transform',
           background: `
             radial-gradient(circle at 20% 50%, rgba(65, 90, 119, 0.15) 0%, transparent 50%),
             radial-gradient(circle at 80% 80%, rgba(119, 141, 169, 0.1) 0%, transparent 50%),
@@ -106,26 +107,27 @@ function AnimatedBackground() {
         }}
       />
 
-      {/* Floating particles */}
-      {Array.from({ length: 5 }).map((_, i) => (
+      {/* Reduced floating particles from 5 to 3 */}
+      {Array.from({ length: 3 }).map((_, i) => (
         <motion.div
           key={i}
           className="absolute h-64 w-64 rounded-full"
           style={{
             background: `radial-gradient(circle, rgba(65, 90, 119, ${0.05 + i * 0.01}) 0%, transparent 70%)`,
-            left: `${20 + i * 15}%`,
-            top: `${10 + i * 20}%`,
+            left: `${20 + i * 25}%`,
+            top: `${10 + i * 30}%`,
+            willChange: 'transform',
           }}
           animate={{
-            x: [0, 30, 0],
-            y: [0, -40, 0],
-            scale: [1, 1.2, 1],
+            x: [0, 20, 0],
+            y: [0, -30, 0],
+            scale: [1, 1.1, 1],
           }}
           transition={{
-            duration: 10 + i * 2,
+            duration: 12 + i * 2,
             ease: "easeInOut",
             repeat: Infinity,
-            delay: i * 0.5,
+            delay: i * 0.8,
           }}
         />
       ))}
@@ -194,6 +196,14 @@ function HeroMetrics() {
 // ============================================================================
 
 function HeroVisual() {
+  // Use useMemo to prevent recalculation on every render
+  const [isVisible, setIsVisible] = useState(false);
+  
+  useEffect(() => {
+    // Only start animations when component is visible
+    setIsVisible(true);
+  }, []);
+
   return (
     <motion.div
       variants={floatingVariants}
@@ -211,6 +221,7 @@ function HeroVisual() {
           ease: easings.emphasized,
         }}
         className="relative aspect-square max-w-full overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-card/80 via-card/60 to-card/80 backdrop-blur-xl shadow-2xl"
+        style={{ willChange: 'transform' }}
       >
         {/* Animated background grid */}
         <div className="absolute inset-0 opacity-10">
@@ -226,11 +237,12 @@ function HeroVisual() {
           />
         </div>
 
-        {/* SVG Container for responsive animation */}
+        {/* SVG Container - Optimized with reduced animations */}
         <svg
           className="absolute inset-0 h-full w-full"
           viewBox="0 0 400 400"
           preserveAspectRatio="xMidYMid meet"
+          style={{ willChange: 'contents' }}
         >
           <defs>
             <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -238,11 +250,15 @@ function HeroVisual() {
               <stop offset="50%" stopColor="var(--color-accent)" stopOpacity="0.8" />
               <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
             </linearGradient>
+            <linearGradient id="hubGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="var(--color-accent)" />
+              <stop offset="100%" stopColor="var(--color-primary)" />
+            </linearGradient>
           </defs>
 
-          {/* Animated connection lines */}
-          {Array.from({ length: 6 }).map((_, i) => {
-            const angle = (i / 6) * Math.PI * 2;
+          {/* Reduced to 3 animated connection lines (was 6) */}
+          {Array.from({ length: 3 }).map((_, i) => {
+            const angle = (i / 3) * Math.PI * 2;
             const radius = 120;
             const centerX = 200;
             const centerY = 200;
@@ -260,23 +276,24 @@ function HeroVisual() {
                 strokeWidth="2"
                 strokeDasharray="5,5"
                 initial={{ pathLength: 0, opacity: 0 }}
-                animate={{
+                animate={isVisible ? {
                   pathLength: [0, 1, 0],
                   opacity: [0, 0.5, 0],
-                }}
+                } : {}}
                 transition={{
-                  duration: 2,
+                  duration: 3,
                   repeat: Infinity,
-                  delay: i * 0.3,
+                  delay: i * 0.5,
                   ease: "easeInOut",
                 }}
+                style={{ willChange: 'opacity' }}
               />
             );
           })}
 
-          {/* Animated payment nodes */}
-          {Array.from({ length: 12 }).map((_, i) => {
-            const angle = (i / 12) * Math.PI * 2;
+          {/* Reduced to 6 static nodes with subtle pulse (was 12 animated) */}
+          {Array.from({ length: 6 }).map((_, i) => {
+            const angle = (i / 6) * Math.PI * 2;
             const radius = 120;
             const centerX = 200;
             const centerY = 200;
@@ -290,42 +307,37 @@ function HeroVisual() {
                 cy={y}
                 r="6"
                 fill="var(--color-accent)"
-                animate={{
-                  r: [6, 9, 6],
-                  opacity: [0.4, 1, 0.4],
-                }}
+                animate={isVisible ? {
+                  opacity: [0.6, 0.9, 0.6],
+                } : { opacity: 0.6 }}
                 transition={{
-                  duration: 2,
+                  duration: 3,
                   repeat: Infinity,
-                  delay: i * 0.15,
+                  delay: i * 0.3,
                   ease: "easeInOut",
                 }}
+                style={{ willChange: 'opacity' }}
               />
             );
           })}
 
-          {/* Central hub */}
+          {/* Central hub - simplified animation */}
           <motion.circle
             cx="200"
             cy="200"
             r="40"
             fill="url(#hubGradient)"
-            animate={{
-              r: [40, 44, 40],
-            }}
+            animate={isVisible ? {
+              opacity: [0.9, 1, 0.9],
+            } : { opacity: 0.9 }}
             transition={{
-              duration: 3,
+              duration: 4,
               repeat: Infinity,
               ease: "easeInOut",
             }}
+            style={{ willChange: 'opacity' }}
           />
-          <defs>
-            <linearGradient id="hubGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="var(--color-accent)" />
-              <stop offset="100%" stopColor="var(--color-primary)" />
-            </linearGradient>
-          </defs>
-          <motion.circle
+          <circle
             cx="200"
             cy="200"
             r="32"
@@ -334,26 +346,19 @@ function HeroVisual() {
           />
         </svg>
 
-        {/* Central hub icon overlay */}
+        {/* Central hub icon overlay - simplified rotation */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
           <motion.div
             className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-accent to-primary"
-            animate={{
-              scale: [1, 1.1, 1],
-              rotate: [0, 360],
-            }}
+            animate={isVisible ? {
+              scale: [1, 1.05, 1],
+            } : { scale: 1 }}
             transition={{
-              scale: {
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              },
-              rotate: {
-                duration: 20,
-                repeat: Infinity,
-                ease: "linear",
-              },
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
             }}
+            style={{ willChange: 'transform' }}
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm">
               <Zap className="h-6 w-6 text-accent" />
@@ -361,24 +366,24 @@ function HeroVisual() {
           </motion.div>
         </div>
 
-        {/* Floating particles */}
-        {Array.from({ length: 20 }).map((_, i) => (
+        {/* Reduced floating particles from 20 to 8 */}
+        {Array.from({ length: 8 }).map((_, i) => (
           <motion.div
             key={`particle-${i}`}
             className="absolute h-1 w-1 rounded-full bg-accent/40"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${20 + (i * 10)}%`,
+              top: `${20 + (i * 8)}%`,
+              willChange: 'transform',
             }}
-            animate={{
-              y: [0, -30, 0],
-              x: [0, Math.sin(i) * 20, 0],
-              opacity: [0, 1, 0],
-            }}
+            animate={isVisible ? {
+              y: [0, -20, 0],
+              opacity: [0, 0.6, 0],
+            } : { opacity: 0 }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: 4 + i * 0.5,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: i * 0.4,
               ease: "easeInOut",
             }}
           />
@@ -394,7 +399,7 @@ function HeroVisual() {
           <span className="flex items-center gap-1">
             <motion.div
               className="h-1.5 w-1.5 rounded-full bg-green-500"
-              animate={{ scale: [1, 1.3, 1] }}
+              animate={isVisible ? { scale: [1, 1.3, 1] } : { scale: 1 }}
               transition={{ duration: 2, repeat: Infinity }}
             />
             Sistema Online
@@ -410,7 +415,7 @@ function HeroVisual() {
           <span className="flex items-center gap-1">
             <motion.div
               className="h-1.5 w-1.5 rounded-full bg-blue-500"
-              animate={{ scale: [1, 1.3, 1] }}
+              animate={isVisible ? { scale: [1, 1.3, 1] } : { scale: 1 }}
               transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
             />
             Processando
@@ -517,10 +522,10 @@ export function HeroSection({
                     size="lg"
                     variant="kodano"
                     className="group"
+                    rightIcon={<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
                   >
                     <Link href={primaryCta.href}>
                       {primaryCta.label}
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </Button>
                 )}
@@ -531,9 +536,9 @@ export function HeroSection({
                     size="lg"
                     variant="outline"
                     className="group"
+                    leftIcon={<Play className="h-4 w-4" />}
                   >
                     <Link href={secondaryCta.href}>
-                      <Play className="mr-2 h-4 w-4" />
                       {secondaryCta.label}
                     </Link>
                   </Button>

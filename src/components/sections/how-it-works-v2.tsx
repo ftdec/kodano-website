@@ -117,10 +117,10 @@ function StepCard({
       animate={isInView ? "visible" : "hidden"}
       className="relative"
     >
-      {/* Connecting line (except for last item) */}
+      {/* Connecting line (except for last item) - mobile only */}
       {index < 3 && (
         <motion.div
-          className="absolute left-8 top-16 h-full w-0.5 bg-gradient-to-b from-accent/50 to-transparent lg:hidden"
+          className="absolute left-6 top-12 h-full w-0.5 bg-gradient-to-b from-accent/50 to-transparent md:hidden"
           initial={{ scaleY: 0 }}
           animate={isInView ? { scaleY: 1 } : {}}
           transition={{ delay: index * 0.15 + 0.3, duration: durations.slow }}
@@ -133,21 +133,16 @@ function StepCard({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         className={cn(
-          "relative cursor-pointer rounded-xl border bg-card p-6 transition-all",
+          "relative cursor-pointer rounded-xl border bg-card p-4 sm:p-6 transition-all",
           isActive && "border-accent shadow-lg"
         )}
       >
         {/* Step number and icon */}
-        <div className="flex items-start gap-4">
-          {/* Step number circle */}
+        <div className="flex items-start gap-3 sm:gap-4">
+          {/* Step number circle - mesma cor para todos */}
           <motion.div
             animate={isActive ? "active" : "inactive"}
-            className={cn(
-              "flex h-16 w-16 items-center justify-center rounded-full font-bold text-2xl transition-colors",
-              isActive
-                ? "bg-gradient-to-br from-accent to-primary text-white"
-                : "bg-accent/10 text-accent"
-            )}
+            className="flex h-12 w-12 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-full font-bold text-lg sm:text-2xl bg-accent text-white transition-all"
           >
             <motion.div
               initial={{ scale: 0 }}
@@ -163,9 +158,9 @@ function StepCard({
           </motion.div>
 
           {/* Title and description */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <motion.h3
-              className="text-xl font-semibold text-foreground"
+              className="text-lg sm:text-xl font-semibold text-foreground"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: index * 0.15 + 0.3 }}
@@ -173,7 +168,7 @@ function StepCard({
               {title}
             </motion.h3>
             <motion.p
-              className="mt-2 text-muted-foreground"
+              className="mt-1 sm:mt-2 text-sm sm:text-base text-muted-foreground"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: index * 0.15 + 0.4 }}
@@ -182,12 +177,12 @@ function StepCard({
             </motion.p>
           </div>
 
-          {/* Icon */}
+          {/* Icon - hidden on mobile, shown on tablet+ */}
           <motion.div
             variants={iconVariants}
             animate={isActive ? "active" : "inactive"}
             className={cn(
-              "flex h-12 w-12 items-center justify-center rounded-lg",
+              "hidden sm:flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-lg",
               isActive ? "bg-accent/20" : "bg-accent/10"
             )}
           >
@@ -275,7 +270,7 @@ function Timeline({ steps, activeStep }: TimelineProps) {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <div ref={ref} className="relative hidden lg:block">
+    <div ref={ref} className="relative hidden md:block">
       {/* Main timeline line */}
       <motion.div
         className="absolute left-0 right-0 top-1/2 h-1 -translate-y-1/2 bg-accent/10"
@@ -295,7 +290,7 @@ function Timeline({ steps, activeStep }: TimelineProps) {
       />
 
       {/* Step indicators */}
-      <div className="relative flex justify-between">
+      <div className="relative flex justify-between gap-2">
         {steps.map((step, index) => (
           <motion.div
             key={index}
@@ -306,24 +301,20 @@ function Timeline({ steps, activeStep }: TimelineProps) {
               type: "spring",
               stiffness: 300,
             }}
-            className="flex flex-col items-center"
+            className="flex flex-col items-center flex-1"
           >
-            {/* Circle indicator */}
+            {/* Circle indicator - mesma cor para todos */}
             <motion.div
               animate={{
                 scale: activeStep >= index ? 1.2 : 1,
-                backgroundColor: activeStep >= index ? "#415A77" : "#E0E1DD",
               }}
               transition={{ duration: durations.fast }}
-              className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-4 border-background"
+              className="relative z-10 flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full border-4 border-background bg-accent"
             >
               {activeStep > index ? (
-                <CheckCircle className="h-6 w-6 text-white" />
+                <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-white" />
               ) : (
-                <span className={cn(
-                  "text-lg font-bold",
-                  activeStep >= index ? "text-white" : "text-foreground"
-                )}>
+                <span className="text-base md:text-lg font-bold text-white">
                   {step.number}
                 </span>
               )}
@@ -334,9 +325,9 @@ function Timeline({ steps, activeStep }: TimelineProps) {
               initial={{ opacity: 0, y: 10 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: index * 0.1 + 0.2 }}
-              className="mt-4 text-center"
+              className="mt-3 md:mt-4 text-center px-1"
             >
-              <div className="text-sm font-semibold text-foreground">
+              <div className="text-xs md:text-sm font-semibold text-foreground">
                 {step.title}
               </div>
             </motion.div>
@@ -516,16 +507,34 @@ export function HowItWorksSection({
         centered
       />
 
-      {/* Timeline (Desktop only) */}
+      {/* Timeline (Tablet+ only) */}
       {layout === "timeline" && (
-        <div className="mt-20">
-          <Timeline steps={steps} activeStep={activeStep} />
-        </div>
+        <>
+          {/* Cards for mobile */}
+          <div className="mt-12 sm:mt-16 md:hidden">
+            <div className="grid gap-6">
+              {steps.map((step, index) => (
+                <StepCard
+                  key={index}
+                  {...step}
+                  index={index}
+                  isActive={activeStep === index}
+                  onClick={() => setActiveStep(index)}
+                />
+              ))}
+            </div>
+          </div>
+          
+          {/* Timeline for tablet+ */}
+          <div className="mt-12 sm:mt-16 md:mt-20 hidden md:block">
+            <Timeline steps={steps} activeStep={activeStep} />
+          </div>
+        </>
       )}
 
       {/* Cards layout */}
       {layout === "cards" && (
-        <div className="mt-16 grid gap-8 lg:grid-cols-2">
+        <div className="mt-12 sm:mt-16 grid gap-6 sm:gap-8 lg:grid-cols-2">
           {steps.map((step, index) => (
             <StepCard
               key={index}
@@ -540,9 +549,9 @@ export function HowItWorksSection({
 
       {/* Split layout */}
       {layout === "split" && (
-        <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-12 sm:mt-16 grid gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Step navigation */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {steps.map((step, index) => (
               <motion.div
                 key={index}
@@ -555,26 +564,19 @@ export function HowItWorksSection({
                 }}
                 onClick={() => setActiveStep(index)}
                 className={cn(
-                  "cursor-pointer rounded-lg border p-4 transition-all",
+                  "cursor-pointer rounded-lg border p-3 sm:p-4 transition-all",
                   activeStep === index
                     ? "border-accent bg-accent/5 shadow-md"
                     : "border-border hover:border-accent/50"
                 )}
               >
-                <div className="flex items-center gap-3">
-                  <div
-                    className={cn(
-                      "flex h-10 w-10 items-center justify-center rounded-full font-bold",
-                      activeStep === index
-                        ? "bg-accent text-white"
-                        : "bg-accent/10 text-accent"
-                    )}
-                  >
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full font-bold text-sm sm:text-base bg-accent text-white">
                     {step.number}
                   </div>
-                  <div>
-                    <h4 className="font-semibold">{step.title}</h4>
-                    <p className="text-sm text-muted-foreground">
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-sm sm:text-base font-semibold">{step.title}</h4>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
                       {step.description}
                     </p>
                   </div>
@@ -593,25 +595,25 @@ export function HowItWorksSection({
               transition={{ duration: durations.normal }}
               className="relative"
             >
-              <div className="rounded-xl border bg-card p-8">
-                <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-accent/10">
+              <div className="rounded-xl border bg-card p-4 sm:p-6 md:p-8">
+                <div className="mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 shrink-0 items-center justify-center rounded-lg bg-accent/10">
                     {steps[activeStep].icon}
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold">
+                    <h3 className="text-lg sm:text-xl font-semibold">
                       {steps[activeStep].title}
                     </h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Passo {activeStep + 1} de {steps.length}
                     </p>
                   </div>
                 </div>
 
                 {steps[activeStep].code && (
-                  <div className="rounded-lg bg-[#0D1B2A] p-4">
+                  <div className="rounded-lg bg-[#0D1B2A] p-3 sm:p-4">
                     <pre className="overflow-x-auto">
-                      <code className="text-sm text-gray-300">
+                      <code className="text-xs sm:text-sm text-gray-300">
                         {steps[activeStep].code.snippet}
                       </code>
                     </pre>
@@ -619,7 +621,7 @@ export function HowItWorksSection({
                 )}
 
                 {steps[activeStep].demo && (
-                  <div className="rounded-lg border bg-background/50 p-6">
+                  <div className="rounded-lg border bg-background/50 p-4 sm:p-6">
                     {steps[activeStep].demo}
                   </div>
                 )}
@@ -636,13 +638,13 @@ export function HowItWorksSection({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4, duration: durations.slow }}
-          className="mt-16 text-center"
+          className="mt-12 sm:mt-16 text-center"
         >
           <Link href="/fale-conosco">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 font-medium text-white"
+              className="group inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base font-medium text-white"
             >
               Fale Conosco
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

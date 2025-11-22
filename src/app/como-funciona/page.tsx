@@ -370,10 +370,9 @@ export default function ComoFuncionaPage() {
       <CTASection
         variant="split"
         title="Veja a mágica acontecendo"
-        subtitle="Teste na prática"
-        description="Experimente nossa plataforma e veja como é simples transformar seus pagamentos"
-        primaryCTA={{ label: "Começar Teste Grátis", href: "/cadastro" }}
-        secondaryCTA={{ label: "Fale Conosco", href: "/fale-conosco" }}
+        subtitle="Entre em contato"
+        description="Entre em contato conosco e veja como é simples transformar seus pagamentos"
+        primaryCTA={{ label: "Fale Conosco", href: "/fale-conosco" }}
         background={true}
       />
     </MainLayout>

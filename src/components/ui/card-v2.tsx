@@ -455,7 +455,7 @@ const PricingCard = React.forwardRef<HTMLDivElement, PricingCardProps>(
         shineOnHover={popular}
         className={cn(
           popular && "border-accent shadow-lg",
-          "relative",
+          "relative flex flex-col h-full",
           className
         )}
         {...props}
@@ -474,7 +474,7 @@ const PricingCard = React.forwardRef<HTMLDivElement, PricingCardProps>(
           <CardDescription className="mt-2">{description}</CardDescription>
         </CardHeader>
 
-        <CardContent className="text-center">
+        <CardContent className="text-center flex-1 flex flex-col">
           <div className="mb-8">
             <span className="text-4xl font-bold">{price.amount}</span>
             {price.period && (
@@ -482,7 +482,7 @@ const PricingCard = React.forwardRef<HTMLDivElement, PricingCardProps>(
             )}
           </div>
 
-          <ul className="space-y-3 text-sm">
+          <ul className="space-y-3 text-sm flex-1">
             {features.map((feature, index) => (
               <motion.li
                 key={index}
