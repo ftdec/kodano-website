@@ -287,9 +287,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     // When using asChild with Link, children is the Link element itself
     // We need to extract the actual text/content from the Link
     const getLinkContent = () => {
-      if (React.isValidElement(children) && children.props?.children) {
-        // Extract children from the Link element (or any child element)
-        return children.props.children;
+      if (React.isValidElement(children)) {
+        const props = children.props as { children?: React.ReactNode };
+        if (props?.children) {
+          // Extract children from the Link element (or any child element)
+          return props.children;
+        }
       }
       return children;
     };
