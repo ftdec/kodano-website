@@ -18,7 +18,6 @@ import {
   TrendingUp,
   Users,
   Mail,
-  Phone,
   MessageCircle,
   Calendar,
   ExternalLink,
@@ -299,13 +298,6 @@ function ContactCTA({ title, description }: ContactCTAProps) {
       description: "Resposta em até 24h",
       action: "contato@kodano.com",
       href: "mailto:contato@kodano.com",
-    },
-    {
-      icon: <Phone className="h-5 w-5 text-accent" />,
-      title: "Telefone",
-      description: "Seg-Sex, 9h-18h",
-      action: "(11) 4000-1234",
-      href: "tel:+551140001234",
     },
     {
       icon: <MessageCircle className="h-5 w-5 text-accent" />,

@@ -194,17 +194,8 @@ export function OrganizationSchema() {
     ],
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+55-11-1234-5678",
       contactType: "customer service",
       availableLanguage: ["Portuguese", "English"],
-    },
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Av. Paulista, 1000",
-      addressLocality: "São Paulo",
-      addressRegion: "SP",
-      postalCode: "01310-100",
-      addressCountry: "BR",
     },
   };
 
@@ -350,27 +341,6 @@ export function LocalBusinessSchema() {
     name: "Kodano",
     description: DEFAULT_SEO.description,
     url: DEFAULT_SEO.siteUrl,
-    telephone: "+55-11-1234-5678",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Av. Paulista, 1000",
-      addressLocality: "São Paulo",
-      addressRegion: "SP",
-      postalCode: "01310-100",
-      addressCountry: "BR",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: -23.5505,
-      longitude: -46.6333,
-    },
-    openingHoursSpecification: {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "09:00",
-      closes: "18:00",
-    },
-    priceRange: "$$",
   };
 
   return <SEO jsonLd={schema} />;

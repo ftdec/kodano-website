@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BRAND } from "@/lib/constants/brand";
-import { Mail, Phone, MapPin, Clock, ArrowRight } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contato - Fale com o nosso time",
@@ -54,57 +54,6 @@ export default function ContatoPage() {
                 </CardHeader>
               </Card>
 
-              <Card className="border-border">
-                <CardHeader>
-                  <div className="flex items-start space-x-3">
-                    <Phone className="h-6 w-6 text-accent mt-1" />
-                    <div>
-                      <h3 className="font-semibold text-foreground mb-1">
-                        Telefone
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {BRAND.phone}
-                      </p>
-                    </div>
-                  </div>
-                </CardHeader>
-              </Card>
-
-              <Card className="border-border">
-                <CardHeader>
-                  <div className="flex items-start space-x-3">
-                    <MapPin className="h-6 w-6 text-accent mt-1" />
-                    <div>
-                      <h3 className="font-semibold text-foreground mb-1">
-                        Endereço
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        São Paulo, SP
-                        <br />
-                        Brasil
-                      </p>
-                    </div>
-                  </div>
-                </CardHeader>
-              </Card>
-
-              <Card className="border-border">
-                <CardHeader>
-                  <div className="flex items-start space-x-3">
-                    <Clock className="h-6 w-6 text-accent mt-1" />
-                    <div>
-                      <h3 className="font-semibold text-foreground mb-1">
-                        Horário de atendimento
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Segunda a Sexta
-                        <br />
-                        9h às 18h (BRT)
-                      </p>
-                    </div>
-                  </div>
-                </CardHeader>
-              </Card>
             </div>
 
             {/* Contact Form */}

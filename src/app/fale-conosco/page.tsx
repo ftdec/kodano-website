@@ -8,7 +8,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Send, CheckCircle2, ArrowLeft } from "lucide-react";
+import { Mail, Send, CheckCircle2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button-v2";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -77,29 +77,6 @@ export default function FaleConoscoPage() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center shrink-0">
-                    <Phone className="w-5 h-5 text-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium mb-1">Telefone</h3>
-                    <p className="text-muted-foreground text-sm">(11) 4000-1234</p>
-                    <p className="text-xs text-muted-foreground mt-1">Seg-Sex, 9h-18h</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center shrink-0">
-                    <MapPin className="w-5 h-5 text-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium mb-1">Escritório</h3>
-                    <p className="text-muted-foreground text-sm">
-                      Av. Paulista, 1234 - 10º andar<br />
-                      São Paulo, SP
-                    </p>
-                  </div>
-                </div>
               </div>
             </motion.div>
           </div>

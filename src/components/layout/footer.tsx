@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { BRAND } from "@/lib/constants/brand";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -53,27 +53,6 @@ export function Footer() {
                     <p className="text-xs text-muted-foreground">Resposta em até 24h</p>
                   </div>
                 </a>
-              </li>
-              <li>
-                <a
-                  href="tel:+551140001234"
-                  className="flex items-start gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-                >
-                  <Phone className="h-4 w-4 mt-0.5 shrink-0 group-hover:text-primary transition-colors" />
-                  <div>
-                    <p className="font-medium text-foreground">(11) 4000-1234</p>
-                    <p className="text-xs text-muted-foreground">Seg-Sex, 9h-18h</p>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <div className="flex items-start gap-3 text-sm text-muted-foreground">
-                  <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-                  <div>
-                    <p className="font-medium text-foreground">Av. Paulista, 1234 - 10º andar</p>
-                    <p className="text-xs text-muted-foreground">São Paulo, SP</p>
-                  </div>
-                </div>
               </li>
             </ul>
           </div>
