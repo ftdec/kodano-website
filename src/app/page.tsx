@@ -242,44 +242,44 @@ export default function Home() {
         </section>
 
         {/* HOW IT WORKS (PROCESS) */}
-        <section id="process" className="py-32 px-6">
+        <section id="process" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6">
           <div className="container max-w-5xl mx-auto">
-            <div className="text-center mb-20">
-              <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/70 dark:bg-white/5 border border-border/60 backdrop-blur-xl mb-6">
-                <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
-                <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">Processo Simplificado</span>
+            <div className="text-center mb-12 sm:mb-16 md:mb-20">
+              <div className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 rounded-full bg-white/70 dark:bg-white/5 border border-border/60 backdrop-blur-xl mb-4 sm:mb-6">
+                <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
+                <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] text-muted-foreground">Processo Simplificado</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Como Funciona</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Como Funciona</h2>
+              <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
                 Do setup à primeira transação em poucos passos.
               </p>
             </div>
 
             <div className="relative">
-              {/* Connecting Line */}
-              <div className="absolute left-[20px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-border to-transparent md:-translate-x-1/2" />
+              {/* Connecting Line - ajustado para mobile */}
+              <div className="absolute left-6 sm:left-[20px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-border to-transparent md:-translate-x-1/2" />
 
-              <div className="space-y-16">
+              <div className="space-y-10 sm:space-y-12 md:space-y-16">
                 {[
                   {
                     title: "Integração Rápida",
                     desc: "Conecte-se à nossa API RESTful moderna em minutos, com documentação clara e SDKs prontos.",
-                    icon: <Layers className="w-6 h-6" />
+                    icon: <Layers className="w-5 h-5 sm:w-6 sm:h-6" />
                   },
                   {
                     title: "Configure Pagamentos",
                     desc: "Defina suas regras de negócio, métodos de pagamento aceitos e fluxo de checkout.",
-                    icon: <Zap className="w-6 h-6" />
+                    icon: <Zap className="w-5 h-5 sm:w-6 sm:h-6" />
                   },
                   {
                     title: "Processe Transações",
                     desc: "Nossa tecnologia processa cada transação com otimização inteligente para maximizar aprovações.",
-                    icon: <BarChart3 className="w-6 h-6" />
+                    icon: <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6" />
                   },
                   {
                     title: "Monitore e Otimize",
                     desc: "Acompanhe tudo em tempo real pelo dashboard e deixe nossa IA otimizar as conversões.",
-                    icon: <Shield className="w-6 h-6" />
+                    icon: <Shield className="w-5 h-5 sm:w-6 sm:h-6" />
                   }
                 ].map((step, i) => (
                   <motion.div
@@ -288,18 +288,20 @@ export default function Home() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: i * 0.1 }}
-                    className={`relative flex flex-col md:flex-row gap-8 ${i % 2 === 0 ? "md:text-right" : "md:flex-row-reverse md:text-left"
-                      }`}
+                    className={`relative flex flex-col md:flex-row gap-4 sm:gap-6 md:gap-8 ${i % 2 === 0 ? "md:text-right" : "md:flex-row-reverse md:text-left"}`}
                   >
-                    <div className={`flex-1 ${i % 2 === 0 ? "md:pr-12" : "md:pl-12"}`}>
-                      <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-                      <p className="text-muted-foreground">{step.desc}</p>
+                    {/* Mobile: conteúdo à direita do círculo, Desktop: layout alternado */}
+                    <div className={`flex-1 pl-12 sm:pl-14 ${i % 2 === 0 ? "md:pl-0 md:pr-12" : "md:pl-12 md:pr-0"}`}>
+                      <h3 className="text-lg sm:text-xl font-bold mb-1.5 sm:mb-2">{step.title}</h3>
+                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{step.desc}</p>
                     </div>
 
-                    <div className="absolute left-0 md:left-1/2 w-10 h-10 rounded-full bg-background border-2 border-primary flex items-center justify-center z-10 md:-translate-x-1/2">
-                      <div className="text-primary">{step.icon}</div>
+                    {/* Círculo com ícone - posicionado à esquerda no mobile, centralizado no desktop */}
+                    <div className="absolute left-0 md:left-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-background border-2 border-primary flex items-center justify-center z-10 md:-translate-x-1/2 shrink-0">
+                      <div className="text-primary text-sm sm:text-base">{step.icon}</div>
                     </div>
 
+                    {/* Espaço vazio no desktop para layout alternado */}
                     <div className="flex-1 hidden md:block" />
                   </motion.div>
                 ))}
