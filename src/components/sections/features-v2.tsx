@@ -15,12 +15,6 @@ import {
   Shield,
   BarChart3,
   Globe,
-  Lock,
-  Cpu,
-  Layers,
-  TrendingUp,
-  Users,
-  CreditCard,
   ArrowRight,
   CheckCircle,
 } from "lucide-react";
@@ -49,18 +43,6 @@ const itemVariants = {
     transition: {
       duration: durations.slow,
       ease: easings.emphasized,
-    },
-  },
-};
-
-const floatVariants = {
-  initial: { y: 0 },
-  float: {
-    y: [-5, 5, -5],
-    transition: {
-      duration: 4,
-      ease: "easeInOut",
-      repeat: Infinity,
     },
   },
 };
@@ -110,10 +92,9 @@ interface AnimatedFeatureCardProps {
     badge?: string;
     highlight?: boolean;
   };
-  index: number;
 }
 
-function AnimatedFeatureCard({ feature, index }: AnimatedFeatureCardProps) {
+function AnimatedFeatureCard({ feature }: AnimatedFeatureCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(cardRef, { once: true, margin: "-100px" });
 
@@ -429,7 +410,7 @@ export function FeaturesSection({
           className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4"
         >
           {features.map((feature, index) => (
-            <AnimatedFeatureCard key={index} feature={feature} index={index} />
+            <AnimatedFeatureCard key={index} feature={feature} />
           ))}
         </motion.div>
 

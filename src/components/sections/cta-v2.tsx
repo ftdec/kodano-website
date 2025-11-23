@@ -22,7 +22,6 @@ import {
   MessageCircle,
   Calendar,
   ExternalLink,
-  ChevronRight,
   Rocket,
   Star,
 } from "lucide-react";

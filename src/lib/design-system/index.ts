@@ -20,6 +20,11 @@ export { utils } from "./utils";
 export * from "./gpu";
 export { default as gpu } from "./gpu";
 
+// Import required modules for composite exports
+import { designTokens as tokensModule, generateCSSVariables, colors, typography, breakpoints, spacing } from "./tokens";
+import { motion as motionModule } from "./motion";
+import { utils as utilsModule } from "./utils";
+
 // Type exports
 export type { DesignTokens } from "./tokens";
 
@@ -54,9 +59,9 @@ export { cn } from "./utils";
  * Use this for accessing the entire system in one import
  */
 export const KodanoDesignSystem = {
-  tokens: require("./tokens").designTokens,
-  motion: require("./motion").motion,
-  utils: require("./utils").utils,
+  tokens: tokensModule,
+  motion: motionModule,
+  utils: utilsModule,
 } as const;
 
 // ============================================================================
@@ -67,7 +72,6 @@ export const KodanoDesignSystem = {
  * Generates CSS custom properties for use in stylesheets
  */
 export function generateDesignSystemCSS(): string {
-  const { generateCSSVariables } = require("./tokens");
 
   return `
 /* ========================================
@@ -237,11 +241,11 @@ export function generateDesignSystemCSS(): string {
  * Configuration object for theme providers and build tools
  */
 export const themeConfig = {
-  colors: require("./tokens").colors,
-  fonts: require("./tokens").typography.fonts,
-  breakpoints: require("./tokens").breakpoints,
-  spacing: require("./tokens").spacing,
-  animation: require("./motion").motion,
+  colors,
+  fonts: typography.fonts,
+  breakpoints,
+  spacing,
+  animation: motionModule,
 } as const;
 
 // ============================================================================

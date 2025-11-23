@@ -545,7 +545,10 @@ export function shouldReduceMotion(): boolean {
 /**
  * Returns animation props based on reduced motion preference
  */
-export function getMotionProps(props: any, reducedProps: any = {}) {
+export function getMotionProps(
+  props: TargetAndTransition | Variants | Transition,
+  reducedProps: TargetAndTransition | Variants | Transition = {}
+) {
   if (shouldReduceMotion()) {
     return reducedProps;
   }

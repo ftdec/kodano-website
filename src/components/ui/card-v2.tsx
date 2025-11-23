@@ -82,7 +82,11 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       hoverable = false,
       glowOnHover = false,
       shineOnHover = false,
-      ...props
+      onClick,
+      onMouseEnter,
+      onMouseLeave,
+      onFocus,
+      onBlur,
     },
     ref
   ) => {
@@ -98,7 +102,11 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         initial={hoverable ? "default" : undefined}
         whileHover={hoverable ? "hover" : undefined}
         whileTap={hoverable ? "tap" : undefined}
-        {...(props as any)}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onFocus={onFocus}
+        onBlur={onBlur}
       >
         {/* Glow effect */}
         {glowOnHover && (

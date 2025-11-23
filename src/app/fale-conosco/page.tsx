@@ -1,531 +1,200 @@
 /**
  * Fale Conosco Page - Kodano Website
- * Stripe-level contact page with advanced form interactions
+ * Simplified, modern, split-layout design
  */
 
 "use client";
 
 import React, { useState } from "react";
-import { MainLayout } from "@/components/layout/main-layout";
-import { CTASection } from "@/components/sections/cta-v2";
-import { AnimatedSection, SectionContainer, SectionHeader } from "@/components/sections/section-wrapper";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Send,
-  User,
-  Building2,
-  Mail,
-  Phone,
-  BarChart3,
-  MessageSquare,
-  CheckCircle,
-  ArrowRight,
-  Calendar,
-  Clock,
-  MapPin,
-  Sparkles,
-  Shield,
-  Zap,
-} from "lucide-react";
-import { easings, durations } from "@/lib/design-system/motion";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Mail, Phone, MapPin, Send, CheckCircle2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button-v2";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-// ============================================================================
-// FORM FIELD WRAPPER WITH ANIMATIONS
-// ============================================================================
-
-interface FormFieldProps {
-  label: string;
-  icon: React.ReactNode;
-  error?: string;
-  required?: boolean;
-  children: React.ReactNode;
-  delay?: number;
-}
-
-function FormField({ label, icon, error, required, children, delay = 0 }: FormFieldProps) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay, duration: durations.normal }}
-      className="space-y-2"
-    >
-      <Label className="flex items-center gap-2 text-sm font-medium">
-        {icon}
-        {label}
-        {required && <span className="text-red-500">*</span>}
-      </Label>
-      {children}
-      <AnimatePresence>
-        {error && (
-          <motion.p
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="text-xs text-red-500"
-          >
-            {error}
-          </motion.p>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
-}
-
-// ============================================================================
-// SUCCESS MESSAGE COMPONENT
-// ============================================================================
-
-function SuccessMessage() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ type: "spring", stiffness: 200 }}
-      className="flex flex-col items-center justify-center py-16 text-center"
-    >
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-        className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-500/10"
-      >
-        <CheckCircle className="h-10 w-10 text-green-500" />
-      </motion.div>
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="mb-2 text-2xl font-bold"
-      >
-        Mensagem enviada com sucesso!
-      </motion.h2>
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-        className="text-muted-foreground"
-      >
-        Entraremos em contato em até 24 horas úteis.
-      </motion.p>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="mt-6"
-      >
-        <Button variant="outline" onClick={() => window.location.reload()}>
-          Enviar nova mensagem
-        </Button>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-// ============================================================================
-// CONTACT INFO CARDS
-// ============================================================================
-
-function ContactInfoCards() {
-  const cards = [
-    {
-      icon: <Mail className="h-5 w-5" />,
-      title: "Email",
-      value: "contato@kodano.com",
-      description: "Resposta em até 24h",
-      action: "mailto:contato@kodano.com",
-    },
-    {
-      icon: <Phone className="h-5 w-5" />,
-      title: "Telefone",
-      value: "(11) 4000-1234",
-      description: "Seg-Sex, 9h-18h",
-      action: "tel:+551140001234",
-    },
-    {
-      icon: <MessageSquare className="h-5 w-5" />,
-      title: "WhatsApp",
-      value: "(11) 99999-9999",
-      description: "Resposta rápida",
-      action: "https://wa.me/5511999999999",
-    },
-    {
-      icon: <Calendar className="h-5 w-5" />,
-      title: "Fale Conosco",
-      value: "",
-      description: "Entre em contato",
-      action: "/fale-conosco",
-    },
-  ];
-
-  return (
-    <div className="space-y-4">
-      {cards.map((card, index) => (
-        <motion.a
-          key={index}
-          href={card.action}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1 }}
-          whileHover={{ scale: 1.02, y: -2 }}
-          className="group flex items-start gap-4 rounded-lg border bg-background p-4 transition-all hover:border-accent hover:shadow-md"
-        >
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
-            {card.icon}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="mb-1 font-semibold text-foreground">{card.title}</h3>
-            {card.value && (
-              <p className="mb-1 text-sm font-bold text-accent">{card.value}</p>
-            )}
-            <p className="text-xs text-muted-foreground">{card.description}</p>
-          </div>
-          <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground opacity-0 transition-all group-hover:opacity-100 group-hover:translate-x-1" />
-        </motion.a>
-      ))}
-    </div>
-  );
-}
-
-// ============================================================================
-// MAIN FORM COMPONENT
-// ============================================================================
-
-function ContactForm() {
-  const [formData, setFormData] = useState({
-    name: "",
-    company: "",
-    email: "",
-    phone: "",
-    volume: "",
-    message: "",
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+export default function FaleConoscoPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const volumeOptions = [
-    "Baixo volume",
-    "Volume médio",
-    "Alto volume",
-    "Volume muito alto",
-    "Volume empresarial",
-    "Volume corporativo",
-  ];
-
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.name) newErrors.name = "Nome é obrigatório";
-    if (!formData.company) newErrors.company = "Empresa é obrigatória";
-    if (!formData.email) newErrors.email = "Email é obrigatório";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Email inválido";
-    }
-    if (!formData.phone) newErrors.phone = "Telefone / WhatsApp é obrigatório";
-    if (!formData.volume) newErrors.volume = "Selecione o volume mensal";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!validateForm()) return;
-
     setIsSubmitting(true);
-
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
+    await new Promise(resolve => setTimeout(resolve, 1500));
     setIsSubmitting(false);
     setIsSuccess(true);
   };
 
-  if (isSuccess) {
-    return <SuccessMessage />;
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid gap-6 sm:grid-cols-2">
-        <FormField
-          label="Nome completo"
-          icon={<User className="h-4 w-4" />}
-          required
-          error={errors.name}
-          delay={0.1}
-        >
-          <Input
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="João Silva"
-            className="transition-all focus:ring-2 focus:ring-accent/50"
-          />
-        </FormField>
+    <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-x-hidden font-sans selection:bg-primary/20">
 
-        <FormField
-          label="Empresa"
-          icon={<Building2 className="h-4 w-4" />}
-          required
-          error={errors.company}
-          delay={0.2}
-        >
-          <Input
-            value={formData.company}
-            onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-            placeholder="Empresa XYZ"
-            className="transition-all focus:ring-2 focus:ring-accent/50"
-          />
-        </FormField>
-      </div>
-
-      <div className="grid gap-6 sm:grid-cols-2">
-        <FormField
-          label="Email corporativo"
-          icon={<Mail className="h-4 w-4" />}
-          required
-          error={errors.email}
-          delay={0.3}
-        >
-          <Input
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            placeholder="joao@empresa.com"
-            className="transition-all focus:ring-2 focus:ring-accent/50"
-          />
-        </FormField>
-
-        <FormField
-          label="Telefone / WhatsApp"
-          icon={<Phone className="h-4 w-4" />}
-          required
-          error={errors.phone}
-          delay={0.4}
-        >
-          <Input
-            type="tel"
-            value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            placeholder="(11) 99999-9999"
-            className="transition-all focus:ring-2 focus:ring-accent/50"
-          />
-        </FormField>
-      </div>
-
-      <FormField
-        label="Volume mensal de transações"
-        icon={<BarChart3 className="h-4 w-4" />}
-        required
-        error={errors.volume}
-        delay={0.5}
-      >
-        <Select
-          value={formData.volume}
-          onValueChange={(value) => setFormData({ ...formData, volume: value })}
-        >
-          <SelectTrigger className="transition-all focus:ring-2 focus:ring-accent/50">
-            <SelectValue placeholder="Selecione o volume mensal" />
-          </SelectTrigger>
-          <SelectContent>
-            {volumeOptions.map((option) => (
-              <SelectItem key={option} value={option}>
-                {option}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </FormField>
-
-      <FormField
-        label="Mensagem"
-        icon={<MessageSquare className="h-4 w-4" />}
-        delay={0.6}
-      >
-        <textarea
-          value={formData.message}
-          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-          rows={4}
-          placeholder="Conte-nos mais sobre suas necessidades..."
-          className="w-full rounded-lg border bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50"
-        />
-      </FormField>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
-        className="flex flex-col gap-4"
-      >
-        <Button
-          type="submit"
-          size="lg"
-          variant="kodano"
-          disabled={isSubmitting}
-          loading={isSubmitting}
-          className="w-full"
-        >
-          {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
-          <Send className="ml-2 h-5 w-5" />
-        </Button>
-
-        <p className="text-center text-xs text-muted-foreground">
-          Ao enviar este formulário, você concorda com nossa{" "}
-          <a href="/privacidade" className="underline">
-            política de privacidade
-          </a>
-          .
-        </p>
-      </motion.div>
-    </form>
-  );
-}
-
-// ============================================================================
-// MAIN PAGE COMPONENT
-// ============================================================================
-
-export default function FaleConoscoPage() {
-  return (
-    <MainLayout>
-      {/* Hero Section */}
-      <AnimatedSection animation="fadeInUp" className="relative py-24 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
-
-        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl text-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: durations.normal }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-1 text-sm font-medium text-accent"
-            >
-              <Sparkles className="h-4 w-4" />
-              Vamos conversar
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: durations.slow }}
-              className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
-            >
-              Transforme seus pagamentos{" "}
-              <span className="bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
-                conosco
-              </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: durations.normal }}
-              className="mt-6 text-lg text-muted-foreground"
-            >
-              Nossa equipe de especialistas está pronta para entender suas necessidades
-              e criar a solução perfeita para o seu negócio.
-            </motion.p>
-
-            {/* Quick stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mt-8 flex flex-col items-center justify-center gap-6 sm:flex-row"
-            >
-              <div className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-green-500" />
-                <span className="text-sm">Resposta em até 24h</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Shield className="h-5 w-5 text-blue-500" />
-                <span className="text-sm">100% Seguro</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-purple-500" />
-                <span className="text-sm">Setup em 30 min</span>
-              </div>
-            </motion.div>
-          </div>
+      {/* MINIMAL HEADER */}
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
+        <div className="container max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-kodano-blue-medium flex items-center justify-center text-white font-bold text-lg">
+              K
+            </div>
+            <span className="font-bold text-xl tracking-tight">Kodano</span>
+          </Link>
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+            <Link href="/" className="flex items-center gap-2 hover:text-foreground transition-colors">
+              <ArrowLeft className="w-4 h-4" /> Voltar para Home
+            </Link>
+          </nav>
         </div>
-      </AnimatedSection>
+      </header>
 
-      {/* Contact Form and Info */}
-      <SectionContainer spacing="xl">
-        <div className="grid gap-12 lg:grid-cols-3">
-          {/* Form */}
-          <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: durations.slow }}
-              className="rounded-xl border bg-card p-8"
-            >
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold">Preencha seus dados</h2>
-                <p className="mt-2 text-muted-foreground">
-                  Entraremos em contato para entender melhor suas necessidades.
-                </p>
-              </div>
-              <ContactForm />
-            </motion.div>
-          </div>
+      <main className="flex-1 flex flex-col w-full pt-24 pb-12 px-6">
+        <div className="container max-w-6xl mx-auto h-full flex-1 flex flex-col lg:flex-row gap-12 lg:gap-24 items-start justify-center py-8">
 
-          {/* Contact Info */}
-          <div className="space-y-6">
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: durations.slow }}
-              className="rounded-lg border bg-card p-6"
-            >
-              <h3 className="mb-6 text-lg font-semibold">Outras formas de contato</h3>
-              <div className="space-y-4">
-                <ContactInfoCards />
-              </div>
-            </motion.div>
-
-            {/* Office info */}
+          {/* LEFT COLUMN - INFO */}
+          <div className="flex-1 lg:sticky lg:top-32">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="rounded-lg border bg-card p-6"
+              transition={{ duration: 0.6 }}
             >
-              <div className="mb-4 flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-accent" />
-                <h3 className="font-semibold">Nosso escritório</h3>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Av. Paulista, 1234 - 10º andar
-                <br />
-                São Paulo, SP - 01310-100
-                <br />
-                Brasil
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+                Vamos conversar sobre <br />
+                <span className="text-kodano-blue-medium">o seu negócio</span>
+              </h1>
+              <p className="text-lg text-muted-foreground mb-12 leading-relaxed">
+                Nossa equipe de especialistas está pronta para entender suas necessidades e mostrar como a Kodano pode transformar sua operação de pagamentos.
               </p>
-              <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                Seg-Sex, 9h-18h
+
+              <div className="space-y-8">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center shrink-0">
+                    <Mail className="w-5 h-5 text-foreground" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium mb-1">Email</h3>
+                    <p className="text-muted-foreground text-sm">contato@kodano.com</p>
+                    <p className="text-xs text-muted-foreground mt-1">Resposta em até 24h</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center shrink-0">
+                    <Phone className="w-5 h-5 text-foreground" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium mb-1">Telefone</h3>
+                    <p className="text-muted-foreground text-sm">(11) 4000-1234</p>
+                    <p className="text-xs text-muted-foreground mt-1">Seg-Sex, 9h-18h</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center shrink-0">
+                    <MapPin className="w-5 h-5 text-foreground" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium mb-1">Escritório</h3>
+                    <p className="text-muted-foreground text-sm">
+                      Av. Paulista, 1234 - 10º andar<br />
+                      São Paulo, SP
+                    </p>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
-        </div>
-      </SectionContainer>
 
-      {/* CTA Section */}
-      <CTASection
-        variant="simple"
-        title="Prefere uma demonstração ao vivo?"
-        description="Agende uma chamada com nossos especialistas e veja a plataforma em ação"
-        primaryCTA={{ label: "Fale Conosco", href: "/fale-conosco" }}
-        background={true}
-      />
-    </MainLayout>
+          {/* RIGHT COLUMN - FORM */}
+          <div className="flex-1 w-full">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="bg-card border border-border rounded-2xl p-6 md:p-8 shadow-sm"
+            >
+              {isSuccess ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mb-6">
+                    <CheckCircle2 className="w-8 h-8 text-green-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">Mensagem enviada!</h3>
+                  <p className="text-muted-foreground mb-8">
+                    Obrigado pelo contato. Retornaremos em breve.
+                  </p>
+                  <Button variant="outline" onClick={() => setIsSuccess(false)}>
+                    Enviar outra mensagem
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="space-y-4">
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Nome completo</Label>
+                        <Input id="name" placeholder="João Silva" required />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="company">Empresa</Label>
+                        <Input id="company" placeholder="Empresa XYZ" required />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email corporativo</Label>
+                      <Input id="email" type="email" placeholder="joao@empresa.com" required />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="volume">Volume mensal de transações</Label>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o volume" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="v1">Até R$ 50k/mês</SelectItem>
+                          <SelectItem value="v2">R$ 50k - R$ 200k/mês</SelectItem>
+                          <SelectItem value="v3">R$ 200k - R$ 1M/mês</SelectItem>
+                          <SelectItem value="v4">Acima de R$ 1M/mês</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="message">Mensagem</Label>
+                      <textarea
+                        id="message"
+                        className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Conte-nos sobre sua necessidade..."
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <Button type="submit" className="w-full" size="lg" loading={isSubmitting}>
+                    Enviar Mensagem <Send className="ml-2 w-4 h-4" />
+                  </Button>
+                </form>
+              )}
+            </motion.div>
+          </div>
+
+        </div>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="py-12 px-6 border-t border-border bg-secondary/10">
+        <div className="container max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-md bg-gradient-to-br from-primary to-kodano-blue-medium flex items-center justify-center text-white font-bold text-xs">
+              K
+            </div>
+            <span className="font-bold text-xl tracking-tight">Kodano</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} Kodano. Todos os direitos reservados.
+          </p>
+        </div>
+      </footer>
+    </div>
   );
 }

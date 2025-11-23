@@ -6,6 +6,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, useInView, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
@@ -153,7 +154,7 @@ function TestimonialCard({
         transition={{ delay: index * 0.1 + 0.5 }}
         className="relative z-10 mb-6 text-lg font-medium leading-relaxed"
       >
-        "{quote}"
+        &ldquo;{quote}&rdquo;
       </motion.blockquote>
 
       {/* Metrics */}
@@ -182,10 +183,11 @@ function TestimonialCard({
       >
         <div className="relative h-12 w-12 overflow-hidden rounded-full bg-gradient-to-br from-accent to-primary">
           {author.avatar ? (
-            <img
+            <Image
               src={author.avatar}
               alt={author.name}
-              className="h-full w-full object-cover"
+              fill
+              className="object-cover"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-white">

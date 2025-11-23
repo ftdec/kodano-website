@@ -505,7 +505,7 @@ export function BackgroundDecoration({
 // EXPORTS
 // ============================================================================
 
-export default {
+const SectionWrapperExports = {
   AnimatedSection,
   SectionContainer,
   SectionHeader,
@@ -515,3 +515,5 @@ export default {
   StaggerContainer,
   BackgroundDecoration,
 };
+
+export default SectionWrapperExports;

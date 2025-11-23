@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:dev": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "p-old": "prettier --write .",
+    "p": "bunx prettier --list-different . | xargs bunx prettier --write",
+    "check": "bun lint && bun typecheck && (prettier --list-different . | xargs prettier --write) && echo 'All linting errors and prettier warnings fixed'"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.16",
@@ -16,7 +22,7 @@
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-separator": "^1.1.7",
-    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-slot": "^1.2.4",
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.4.0",
     "@studio-freight/lenis": "^1.0.42",

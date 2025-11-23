@@ -15,11 +15,8 @@ import {
   BarChart3,
   ArrowRight,
   CheckCircle,
-  Zap,
-  Globe,
 } from "lucide-react";
 import { easings, durations } from "@/lib/design-system/motion";
-import { FeatureCard } from "@/components/ui/card-v2";
 import { SectionContainer, SectionHeader } from "./section-wrapper";
 
 // ============================================================================

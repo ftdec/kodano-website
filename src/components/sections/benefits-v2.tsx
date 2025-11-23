@@ -15,13 +15,11 @@ import {
   Globe,
   Users,
   BarChart3,
-  Lock,
-  Cpu,
   Check,
   ArrowUpRight,
 } from "lucide-react";
 import { easings, durations } from "@/lib/design-system/motion";
-import { SectionContainer, SectionHeader, StaggerContainer } from "./section-wrapper";
+import { SectionContainer, SectionHeader } from "./section-wrapper";
 
 // ============================================================================
 // BENEFIT CARD COMPONENT
@@ -187,7 +185,7 @@ function BenefitCard({
                 "text-accent",
                 variant === "large" ? "h-7 w-7" : "h-6 w-6"
               ),
-            } as any)
+            } as React.ComponentProps<typeof motion.div>)
           : icon}
       </motion.div>
 

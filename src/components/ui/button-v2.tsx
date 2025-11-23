@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 // Import design system
-import { easings, durations, springs } from "@/lib/design-system/motion";
+import { easings } from "@/lib/design-system/motion";
 
 // ============================================================================
 // BUTTON VARIANTS
@@ -226,6 +226,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       asChild = false,
       children,
       disabled,
+      onClick,
+      onMouseEnter,
+      onMouseLeave,
+      onFocus,
+      onBlur,
+      type,
       ...props
     },
     ref
@@ -361,7 +367,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         initial={hasMotion ? "rest" : undefined}
         whileHover={hasMotion && !isDisabled ? "hover" : undefined}
         whileTap={hasMotion && !isDisabled ? "tap" : undefined}
-        {...(props as any)}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        type={type}
       >
         {buttonContent}
       </motion.button>

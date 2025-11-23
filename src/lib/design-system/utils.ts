@@ -322,7 +322,7 @@ export function lockScroll(): () => void {
 /**
  * Debounces a function
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -342,7 +342,7 @@ export function debounce<T extends (...args: any[]) => any>(
 /**
  * Throttles a function
  */
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
@@ -429,7 +429,7 @@ export function getRelativeTime(date: Date | string): string {
 /**
  * Merges refs for forwarding
  */
-export function mergeRefs<T = any>(
+export function mergeRefs<T = HTMLElement>(
   ...refs: Array<React.MutableRefObject<T> | React.LegacyRef<T> | undefined | null>
 ): React.RefCallback<T> {
   return (value) => {
@@ -467,7 +467,7 @@ export function createContext<T>(name: string) {
 /**
  * Memoizes expensive computations
  */
-export function memoize<T extends (...args: any[]) => any>(
+export function memoize<T extends (...args: unknown[]) => unknown>(
   fn: T
 ): T {
   const cache = new Map();

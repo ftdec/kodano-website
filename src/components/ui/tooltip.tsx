@@ -34,7 +34,7 @@ export function Tooltip({
   className = "",
 }: TooltipProps) {
   const [isOpen, setIsOpen] = React.useState(false);
-  const arrowRef = React.useRef(null);
+  const arrowRef = React.useRef<SVGSVGElement>(null);
 
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
@@ -69,19 +69,23 @@ export function Tooltip({
 
   return (
     <>
-      {/* eslint-disable-next-line react-hooks/refs */}
       {React.cloneElement(
         children,
         getReferenceProps({
+          /* eslint-disable react-hooks/rules-of-hooks */
+          // Floating UI requires using ref setters during render - this is safe and intended
           ref: refs.setReference,
+          /* eslint-enable react-hooks/rules-of-hooks */
           ...(children.props || {}),
         })
       )}
       <FloatingPortal>
         {isOpen && (
           <div
-            // eslint-disable-next-line react-hooks/refs
+            /* eslint-disable react-hooks/rules-of-hooks */
+            // Floating UI requires using ref setters during render - this is safe and intended
             ref={refs.setFloating}
+            /* eslint-enable react-hooks/rules-of-hooks */
             style={floatingStyles}
             {...floatingProps}
             className={`z-50 px-3 py-2 text-sm text-white bg-gray-900 dark:bg-gray-800 rounded-lg shadow-lg animate-in fade-in zoom-in-95 duration-200 ${className}`}

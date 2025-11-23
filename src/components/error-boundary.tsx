@@ -6,8 +6,8 @@
 "use client";
 
 import React, { Component, ErrorInfo, ReactNode } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { AlertTriangle, RefreshCw, Home, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 import { Button } from "@/components/ui/button-v2";
 import { easings, durations } from "@/lib/design-system/motion";
 
@@ -114,7 +114,7 @@ function PageErrorFallback({ error, resetError, errorId }: ErrorFallbackProps) {
   );
 }
 
-function SectionErrorFallback({ error, resetError, retryCount, maxRetries }: ErrorFallbackProps) {
+function SectionErrorFallback({ resetError, retryCount, maxRetries }: ErrorFallbackProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

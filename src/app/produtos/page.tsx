@@ -19,16 +19,13 @@ import {
   BarChart3,
   Globe,
   CreditCard,
-  TrendingUp,
   Lock,
-  Cpu,
   CheckCircle,
   ArrowRight,
   Layers,
   RefreshCw,
   Activity
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { easings, durations } from "@/lib/design-system/motion";
 import { Button } from "@/components/ui/button-v2";
 import { useRef } from "react";

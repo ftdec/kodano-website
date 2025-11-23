@@ -151,7 +151,7 @@ export function measureAnimationPerformance(
   });
 }
 
-export default {
+const GPUExports = {
   gpuAcceleration,
   gpu3dTransform,
   gpuVariants,
@@ -163,3 +163,5 @@ export default {
   useGPUAnimation,
   measureAnimationPerformance,
 };
+
+export default GPUExports;
