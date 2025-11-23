@@ -216,7 +216,7 @@ export default function ProdutosPage() {
     {
       icon: <Layers className="h-7 w-7 text-accent" />,
       title: "Orquestração Inteligente",
-      description: "Roteamento automático que escolhe o melhor caminho para cada transação, maximizando aprovações e reduzindo custos.",
+      description: "Processamento inteligente que otimiza cada transação em tempo real, maximizando aprovações e reduzindo custos.",
       features: [
         "Otimização por performance em tempo real",
         "Retry automático inteligente",

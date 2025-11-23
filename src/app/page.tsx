@@ -18,8 +18,8 @@ import { cn } from "@/lib/utils";
 
 const orchestrationFeatures = [
   {
-    title: "Roteamento Inteligente",
-    desc: "Direcionamento dinâmico de transações para a adquirente com maior probabilidade de aprovação.",
+    title: "Processamento Inteligente",
+    desc: "Tecnologia avançada que otimiza cada transação para maximizar taxas de aprovação e reduzir custos.",
     icon: <Layers className="w-6 h-6" />,
     accent: {
       border: "from-[#4FACFE] via-[#00DBDE] to-[#43E97B]",
@@ -196,7 +196,7 @@ export default function Home() {
                   Orquestração feita com precisão cirúrgica
                 </h2>
                 <p className="text-lg text-muted-foreground/80 leading-relaxed text-balance">
-                  A rota certa, no momento certo. Automatizamos regras complexas de aprovação, retentativas e conciliação em uma camada inteligente que se integra com seus adquirentes sem atrito operacional.
+                  Processamento feito com precisão. Automatizamos regras complexas de aprovação, retentativas e conciliação em uma camada inteligente que otimiza cada transação para máxima eficiência.
                 </p>
               </motion.div>
             </div>
@@ -273,7 +273,7 @@ export default function Home() {
                   },
                   {
                     title: "Processe Transações",
-                    desc: "Nossa orquestração escolhe automaticamente o melhor adquirente para cada venda.",
+                    desc: "Nossa tecnologia processa cada transação com otimização inteligente para maximizar aprovações.",
                     icon: <BarChart3 className="w-6 h-6" />
                   },
                   {

@@ -317,9 +317,9 @@ function AnimatedCounter({
 const defaultBenefits = [
   {
     icon: <TrendingUp />,
-    title: "Roteamento Inteligente",
-    description: "Maximize suas conversões com nossa tecnologia de roteamento inteligente que escolhe o melhor adquirente.",
-    features: ["Roteamento automático", "Retry inteligente", "Fallback configurável"],
+    title: "Processamento Inteligente",
+    description: "Maximize suas conversões com nossa tecnologia avançada de processamento que otimiza cada transação.",
+    features: ["Otimização automática", "Retry inteligente", "Processamento configurável"],
   },
   {
     icon: <Zap />,
