@@ -64,18 +64,46 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setEmail("");
-    setMessage("");
-    // Reset success state after 5 seconds
-    setTimeout(() => setIsSuccess(false), 5000);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: "Contato do Site",
+          email,
+          message,
+          subject: "Nova mensagem do formulário principal",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        const errorMsg = data.details 
+          ? `${data.error}\n\nDetalhes: ${data.details}` 
+          : data.error || "Erro ao enviar mensagem";
+        throw new Error(errorMsg);
+      }
+
+      setIsSuccess(true);
+      setEmail("");
+      setMessage("");
+      // Reset success state after 5 seconds
+      setTimeout(() => setIsSuccess(false), 5000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao enviar mensagem. Tente novamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -400,6 +428,12 @@ export default function Home() {
                       <h3 className="text-2xl font-semibold">Envie uma mensagem</h3>
                       <p className="text-sm text-muted-foreground">Preencha os dados abaixo para iniciar a conversa.</p>
                     </div>
+
+                    {error && (
+                      <div className="p-4 rounded-md bg-red-500/10 border border-red-500/20 text-red-500 text-sm">
+                        {error}
+                      </div>
+                    )}
 
                     <div className="space-y-4">
                       <div className="space-y-2">

@@ -346,22 +346,48 @@ function FormCTA({ title, description }: FormCTAProps) {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: "Newsletter Signup",
+          email,
+          message: "Solicitação de contato através do formulário CTA",
+          subject: "Nova inscrição no formulário CTA",
+        }),
+      });
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
+      const data = await response.json();
 
-    // Reset after 3 seconds
-    setTimeout(() => {
-      setIsSuccess(false);
+      if (!response.ok) {
+        const errorMsg = data.details 
+          ? `${data.error}\n\nDetalhes: ${data.details}` 
+          : data.error || "Erro ao enviar mensagem";
+        throw new Error(errorMsg);
+      }
+
+      setIsSuccess(true);
       setEmail("");
-    }, 3000);
+
+      // Reset after 3 seconds
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao enviar mensagem. Tente novamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -386,6 +412,11 @@ function FormCTA({ title, description }: FormCTAProps) {
         <p className="mb-8 text-muted-foreground">{description}</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="p-3 rounded-md bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-left">
+              {error}
+            </div>
+          )}
           <div className="relative">
             <input
               type="email"

@@ -17,14 +17,51 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export default function FaleConoscoPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSuccess(true);
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const company = formData.get("company") as string;
+    const volume = formData.get("volume") as string;
+    const message = formData.get("message") as string;
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          company,
+          volume,
+          message,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        const errorMsg = data.details 
+          ? `${data.error}\n\nDetalhes: ${data.details}` 
+          : data.error || "Erro ao enviar mensagem";
+        throw new Error(errorMsg);
+      }
+
+      setIsSuccess(true);
+      e.currentTarget.reset();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao enviar mensagem. Tente novamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -105,33 +142,38 @@ export default function FaleConoscoPage() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-4">
+                    {error && (
+                      <div className="p-4 rounded-md bg-red-500/10 border border-red-500/20 text-red-500 text-sm">
+                        {error}
+                      </div>
+                    )}
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="name">Nome completo</Label>
-                        <Input id="name" placeholder="João Silva" required />
+                        <Input id="name" name="name" placeholder="João Silva" required />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="company">Empresa</Label>
-                        <Input id="company" placeholder="Empresa XYZ" required />
+                        <Input id="company" name="company" placeholder="Empresa XYZ" required />
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="email">Email corporativo</Label>
-                      <Input id="email" type="email" placeholder="joao@empresa.com" required />
+                      <Input id="email" name="email" type="email" placeholder="joao@empresa.com" required />
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="volume">Volume mensal de transações</Label>
-                      <Select>
+                      <Select name="volume" required>
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione o volume" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="v1">Até R$ 50k/mês</SelectItem>
-                          <SelectItem value="v2">R$ 50k - R$ 200k/mês</SelectItem>
-                          <SelectItem value="v3">R$ 200k - R$ 1M/mês</SelectItem>
-                          <SelectItem value="v4">Acima de R$ 1M/mês</SelectItem>
+                          <SelectItem value="Até R$ 50k/mês">Até R$ 50k/mês</SelectItem>
+                          <SelectItem value="R$ 50k - R$ 200k/mês">R$ 50k - R$ 200k/mês</SelectItem>
+                          <SelectItem value="R$ 200k - R$ 1M/mês">R$ 200k - R$ 1M/mês</SelectItem>
+                          <SelectItem value="Acima de R$ 1M/mês">Acima de R$ 1M/mês</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -140,6 +182,7 @@ export default function FaleConoscoPage() {
                       <Label htmlFor="message">Mensagem</Label>
                       <textarea
                         id="message"
+                        name="message"
                         className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder="Conte-nos sobre sua necessidade..."
                         required
@@ -147,7 +190,7 @@ export default function FaleConoscoPage() {
                     </div>
                   </div>
 
-                  <Button type="submit" className="w-full" size="lg" loading={isSubmitting}>
+                  <Button type="submit" className="w-full" size="lg" loading={isSubmitting} disabled={isSubmitting}>
                     Enviar Mensagem <Send className="ml-2 w-4 h-4" />
                   </Button>
                 </form>

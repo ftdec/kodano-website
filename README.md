@@ -65,11 +65,43 @@ Site institucional moderno e responsivo desenvolvido para a Kodano, uma platafor
 # Instale as dependências
 npm install
 
+# Configure as variáveis de ambiente
+cp .env.example .env.local
+# Edite .env.local e adicione suas credenciais do Resend
+
 # Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
 O site estará disponível em `http://localhost:3000`
+
+### Configuração do Resend (Email)
+
+O projeto usa [Resend](https://resend.com) para envio de emails através dos formulários de contato.
+
+1. **Crie uma conta no Resend:**
+   - Acesse [https://resend.com](https://resend.com)
+   - Crie uma conta gratuita
+
+2. **Obtenha sua API Key:**
+   - Vá para [API Keys](https://resend.com/api-keys)
+   - Crie uma nova API key
+   - Copie a chave (começa com `re_`)
+
+3. **Configure o domínio (opcional, mas recomendado):**
+   - Vá para [Domains](https://resend.com/domains)
+   - Adicione seu domínio e configure os registros DNS
+   - Isso permite usar emails customizados (ex: `noreply@kodano.com`)
+
+4. **Configure as variáveis de ambiente:**
+   Crie um arquivo `.env.local` na raiz do projeto com:
+   ```env
+   RESEND_API_KEY=re_sua_api_key_aqui
+   RESEND_FROM_EMAIL=onboarding@resend.dev  # Ou seu email verificado
+   RESEND_TO_EMAIL=contato@kodano.com      # Email que receberá os contatos
+   ```
+
+**Nota:** Para desenvolvimento, você pode usar `onboarding@resend.dev` como `RESEND_FROM_EMAIL` sem configurar um domínio. Para produção, configure seu próprio domínio.
 
 ### Scripts Disponíveis
 
@@ -116,6 +148,14 @@ kodano-website/
 ```
 
 ## 🎯 Próximos Passos
+
+### Integrações Implementadas
+
+- ✅ **Resend** - Envio de emails através dos formulários de contato
+  - Formulário principal (Home)
+  - Formulário de contato (`/contato`)
+  - Formulário "Fale Conosco" (`/fale-conosco`)
+  - Formulário CTA em seções
 
 ### Integrações Planejadas
 
