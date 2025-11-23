@@ -1,5 +1,26 @@
 # Guia de Deploy - kodano.com.br
 
+## 🚀 Configurar kodano.com.br como domínio principal
+
+### Passos rápidos para configurar o domínio principal:
+
+1. **Acesse o Dashboard da Vercel**: https://vercel.com/dashboard
+2. **Selecione o projeto**: `kodano-website`
+3. **Vá em Settings > Domains**
+4. **Adicione o domínio**: `kodano.com.br`
+5. **Configure DNS** conforme instruções da Vercel
+6. **Certifique-se de que está em Production**:
+   - Vá em **Deployments**
+   - Se o deployment que você quer está em Preview, clique nos três pontos (...) > **Promote to Production**
+   - Ou faça um novo deploy da branch `main` para produção automaticamente
+
+### ⚠️ Importante:
+- O domínio `kodano.com.br` deve apontar para **Production**, não para Preview
+- Deployments de Preview têm URLs temporárias
+- Apenas deployments de Production podem usar domínios personalizados
+
+---
+
 ## Opção 1: Vercel (Recomendado para Next.js)
 
 ### Passo 1: Criar conta na Vercel
@@ -26,11 +47,18 @@ NEXT_PUBLIC_SITE_URL=https://kodano.com.br
 1. Clique em "Deploy"
 2. Aguarde o build completar (geralmente 2-3 minutos)
 
-### Passo 5: Configurar domínio personalizado
-1. No projeto na Vercel, vá em Settings > Domains
-2. Adicione o domínio: `kodano.com.br`
-3. Adicione também: `www.kodano.com.br` (opcional, mas recomendado)
-4. A Vercel fornecerá instruções de DNS
+### Passo 5: Configurar domínio personalizado (kodano.com.br)
+1. No projeto na Vercel, vá em **Settings > Domains**
+2. Clique em **Add Domain**
+3. Digite: `kodano.com.br`
+4. A Vercel mostrará os registros DNS necessários
+5. Adicione também: `www.kodano.com.br` (opcional, mas recomendado)
+6. **IMPORTANTE**: Certifique-se de que o domínio está apontando para **Production** (não Preview)
+7. Para garantir que está na produção:
+   - Vá em **Deployments**
+   - Encontre o deployment da branch `main`
+   - Clique nos três pontos (...) > **Promote to Production**
+   - Ou faça um novo deploy da branch `main` para produção
 
 ### Passo 6: Configurar DNS no seu provedor de domínio
 No seu provedor de domínio (Registro.br, GoDaddy, etc.), configure:
