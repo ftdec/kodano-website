@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { MainLayout } from "@/components/layout/main-layout";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { BRAND } from "@/lib/constants/brand";
 import { Mail } from "lucide-react";
 import { ContactForm } from "./contact-form";
