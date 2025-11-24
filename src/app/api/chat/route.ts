@@ -101,7 +101,9 @@ export async function POST(req: Request) {
     console.log("[Chat API] Creating agent...")
     const agent = createCalendarAgent()
     console.log("[Chat API] Agent created, starting stream...")
+    console.log("[Chat API] Messages received:", messages.length)
     
+    // Add timeout wrapper
     const streamResponse = createAgentUIStreamResponse({
       agent,
       messages: messages as UIMessage[],

@@ -56,6 +56,26 @@ function AIAssistantWidgetContent() {
     },
   })
 
+  // Timeout detection - if streaming for more than 60 seconds, show error
+  useEffect(() => {
+    if (status === "streaming" || status === "submitted") {
+      const timeoutId = setTimeout(() => {
+        console.error("[Chat Widget] Timeout: Chat has been thinking for more than 60 seconds")
+        // Force stop by clearing messages or showing error
+        setMessages((prev) => {
+          const lastMessage = prev[prev.length - 1]
+          if (lastMessage?.role === "assistant" && !lastMessage.content) {
+            // Remove incomplete assistant message
+            return prev.slice(0, -1)
+          }
+          return prev
+        })
+      }, 60000) // 60 seconds timeout
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [status, setMessages])
+
   // Handle errors
   useEffect(() => {
     if (error) {
