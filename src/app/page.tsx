@@ -72,7 +72,6 @@ function MobileNavOnePage() {
     { label: "Home", href: "#", key: "home" },
     { label: "Produtos", href: "#concept", key: "produtos" },
     { label: "Como Funciona", href: "#process", key: "como-funciona" },
-    { label: "Fale Conosco", href: "#contact", key: "fale-conosco" },
   ];
 
   useEffect(() => {
@@ -262,7 +261,6 @@ export default function Home() {
     { label: "Home", href: "#", key: "home" },
     { label: "Produtos", href: "#concept", key: "produtos" },
     { label: "Como Funciona", href: "#process", key: "como-funciona" },
-    { label: "Fale Conosco", href: "#contact", key: "fale-conosco" },
   ];
 
   const [isScrolled, setIsScrolled] = useState(false);
