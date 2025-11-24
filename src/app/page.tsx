@@ -771,66 +771,138 @@ export default function Home() {
 
                     <motion.div
                       className="relative"
-                      whileHover={!isSubmitting ? { scale: 1.01 } : {}}
-                      whileTap={!isSubmitting ? { scale: 0.99 } : {}}
+                      initial={false}
+                      animate={isSubmitting ? {
+                        scale: 1,
+                      } : {}}
+                      whileHover={!isSubmitting ? { 
+                        scale: 1.02,
+                        transition: { duration: 0.2, ease: [0.32, 0, 0.67, 0] }
+                      } : {}}
+                      whileTap={!isSubmitting ? { 
+                        scale: 0.98,
+                        transition: { duration: 0.15 }
+                      } : {}}
                     >
-                      {/* Pulse effect when submitting */}
+                      {/* Animated pulse ring when submitting */}
                       {isSubmitting && (
-                        <motion.div
-                          className="absolute inset-0 rounded-lg"
-                          animate={{
-                            boxShadow: [
-                              "0 0 0 0 rgba(59, 130, 246, 0.6)",
-                              "0 0 0 10px rgba(59, 130, 246, 0)",
-                              "0 0 0 0 rgba(59, 130, 246, 0)"
-                            ],
-                          }}
-                          transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            ease: "easeOut"
-                          }}
-                          style={{ pointerEvents: "none", zIndex: -1 }}
-                        />
+                        <>
+                          <motion.div
+                            className="absolute inset-0 rounded-lg"
+                            animate={{
+                              boxShadow: [
+                                "0 0 0 0 rgba(59, 130, 246, 0.7)",
+                                "0 0 0 8px rgba(59, 130, 246, 0.3)",
+                                "0 0 0 16px rgba(59, 130, 246, 0)",
+                                "0 0 0 0 rgba(59, 130, 246, 0)"
+                              ],
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "easeOut"
+                            }}
+                            style={{ pointerEvents: "none", zIndex: -1 }}
+                          />
+                          <motion.div
+                            className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                            animate={{
+                              x: ["-100%", "100%"],
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "linear",
+                              repeatDelay: 0.5
+                            }}
+                            style={{ 
+                              pointerEvents: "none",
+                              zIndex: 1,
+                              mixBlendMode: "overlay"
+                            }}
+                          />
+                        </>
                       )}
                       <ButtonV2
-                      type="submit"
-                      variant="primary"
-                      size="lg"
+                        type="submit"
+                        variant="primary"
+                        size="lg"
                         className={cn(
                           "w-full h-12 text-base mt-2 relative overflow-hidden transition-all duration-300",
-                          isSubmitting && "shadow-xl shadow-primary/40"
+                          isSubmitting 
+                            ? "shadow-2xl shadow-primary/50 cursor-wait" 
+                            : "shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30"
                         )}
-                      loading={isSubmitting}
+                        loading={isSubmitting}
                         shimmer={isSubmitting}
                         rightIcon={
                           <motion.div
+                            className="relative"
                             animate={isSubmitting ? {
-                              rotate: [0, 15, -15, 0],
-                              scale: [1, 1.1, 1],
+                              rotate: [0, 10, -10, 0],
                             } : {}}
                             transition={isSubmitting ? {
-                              duration: 0.8,
+                              duration: 1.2,
                               repeat: Infinity,
                               ease: "easeInOut"
+                            } : {
+                              type: "spring",
+                              stiffness: 400,
+                              damping: 25
+                            }}
+                            whileHover={!isSubmitting ? {
+                              x: 4,
+                              transition: { duration: 0.2 }
                             } : {}}
                           >
                             <Send className="w-4 h-4" />
+                            {isSubmitting && (
+                              <motion.div
+                                className="absolute inset-0"
+                                animate={{
+                                  scale: [1, 1.3, 1],
+                                  opacity: [0.5, 0, 0.5]
+                                }}
+                                transition={{
+                                  duration: 1.2,
+                                  repeat: Infinity,
+                                  ease: "easeInOut"
+                                }}
+                              >
+                                <Send className="w-4 h-4" />
+                              </motion.div>
+                            )}
                           </motion.div>
                         }
                         disabled={isSubmitting}
                       >
                         <motion.span
+                          className="relative z-10"
                           animate={isSubmitting ? {
-                            opacity: [1, 0.8, 1],
+                            opacity: [1, 0.9, 1],
                           } : {}}
                           transition={isSubmitting ? {
-                            duration: 1.2,
+                            duration: 1.5,
                             repeat: Infinity,
                             ease: "easeInOut"
                           } : {}}
                         >
-                          {isSubmitting ? "Enviando..." : "Solicitar Contato"}
+                          {isSubmitting ? (
+                            <motion.span
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ duration: 0.3 }}
+                            >
+                              Enviando...
+                            </motion.span>
+                          ) : (
+                            <motion.span
+                              initial={{ opacity: 1 }}
+                              animate={{ opacity: 1 }}
+                            >
+                              Solicitar Contato
+                            </motion.span>
+                          )}
                         </motion.span>
                       </ButtonV2>
                     </motion.div>
