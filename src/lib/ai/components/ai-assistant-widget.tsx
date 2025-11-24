@@ -38,7 +38,6 @@ export function AIAssistantWidget() {
   // Initialize chat hook
   const { messages, sendMessage, status, setMessages, error } = useChat({
     id: `ai-assistant-${locale}`,
-    api: "/api/chat",
     onError: (error) => {
       console.error("[Chat Widget] Error:", error)
     },
