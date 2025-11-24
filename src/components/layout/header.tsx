@@ -71,8 +71,17 @@ export function Header() {
               ))}
             </nav>
 
-            {/* CTA Button */}
+            {/* CTA Buttons */}
             <div className="flex items-center gap-3 shrink-0">
+              <Button
+                asChild
+                size="sm"
+                variant="outline"
+                rounded="full"
+                className="hidden lg:flex"
+              >
+                <Link href="/desenvolvedores">Documentação</Link>
+              </Button>
               <Button
                 asChild
                 size="sm"

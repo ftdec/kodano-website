@@ -15,9 +15,19 @@ export const NAVIGATION_ITEMS = [
     description: "Modelos de cobrança",
   },
   {
+    label: "Soluções",
+    href: "/solucoes",
+    description: "Soluções para seu negócio",
+  },
+  {
     label: "Sobre",
     href: "/sobre",
     description: "Conheça a Kodano",
+  },
+  {
+    label: "Desenvolvedores",
+    href: "/desenvolvedores",
+    description: "Documentação e APIs",
   },
 ];
 

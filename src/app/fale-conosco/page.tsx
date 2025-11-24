@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Mail, Send, CheckCircle2, ArrowLeft } from "lucide-react";
+import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button-v2";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -66,25 +67,10 @@ export default function FaleConoscoPage() {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-x-hidden font-sans selection:bg-primary/20">
+      {/* HEADER COMPLETO COM NAVEGAÇÃO */}
+      <Header />
 
-      {/* MINIMAL HEADER */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="container max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-kodano-blue-medium flex items-center justify-center text-white font-bold text-lg">
-              K
-            </div>
-            <span className="font-bold text-xl tracking-tight">Kodano</span>
-          </Link>
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-            <Link href="/" className="flex items-center gap-2 hover:text-foreground transition-colors">
-              <ArrowLeft className="w-4 h-4" /> Voltar para Home
-            </Link>
-          </nav>
-        </div>
-      </header>
-
-      <main className="flex-1 flex flex-col w-full pt-24 pb-12 px-6">
+      <main className="flex-1 flex flex-col w-full pt-16 pb-12 px-6">
         <div className="container max-w-6xl mx-auto h-full flex-1 flex flex-col lg:flex-row gap-12 lg:gap-24 items-start justify-center py-8">
 
           {/* LEFT COLUMN - INFO */}

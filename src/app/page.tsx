@@ -5,16 +5,18 @@
 
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Zap, Shield, BarChart3, Layers, Send, CheckCircle2 } from "lucide-react";
 
+import Image from "next/image";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Footer } from "@/components/layout/footer";
-import { Button } from "@/components/ui/button-v2";
+import { Button } from "@/components/ui/button";
+import { Button as ButtonV2 } from "@/components/ui/button-v2";
 import { InputGroup, InputGroupInput, InputGroupTextarea } from "@/components/ui/input-group";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/layout/logo";
 
 const orchestrationFeatures = [
   {
@@ -58,6 +60,153 @@ const orchestrationFeatures = [
     }
   }
 ] as const;
+
+// Mobile Nav Component for One-Page
+function MobileNavOnePage() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const lastScrollY = useRef(0);
+  const scrollThreshold = 20;
+
+  const menuItems: Array<{ label: string; href: string; key: string }> = [
+    { label: "Como Funciona", href: "#process", key: "como-funciona" },
+    { label: "Produtos", href: "#concept", key: "produtos" },
+    { label: "Preços", href: "#contact", key: "precos" },
+    { label: "Sobre", href: "#contact", key: "sobre" },
+  ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 4);
+      if (isOpen && currentScrollY > lastScrollY.current + scrollThreshold) {
+        setIsOpen(false);
+      }
+      lastScrollY.current = currentScrollY;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const navElement = document.querySelector('[data-mobile-nav]');
+      if (navElement && !navElement.contains(target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
+  function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
+    return (
+      <div className="relative w-6 h-6 flex items-center justify-center">
+        <motion.div
+          className="absolute w-6 h-5 flex flex-col justify-between"
+          initial={false}
+          animate={isOpen ? "open" : "closed"}
+        >
+          <motion.span
+            className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
+            variants={{
+              closed: { rotate: 0, y: 0 },
+              open: { rotate: 45, y: 8 },
+            }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+          />
+          <motion.span
+            className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
+            variants={{
+              closed: { opacity: 1, scale: 1 },
+              open: { opacity: 0, scale: 0 },
+            }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+          />
+          <motion.span
+            className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
+            variants={{
+              closed: { rotate: 0, y: 0 },
+              open: { rotate: -45, y: -8 },
+            }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+          />
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <header
+      className="lg:hidden relative z-50 w-full bg-white"
+      data-mobile-nav
+    >
+      <div
+        className={`w-full px-4 sm:px-6 h-16 flex items-center justify-between transition-shadow duration-200 ${
+          isScrolled ? "shadow-sm" : ""
+        }`}
+      >
+        <Logo />
+        <motion.button
+          onClick={() => setIsOpen(!isOpen)}
+          className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
+          aria-label="Toggle menu"
+          aria-expanded={isOpen}
+          whileTap={{ scale: 0.95 }}
+        >
+          <HamburgerIcon isOpen={isOpen} />
+        </motion.button>
+      </div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute left-0 right-0 top-full bg-white shadow-lg rounded-b-xl"
+            style={{
+              maxHeight: "50vh",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.10)",
+            }}
+          >
+            <div className="overflow-y-auto" style={{ maxHeight: "50vh" }}>
+              <nav className="p-4 pb-4 space-y-1">
+                {menuItems.map((item, index) => (
+                  <motion.a
+                    key={item.key}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    {item.label}
+                  </motion.a>
+                ))}
+                <div className="pt-4 mt-4 border-t border-gray-100 pb-2 space-y-2">
+                  <motion.div whileTap={{ scale: 0.98 }}>
+                    <a
+                      href="#contact"
+                      onClick={() => setIsOpen(false)}
+                      className="block w-full px-4 py-3 text-base font-semibold text-white text-center rounded-lg bg-[#0D1B2A] hover:bg-[#415A77] active:bg-[#0D1B2A]/90 transition-all duration-200"
+                    >
+                      Fale Conosco
+                    </a>
+                  </motion.div>
+                </div>
+              </nav>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -106,37 +255,111 @@ export default function Home() {
     }
   };
 
+  // Navigation items for one-page with anchors
+  const onePageNavItems: Array<{ label: string; href: string; key: string }> = [
+    { label: "Como Funciona", href: "#process", key: "como-funciona" },
+    { label: "Produtos", href: "#concept", key: "produtos" },
+    { label: "Preços", href: "#contact", key: "precos" },
+    { label: "Sobre", href: "#contact", key: "sobre" },
+  ];
+
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Smooth scroll for anchor links
+  useEffect(() => {
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a[href^="#"]');
+      if (anchor) {
+        const href = anchor.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          const targetId = href.substring(1);
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            const headerHeight = 64; // Header height
+            const targetPosition = targetElement.offsetTop - headerHeight;
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+          }
+        }
+      }
+    };
+    document.addEventListener('click', handleAnchorClick);
+    return () => document.removeEventListener('click', handleAnchorClick);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-x-hidden font-sans selection:bg-primary/20">
-
-      {/* MINIMAL HEADER */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
-        <div className="w-full px-4 sm:px-6 lg:px-10 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/kodano-logo.png"
-              alt="Kodano"
-              width={36}
-              height={36}
-              className="rounded-lg"
-            />
-            <span className="font-bold text-xl tracking-tight">Kodano</span>
-          </div>
-          <nav className="hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
-            <a
-              href="#contact"
-              className="px-4 py-2 rounded-full bg-foreground text-white font-medium hover:opacity-90 transition-opacity text-sm"
-            >
-              Fale Conosco
-            </a>
-          </nav>
+      {/* HEADER COM MENU E LOGO ANIMADO */}
+      <>
+        {/* Mobile Navigation */}
+        <div className="lg:hidden">
+          <MobileNavOnePage />
         </div>
-      </header>
+
+        {/* Desktop Header */}
+        <header
+          className={`hidden lg:block sticky top-0 z-50 w-full border-b transition-all duration-300 relative ${
+            isScrolled
+              ? "border-border/50 bg-background/80 backdrop-blur-xl shadow-sm"
+              : "border-border/50 bg-background/80 backdrop-blur-xl"
+          }`}
+        >
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex h-16 items-center justify-between">
+              {/* Logo Animado */}
+              <div className="flex items-center shrink-0">
+                <Logo />
+              </div>
+
+              {/* Desktop Navigation */}
+              <nav className="hidden lg:flex items-center gap-1">
+                {onePageNavItems.map((item) => (
+                  <a
+                    key={item.key}
+                    href={item.href}
+                    className="relative px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors rounded-md hover:bg-accent/5 group"
+                  >
+                    <span className="relative">
+                      {item.label}
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full" />
+                    </span>
+                  </a>
+                ))}
+              </nav>
+
+              {/* CTA Button */}
+              <div className="flex items-center gap-3 shrink-0">
+                <Button
+                  asChild
+                  size="sm"
+                  variant="kodano"
+                  rounded="full"
+                  className="hidden lg:flex"
+                >
+                  <a href="#contact">Fale Conosco</a>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </header>
+      </>
 
       <main className="flex-1 flex flex-col w-full">
 
         {/* HERO SECTION */}
-        <section className="relative min-h-[90vh] flex items-center justify-center pt-32 pb-32 px-6">
+        <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-32 px-6">
           {/* Background Elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-kodano-blue-light/10 rounded-full blur-[120px]" />
@@ -270,7 +493,7 @@ export default function Home() {
         </section>
 
         {/* HOW IT WORKS (PROCESS) */}
-        <section id="process" className="py-16 sm:py-24 md:py-32 px-4 sm:px-6">
+        <section id="process" className="scroll-mt-28 py-16 sm:py-24 md:py-32 px-4 sm:px-6">
           <div className="container max-w-5xl mx-auto">
             <div className="text-center mb-12 sm:mb-16 md:mb-20">
               <div className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 rounded-full bg-white/70 dark:bg-white/5 border border-border/60 backdrop-blur-xl mb-4 sm:mb-6">
