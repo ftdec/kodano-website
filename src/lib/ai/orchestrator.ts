@@ -270,7 +270,6 @@ export function createCalendarAgent() {
   const agent = new ToolLoopAgent({
     model: model,
     instructions: pure.getAgentSystemPrompt(),
-    maxSteps: 10, // Limite de passos para evitar loops infinitos
     tools: {
       checkAvailability: tool({
         description: "Check available time windows within a date range",
