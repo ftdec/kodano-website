@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { I18nProvider } from "@/lib/i18n/context";
 import { AIAssistantWidget } from "@/lib/ai/components/ai-assistant-widget";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 interface ClientLayoutProps {
   children: ReactNode;
@@ -19,7 +20,9 @@ export function ClientLayout({ children }: ClientLayoutProps) {
     >
       <I18nProvider locale="pt">
         {children}
-        <AIAssistantWidget />
+        <ErrorBoundary level="component">
+          <AIAssistantWidget />
+        </ErrorBoundary>
       </I18nProvider>
     </ThemeProvider>
   );
