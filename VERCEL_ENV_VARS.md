@@ -14,7 +14,7 @@ Add these 3 variables:
 
 **Variable Name:** `RESEND_API_KEY`
 
-**Value:** `re_XTVZcoXG_Khe6CAQfxDCwzma5sz6cBBbG`
+**Value:** `re_8cgobSgr_3EzGmZa85beZ2KNLmtj6Kqvc`
 
 **Environments:** ✅ Production, ✅ Preview, ✅ Development
 
@@ -24,7 +24,7 @@ Add these 3 variables:
 
 **Variable Name:** `RESEND_FROM_EMAIL`
 
-**Value:** `noreply@kodano.com.br`
+**Value:** `noreply@notifications.kodano.com.br`
 
 **Environments:** ✅ Production, ✅ Preview, ✅ Development
 
@@ -49,8 +49,8 @@ Add these 3 variables:
 If you prefer to see them all together:
 
 ```
-RESEND_API_KEY=re_XTVZcoXG_Khe6CAQfxDCwzma5sz6cBBbG
-RESEND_FROM_EMAIL=noreply@kodano.com.br
+RESEND_API_KEY=re_8cgobSgr_3EzGmZa85beZ2KNLmtj6Kqvc
+RESEND_FROM_EMAIL=noreply@notifications.kodano.com.br
 RESEND_TO_EMAIL=contato@kodano.com.br
 ```
 
@@ -70,7 +70,7 @@ RESEND_TO_EMAIL=contato@kodano.com.br
 - [ ] Variables set for Production, Preview, and Development
 - [ ] No extra spaces or quotes in values
 - [ ] Application redeployed after adding variables
-- [ ] Domain `kodano.com.br` verified in Resend dashboard
+- [ ] Domain `notifications.kodano.com.br` verified in Resend dashboard
 
 ---
 
@@ -83,7 +83,7 @@ If emails still don't work after setting these:
 
 2. **Verify Domain in Resend:**
    - Go to [Resend Domains](https://resend.com/domains)
-   - Ensure `kodano.com.br` shows as verified
+   - Ensure `notifications.kodano.com.br` shows as verified
 
 3. **Test with onboarding@resend.dev:**
    - Temporarily change `RESEND_FROM_EMAIL` to `onboarding@resend.dev`
