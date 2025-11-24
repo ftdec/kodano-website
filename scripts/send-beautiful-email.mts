@@ -55,6 +55,13 @@ const htmlContent = `
 async function main() {
   const fromEmail = process.env.RESEND_FROM_EMAIL;
   const fromName = process.env.RESEND_FROM_NAME || 'Kodano Pagamentos';
+  
+  // Validate from email
+  if (!fromEmail) {
+    console.error('❌ RESEND_FROM_EMAIL is not set in environment variables');
+    process.exit(1);
+  }
+  
   // Try simplified from address for better Gmail deliverability
   const from = fromEmail; // Simplified: just email, no display name
   
