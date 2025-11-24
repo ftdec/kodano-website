@@ -1,10 +1,11 @@
-import { DateTime } from "luxon"
-
 export function getAgentSystemPrompt(): string {
-  const now = DateTime.now().setZone("America/Sao_Paulo")
-  const currentDate = now.toFormat("yyyy-MM-dd")
-  const currentTime = now.toFormat("HH:mm")
-  const currentDayName = now.toFormat("EEEE")
+  // Get current date/time in São Paulo timezone
+  const now = new Date()
+  const saoPauloTime = new Date(now.toLocaleString("en-US", { timeZone: "America/Sao_Paulo" }))
+  
+  const currentDate = saoPauloTime.toISOString().split('T')[0]
+  const currentTime = saoPauloTime.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", hour12: false })
+  const currentDayName = saoPauloTime.toLocaleDateString("pt-BR", { weekday: "long" })
 
   return `# KODANO — SUPER SELLER CHATBOT
 
