@@ -24,7 +24,17 @@ import { ConversationSection } from "@/lib/ai/components/conversation-section"
 import { InputSection } from "@/lib/ai/components/input-section"
 
 export function AIAssistantWidget() {
+  const [mounted, setMounted] = useState(false)
   const { dictionary, locale } = useI18n()
+
+  // Only render after mount to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
   const [isOpen, setIsOpen] = useState(false)
   const [lastLoadingCopy, setLastLoadingCopy] = useState<string | null>(null)
   const prevLoadingCopyRef = useRef<string | null>(null)
