@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { resend, FROM_EMAIL, TO_EMAIL } from "@/lib/resend";
+import { resend, FROM_EMAIL, TO_EMAIL, getAllRecipients } from "@/lib/resend";
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,28 +14,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get all recipients (Kodano emails + backup Gmail)
+    const recipients = getAllRecipients();
+    
     // Log for debugging
     console.log("Sending email:", {
       from: FROM_EMAIL,
-      to: TO_EMAIL,
+      to: recipients,
       replyTo: email,
       hasApiKey: !!process.env.RESEND_API_KEY,
       apiKeyPrefix: process.env.RESEND_API_KEY?.substring(0, 10) + "...",
     });
 
     // Validate email addresses
-    if (!FROM_EMAIL || !TO_EMAIL) {
-      console.error("Missing email configuration:", { FROM_EMAIL, TO_EMAIL });
+    if (!FROM_EMAIL || recipients.length === 0) {
+      console.error("Missing email configuration:", { FROM_EMAIL, recipients });
       return NextResponse.json(
         { error: "Configuração de email não encontrada. Verifique as variáveis de ambiente." },
         { status: 500 }
       );
     }
 
+    // Separate Kodano emails (TO) from backup Gmail (BCC)
+    // This helps avoid Gmail filtering issues
+    const kodanoEmails = recipients.filter(e => e.includes('@kodano.com.br'));
+    const backupEmail = recipients.find(e => e.includes('@gmail.com'));
+    
     // Send email using Resend
+    // Use BCC for backup email to avoid filtering issues
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
-      to: TO_EMAIL,
+      to: kodanoEmails.length > 0 ? kodanoEmails : recipients, // Primary: Kodano emails
+      ...(backupEmail && { bcc: [backupEmail] }), // Backup: Gmail in BCC
       replyTo: email,
       subject: subject || `Nova mensagem de contato de ${name}`,
       html: `

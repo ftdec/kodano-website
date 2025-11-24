@@ -40,7 +40,31 @@ Add these 3 variables:
 
 **Environments:** ✅ Production, ✅ Preview, ✅ Development
 
-**Note:** This is the email address that will receive contact form submissions.
+**Note:** This is the primary email address that will receive contact form submissions.
+
+---
+
+### 4. RESEND_ADDITIONAL_EMAILS
+
+**Variable Name:** `RESEND_ADDITIONAL_EMAILS`
+
+**Value:** `felipe.caltabiano@kodano.com.br`
+
+**Environments:** ✅ Production, ✅ Preview, ✅ Development
+
+**Note:** Additional Kodano email addresses that will receive emails. Separate multiple emails with commas.
+
+---
+
+### 5. RESEND_BACKUP_EMAIL
+
+**Variable Name:** `RESEND_BACKUP_EMAIL`
+
+**Value:** `felipe.caltabiano.castro@gmail.com`
+
+**Environments:** ✅ Production, ✅ Preview, ✅ Development
+
+**Note:** Backup Gmail address that will always receive a copy of emails. This ensures delivery even if Kodano emails have issues.
 
 ---
 
@@ -52,6 +76,8 @@ If you prefer to see them all together:
 RESEND_API_KEY=re_8cgobSgr_3EzGmZa85beZ2KNLmtj6Kqvc
 RESEND_FROM_EMAIL=noreply@notifications.kodano.com.br
 RESEND_TO_EMAIL=contato@kodano.com.br
+RESEND_ADDITIONAL_EMAILS=felipe.caltabiano@kodano.com.br
+RESEND_BACKUP_EMAIL=felipe.caltabiano.castro@gmail.com
 ```
 
 ---
@@ -66,11 +92,12 @@ RESEND_TO_EMAIL=contato@kodano.com.br
 
 ## Verification Checklist
 
-- [ ] All 3 variables added
+- [ ] All 5 variables added
 - [ ] Variables set for Production, Preview, and Development
 - [ ] No extra spaces or quotes in values
 - [ ] Application redeployed after adding variables
 - [ ] Domain `notifications.kodano.com.br` verified in Resend dashboard
+- [ ] Test email sent to verify all recipients receive emails
 
 ---
 
