@@ -254,13 +254,16 @@ export async function getNextAvailability(): Promise<NextAvailabilityOutput> {
 export function createCalendarAgent() {
   const xaiApiKey = process.env.XAI_API_KEY
   if (!xaiApiKey) {
+    console.error("[Orchestrator] XAI_API_KEY not found")
     throw new Error("XAI_API_KEY environment variable is required")
   }
 
+  console.log("[Orchestrator] Creating xAI client...")
   const xai = createXai({
     apiKey: xaiApiKey,
   })
 
+  console.log("[Orchestrator] Creating ToolLoopAgent with model grok-4-1-fast-non-reasoning...")
   const agent = new ToolLoopAgent({
     model: xai("grok-4-1-fast-non-reasoning"),
     instructions: pure.getAgentSystemPrompt(),

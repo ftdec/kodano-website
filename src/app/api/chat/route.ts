@@ -98,13 +98,20 @@ export async function POST(req: Request) {
 
   // 4. Create agent and stream response
   try {
+    console.log("[Chat API] Creating agent...")
     const agent = createCalendarAgent()
-    return createAgentUIStreamResponse({
+    console.log("[Chat API] Agent created, starting stream...")
+    
+    const streamResponse = createAgentUIStreamResponse({
       agent,
       messages: messages as UIMessage[],
     })
+    
+    console.log("[Chat API] Stream response created")
+    return streamResponse
   } catch (error) {
-    console.error("Error in chat endpoint:", error)
+    console.error("[Chat API] Error in chat endpoint:", error)
+    console.error("[Chat API] Error stack:", error instanceof Error ? error.stack : "No stack")
     return new Response(
       JSON.stringify({
         error: "Failed to process chat request",

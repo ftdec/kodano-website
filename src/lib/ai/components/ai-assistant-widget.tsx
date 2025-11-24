@@ -40,9 +40,24 @@ export function AIAssistantWidget() {
   const prevLoadingCopyRef = useRef<string | null>(null)
 
   // Initialize chat hook
-  const { messages, sendMessage, status, setMessages } = useChat({
+  const { messages, sendMessage, status, setMessages, error } = useChat({
     id: `ai-assistant-${locale}`,
+    api: "/api/chat",
+    onError: (error) => {
+      console.error("[Chat Widget] Error:", error)
+    },
+    onFinish: (message) => {
+      console.log("[Chat Widget] Message finished:", message)
+    },
   })
+
+  // Handle errors
+  useEffect(() => {
+    if (error) {
+      console.error("[Chat Widget] Chat error:", error)
+      // You could show an error message to the user here
+    }
+  }, [error])
 
   // Set initial greeting message
   useEffect(() => {
