@@ -69,7 +69,6 @@ function MobileNavOnePage() {
   const scrollThreshold = 20;
 
   const menuItems: Array<{ label: string; href: string; key: string }> = [
-    { label: "Home", href: "#", key: "home" },
     { label: "Produtos", href: "#concept", key: "produtos" },
     { label: "Como Funciona", href: "#process", key: "como-funciona" },
   ];
@@ -258,7 +257,6 @@ export default function Home() {
 
   // Navigation items for one-page with anchors
   const onePageNavItems: Array<{ label: string; href: string; key: string }> = [
-    { label: "Home", href: "#", key: "home" },
     { label: "Produtos", href: "#concept", key: "produtos" },
     { label: "Como Funciona", href: "#process", key: "como-funciona" },
   ];
