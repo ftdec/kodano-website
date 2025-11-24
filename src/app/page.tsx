@@ -418,6 +418,20 @@ export default function Home() {
                   Maximize aprovação, reduza custos e tenha controle total com APIs modernas e orquestração inteligente de funcionalidades.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 flex-wrap">
+                  <a
+                    href="#contact"
+                    className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full bg-foreground text-white font-medium hover:opacity-90 transition-opacity gap-2 justify-center shadow-md shadow-foreground/15"
+                  >
+                    Fale com o Kodano
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="#process"
+                    className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full border border-border text-foreground font-medium hover:bg-primary/5 transition-colors justify-center"
+                  >
+                    Conheça nosso processo
+                  </a>
+                </div>
               </>
             ) : (
               <>
