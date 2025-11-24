@@ -264,9 +264,13 @@ export function createCalendarAgent() {
   })
 
   console.log("[Orchestrator] Creating ToolLoopAgent with model grok-4-1-fast-non-reasoning...")
+  const model = xai("grok-4-1-fast-non-reasoning")
+  console.log("[Orchestrator] Model created:", model)
+  
   const agent = new ToolLoopAgent({
-    model: xai("grok-4-1-fast-non-reasoning"),
+    model: model,
     instructions: pure.getAgentSystemPrompt(),
+    maxSteps: 10, // Limite de passos para evitar loops infinitos
     tools: {
       checkAvailability: tool({
         description: "Check available time windows within a date range",
