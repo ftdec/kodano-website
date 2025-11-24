@@ -26,18 +26,14 @@ import { InputSection } from "@/lib/ai/components/input-section"
 export function AIAssistantWidget() {
   const [mounted, setMounted] = useState(false)
   const { dictionary, locale } = useI18n()
+  const [isOpen, setIsOpen] = useState(false)
+  const [lastLoadingCopy, setLastLoadingCopy] = useState<string | null>(null)
+  const prevLoadingCopyRef = useRef<string | null>(null)
 
   // Only render after mount to avoid hydration mismatch
   useEffect(() => {
     setMounted(true)
   }, [])
-
-  if (!mounted) {
-    return null
-  }
-  const [isOpen, setIsOpen] = useState(false)
-  const [lastLoadingCopy, setLastLoadingCopy] = useState<string | null>(null)
-  const prevLoadingCopyRef = useRef<string | null>(null)
 
   // Initialize chat hook
   const { messages, sendMessage, status, setMessages, error } = useChat({
@@ -50,6 +46,11 @@ export function AIAssistantWidget() {
       console.log("[Chat Widget] Message finished:", message)
     },
   })
+
+  // Don't render until mounted to avoid hydration mismatch
+  if (!mounted) {
+    return null
+  }
 
   // Handle errors
   useEffect(() => {
