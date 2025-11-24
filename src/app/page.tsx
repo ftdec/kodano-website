@@ -69,10 +69,10 @@ function MobileNavOnePage() {
   const scrollThreshold = 20;
 
   const menuItems: Array<{ label: string; href: string; key: string }> = [
-    { label: "Como Funciona", href: "#process", key: "como-funciona" },
+    { label: "Home", href: "#", key: "home" },
     { label: "Produtos", href: "#concept", key: "produtos" },
-    { label: "Preços", href: "#contact", key: "precos" },
-    { label: "Sobre", href: "#contact", key: "sobre" },
+    { label: "Como Funciona", href: "#process", key: "como-funciona" },
+    { label: "Fale Conosco", href: "#contact", key: "fale-conosco" },
   ];
 
   useEffect(() => {
@@ -259,10 +259,10 @@ export default function Home() {
 
   // Navigation items for one-page with anchors
   const onePageNavItems: Array<{ label: string; href: string; key: string }> = [
-    { label: "Como Funciona", href: "#process", key: "como-funciona" },
+    { label: "Home", href: "#", key: "home" },
     { label: "Produtos", href: "#concept", key: "produtos" },
-    { label: "Preços", href: "#contact", key: "precos" },
-    { label: "Sobre", href: "#contact", key: "sobre" },
+    { label: "Como Funciona", href: "#process", key: "como-funciona" },
+    { label: "Fale Conosco", href: "#contact", key: "fale-conosco" },
   ];
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -311,6 +311,14 @@ export default function Home() {
         const href = anchor.getAttribute('href');
         if (href && href.startsWith('#')) {
           e.preventDefault();
+          // If href is just "#", scroll to top
+          if (href === '#') {
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+            });
+            return;
+          }
           const targetId = href.substring(1);
           const targetElement = document.getElementById(targetId);
           if (targetElement) {
@@ -435,57 +443,57 @@ export default function Home() {
               </>
             ) : (
               <>
-                <motion.div
+            <motion.div
                   initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: isMobile ? 0.3 : 0.6 }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border mb-8 backdrop-blur-sm"
-                >
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-sm font-medium text-muted-foreground">Subadquirente Digital com Tecnologia Avançada</span>
-                </motion.div>
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border mb-8 backdrop-blur-sm"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-sm font-medium text-muted-foreground">Subadquirente Digital com Tecnologia Avançada</span>
+            </motion.div>
 
-                <motion.h1
+            <motion.h1
                   initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : 0.1 }}
-                  className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.1]"
-                >
-                  Pagamentos inteligentes <br className="hidden md:block" />
-                  <span className="text-foreground/90">
-                    para empresas modernas
-                  </span>
-                </motion.h1>
+              className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.1]"
+            >
+              Pagamentos inteligentes <br className="hidden md:block" />
+              <span className="text-foreground/90">
+                para empresas modernas
+              </span>
+            </motion.h1>
 
-                <motion.p
+            <motion.p
                   initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : 0.2 }}
-                  className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed"
-                >
-                  Maximize aprovação, reduza custos e tenha controle total com APIs modernas e orquestração inteligente de funcionalidades.
-                </motion.p>
+              className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed"
+            >
+              Maximize aprovação, reduza custos e tenha controle total com APIs modernas e orquestração inteligente de funcionalidades.
+            </motion.p>
 
-                <motion.div
+            <motion.div
                   initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : 0.3 }}
-                  className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 flex-wrap"
-                >
-                  <a
-                    href="#contact"
-                    className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full bg-foreground text-white font-medium hover:opacity-90 transition-opacity gap-2 justify-center shadow-md shadow-foreground/15"
-                  >
-                    Fale com o Kodano
-                    <ArrowRight className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="#process"
-                    className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full border border-border text-foreground font-medium hover:bg-primary/5 transition-colors justify-center"
-                  >
-                    Conheça nosso processo
-                  </a>
-                </motion.div>
+              className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 flex-wrap"
+            >
+              <a
+                href="#contact"
+                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full bg-foreground text-white font-medium hover:opacity-90 transition-opacity gap-2 justify-center shadow-md shadow-foreground/15"
+              >
+                Fale com o Kodano
+                <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href="#process"
+                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full border border-border text-foreground font-medium hover:bg-primary/5 transition-colors justify-center"
+              >
+                Conheça nosso processo
+              </a>
+            </motion.div>
               </>
             )}
           </div>
@@ -552,9 +560,9 @@ export default function Home() {
                     )}>
                       <div className={cn("absolute inset-x-0 top-0 h-1 bg-gradient-to-r", item.accent.border)} />
                       {!isMobile && (
-                        <div className="absolute inset-0 pointer-events-none">
-                          <div className={cn("absolute inset-x-6 -top-10 h-24 bg-gradient-to-r blur-3xl opacity-0 group-hover:opacity-70 transition-all duration-700", item.accent.glow)} />
-                        </div>
+                      <div className="absolute inset-0 pointer-events-none">
+                        <div className={cn("absolute inset-x-6 -top-10 h-24 bg-gradient-to-r blur-3xl opacity-0 group-hover:opacity-70 transition-all duration-700", item.accent.glow)} />
+                      </div>
                       )}
 
                       <CardHeader className="relative z-10 space-y-4 p-8">
@@ -838,16 +846,16 @@ export default function Home() {
                         </>
                       )}
                       <ButtonV2
-                        type="submit"
-                        variant="primary"
-                        size="lg"
+                      type="submit"
+                      variant="primary"
+                      size="lg"
                         className={cn(
                           "w-full h-12 text-base mt-2 relative overflow-hidden transition-all duration-300",
                           isSubmitting 
                             ? "shadow-2xl shadow-primary/50 cursor-wait" 
                             : "shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30"
                         )}
-                        loading={isSubmitting}
+                      loading={isSubmitting}
                         shimmer={isSubmitting}
                         rightIcon={
                           <motion.div
@@ -913,8 +921,8 @@ export default function Home() {
                             <motion.span
                               initial={{ opacity: 1 }}
                               animate={{ opacity: 1 }}
-                            >
-                              Solicitar Contato
+                    >
+                      Solicitar Contato
                             </motion.span>
                           )}
                         </motion.span>
