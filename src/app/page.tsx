@@ -321,23 +321,23 @@ export default function Home() {
               {/* Logo Animado */}
               <div className="flex items-center shrink-0">
                 <Logo />
-              </div>
+          </div>
 
               {/* Desktop Navigation */}
               <nav className="hidden lg:flex items-center gap-1">
                 {onePageNavItems.map((item) => (
-                  <a
+            <a
                     key={item.key}
                     href={item.href}
                     className="relative px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors rounded-md hover:bg-accent/5 group"
-                  >
+            >
                     <span className="relative">
                       {item.label}
                       <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full" />
                     </span>
-                  </a>
+            </a>
                 ))}
-              </nav>
+          </nav>
 
               {/* CTA Button */}
               <div className="flex items-center gap-3 shrink-0">
@@ -352,8 +352,8 @@ export default function Home() {
                 </Button>
               </div>
             </div>
-          </div>
-        </header>
+        </div>
+      </header>
       </>
 
       <main className="flex-1 flex flex-col w-full">
@@ -690,16 +690,71 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <ButtonV2
+                    <motion.div
+                      className="relative"
+                      whileHover={!isSubmitting ? { scale: 1.01 } : {}}
+                      whileTap={!isSubmitting ? { scale: 0.99 } : {}}
+                    >
+                      {/* Pulse effect when submitting */}
+                      {isSubmitting && (
+                        <motion.div
+                          className="absolute inset-0 rounded-lg"
+                          animate={{
+                            boxShadow: [
+                              "0 0 0 0 rgba(59, 130, 246, 0.6)",
+                              "0 0 0 10px rgba(59, 130, 246, 0)",
+                              "0 0 0 0 rgba(59, 130, 246, 0)"
+                            ],
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeOut"
+                          }}
+                          style={{ pointerEvents: "none", zIndex: -1 }}
+                        />
+                      )}
+                      <ButtonV2
                       type="submit"
                       variant="primary"
                       size="lg"
-                      className="w-full h-12 text-base mt-2"
+                        className={cn(
+                          "w-full h-12 text-base mt-2 relative overflow-hidden transition-all duration-300",
+                          isSubmitting && "shadow-xl shadow-primary/40"
+                        )}
                       loading={isSubmitting}
-                      rightIcon={<Send className="w-4 h-4" />}
-                    >
-                      Solicitar Contato
-                    </ButtonV2>
+                        shimmer={isSubmitting}
+                        rightIcon={
+                          <motion.div
+                            animate={isSubmitting ? {
+                              rotate: [0, 15, -15, 0],
+                              scale: [1, 1.1, 1],
+                            } : {}}
+                            transition={isSubmitting ? {
+                              duration: 0.8,
+                              repeat: Infinity,
+                              ease: "easeInOut"
+                            } : {}}
+                          >
+                            <Send className="w-4 h-4" />
+                          </motion.div>
+                        }
+                        disabled={isSubmitting}
+                      >
+                        <motion.span
+                          animate={isSubmitting ? {
+                            opacity: [1, 0.8, 1],
+                          } : {}}
+                          transition={isSubmitting ? {
+                            duration: 1.2,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          } : {}}
+                        >
+                          {isSubmitting ? "Enviando..." : "Solicitar Contato"}
+                        </motion.span>
+                      </ButtonV2>
+                    </motion.div>
 
                     <p className="text-xs text-center text-muted-foreground mt-4">
                       Ao enviar, você concorda com nossa Política de Privacidade.
