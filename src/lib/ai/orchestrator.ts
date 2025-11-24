@@ -267,10 +267,15 @@ export function createCalendarAgent() {
   const model = xai("grok-4-1-fast-non-reasoning")
   console.log("[Orchestrator] Model created:", model)
   
+  // Temporarily remove calendar tools to prevent hanging
+  // The chatbot should only direct users to "Fale Conosco" form
   const agent = new ToolLoopAgent({
     model: model,
     instructions: pure.getAgentSystemPrompt(),
     tools: {
+      // Calendar tools removed - chatbot should only direct to contact form
+      // If needed in future, uncomment these tools
+      /*
       checkAvailability: tool({
         description: "Check available time windows within a date range",
         inputSchema: CheckAvailabilityInputSchema,
@@ -299,6 +304,7 @@ export function createCalendarAgent() {
           return await getNextAvailability()
         },
       }),
+      */
     },
   })
 
