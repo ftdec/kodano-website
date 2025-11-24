@@ -363,3 +363,29 @@ nav a,
 nav button {
   white-space: nowrap;
 }
+
+/* Performance optimizations for mobile */
+@media (max-width: 1024px) {
+  /* Reduce motion complexity on mobile */
+  * {
+    will-change: auto !important;
+  }
+  
+  /* Optimize transforms for GPU acceleration */
+  [class*="motion"] {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+  
+  /* Reduce backdrop blur performance impact */
+  [class*="backdrop-blur"] {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* GPU acceleration for smooth animations */
+.motion-safe\:transform-gpu {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+}
