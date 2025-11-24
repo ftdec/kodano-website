@@ -690,7 +690,7 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <Button
+                    <ButtonV2
                       type="submit"
                       variant="primary"
                       size="lg"
@@ -699,7 +699,7 @@ export default function Home() {
                       rightIcon={<Send className="w-4 h-4" />}
                     >
                       Solicitar Contato
-                    </Button>
+                    </ButtonV2>
 
                     <p className="text-xs text-center text-muted-foreground mt-4">
                       Ao enviar, você concorda com nossa Política de Privacidade.
