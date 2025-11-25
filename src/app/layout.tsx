@@ -54,10 +54,18 @@ export const metadata: Metadata = {
     siteName: "Kodano",
     images: [
       {
-        url: "/kodano-logo.png",
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "Kodano - Gateway de Pagamentos B2B",
+        type: "image/png",
+      },
+      {
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/kodano-logo.png`,
         width: 1024,
         height: 1024,
         alt: "Kodano - Gateway de Pagamentos B2B",
+        type: "image/png",
       },
     ],
   },
@@ -65,7 +73,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kodano — Subadquirente com tecnologia avançada",
     description: "Subadquirente digital com APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades.",
-    images: ["/kodano-logo.png"],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`],
     creator: "@kodano",
   },
   robots: {
@@ -142,6 +150,28 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#FFFFFF" />
         <meta name="color-scheme" content="light" />
+        
+        {/* Open Graph / Facebook / WhatsApp */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://kodano.com.br" />
+        <meta property="og:title" content="Kodano — Subadquirente com tecnologia avançada" />
+        <meta property="og:description" content="Subadquirente digital que oferece APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades." />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:alt" content="Kodano - Gateway de Pagamentos B2B" />
+        <meta property="og:site_name" content="Kodano" />
+        <meta property="og:locale" content="pt_BR" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://kodano.com.br" />
+        <meta name="twitter:title" content="Kodano — Subadquirente com tecnologia avançada" />
+        <meta name="twitter:description" content="Subadquirente digital com APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades." />
+        <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`} />
+        <meta name="twitter:creator" content="@kodano" />
+        
         <OrganizationStructuredData />
         <SoftwareApplicationStructuredData />
       </head>
