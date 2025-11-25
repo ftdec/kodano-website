@@ -16,7 +16,7 @@ export function FloatingChatButton({ onClick, ariaLabel }: FloatingChatButtonPro
         aria-label={ariaLabel}
       >
         <svg
-          className="w-8 h-8 sm:w-7 sm:h-7 text-blue-600"
+          className="w-8 h-8 sm:w-7 sm:h-7 text-[#00C8DC]"
           fill="currentColor"
           viewBox="0 0 20 20"
           aria-hidden="true"
