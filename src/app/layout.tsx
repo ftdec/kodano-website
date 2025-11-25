@@ -84,11 +84,26 @@ export const metadata: Metadata = {
       { url: "/kodano-logo.png", sizes: "any" },
       { url: "/kodano-logo.png", type: "image/png", sizes: "32x32" },
       { url: "/kodano-logo.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon.png", type: "image/png", sizes: "32x32" },
     ],
-    shortcut: "/kodano-logo.png",
-    apple: "/kodano-logo.png",
+    shortcut: "/favicon.png",
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/kodano-logo.png", sizes: "180x180", type: "image/png" },
+    ],
+    other: [
+      {
+        rel: "mask-icon",
+        url: "/kodano-logo.png",
+      },
+    ],
   },
   manifest: "/site.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Kodano",
+  },
 };
 
 export default function RootLayout({
@@ -99,6 +114,14 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
+        {/* Favicon and Icons - Critical for Google Search Results */}
+        <link rel="icon" type="image/png" sizes="32x32" href="/kodano-logo.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/kodano-logo.png" />
+        <link rel="shortcut icon" href="/favicon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/kodano-logo.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#002A35" />
         <OrganizationStructuredData />
         <SoftwareApplicationStructuredData />
       </head>

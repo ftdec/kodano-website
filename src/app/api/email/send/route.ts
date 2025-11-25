@@ -93,11 +93,55 @@ export async function POST(req: Request) {
         message: error.message,
         name: error.name,
       });
+      
+      // Check if error is due to unverified domain
+      const errorMessage = error.message || String(error);
+      const isDomainNotVerified = errorMessage.toLowerCase().includes('domain is not verified') || 
+                                   errorMessage.toLowerCase().includes('domain not verified') ||
+                                   errorMessage.toLowerCase().includes('not verified');
+      
+      if (isDomainNotVerified && fromEmail !== "onboarding@resend.dev") {
+        console.warn("[Resend API] Domain not verified, attempting fallback to onboarding@resend.dev");
+        
+        // Try again with Resend test domain
+        try {
+          const fallbackPayload = {
+            from: "onboarding@resend.dev",
+            to: Array.isArray(to) ? to : to,
+            subject: `[TEST DOMAIN] ${subject}`,
+            ...(html && { html: `<p><strong>⚠️ Aviso:</strong> O domínio não está verificado. Este email foi enviado usando o domínio de teste do Resend.</p>${html}` }),
+            ...(text && { text: `⚠️ AVISO: O domínio não está verificado. Este email foi enviado usando o domínio de teste do Resend.\n\n${text}` }),
+          };
+          
+          const fallbackResult = await resend.emails.send(fallbackPayload as Parameters<typeof resend.emails.send>[0]);
+          
+          if (fallbackResult.error) {
+            throw fallbackResult.error;
+          }
+          
+          console.log("[Resend API] Email sent successfully using fallback domain:", fallbackResult.data);
+          return NextResponse.json(
+            {
+              ok: true,
+              data: {
+                id: fallbackResult.data?.id,
+                message: "Email sent successfully (using test domain - please verify notifications.kodano.com.br at https://resend.com/domains)",
+              },
+              warning: "O domínio notifications.kodano.com.br não está verificado. Verifique em https://resend.com/domains",
+            },
+            { status: 200 }
+          );
+        } catch (fallbackError) {
+          console.error("[Resend API] Fallback email also failed:", fallbackError);
+        }
+      }
+      
       return NextResponse.json(
         {
           ok: false,
-          error: error.message || String(error),
+          error: errorMessage,
           details: process.env.NODE_ENV === "development" ? error : undefined,
+          help: isDomainNotVerified ? "Verifique o domínio em https://resend.com/domains" : undefined,
         },
         { status: 400 }
       );
