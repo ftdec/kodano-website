@@ -184,9 +184,22 @@
   
   /* Remove white highlight on text selection in chatbot responses */
   .prose ::selection,
-  .prose::selection {
+  .prose::selection,
+  .prose *::selection,
+  .prose p::selection,
+  .prose div::selection,
+  .prose span::selection {
     background-color: transparent !important;
+    background: transparent !important;
     color: inherit !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+  
+  /* Remove any white background from prose elements */
+  .prose p,
+  .prose div,
+  .prose span {
+    background-color: transparent !important;
   }
   
 }
