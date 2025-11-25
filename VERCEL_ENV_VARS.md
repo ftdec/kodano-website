@@ -48,7 +48,7 @@ Add these 3 variables:
 
 **Variable Name:** `RESEND_ADDITIONAL_EMAILS`
 
-**Value:** `felipe.caltabiano@kodano.com.br`
+**Value:** `felipe.caltabiano@kodano.com.br,marcelo.almeida@kodano.com.br`
 
 **Environments:** ✅ Production, ✅ Preview, ✅ Development
 
@@ -76,7 +76,7 @@ If you prefer to see them all together:
 RESEND_API_KEY=re_8cgobSgr_3EzGmZa85beZ2KNLmtj6Kqvc
 RESEND_FROM_EMAIL=noreply@notifications.kodano.com.br
 RESEND_TO_EMAIL=contato@kodano.com.br
-RESEND_ADDITIONAL_EMAILS=felipe.caltabiano@kodano.com.br
+RESEND_ADDITIONAL_EMAILS=felipe.caltabiano@kodano.com.br,marcelo.almeida@kodano.com.br
 RESEND_BACKUP_EMAIL=felipe.caltabiano.castro@gmail.com
 ```
 
