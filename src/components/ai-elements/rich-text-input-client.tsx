@@ -22,7 +22,7 @@ export function RichTextInputClient({ placeholder = "Type a message...", onSubmi
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm max-w-none focus:outline-none min-h-[2.5rem] sm:min-h-[2.5rem] max-h-[8rem] sm:max-h-[10rem] overflow-y-auto px-3 py-2 sm:px-4 text-sm sm:text-base text-white placeholder:text-gray-300 selection:bg-[#00C8DC]/30 selection:text-white",
+          "prose prose-sm max-w-none focus:outline-none min-h-[2.5rem] sm:min-h-[2.5rem] max-h-[8rem] sm:max-h-[10rem] overflow-y-auto px-3 py-2 sm:px-4 text-sm sm:text-base text-gray-900 placeholder:text-gray-400",
       },
     },
     onUpdate: ({ editor }) => {
@@ -65,7 +65,7 @@ export function RichTextInputClient({ placeholder = "Type a message...", onSubmi
   }
 
   return (
-    <div className="flex items-end gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl border border-gray-300 bg-[#002A35] backdrop-blur-sm focus-within:border-[#00C8DC] focus-within:ring-2 focus-within:ring-[#00C8DC]/20 transition-all">
+    <div className="flex items-end gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl border border-gray-200 bg-gray-50 backdrop-blur-sm focus-within:border-[#00C8DC] focus-within:ring-2 focus-within:ring-[#00C8DC]/20 transition-all">
       <EditorContent editor={editor} className="flex-1 min-w-0" />
       <button
         onClick={handleSendClick}

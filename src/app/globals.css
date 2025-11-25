@@ -182,25 +182,6 @@
     color-scheme: light !important;
   }
   
-  /* Chatbot text selection - remove white highlight, keep white text */
-  [class*="bg-\\[\\#002A35\\]"] ::selection,
-  [class*="bg-\\[\\#002A35\\]"]::selection,
-  .bg-\\[\\#002A35\\] ::selection,
-  .bg-\\[\\#002A35\\]::selection {
-    background-color: rgba(0, 200, 220, 0.3) !important;
-    color: white !important;
-  }
-  
-  /* Ensure all text in chatbot dark backgrounds is white */
-  [class*="bg-\\[\\#002A35\\]"],
-  .bg-\\[\\#002A35\\] {
-    color: white !important;
-  }
-  
-  [class*="bg-\\[\\#002A35\\]"] *,
-  .bg-\\[\\#002A35\\] * {
-    color: inherit;
-  }
 }
 
 /* ===== Stripe-Level Animations ===== */

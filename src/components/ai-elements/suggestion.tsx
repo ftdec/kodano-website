@@ -13,7 +13,7 @@ export interface AssistantWidgetCtaEventDetail {
 }
 
 const suggestionVariants = cva(
-  "inline-flex items-center justify-center rounded-full border border-gray-300 bg-[#002A35] backdrop-blur-sm px-3 py-1.5 text-sm font-medium text-white transition-all active:bg-[#00C8DC] hover:bg-[#00C8DC] active:border-[#00C8DC] hover:border-[#00C8DC] active:text-white hover:text-white active:shadow-md hover:shadow-md cursor-pointer touch-manipulation",
+  "inline-flex items-center justify-center rounded-full border border-gray-200 bg-gray-50 backdrop-blur-sm px-3 py-1.5 text-sm font-medium text-gray-700 transition-all active:bg-[#00C8DC] hover:bg-[#00C8DC] active:border-[#00C8DC] hover:border-[#00C8DC] active:text-white hover:text-white active:shadow-md hover:shadow-md cursor-pointer touch-manipulation",
   {
     variants: {
       size: {
