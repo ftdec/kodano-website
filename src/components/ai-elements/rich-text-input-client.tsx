@@ -65,7 +65,7 @@ export function RichTextInputClient({ placeholder = "Type a message...", onSubmi
   }
 
   return (
-    <div className="flex items-end gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl border border-[#00C8DC]/50 bg-[#002A35]/50 backdrop-blur-sm focus-within:border-[#00C8DC] focus-within:ring-2 focus-within:ring-[#00C8DC]/20 transition-all">
+    <div className="flex items-end gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl border border-[#00C8DC]/50 bg-[#3a6a7a]/60 backdrop-blur-sm focus-within:border-[#00C8DC] focus-within:ring-2 focus-within:ring-[#00C8DC]/20 transition-all">
       <EditorContent editor={editor} className="flex-1 min-w-0" />
       <button
         onClick={handleSendClick}

@@ -57,15 +57,15 @@ export function ChatSidebar({ isOpen, onClose, children }: ChatSidebarProps) {
     <div
       ref={sidebarRef}
       style={sidebarStyle}
-      className={`fixed right-0 top-0 w-full sm:max-w-[30rem] bg-gradient-to-br from-[#002A35]/95 via-[#002A35]/85 to-[#003847]/80 backdrop-blur-2xl backdrop-saturate-180 ring-2 ring-[#00C8DC]/30 border border-[#00C8DC]/20 shadow-[0_32px_80px_rgba(0,200,220,0.25)] transform transition-transform duration-300 ease-in-out z-50 rounded-none sm:rounded-l-3xl ${
+      className={`fixed right-0 top-0 w-full sm:max-w-[30rem] bg-gradient-to-br from-[#1a4a5a]/95 via-[#2a5a6a]/90 to-[#3a6a7a]/85 backdrop-blur-2xl backdrop-saturate-180 ring-2 ring-[#00C8DC]/30 border border-[#00C8DC]/20 shadow-[0_32px_80px_rgba(0,200,220,0.25)] transform transition-transform duration-300 ease-in-out z-50 rounded-none sm:rounded-l-3xl ${
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 right-4 sm:right-8 h-48 w-48 sm:h-72 sm:w-72 rounded-full bg-[#00C8DC]/20 blur-[60px] sm:blur-[80px] opacity-90" />
-        <div className="absolute bottom-[-8rem] left-4 sm:left-12 h-64 w-64 sm:h-80 sm:w-80 rounded-full bg-[#00C8DC]/30 blur-[60px] sm:blur-[80px] opacity-60" />
-        <div className="absolute top-16 right-8 sm:right-16 h-32 w-32 sm:h-48 sm:w-48 rounded-full bg-[#00C8DC]/15 blur-[40px] sm:blur-[60px] opacity-50" />
-        <div className="absolute inset-x-4 sm:inset-x-12 top-12 h-2/3 rounded-[2rem] sm:rounded-[3rem] bg-[#00C8DC]/10 blur-[48px] sm:blur-[64px] opacity-70" />
+        <div className="absolute -top-32 right-4 sm:right-8 h-48 w-48 sm:h-72 sm:w-72 rounded-full bg-[#00C8DC]/25 blur-[60px] sm:blur-[80px] opacity-90" />
+        <div className="absolute bottom-[-8rem] left-4 sm:left-12 h-64 w-64 sm:h-80 sm:w-80 rounded-full bg-[#00C8DC]/35 blur-[60px] sm:blur-[80px] opacity-70" />
+        <div className="absolute top-16 right-8 sm:right-16 h-32 w-32 sm:h-48 sm:w-48 rounded-full bg-[#00C8DC]/20 blur-[40px] sm:blur-[60px] opacity-60" />
+        <div className="absolute inset-x-4 sm:inset-x-12 top-12 h-2/3 rounded-[2rem] sm:rounded-[3rem] bg-[#00C8DC]/15 blur-[48px] sm:blur-[64px] opacity-80" />
       </div>
 
       <div className="relative z-10 flex h-full flex-col" style={contentStyle}>

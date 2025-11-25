@@ -39,7 +39,7 @@ export function InputSection({
 
   return (
     <div
-      className="px-3 sm:px-3 md:px-4 border-t border-[#00C8DC]/40 bg-[#002A35]/30 backdrop-blur-md rounded-none sm:rounded-bl-3xl [--chat-input-base:0.75rem] sm:[--chat-input-base:1.5rem] md:[--chat-input-base:2rem]"
+      className="px-3 sm:px-3 md:px-4 border-t border-[#00C8DC]/40 bg-[#2a5a6a]/40 backdrop-blur-md rounded-none sm:rounded-bl-3xl [--chat-input-base:0.75rem] sm:[--chat-input-base:1.5rem] md:[--chat-input-base:2rem]"
       style={inputSectionStyle}
     >
       <AnimatePresence initial={false} mode="wait">
