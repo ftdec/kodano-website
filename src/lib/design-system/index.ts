@@ -147,8 +147,9 @@ export function generateDesignSystemCSS(): string {
   ${generateCSSVariables()}
 }
 
-/* Dark Mode Variables */
-.dark {
+/* Dark Mode Variables - DISABLED - Light mode only */
+/* .dark {
+  Dark mode styles removed - site is light mode only
   --color-background: #000000;
   --color-foreground: #FFFFFF;
   --color-border: rgba(255, 255, 255, 0.1);
@@ -159,7 +160,7 @@ export function generateDesignSystemCSS(): string {
   --shadow-md: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
   --shadow-xl: 0 12px 24px 0 rgba(0, 0, 0, 0.5);
-}
+} */
 
 /* Responsive Container */
 .container {

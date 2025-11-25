@@ -294,16 +294,23 @@
   }
 }
 
-/* Dark mode specific */
-@media (prefers-color-scheme: dark) {
+/* Dark mode disabled - Light mode only */
+/* @media (prefers-color-scheme: dark) {
   .aurora-glass {
     background: rgba(10, 10, 15, 0.7);
   }
-}
+} */
 
+/* Light mode only */
 @media (prefers-color-scheme: light) {
   .aurora-glass {
     background: rgba(255, 255, 255, 0.7);
     border-color: rgba(0, 42, 53, 0.2);
   }
+}
+
+/* Force light mode even if system prefers dark */
+.aurora-glass {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 42, 53, 0.2);
 }

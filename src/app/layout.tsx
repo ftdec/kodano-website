@@ -112,8 +112,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning className="light" style={{ colorScheme: 'light' }}>
       <head>
+        {/* Force light mode - prevent dark mode completely */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                // Remove dark class if exists
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+                // Force light color scheme
+                document.documentElement.style.colorScheme = 'light';
+                // Prevent system dark mode
+                const meta = document.createElement('meta');
+                meta.name = 'color-scheme';
+                meta.content = 'light';
+                document.head.appendChild(meta);
+              })();
+            `,
+          }}
+        />
         {/* Favicon and Icons - Critical for Google Search Results */}
         <link rel="icon" type="image/png" sizes="32x32" href="/kodano-logo.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/kodano-logo.png" />
@@ -121,7 +140,8 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/kodano-logo.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <meta name="theme-color" content="#002A35" />
+        <meta name="theme-color" content="#FFFFFF" />
+        <meta name="color-scheme" content="light" />
         <OrganizationStructuredData />
         <SoftwareApplicationStructuredData />
       </head>

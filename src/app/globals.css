@@ -2,7 +2,8 @@
 @import "tw-animate-css";
 @import "../styles/aurora.css";
 
-@custom-variant dark (&:is(.dark *));
+/* Dark mode disabled - only light mode */
+/* @custom-variant dark (&:is(.dark *)); */
 
 @theme inline {
   --color-background: var(--background);
@@ -106,56 +107,40 @@
   --sidebar-ring: #415A77;
 }
 
-.dark {
-  /* ===== Dark Mode - Premium dark theme ===== */
-  --background: #000000; /* Pure black for OLED */
-  --foreground: #FFFFFF;
-  --card: #0A0A0A; /* Slightly elevated black */
-  --card-foreground: #FFFFFF;
-  --popover: #0A0A0A;
-  --popover-foreground: #FFFFFF;
-
-  /* Primary - Inverted to light blue for contrast */
-  --primary: #778DA9;
-  --primary-foreground: #000000;
-
-  /* Secondary - Dark variant */
-  --secondary: #1B263B;
-  --secondary-foreground: #FFFFFF;
-
-  /* Accent - Medium blue stays visible */
-  --accent: #415A77;
-  --accent-foreground: #FFFFFF;
-
-  /* Muted colors */
-  --muted: #1B263B;
-  --muted-foreground: #778DA9;
-
-  /* Status colors - adjusted for dark */
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
-
-  /* UI elements */
-  --border: rgba(255, 255, 255, 0.1);
-  --input: rgba(255, 255, 255, 0.15);
-  --ring: #778DA9;
-
-  /* Chart colors - adjusted for dark */
-  --chart-1: #778DA9;
-  --chart-2: #415A77;
-  --chart-3: #8B5CF6;
-  --chart-4: #F59E0B;
-  --chart-5: #10B981;
-
-  /* Sidebar */
-  --sidebar: #0A0A0A;
-  --sidebar-foreground: #FFFFFF;
-  --sidebar-primary: #778DA9;
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #1B263B;
-  --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: rgba(255, 255, 255, 0.1);
-  --sidebar-ring: #778DA9;
+/* Dark mode completely disabled - Force light mode always */
+.dark,
+[data-theme="dark"],
+[class*="dark"] {
+  /* Override any dark mode with light mode values */
+  --background: #FFFFFF !important;
+  --foreground: #0D1B2A !important;
+  --card: #FFFFFF !important;
+  --card-foreground: #0D1B2A !important;
+  --popover: #FFFFFF !important;
+  --popover-foreground: #0D1B2A !important;
+  --primary: #0D1B2A !important;
+  --primary-foreground: #FFFFFF !important;
+  --secondary: #E0E1DD !important;
+  --secondary-foreground: #0D1B2A !important;
+  --accent: #415A77 !important;
+  --accent-foreground: #FFFFFF !important;
+  --muted: #E0E1DD !important;
+  --muted-foreground: #415A77 !important;
+  --destructive: #B91C1C !important;
+  --destructive-foreground: #FFFFFF !important;
+  --border: rgba(225, 225, 221, 0.5) !important;
+  --input: #E0E1DD !important;
+  --ring: #415A77 !important;
+  --sidebar: #FFFFFF !important;
+  --sidebar-foreground: #0D1B2A !important;
+  --sidebar-primary: #0D1B2A !important;
+  --sidebar-primary-foreground: #FFFFFF !important;
+  --sidebar-accent: #E0E1DD !important;
+  --sidebar-accent-foreground: #0D1B2A !important;
+  --sidebar-border: rgba(225, 225, 221, 0.5) !important;
+  --sidebar-ring: #415A77 !important;
+  background-color: #FFFFFF !important;
+  color: #0D1B2A !important;
 }
 
 @layer base {
@@ -164,6 +149,37 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Force light mode - prevent dark mode completely */
+  html {
+    color-scheme: light !important;
+  }
+  
+  html.dark,
+  html[data-theme="dark"],
+  html[class*="dark"] {
+    /* Override any dark mode attempts */
+    --background: #FFFFFF !important;
+    --foreground: #0D1B2A !important;
+    --card: #FFFFFF !important;
+    --card-foreground: #0D1B2A !important;
+    --popover: #FFFFFF !important;
+    --popover-foreground: #0D1B2A !important;
+    --primary: #0D1B2A !important;
+    --primary-foreground: #FFFFFF !important;
+    --secondary: #E0E1DD !important;
+    --secondary-foreground: #0D1B2A !important;
+    --accent: #415A77 !important;
+    --accent-foreground: #FFFFFF !important;
+    --muted: #E0E1DD !important;
+    --muted-foreground: #415A77 !important;
+    --destructive: #B91C1C !important;
+    --destructive-foreground: #FFFFFF !important;
+    --border: rgba(225, 225, 221, 0.5) !important;
+    --input: #E0E1DD !important;
+    --ring: #415A77 !important;
+    color-scheme: light !important;
   }
 }
 
