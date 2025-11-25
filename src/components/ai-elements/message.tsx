@@ -29,7 +29,7 @@ const messageContentVariants = cva("rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 max-
   variants: {
     variant: {
       contained: "bg-[#00C8DC] text-white",
-      flat: "bg-gray-100 text-gray-900",
+      flat: "bg-[#002A35] text-white",
     },
   },
   defaultVariants: {
