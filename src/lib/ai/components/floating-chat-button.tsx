@@ -9,14 +9,14 @@ interface FloatingChatButtonProps {
 
 export function FloatingChatButton({ onClick, ariaLabel }: FloatingChatButtonProps) {
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40">
       <button
         onClick={onClick}
-        className="w-14 h-14 bg-white text-gray-900 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center relative cursor-pointer border-2 border-blue-500"
+        className="w-16 h-16 sm:w-14 sm:h-14 bg-[#002A35] active:bg-[#00C8DC] hover:bg-[#00C8DC] text-white rounded-full shadow-lg active:shadow-xl hover:shadow-xl transition-all duration-300 active:scale-95 hover:scale-110 flex items-center justify-center relative cursor-pointer border-2 border-[#00C8DC] touch-manipulation"
         aria-label={ariaLabel}
       >
         <svg
-          className="w-7 h-7 text-blue-600"
+          className="w-8 h-8 sm:w-7 sm:h-7 text-blue-600"
           fill="currentColor"
           viewBox="0 0 20 20"
           aria-hidden="true"
@@ -27,7 +27,7 @@ export function FloatingChatButton({ onClick, ariaLabel }: FloatingChatButtonPro
             clipRule="evenodd"
           />
         </svg>
-        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white animate-pulse" />
+        <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-3.5 sm:h-3.5 bg-[#00C8DC] rounded-full border-2 border-white animate-pulse" />
       </button>
     </div>
   )

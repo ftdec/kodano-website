@@ -22,7 +22,7 @@ export function RichTextInputClient({ placeholder = "Type a message...", onSubmi
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm max-w-none focus:outline-none min-h-[2.5rem] max-h-[10rem] overflow-y-auto px-4 py-2 text-gray-900 dark:text-gray-100",
+          "prose prose-sm max-w-none focus:outline-none min-h-[2.5rem] sm:min-h-[2.5rem] max-h-[8rem] sm:max-h-[10rem] overflow-y-auto px-3 py-2 sm:px-4 text-sm sm:text-base text-white placeholder:text-white/50",
       },
     },
     onUpdate: ({ editor }) => {
@@ -65,14 +65,14 @@ export function RichTextInputClient({ placeholder = "Type a message...", onSubmi
   }
 
   return (
-    <div className="flex items-end gap-2 rounded-2xl border border-gray-300 bg-white/90 backdrop-blur-sm focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all">
+    <div className="flex items-end gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl border border-[#00C8DC]/50 bg-[#002A35]/50 backdrop-blur-sm focus-within:border-[#00C8DC] focus-within:ring-2 focus-within:ring-[#00C8DC]/20 transition-all">
       <EditorContent editor={editor} className="flex-1 min-w-0" />
       <button
         onClick={handleSendClick}
-        className="shrink-0 m-1.5 flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+        className="shrink-0 m-1 sm:m-1.5 flex items-center justify-center w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-[#00C8DC] text-white active:bg-[#00C8DC]/80 hover:bg-[#00C8DC]/80 transition-colors touch-manipulation"
         aria-label="Send message"
       >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"

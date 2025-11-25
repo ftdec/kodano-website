@@ -20,6 +20,7 @@ interface InputSectionProps {
   placeholder: string
   onSuggestionSelect: (suggestion: PromptSuggestion) => void
   onSubmitMessage: (message: PromptInputMessage) => void
+  onClose?: () => void
 }
 
 export function InputSection({
@@ -28,6 +29,7 @@ export function InputSection({
   placeholder,
   onSuggestionSelect,
   onSubmitMessage,
+  onClose,
 }: InputSectionProps) {
   const inputSectionStyle: CSSProperties & { "--chat-bottom-offset"?: string } = {
     "--chat-bottom-offset":
@@ -37,7 +39,7 @@ export function InputSection({
 
   return (
     <div
-      className="px-2 sm:px-3 md:px-4 border-t border-white/40 bg-white/25 backdrop-blur-md rounded-bl-3xl [--chat-input-base:1rem] sm:[--chat-input-base:1.5rem] md:[--chat-input-base:2rem]"
+      className="px-3 sm:px-3 md:px-4 border-t border-[#00C8DC]/40 bg-[#002A35]/30 backdrop-blur-md rounded-none sm:rounded-bl-3xl [--chat-input-base:0.75rem] sm:[--chat-input-base:1.5rem] md:[--chat-input-base:2rem]"
       style={inputSectionStyle}
     >
       <AnimatePresence initial={false} mode="wait">

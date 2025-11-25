@@ -20,6 +20,28 @@ interface ConversationSectionProps {
   shouldShowLoadingState: boolean
   loadingBaseText: string
   isScrollIsolationEnabled: boolean
+  onClose?: () => void
+}
+
+// Helper function to detect if message mentions contact
+function shouldShowContactButton(text: string): boolean {
+  const keywords = [
+    'fale conosco',
+    'fale com',
+    'contato',
+    'formulário',
+    'conectar',
+    'time',
+    'equipe',
+    'especialista',
+    'consultor',
+    'demonstração',
+    'clique',
+    'acesse'
+  ]
+
+  const lowerText = text.toLowerCase()
+  return keywords.some(keyword => lowerText.includes(keyword))
 }
 
 export function ConversationSection({
@@ -28,6 +50,7 @@ export function ConversationSection({
   shouldShowLoadingState,
   loadingBaseText,
   isScrollIsolationEnabled,
+  onClose,
 }: ConversationSectionProps) {
   return (
     <Conversation className="flex-1">
@@ -37,7 +60,7 @@ export function ConversationSection({
         isStreaming={isStreaming}
         shouldShowLoadingState={shouldShowLoadingState}
       />
-      <ConversationContent className="px-3 py-4 sm:px-6 sm:py-5">
+      <ConversationContent className="px-3 py-3 sm:px-6 sm:py-5">
         {messages.map((message: UIMessage) => (
           <div key={message.id}>
             {message.parts?.map((part, i: number) => {
@@ -52,8 +75,30 @@ export function ConversationSection({
                           <Response>{part.text}</Response>
                         </MessageContent>
                       </Message>
+                      {/* Botão Fale Conosco apenas quando o assistente menciona contato */}
+                      {message.role === "assistant" && shouldShowContactButton(part.text) && (
+                        <div className="mt-2 sm:mt-3 px-2 sm:px-4">
+                          <a
+                            href="#contact"
+                            data-slot="button"
+                            className="items-center justify-center gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-[#002A35] active:bg-[#00C8DC] hover:bg-[#00C8DC] text-white shadow-lg shadow-primary/20 active:shadow-xl hover:shadow-xl hover:shadow-accent/30 h-11 sm:h-10 px-5 sm:px-6 py-2.5 sm:py-2 text-sm rounded-full inline-flex w-full touch-manipulation"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              if (onClose) onClose()
+                              setTimeout(() => {
+                                document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth", block: "start" })
+                              }, 300)
+                            }}
+                          >
+                            Fale Conosco
+                          </a>
+                        </div>
+                      )}
                     </div>
                   )
+                case "tool-result":
+                  // Não renderiza nada para tool results, o botão fixo é suficiente
+                  return null
                 default:
                   return null
               }
@@ -62,8 +107,8 @@ export function ConversationSection({
         ))}
 
         {shouldShowLoadingState && (
-          <div className="px-4 py-3">
-            <Shimmer className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="px-3 sm:px-4 py-2 sm:py-3">
+            <Shimmer className="text-sm text-white/80">
               <AnimatedThinking baseText={loadingBaseText} />
             </Shimmer>
           </div>

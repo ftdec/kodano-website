@@ -13,13 +13,13 @@ export interface AssistantWidgetCtaEventDetail {
 }
 
 const suggestionVariants = cva(
-  "inline-flex items-center justify-center rounded-full border border-gray-300 bg-white/70 backdrop-blur-sm px-3 py-1.5 text-sm font-medium text-gray-700 transition-all hover:bg-white hover:border-blue-500 hover:text-blue-600 hover:shadow-md cursor-pointer",
+  "inline-flex items-center justify-center rounded-full border border-[#00C8DC]/50 bg-[#002A35]/50 backdrop-blur-sm px-3 py-1.5 text-sm font-medium text-white/90 transition-all active:bg-[#00C8DC]/30 hover:bg-[#00C8DC]/30 active:border-[#00C8DC] hover:border-[#00C8DC] active:text-white hover:text-white active:shadow-md hover:shadow-md cursor-pointer touch-manipulation",
   {
     variants: {
       size: {
-        sm: "text-xs px-2.5 py-1",
-        md: "text-sm px-3 py-1.5",
-        lg: "text-base px-4 py-2",
+        sm: "text-xs px-2.5 py-1.5 sm:py-1 min-h-[2rem] sm:min-h-0",
+        md: "text-sm px-3 py-1.5 min-h-[2.25rem] sm:min-h-0",
+        lg: "text-base px-4 py-2 min-h-[2.5rem] sm:min-h-0",
       },
     },
     defaultVariants: {
