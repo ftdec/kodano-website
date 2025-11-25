@@ -182,6 +182,13 @@
     color-scheme: light !important;
   }
   
+  /* Remove white highlight on text selection in chatbot responses */
+  .prose ::selection,
+  .prose::selection {
+    background-color: transparent !important;
+    color: inherit !important;
+  }
+  
 }
 
 /* ===== Stripe-Level Animations ===== */
