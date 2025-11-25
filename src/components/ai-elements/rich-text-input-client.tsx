@@ -22,7 +22,7 @@ export function RichTextInputClient({ placeholder = "Type a message...", onSubmi
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm max-w-none focus:outline-none min-h-[2.5rem] sm:min-h-[2.5rem] max-h-[8rem] sm:max-h-[10rem] overflow-y-auto px-3 py-2 sm:px-4 text-sm sm:text-base text-white placeholder:text-gray-300",
+          "prose prose-sm max-w-none focus:outline-none min-h-[2.5rem] sm:min-h-[2.5rem] max-h-[8rem] sm:max-h-[10rem] overflow-y-auto px-3 py-2 sm:px-4 text-sm sm:text-base text-white placeholder:text-gray-300 selection:bg-[#00C8DC]/30 selection:text-white",
       },
     },
     onUpdate: ({ editor }) => {

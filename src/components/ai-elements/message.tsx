@@ -25,7 +25,7 @@ export function Message({ children, from }: MessageProps) {
   return <div className={cn(messageVariants({ from }))}>{children}</div>
 }
 
-const messageContentVariants = cva("rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[85%] break-words text-sm sm:text-base leading-relaxed", {
+const messageContentVariants = cva("rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[85%] break-words text-sm sm:text-base leading-relaxed text-white selection:bg-[#00C8DC]/30 selection:text-white", {
   variants: {
     variant: {
       contained: "bg-[#00C8DC] text-white",
