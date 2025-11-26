@@ -42,5 +42,14 @@ interface MessageContentProps extends VariantProps<typeof messageContentVariants
 }
 
 export function MessageContent({ children, variant }: MessageContentProps) {
-  return <div className={cn(messageContentVariants({ variant }))}>{children}</div>
+  return (
+    <div 
+      className={cn(messageContentVariants({ variant }), "chatbot-message-content")}
+      style={{
+        WebkitTapHighlightColor: 'transparent',
+      }}
+    >
+      {children}
+    </div>
+  )
 }

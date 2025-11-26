@@ -188,18 +188,79 @@
   .prose *::selection,
   .prose p::selection,
   .prose div::selection,
-  .prose span::selection {
-    background-color: transparent !important;
+  .prose span::selection,
+  .chatbot-response ::selection,
+  .chatbot-response::selection,
+  .chatbot-response *::selection,
+  .chatbot-response p::selection,
+  .chatbot-response div::selection,
+  .chatbot-response span::selection,
+  .chatbot-response p *::selection,
+  .chatbot-response div *::selection,
+  .chatbot-response p span::selection,
+  .chatbot-response div span::selection {
     background: transparent !important;
+    background-color: transparent !important;
     color: inherit !important;
     -webkit-tap-highlight-color: transparent !important;
+    -moz-selection-background-color: transparent !important;
+  }
+  
+  /* Firefox specific */
+  .prose ::-moz-selection,
+  .prose::-moz-selection,
+  .prose *::-moz-selection,
+  .chatbot-response ::-moz-selection,
+  .chatbot-response::-moz-selection,
+  .chatbot-response *::-moz-selection {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: inherit !important;
   }
   
   /* Remove any white background from prose elements */
   .prose p,
   .prose div,
-  .prose span {
+  .prose span,
+  .chatbot-response p,
+  .chatbot-response div,
+  .chatbot-response span {
     background-color: transparent !important;
+    background: transparent !important;
+  }
+  
+  /* Force no selection highlight for chatbot responses */
+  .chatbot-response,
+  .chatbot-message-content {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none;
+    user-select: text;
+    -webkit-user-select: text;
+  }
+  
+  .chatbot-response *,
+  .chatbot-message-content * {
+    -webkit-tap-highlight-color: transparent !important;
+  }
+  
+  /* Remove selection highlight from chatbot message content */
+  .chatbot-message-content ::selection,
+  .chatbot-message-content::selection,
+  .chatbot-message-content *::selection,
+  .chatbot-message-content p::selection,
+  .chatbot-message-content div::selection,
+  .chatbot-message-content span::selection {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: inherit !important;
+  }
+  
+  .chatbot-message-content ::-moz-selection,
+  .chatbot-message-content::-moz-selection,
+  .chatbot-message-content *::-moz-selection {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: inherit !important;
   }
   
 }
