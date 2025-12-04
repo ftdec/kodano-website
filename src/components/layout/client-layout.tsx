@@ -3,7 +3,7 @@
 import { ReactNode, useEffect } from "react";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { I18nProvider } from "@/lib/i18n/context";
-import { ChatWidget } from "@/components/chat";
+import { AIAssistantWidget } from "@/lib/ai/components/ai-assistant-widget";
 import { ErrorBoundary } from "@/components/error-boundary";
 
 interface ClientLayoutProps {
@@ -52,7 +52,7 @@ export function ClientLayout({ children }: ClientLayoutProps) {
       <I18nProvider locale="pt">
         {children}
         <ErrorBoundary level="component">
-          <ChatWidget />
+          <AIAssistantWidget />
         </ErrorBoundary>
       </I18nProvider>
     </ThemeProvider>
