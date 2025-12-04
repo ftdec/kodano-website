@@ -254,7 +254,7 @@
     background-color: transparent !important;
     color: inherit !important;
   }
-  
+
   .chatbot-message-content ::-moz-selection,
   .chatbot-message-content::-moz-selection,
   .chatbot-message-content *::-moz-selection {
@@ -262,7 +262,24 @@
     background-color: transparent !important;
     color: inherit !important;
   }
-  
+
+  /* Remove tap highlight from chatbot messages */
+  .chatbot-message-content,
+  .chatbot-response,
+  .chatbot-response *,
+  .prose,
+  .prose * {
+    -webkit-tap-highlight-color: transparent !important;
+    tap-highlight-color: transparent !important;
+  }
+
+  /* Remove white background from chatbot response divs */
+  .chatbot-message-content,
+  .chatbot-response {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
 }
 
 /* ===== Stripe-Level Animations ===== */

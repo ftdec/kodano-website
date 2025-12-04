@@ -57,7 +57,7 @@ export function ChatSidebar({ isOpen, onClose, children }: ChatSidebarProps) {
     <div
       ref={sidebarRef}
       style={sidebarStyle}
-      className={`fixed right-0 top-0 w-full sm:max-w-[30rem] bg-white backdrop-blur-2xl backdrop-saturate-180 ring-2 ring-gray-200 border border-gray-200 shadow-[0_32px_80px_rgba(0,0,0,0.1)] transform transition-transform duration-300 ease-in-out z-50 rounded-none sm:rounded-l-3xl ${
+      className={`fixed right-0 top-0 w-full sm:max-w-[30rem] bg-white backdrop-blur-2xl backdrop-saturate-180 ring-2 ring-gray-200 border border-gray-200 shadow-[0_32px_80px_rgba(0,0,0,0.1)] transform transition-transform duration-300 ease-in-out z-50 rounded-none sm:rounded-l-3xl touch-pan-y ${
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
