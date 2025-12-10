@@ -29,6 +29,7 @@ export default function FaleConoscoPage() {
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const company = formData.get("company") as string;
+    const phone = formData.get("phone") as string;
     const volume = formData.get("volume") as string;
     const message = formData.get("message") as string;
 
@@ -42,6 +43,7 @@ export default function FaleConoscoPage() {
           name,
           email,
           company,
+          phone,
           volume,
           message,
         }),
@@ -144,9 +146,15 @@ export default function FaleConoscoPage() {
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email corporativo</Label>
-                      <Input id="email" name="email" type="email" placeholder="joao@empresa.com" required />
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email corporativo</Label>
+                        <Input id="email" name="email" type="email" placeholder="joao@empresa.com" required />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="phone">Telefone</Label>
+                        <Input id="phone" name="phone" type="tel" placeholder="(11) 99999-9999" required />
+                      </div>
                     </div>
 
                     <div className="space-y-2">
