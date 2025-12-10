@@ -39,3 +39,27 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# PDFs e arquivos temporários de geração
+*.pdf
+*apresentacao*.html
+*investor-deck*.html
+*pricing-deck*.html
+*product-overview*.html
+*carta-features*.html
+*contrato*.html
+generate-pdf*.js
+generate-pdf*.mjs
+gerar_pdf*.py
+embed_logo.py
+
+# Arquivos de deploy com secrets
+VARIAVEIS_VERCEL.txt
+*_DEPLOY.md
+DEPLOY_*.md
+
+# Scripts Python temporários
+generate-*.py
+
+# Arquivos Typst
+*.typ
