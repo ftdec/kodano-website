@@ -15,7 +15,7 @@ import { useScroll, useTransform, useMotionValue, useSpring, MotionValue } from 
 /**
  * Get scroll progress of an element (0 to 1)
  */
-export function useScrollProgress(ref: RefObject<HTMLElement>) {
+export function useScrollProgress(ref: RefObject<HTMLElement | null>) {
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
@@ -27,7 +27,7 @@ export function useScrollProgress(ref: RefObject<HTMLElement>) {
 /**
  * Get smooth scroll progress with spring physics
  */
-export function useSmoothScrollProgress(ref: RefObject<HTMLElement>) {
+export function useSmoothScrollProgress(ref: RefObject<HTMLElement | null>) {
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
@@ -45,7 +45,7 @@ export function useSmoothScrollProgress(ref: RefObject<HTMLElement>) {
 /**
  * Pin element during scroll within a range
  */
-export function useScrollPin(ref: RefObject<HTMLElement>) {
+export function useScrollPin(ref: RefObject<HTMLElement | null>) {
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"]
@@ -57,7 +57,7 @@ export function useScrollPin(ref: RefObject<HTMLElement>) {
 /**
  * Parallax effect based on scroll
  */
-export function useParallax(ref: RefObject<HTMLElement>, distance = 100) {
+export function useParallax(ref: RefObject<HTMLElement | null>, distance = 100) {
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
@@ -71,7 +71,7 @@ export function useParallax(ref: RefObject<HTMLElement>, distance = 100) {
 /**
  * Scale element based on scroll progress
  */
-export function useScrollScale(ref: RefObject<HTMLElement>, range: [number, number] = [0.8, 1]) {
+export function useScrollScale(ref: RefObject<HTMLElement | null>, range: [number, number] = [0.8, 1]) {
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
@@ -85,7 +85,7 @@ export function useScrollScale(ref: RefObject<HTMLElement>, range: [number, numb
 /**
  * Opacity based on scroll
  */
-export function useScrollOpacity(ref: RefObject<HTMLElement>) {
+export function useScrollOpacity(ref: RefObject<HTMLElement | null>) {
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
@@ -124,7 +124,7 @@ export function useMousePosition() {
 /**
  * Track mouse position relative to element
  */
-export function useMousePositionInElement(ref: RefObject<HTMLElement>) {
+export function useMousePositionInElement(ref: RefObject<HTMLElement | null>) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -152,7 +152,7 @@ export function useMousePositionInElement(ref: RefObject<HTMLElement>) {
 /**
  * Calculate rotation based on mouse position for 3D tilt effect
  */
-export function useMouseTilt(ref: RefObject<HTMLElement>, maxRotation = 10) {
+export function useMouseTilt(ref: RefObject<HTMLElement | null>, maxRotation = 10) {
   const [rotation, setRotation] = useState({ rotateX: 0, rotateY: 0 });
 
   useEffect(() => {
@@ -192,7 +192,7 @@ export function useMouseTilt(ref: RefObject<HTMLElement>, maxRotation = 10) {
 /**
  * Magnetic button effect - element follows cursor
  */
-export function useMagneticEffect(ref: RefObject<HTMLElement>, strength = 0.3) {
+export function useMagneticEffect(ref: RefObject<HTMLElement | null>, strength = 0.3) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -241,7 +241,7 @@ export function useMagneticEffect(ref: RefObject<HTMLElement>, strength = 0.3) {
 /**
  * Detect if element is in viewport
  */
-export function useInViewport(ref: RefObject<HTMLElement>, threshold = 0.1) {
+export function useInViewport(ref: RefObject<HTMLElement | null>, threshold = 0.1) {
   const [isInView, setIsInView] = useState(false);
 
   useEffect(() => {
@@ -268,7 +268,7 @@ export function useInViewport(ref: RefObject<HTMLElement>, threshold = 0.1) {
 /**
  * Detect if element has been seen (doesn't toggle back to false)
  */
-export function useHasBeenSeen(ref: RefObject<HTMLElement>, threshold = 0.1) {
+export function useHasBeenSeen(ref: RefObject<HTMLElement | null>, threshold = 0.1) {
   const [hasBeenSeen, setHasBeenSeen] = useState(false);
 
   useEffect(() => {
@@ -391,7 +391,7 @@ export function useCountAnimation(
 /**
  * Stagger reveal hook for children elements
  */
-export function useStaggerReveal(ref: RefObject<HTMLElement>, delay = 100) {
+export function useStaggerReveal(ref: RefObject<HTMLElement | null>, delay = 100) {
   const [revealedIndexes, setRevealedIndexes] = useState<Set<number>>(new Set());
   const isInView = useInViewport(ref);
 
