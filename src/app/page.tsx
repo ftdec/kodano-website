@@ -19,10 +19,6 @@ import { cn } from "@/lib/utils";
 import { Logo } from "@/components/layout/logo";
 
 // Advanced Animation Components
-import { GradientMesh } from "@/components/animations/gradient-mesh";
-import { CursorSpotlight } from "@/components/animations/cursor-spotlight";
-import { TextReveal } from "@/components/animations/text-reveal";
-import { ScrollIndicator } from "@/components/animations/scroll-indicator";
 import { Card3D } from "@/components/animations/card-3d";
 
 const orchestrationFeatures = [
@@ -404,23 +400,30 @@ export default function Home() {
       <main className="flex-1 flex flex-col w-full">
 
         {/* HERO SECTION */}
-        <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-32 px-6">
-          {/* Advanced Gradient Mesh Background */}
-          <GradientMesh
-            className="absolute inset-0 z-0"
-            colors={["#4FACFE", "#00DBDE", "#43E97B", "#415A77"]}
-            speed={0.3}
-          />
-
-          {/* Cursor Spotlight Effect */}
-          {!isMobile && !prefersReducedMotion && (
-            <CursorSpotlight
-              size={600}
-              opacity={0.12}
-              blur={120}
-              color="rgba(79, 172, 254, 0.4)"
-            />
-          )}
+        <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-32 px-6 overflow-hidden">
+          {/* Optimized Gradient Background with Animation */}
+          <div className="absolute inset-0 z-0">
+            <div className={cn(
+              "absolute inset-0 opacity-40",
+              !prefersReducedMotion && "animate-gradient"
+            )} style={{
+              background: `
+                radial-gradient(circle at 20% 50%, rgba(79, 172, 254, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 219, 222, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(67, 233, 123, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 90% 10%, rgba(65, 90, 119, 0.15) 0%, transparent 50%)
+              `,
+              backgroundSize: '200% 200%',
+            }} />
+            <div className={cn(
+              "absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-kodano-blue-light/10 rounded-full",
+              isMobile ? "blur-[60px]" : "blur-[120px]"
+            )} />
+            <div className={cn(
+              "absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] bg-kodano-blue-medium/10 rounded-full",
+              isMobile ? "blur-[50px]" : "blur-[100px]"
+            )} />
+          </div>
 
           <div className="container max-w-5xl mx-auto relative z-10 text-center">
             {prefersReducedMotion ? (
@@ -464,13 +467,17 @@ export default function Home() {
               <span className="text-sm font-medium text-muted-foreground">Subadquirente Digital com Tecnologia Avançada</span>
             </motion.div>
 
-            <TextReveal
-              text="Pagamentos inteligentes para empresas modernas"
-              as="h1"
+            <motion.h1
+                  initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
+              animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0 : 0.1, ease: [0.25, 0.1, 0.25, 1] }}
               className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.1]"
-              delay={0.1}
-              staggerDelay={0.03}
-            />
+            >
+              Pagamentos inteligentes <br className="hidden md:block" />
+              <span className="text-foreground/90 bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/95 to-foreground/90">
+                para empresas modernas
+              </span>
+            </motion.h1>
 
             <motion.p
                   initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
@@ -489,27 +496,53 @@ export default function Home() {
             >
               <motion.a
                 href="#contact"
-                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full bg-foreground text-white font-medium hover:opacity-90 transition-all gap-2 justify-center shadow-md shadow-foreground/15 relative overflow-hidden group"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
+                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full bg-foreground text-white font-medium transition-all gap-2 justify-center shadow-lg shadow-foreground/20 relative overflow-hidden group"
+                whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.3)" }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
                 {!prefersReducedMotion && (
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    initial={{ x: "-100%" }}
-                    animate={{ x: "200%" }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  />
+                  <>
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                      initial={{ x: "-100%" }}
+                      animate={{ x: "200%" }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: "linear", repeatDelay: 0.5 }}
+                    />
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100"
+                      transition={{ duration: 0.3 }}
+                    />
+                  </>
                 )}
                 <span className="relative z-10">Fale com o Kodano</span>
-                <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
+                <motion.div
+                  className="relative z-10"
+                  animate={!prefersReducedMotion ? { x: [0, 3, 0] } : {}}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </motion.div>
               </motion.a>
               <motion.a
                 href="#process"
-                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full border border-border text-foreground font-medium hover:bg-primary/5 transition-all justify-center relative overflow-hidden"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
+                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full border-2 border-border text-foreground font-medium transition-all justify-center relative overflow-hidden group"
+                whileHover={{
+                  scale: 1.05,
+                  borderColor: "rgba(79, 172, 254, 0.5)",
+                  backgroundColor: "rgba(79, 172, 254, 0.05)"
+                }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
+                {!prefersReducedMotion && (
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: "100%" }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                  />
+                )}
                 <span className="relative z-10">Conheça nosso processo</span>
               </motion.a>
             </motion.div>
@@ -517,12 +550,28 @@ export default function Home() {
             )}
           </div>
 
-          {/* Scroll Indicator */}
+          {/* Subtle Scroll Indicator */}
           {!isMobile && !prefersReducedMotion && (
-            <ScrollIndicator
-              variant="mouse"
-              className="absolute bottom-8 left-1/2 -translate-x-1/2"
-            />
+            <motion.div
+              className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 0.5 }}
+            >
+              <motion.div
+                className="w-6 h-10 rounded-full border-2 border-foreground/30 flex items-start justify-center p-2"
+                animate={{
+                  borderColor: ["rgba(0,0,0,0.2)", "rgba(0,0,0,0.4)", "rgba(0,0,0,0.2)"],
+                }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <motion.div
+                  className="w-1 h-2 rounded-full bg-foreground/40"
+                  animate={{ y: [0, 12, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                />
+              </motion.div>
+            </motion.div>
           )}
         </section>
 
