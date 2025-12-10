@@ -18,6 +18,13 @@ import { InputGroup, InputGroupInput, InputGroupTextarea } from "@/components/ui
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/layout/logo";
 
+// Advanced Animation Components
+import { GradientMesh } from "@/components/animations/gradient-mesh";
+import { CursorSpotlight } from "@/components/animations/cursor-spotlight";
+import { TextReveal } from "@/components/animations/text-reveal";
+import { ScrollIndicator } from "@/components/animations/scroll-indicator";
+import { Card3D } from "@/components/animations/card-3d";
+
 const orchestrationFeatures = [
   {
     title: "Processamento Inteligente",
@@ -398,17 +405,22 @@ export default function Home() {
 
         {/* HERO SECTION */}
         <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-32 px-6">
-          {/* Background Elements - Reduced blur on mobile */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className={cn(
-              "absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-kodano-blue-light/10 rounded-full",
-              isMobile ? "blur-[60px]" : "blur-[120px]"
-            )} />
-            <div className={cn(
-              "absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] bg-kodano-blue-medium/10 rounded-full",
-              isMobile ? "blur-[50px]" : "blur-[100px]"
-            )} />
-          </div>
+          {/* Advanced Gradient Mesh Background */}
+          <GradientMesh
+            className="absolute inset-0 z-0"
+            colors={["#4FACFE", "#00DBDE", "#43E97B", "#415A77"]}
+            speed={0.3}
+          />
+
+          {/* Cursor Spotlight Effect */}
+          {!isMobile && !prefersReducedMotion && (
+            <CursorSpotlight
+              size={600}
+              opacity={0.12}
+              blur={120}
+              color="rgba(79, 172, 254, 0.4)"
+            />
+          )}
 
           <div className="container max-w-5xl mx-auto relative z-10 text-center">
             {prefersReducedMotion ? (
@@ -452,17 +464,13 @@ export default function Home() {
               <span className="text-sm font-medium text-muted-foreground">Subadquirente Digital com Tecnologia Avançada</span>
             </motion.div>
 
-            <motion.h1
-                  initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
-              animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : 0.1 }}
+            <TextReveal
+              text="Pagamentos inteligentes para empresas modernas"
+              as="h1"
               className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.1]"
-            >
-              Pagamentos inteligentes <br className="hidden md:block" />
-              <span className="text-foreground/90">
-                para empresas modernas
-              </span>
-            </motion.h1>
+              delay={0.1}
+              staggerDelay={0.03}
+            />
 
             <motion.p
                   initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
@@ -479,23 +487,43 @@ export default function Home() {
                   transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : 0.3 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 flex-wrap"
             >
-              <a
+              <motion.a
                 href="#contact"
-                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full bg-foreground text-white font-medium hover:opacity-90 transition-opacity gap-2 justify-center shadow-md shadow-foreground/15"
+                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full bg-foreground text-white font-medium hover:opacity-90 transition-all gap-2 justify-center shadow-md shadow-foreground/15 relative overflow-hidden group"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Fale com o Kodano
-                <ArrowRight className="w-4 h-4" />
-              </a>
-              <a
+                {!prefersReducedMotion && (
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    initial={{ x: "-100%" }}
+                    animate={{ x: "200%" }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  />
+                )}
+                <span className="relative z-10">Fale com o Kodano</span>
+                <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
+              </motion.a>
+              <motion.a
                 href="#process"
-                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full border border-border text-foreground font-medium hover:bg-primary/5 transition-colors justify-center"
+                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full border border-border text-foreground font-medium hover:bg-primary/5 transition-all justify-center relative overflow-hidden"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Conheça nosso processo
-              </a>
+                <span className="relative z-10">Conheça nosso processo</span>
+              </motion.a>
             </motion.div>
               </>
             )}
           </div>
+
+          {/* Scroll Indicator */}
+          {!isMobile && !prefersReducedMotion && (
+            <ScrollIndicator
+              variant="mouse"
+              className="absolute bottom-8 left-1/2 -translate-x-1/2"
+            />
+          )}
         </section>
 
         {/* WHAT WE DO (CONCEPT) */}
@@ -553,29 +581,35 @@ export default function Home() {
                     viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
                     transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : i * 0.1 }}
                   >
-                    <Card className={cn(
-                      "group relative h-full overflow-hidden border border-border/40 bg-white/80 dark:bg-background/40 shadow-[0_20px_50px_rgba(15,23,42,0.08)] transition-all",
-                      isMobile ? "backdrop-blur-sm duration-200" : "backdrop-blur-2xl duration-500 hover:-translate-y-1 hover:shadow-[0_35px_65px_rgba(15,23,42,0.15)]"
-                    )}>
-                      <div className={cn("absolute inset-x-0 top-0 h-1 bg-gradient-to-r", item.accent.border)} />
-                      {!isMobile && (
-                      <div className="absolute inset-0 pointer-events-none">
-                        <div className={cn("absolute inset-x-6 -top-10 h-24 bg-gradient-to-r blur-3xl opacity-0 group-hover:opacity-70 transition-all duration-700", item.accent.glow)} />
-                      </div>
-                      )}
-
-                      <CardHeader className="relative z-10 space-y-4 p-8">
-                        <div className="flex items-start justify-between gap-4">
-                          <div className={cn("w-14 h-14 rounded-2xl bg-gradient-to-br flex items-center justify-center text-primary shadow-inner shadow-white/60", item.accent.icon)}>
-                            {item.icon}
-                          </div>
+                    <Card3D
+                      maxRotation={8}
+                      glare={!isMobile && !prefersReducedMotion}
+                      shadow={!isMobile}
+                    >
+                      <Card className={cn(
+                        "group relative h-full overflow-hidden border border-border/40 bg-white/80 dark:bg-background/40 shadow-[0_20px_50px_rgba(15,23,42,0.08)] transition-all",
+                        isMobile ? "backdrop-blur-sm duration-200" : "backdrop-blur-2xl duration-500"
+                      )}>
+                        <div className={cn("absolute inset-x-0 top-0 h-1 bg-gradient-to-r", item.accent.border)} />
+                        {!isMobile && (
+                        <div className="absolute inset-0 pointer-events-none">
+                          <div className={cn("absolute inset-x-6 -top-10 h-24 bg-gradient-to-r blur-3xl opacity-0 group-hover:opacity-70 transition-all duration-700", item.accent.glow)} />
                         </div>
-                        <CardTitle className="text-2xl leading-tight pt-2">{item.title}</CardTitle>
-                        <p className="text-muted-foreground/90 leading-relaxed text-base">
-                          {item.desc}
-                        </p>
-                      </CardHeader>
-                    </Card>
+                        )}
+
+                        <CardHeader className="relative z-10 space-y-4 p-8">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className={cn("w-14 h-14 rounded-2xl bg-gradient-to-br flex items-center justify-center text-primary shadow-inner shadow-white/60", item.accent.icon)}>
+                              {item.icon}
+                            </div>
+                          </div>
+                          <CardTitle className="text-2xl leading-tight pt-2">{item.title}</CardTitle>
+                          <p className="text-muted-foreground/90 leading-relaxed text-base">
+                            {item.desc}
+                          </p>
+                        </CardHeader>
+                      </Card>
+                    </Card3D>
                   </motion.div>
                 ))}
               </div>
