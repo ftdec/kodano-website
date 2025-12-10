@@ -64,20 +64,20 @@ export const tweenExpo = {
 // Helper to create custom transition
 export const createTransition = (
   duration: number,
-  ease: typeof easeOut | typeof spring = easeOut,
+  ease: readonly number[] | typeof spring = easeOut,
   delay = 0
 ): Transition => {
   if (typeof ease === 'object' && 'type' in ease && ease.type === 'spring') {
     return {
       ...ease,
       delay,
-    };
+    } as Transition;
   }
 
   return {
-    type: "tween",
+    type: "tween" as const,
     duration,
-    ease: ease as number[],
+    ease: ease as [number, number, number, number],
     delay,
   };
 };
