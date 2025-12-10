@@ -1,16 +1,15 @@
 /**
  * Homepage - Kodano Website
- * Simplified, modern, single-page design
+ * Premium Stripe/CloudWalk level design with advanced animations
+ * Refactored to use modular components
  */
 
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Zap, Shield, BarChart3, Layers, Send, CheckCircle2 } from "lucide-react";
+import { Send, CheckCircle2, Shield } from "lucide-react";
 
-import Image from "next/image";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Button as ButtonV2 } from "@/components/ui/button-v2";
@@ -18,51 +17,15 @@ import { InputGroup, InputGroupInput, InputGroupTextarea } from "@/components/ui
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/layout/logo";
 
-// Advanced Animation Components
-import { Card3D } from "@/components/animations/card-3d";
+// Premium Home Components
+import { HeroSection } from "@/components/home/hero-section";
+import { BenefitsSection } from "@/components/home/benefits-section";
+import { HowItWorksSection } from "@/components/home/how-it-works-section";
+import { SegmentsSection } from "@/components/home/segments-section";
+import { SecuritySection } from "@/components/home/security-section";
+import { FinalCTASection } from "@/components/home/final-cta-section";
 
-const orchestrationFeatures = [
-  {
-    title: "Processamento Inteligente",
-    desc: "Tecnologia avançada que otimiza cada transação para maximizar taxas de aprovação e reduzir custos.",
-    icon: <Layers className="w-6 h-6" />,
-    accent: {
-      border: "from-[#4FACFE] via-[#00DBDE] to-[#43E97B]",
-      icon: "from-[#E0F2FE] via-white to-[#F4ECFF]",
-      glow: "from-[#4FACFE]/40 via-[#43E97B]/10 to-transparent"
-    }
-  },
-  {
-    title: "Retentativas Automáticas",
-    desc: "Recuperação de vendas perdidas com retentativas inteligentes e transparentes.",
-    icon: <Zap className="w-6 h-6" />,
-    accent: {
-      border: "from-[#FAD961] via-[#F76B1C] to-[#FAD961]",
-      icon: "from-[#FFF7E5] via-white to-[#FFE5D0]",
-      glow: "from-[#FAD961]/40 via-[#F76B1C]/15 to-transparent"
-    }
-  },
-  {
-    title: "Conciliação Integrada",
-    desc: "Dashboard unificado para controle total de todas as suas transações e recebíveis.",
-    icon: <BarChart3 className="w-6 h-6" />,
-    accent: {
-      border: "from-[#A8FF78] via-[#78FFD6] to-[#A8FF78]",
-      icon: "from-[#ECFDF5] via-white to-[#DCFCE7]",
-      glow: "from-[#A8FF78]/40 via-[#78FFD6]/15 to-transparent"
-    }
-  },
-  {
-    title: "Segurança Bancária",
-    desc: "Certificação PCI-DSS e conformidade total com as normas do Banco Central.",
-    icon: <Shield className="w-6 h-6" />,
-    accent: {
-      border: "from-[#B8C6FF] via-[#6D83F2] to-[#B8C6FF]",
-      icon: "from-[#EEF2FF] via-white to-[#E0E7FF]",
-      glow: "from-[#B8C6FF]/40 via-[#6D83F2]/15 to-transparent"
-    }
-  }
-] as const;
+// Removed - now handled by BenefitsSection component
 
 // Mobile Nav Component for One-Page
 function MobileNavOnePage() {
@@ -398,345 +361,23 @@ export default function Home() {
       </>
 
       <main className="flex-1 flex flex-col w-full">
-
         {/* HERO SECTION */}
-        <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-32 px-6 overflow-hidden">
-          {/* Optimized Gradient Background with Animation */}
-          <div className="absolute inset-0 z-0">
-            <div className={cn(
-              "absolute inset-0 opacity-40",
-              !prefersReducedMotion && "animate-gradient"
-            )} style={{
-              background: `
-                radial-gradient(circle at 20% 50%, rgba(79, 172, 254, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 219, 222, 0.25) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(67, 233, 123, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 90% 10%, rgba(65, 90, 119, 0.15) 0%, transparent 50%)
-              `,
-              backgroundSize: '200% 200%',
-            }} />
-            <div className={cn(
-              "absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-kodano-blue-light/10 rounded-full",
-              isMobile ? "blur-[60px]" : "blur-[120px]"
-            )} />
-            <div className={cn(
-              "absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] bg-kodano-blue-medium/10 rounded-full",
-              isMobile ? "blur-[50px]" : "blur-[100px]"
-            )} />
-          </div>
+        <HeroSection />
 
-          <div className="container max-w-5xl mx-auto relative z-10 text-center">
-            {prefersReducedMotion ? (
-              <>
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border mb-8 backdrop-blur-sm">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span className="text-sm font-medium text-muted-foreground">Subadquirente Digital com Tecnologia Avançada</span>
-                </div>
-                <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.1]">
-                  Pagamentos inteligentes <br className="hidden md:block" />
-                  <span className="text-foreground/90">para empresas modernas</span>
-                </h1>
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
-                  Maximize aprovação, reduza custos e tenha controle total com APIs modernas e orquestração inteligente de funcionalidades.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 flex-wrap">
-                  <a
-                    href="#contact"
-                    className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full bg-foreground text-white font-medium hover:opacity-90 transition-opacity gap-2 justify-center shadow-md shadow-foreground/15"
-                  >
-                    Fale com o Kodano
-                    <ArrowRight className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="#process"
-                    className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full border border-border text-foreground font-medium hover:bg-primary/5 transition-colors justify-center"
-                  >
-                    Conheça nosso processo
-                  </a>
-                </div>
-              </>
-            ) : (
-              <>
-            <motion.div
-                  initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
-              animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: isMobile ? 0.3 : 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border mb-8 backdrop-blur-sm"
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-sm font-medium text-muted-foreground">Subadquirente Digital com Tecnologia Avançada</span>
-            </motion.div>
+        {/* BENEFITS SECTION (WHAT WE DO) */}
+        <BenefitsSection />
 
-            <motion.h1
-                  initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
-              animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0 : 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-              className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.1]"
-            >
-              Pagamentos inteligentes <br className="hidden md:block" />
-              <span className="text-foreground/90 bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/95 to-foreground/90">
-                para empresas modernas
-              </span>
-            </motion.h1>
+        {/* HOW IT WORKS SECTION */}
+        <HowItWorksSection />
 
-            <motion.p
-                  initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
-              animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : 0.2 }}
-              className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed"
-            >
-              Maximize aprovação, reduza custos e tenha controle total com APIs modernas e orquestração inteligente de funcionalidades.
-            </motion.p>
+        {/* SEGMENTS SECTION (PARA QUEM É) */}
+        <SegmentsSection />
 
-            <motion.div
-                  initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
-              animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : 0.3 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 flex-wrap"
-            >
-              <motion.a
-                href="#contact"
-                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full bg-foreground text-white font-medium transition-all gap-2 justify-center shadow-lg shadow-foreground/20 relative overflow-hidden group"
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.3)" }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
-                {!prefersReducedMotion && (
-                  <>
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                      initial={{ x: "-100%" }}
-                      animate={{ x: "200%" }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: "linear", repeatDelay: 0.5 }}
-                    />
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100"
-                      transition={{ duration: 0.3 }}
-                    />
-                  </>
-                )}
-                <span className="relative z-10">Fale com o Kodano</span>
-                <motion.div
-                  className="relative z-10"
-                  animate={!prefersReducedMotion ? { x: [0, 3, 0] } : {}}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </motion.div>
-              </motion.a>
-              <motion.a
-                href="#process"
-                className="inline-flex h-12 items-center px-6 sm:px-7 rounded-full border-2 border-border text-foreground font-medium transition-all justify-center relative overflow-hidden group"
-                whileHover={{
-                  scale: 1.05,
-                  borderColor: "rgba(79, 172, 254, 0.5)",
-                  backgroundColor: "rgba(79, 172, 254, 0.05)"
-                }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
-                {!prefersReducedMotion && (
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0"
-                    initial={{ x: "-100%" }}
-                    whileHover={{ x: "100%" }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }}
-                  />
-                )}
-                <span className="relative z-10">Conheça nosso processo</span>
-              </motion.a>
-            </motion.div>
-              </>
-            )}
-          </div>
+        {/* SECURITY SECTION */}
+        <SecuritySection />
 
-          {/* Subtle Scroll Indicator */}
-          {!isMobile && !prefersReducedMotion && (
-            <motion.div
-              className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 0.5 }}
-            >
-              <motion.div
-                className="w-6 h-10 rounded-full border-2 border-foreground/30 flex items-start justify-center p-2"
-                animate={{
-                  borderColor: ["rgba(0,0,0,0.2)", "rgba(0,0,0,0.4)", "rgba(0,0,0,0.2)"],
-                }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <motion.div
-                  className="w-1 h-2 rounded-full bg-foreground/40"
-                  animate={{ y: [0, 12, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                />
-              </motion.div>
-            </motion.div>
-          )}
-        </section>
-
-        {/* WHAT WE DO (CONCEPT) */}
-        <section id="concept" className="relative py-28 px-6 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-secondary/60 via-background to-background" />
-          <div className={cn(
-            "absolute -top-32 right-0 w-[420px] h-[420px] bg-[radial-gradient(circle_at_center,_rgba(65,90,119,0.25),_transparent_65%)]",
-            isMobile ? "blur-[60px]" : "blur-[120px]"
-          )} />
-          <div className={cn(
-            "absolute bottom-[-20%] left-[-5%] w-[520px] h-[520px] bg-[radial-gradient(circle_at_center,_rgba(13,27,42,0.15),_transparent_65%)]",
-            isMobile ? "blur-[70px]" : "blur-[140px]"
-          )} />
-          <div className="absolute inset-x-0 top-16 hidden md:block">
-            <div className="mx-auto w-[70%] rounded-[48px] border border-border/40 border-dashed h-[70vh] max-h-[520px] opacity-40" />
-          </div>
-
-          <div className="container relative z-10 max-w-6xl mx-auto">
-            <div className="max-w-3xl mx-auto text-center mb-16">
-              <motion.div
-                initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion || isMobile ? 0 : 20 }}
-                whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
-                transition={{ duration: isMobile ? 0.3 : 0.6 }}
-                className="space-y-6"
-              >
-                <div className={cn(
-                  "inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/70 dark:bg-white/5 border border-border/60",
-                  isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
-                )}>
-                  <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-emerald-400 to-sky-400 animate-pulse" />
-                  <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">Tecnologia proprietária</span>
-                </div>
-                <h2 className="text-3xl md:text-4xl font-heading font-semibold leading-[1.2] text-balance">
-                  Orquestração feita com precisão cirúrgica
-                </h2>
-                <p className="text-lg text-muted-foreground/80 leading-relaxed text-balance">
-                  Processamento feito com precisão. Automatizamos regras complexas de aprovação, retentativas e conciliação em uma camada inteligente que otimiza cada transação para máxima eficiência.
-                </p>
-              </motion.div>
-            </div>
-
-            <div className="relative max-w-5xl mx-auto">
-              <div className="pointer-events-none absolute inset-6 hidden md:block">
-                <div className="absolute left-1/2 top-0 bottom-0 border-l border-border/50 border-dashed" />
-                <div className="absolute top-1/2 left-0 right-0 border-t border-border/50 border-dashed" />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6 relative">
-                {orchestrationFeatures.map((item, i) => (
-                  <motion.div
-                    key={item.title}
-                    initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion || isMobile ? 0 : 20 }}
-                    whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
-                    transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : i * 0.1 }}
-                  >
-                    <Card3D
-                      maxRotation={8}
-                      glare={!isMobile && !prefersReducedMotion}
-                      shadow={!isMobile}
-                    >
-                      <Card className={cn(
-                        "group relative h-full overflow-hidden border border-border/40 bg-white/80 dark:bg-background/40 shadow-[0_20px_50px_rgba(15,23,42,0.08)] transition-all",
-                        isMobile ? "backdrop-blur-sm duration-200" : "backdrop-blur-2xl duration-500"
-                      )}>
-                        <div className={cn("absolute inset-x-0 top-0 h-1 bg-gradient-to-r", item.accent.border)} />
-                        {!isMobile && (
-                        <div className="absolute inset-0 pointer-events-none">
-                          <div className={cn("absolute inset-x-6 -top-10 h-24 bg-gradient-to-r blur-3xl opacity-0 group-hover:opacity-70 transition-all duration-700", item.accent.glow)} />
-                        </div>
-                        )}
-
-                        <CardHeader className="relative z-10 space-y-4 p-8">
-                          <div className="flex items-start justify-between gap-4">
-                            <div className={cn("w-14 h-14 rounded-2xl bg-gradient-to-br flex items-center justify-center text-primary shadow-inner shadow-white/60", item.accent.icon)}>
-                              {item.icon}
-                            </div>
-                          </div>
-                          <CardTitle className="text-2xl leading-tight pt-2">{item.title}</CardTitle>
-                          <p className="text-muted-foreground/90 leading-relaxed text-base">
-                            {item.desc}
-                          </p>
-                        </CardHeader>
-                      </Card>
-                    </Card3D>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* HOW IT WORKS (PROCESS) */}
-        <section id="process" className="scroll-mt-28 py-16 sm:py-24 md:py-32 px-4 sm:px-6">
-          <div className="container max-w-5xl mx-auto">
-            <div className="text-center mb-12 sm:mb-16 md:mb-20">
-              <div className={cn(
-                "inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 rounded-full bg-white/70 dark:bg-white/5 border border-border/60 mb-4 sm:mb-6",
-                isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
-              )}>
-                <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
-                <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] text-muted-foreground">Processo Simplificado</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Como Funciona</h2>
-              <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
-                Do setup à primeira transação em poucos passos.
-              </p>
-            </div>
-
-            <div className="relative">
-              {/* Connecting Line - ajustado para mobile */}
-              <div className="absolute left-6 sm:left-[20px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-border to-transparent md:-translate-x-1/2" />
-
-              <div className="space-y-10 sm:space-y-12 md:space-y-16">
-                {[
-                  {
-                    title: "Integração Rápida",
-                    desc: "Conecte-se à nossa API RESTful moderna em minutos, com documentação clara e SDKs prontos.",
-                    icon: <Layers className="w-5 h-5 sm:w-6 sm:h-6" />
-                  },
-                  {
-                    title: "Configure Pagamentos",
-                    desc: "Defina suas regras de negócio, métodos de pagamento aceitos e fluxo de checkout.",
-                    icon: <Zap className="w-5 h-5 sm:w-6 sm:h-6" />
-                  },
-                  {
-                    title: "Processe Transações",
-                    desc: "Nossa tecnologia processa cada transação com otimização inteligente para maximizar aprovações.",
-                    icon: <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6" />
-                  },
-                  {
-                    title: "Monitore e Otimize",
-                    desc: "Acompanhe tudo em tempo real pelo dashboard e deixe nossa IA otimizar as conversões.",
-                    icon: <Shield className="w-5 h-5 sm:w-6 sm:h-6" />
-                  }
-                ].map((step, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: prefersReducedMotion ? 1 : 0, y: prefersReducedMotion || isMobile ? 0 : 20 }}
-                    whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
-                    transition={{ duration: isMobile ? 0.2 : 0.5, delay: isMobile ? 0 : i * 0.1 }}
-                    className={`relative flex flex-col md:flex-row gap-4 sm:gap-6 md:gap-8 ${i % 2 === 0 ? "md:text-right" : "md:flex-row-reverse md:text-left"}`}
-                  >
-                    {/* Mobile: conteúdo à direita do círculo, Desktop: layout alternado */}
-                    <div className={`flex-1 pl-12 sm:pl-14 ${i % 2 === 0 ? "md:pl-0 md:pr-12" : "md:pl-12 md:pr-0"}`}>
-                      <h3 className="text-lg sm:text-xl font-bold mb-1.5 sm:mb-2">{step.title}</h3>
-                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{step.desc}</p>
-                    </div>
-
-                    {/* Círculo com ícone - posicionado à esquerda no mobile, centralizado no desktop */}
-                    <div className="absolute left-0 md:left-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-background border-2 border-primary flex items-center justify-center z-10 md:-translate-x-1/2 shrink-0">
-                      <div className="text-primary text-sm sm:text-base">{step.icon}</div>
-                    </div>
-
-                    {/* Espaço vazio no desktop para layout alternado */}
-                    <div className="flex-1 hidden md:block" />
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* FINAL CTA SECTION */}
+        <FinalCTASection />
 
         {/* CONTACT */}
         <section id="contact" className="scroll-mt-28 py-24 px-6 relative overflow-hidden">
