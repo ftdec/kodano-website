@@ -208,6 +208,7 @@ function MobileNavOnePage() {
 
 export default function Home() {
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -229,6 +230,7 @@ export default function Home() {
         body: JSON.stringify({
           name: "Contato do Site",
           email,
+          phone,
           message,
           subject: "Nova mensagem do formulário principal",
         }),
@@ -237,14 +239,15 @@ export default function Home() {
       const data = await response.json();
 
       if (!response.ok) {
-        const errorMsg = data.details 
-          ? `${data.error}\n\nDetalhes: ${data.details}` 
+        const errorMsg = data.details
+          ? `${data.error}\n\nDetalhes: ${data.details}`
           : data.error || "Erro ao enviar mensagem";
         throw new Error(errorMsg);
       }
 
       setIsSuccess(true);
       setEmail("");
+      setPhone("");
       setMessage("");
       // Reset success state after 5 seconds
       setTimeout(() => setIsSuccess(false), 5000);
@@ -765,6 +768,21 @@ export default function Home() {
                             placeholder="nome@empresa.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className="h-12"
+                          />
+                        </InputGroup>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label htmlFor="phone" className="text-sm font-medium ml-1">Telefone</label>
+                        <InputGroup>
+                          <InputGroupInput
+                            id="phone"
+                            type="tel"
+                            placeholder="(11) 99999-9999"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
                             required
                             className="h-12"
                           />
