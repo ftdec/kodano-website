@@ -17,3 +17,9 @@ export * from "./scroll-progress";
 // Interactive components
 export * from "./magnetic-button";
 export * from "./card-3d";
+
+// Hero section components
+export * from "./gradient-mesh";
+export * from "./cursor-spotlight";
+export * from "./advanced-button";
+export * from "./scroll-indicator";
