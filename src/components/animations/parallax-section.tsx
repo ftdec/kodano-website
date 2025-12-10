@@ -62,14 +62,12 @@ interface ParallaxLayerProps {
   children: ReactNode;
   className?: string;
   speed?: number;
-  offset?: [string, string];
 }
 
 export function ParallaxLayer({
   children,
   className,
   speed = 0.5,
-  offset = ["start end", "end start"],
 }: ParallaxLayerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -77,7 +75,7 @@ export function ParallaxLayer({
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset,
+    offset: ["start end", "end start"],
   });
 
   const distance = 200;
