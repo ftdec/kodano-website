@@ -417,12 +417,13 @@ export function KodanoControlPlane({ className }: { className?: string }) {
       });
 
       // Field opacity
+      const wasIntervening = systemState === "intervening";
       if (anyIntervention || systemState === "intervening") {
         systemState = "intervening";
         fieldOpacity = Math.min(1, fieldOpacity + deltaTime / 400);
       } else {
         fieldOpacity = Math.max(0, fieldOpacity - deltaTime / 600);
-        if (fieldOpacity === 0 && systemState === "intervening") {
+        if (fieldOpacity === 0 && wasIntervening) {
           systemState = "operating";
         }
       }

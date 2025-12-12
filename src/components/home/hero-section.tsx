@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import { FadeInView, TextReveal, TextRevealGradient } from "@/components/animations";
 import { AdvancedButton, ButtonGroup } from "@/components/animations/advanced-button";
 import { CursorSpotlight, GradientMesh, GradientMeshSimple, ScrollIndicator } from "@/components/animations";
+import { KodanoAuroraBackground } from "@/components/animations/kodano-aurora-background";
 import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
 import { KodanoFlowRail } from "@/components/home/kodano-flow-rail";
@@ -40,19 +41,11 @@ export function HeroSection({ className }: HeroSectionProps) {
         className
       )}
     >
-      {/* Premium Background (paleta atual) */}
-      {heavyEffectsEnabled ? (
-        <GradientMesh
-          className="absolute inset-0 -z-20 opacity-85"
-          colors={["#4FACFE", "#00DBDE", "#43E97B", "#415A77"]}
-          speed={0.22}
-        />
-      ) : (
-        <GradientMeshSimple
-          className="absolute inset-0 -z-20 opacity-85"
-          colors={["#4FACFE", "#00DBDE", "#43E97B", "#415A77"]}
-        />
-      )}
+      {/* Super elegant Aurora Background - smooth, colorful, chique */}
+      <KodanoAuroraBackground
+        className="absolute inset-0 -z-20"
+        intensity={heavyEffectsEnabled ? "medium" : "subtle"}
+      />
 
       {/* Subtle overlays for depth/legibility */}
       <div className="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-b from-background/0 via-background/25 to-background/70" />

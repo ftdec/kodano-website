@@ -23,3 +23,4 @@ export * from "./gradient-mesh";
 export * from "./cursor-spotlight";
 export * from "./advanced-button";
 export * from "./scroll-indicator";
+export * from "./kodano-aurora-background";

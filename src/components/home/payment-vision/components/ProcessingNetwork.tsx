@@ -185,13 +185,11 @@ function Connection({
   });
 
   return (
-    <line ref={lineRef} geometry={geometry}>
-      <lineBasicMaterial
-        color="#4FACFE"
-        transparent
-        opacity={0.3}
-        linewidth={2}
-      />
-    </line>
+    <primitive ref={lineRef} object={new THREE.Line(geometry, new THREE.LineBasicMaterial({
+      color: "#4FACFE",
+      transparent: true,
+      opacity: 0.3,
+      linewidth: 2,
+    }))} />
   );
 }
