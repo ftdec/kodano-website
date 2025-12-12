@@ -11,6 +11,7 @@ import { AdvancedButton, ButtonGroup } from "@/components/animations/advanced-bu
 import { CursorSpotlight, GradientMesh, GradientMeshSimple, ScrollIndicator } from "@/components/animations";
 import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
+import { KodanoFlowRail } from "@/components/home/kodano-flow-rail";
 
 interface HeroSectionProps {
   className?: string;
@@ -48,6 +49,9 @@ export function HeroSection({ className }: HeroSectionProps) {
       {!isLowEnd && (
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 -z-10 w-[820px] h-[820px] rounded-full bg-[#4FACFE]/10 blur-[90px]" />
       )}
+
+      {/* Signature rail (advanced but cheap; auto-disables pulses on low-end/reduced-motion) */}
+      <KodanoFlowRail className="-z-10 opacity-60" enabled />
 
       {/* Spotlight follows cursor (desktop only; auto-disabled on mobile/reduced-motion) */}
       {heavyEffectsEnabled && (
