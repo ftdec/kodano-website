@@ -7,7 +7,7 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring, useTransform } from "framer-motion";
-import { Layers, Zap, BarChart3, Shield } from "lucide-react";
+import { Layers, Zap, BarChart3, Shield, ArrowRight } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { AdvancedButton } from "@/components/animations/advanced-button";
 import {
@@ -20,6 +20,59 @@ import {
 } from "@/lib/animations/motion-variants";
 import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
+
+function SquareCTA({
+  href,
+  title,
+  description,
+  gradient,
+}: {
+  href: string;
+  title: string;
+  description: string;
+  gradient: string;
+}) {
+  return (
+    <motion.a
+      href={href}
+      className={cn(
+        "group relative w-full overflow-hidden rounded-2xl border border-border/50",
+        "bg-white/70 backdrop-blur-md shadow-[0_18px_40px_rgba(15,23,42,0.08)]",
+        "transition-all duration-300 hover:shadow-[0_28px_70px_rgba(15,23,42,0.12)]"
+      )}
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 380, damping: 28 }}
+    >
+      {/* Top border gradient (igual cards de cima) */}
+      <div className={cn("absolute inset-x-0 top-0 h-1 bg-gradient-to-r", gradient)} />
+
+      <div className="relative p-5 flex items-start gap-4">
+        <div
+          className={cn(
+            "shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br flex items-center justify-center shadow-inner shadow-white/50",
+            gradient
+          )}
+        >
+          <ArrowRight className="w-5 h-5 text-white" />
+        </div>
+
+        <div className="min-w-0">
+          <div className="text-base font-semibold leading-tight">{title}</div>
+          <div className="mt-1 text-sm text-muted-foreground leading-relaxed">
+            {description}
+          </div>
+        </div>
+      </div>
+
+      {/* Hover wash */}
+      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <div className="absolute -top-16 -right-16 w-[240px] h-[240px] rounded-full bg-[#4FACFE]/10 blur-[60px]" />
+        <div className="absolute -bottom-16 -left-16 w-[240px] h-[240px] rounded-full bg-[#43E97B]/10 blur-[60px]" />
+      </div>
+    </motion.a>
+  );
+}
 
 const steps = [
   {
@@ -289,27 +342,19 @@ export function HowItWorksSection() {
                             </div>
                           </div>
 
-                          <div className="shrink-0 flex items-center gap-3">
-                            <AdvancedButton
+                          <div className="shrink-0 grid grid-cols-2 gap-3 w-[520px]">
+                            <SquareCTA
                               href="#contact"
-                              variant="primary"
-                              size="md"
-                              className="rounded-full"
-                              ripple
-                              shimmer
-                            >
-                              Fale com o Kodano
-                            </AdvancedButton>
-                            <AdvancedButton
+                              title="Fale com o Kodano"
+                              description="Receba um desenho de arquitetura para o seu fluxo."
+                              gradient="from-[#4FACFE] via-[#00DBDE] to-[#43E97B]"
+                            />
+                            <SquareCTA
                               href="#concept"
-                              variant="outline"
-                              size="md"
-                              className="rounded-full bg-white/50"
-                              ripple
-                              shimmer={false}
-                            >
-                              Rever benefícios
-                            </AdvancedButton>
+                              title="Rever benefícios"
+                              description="Volte para os diferenciais e use-cases."
+                              gradient="from-[#415A77] via-[#4FACFE] to-[#00DBDE]"
+                            />
                           </div>
                         </div>
                       </motion.div>
@@ -418,16 +463,14 @@ export function HowItWorksSection() {
         {/* Mobile/Reduced motion CTA (simple) */}
         {(isMobile || prefersReducedMotion) && (
           <div className="mt-12 flex justify-center">
-            <AdvancedButton
-              href="#contact"
-              variant="primary"
-              size="lg"
-              className="rounded-full"
-              ripple={!prefersReducedMotion}
-              shimmer={!prefersReducedMotion}
-            >
-              Fale com o Kodano
-            </AdvancedButton>
+            <div className="w-full max-w-md">
+              <SquareCTA
+                href="#contact"
+                title="Fale com o Kodano"
+                description="Vamos desenhar a arquitetura ideal para sua operação."
+                gradient="from-[#4FACFE] via-[#00DBDE] to-[#43E97B]"
+              />
+            </div>
           </div>
         )}
       </div>
