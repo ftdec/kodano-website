@@ -17,7 +17,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useIsLowEndDevice, useReducedMotion } from "@/lib/animations/hooks";
 
@@ -74,8 +74,13 @@ export function KodanoFlowRail({
   enabled = true,
   quality,
 }: KodanoFlowRailProps) {
+  const [mounted, setMounted] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const isLowEnd = useIsLowEndDevice();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const resolvedQuality: RailQuality =
     quality ?? (!enabled || prefersReducedMotion || isLowEnd ? "static" : "full");
@@ -166,6 +171,17 @@ export function KodanoFlowRail({
       cancelAnimationFrame(rafId);
     };
   }, [inViewport, pulses, resolvedQuality]);
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <div
+        ref={containerRef}
+        className={cn("pointer-events-none absolute inset-0", className)}
+        aria-hidden="true"
+      />
+    );
+  }
 
   return (
     <div

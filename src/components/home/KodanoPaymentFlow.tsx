@@ -1,14 +1,22 @@
 /**
- * KodanoPaymentFlow
- * Stripe/Cloudwalk-level product visual for Kodano payment infrastructure.
+ * KodanoPaymentFlow V2 — Payment Fabric
  *
- * Goals:
- * - Pure vector (SVG), GPU-friendly transforms, no raster assets
- * - Continuous narrative loop with real "payment packet" travelling through stages
- * - Intelligent routing (branch decision) with subtle pause + selected route glow
- * - States: pending -> processing -> approved -> settled (color shift Blue -> Green)
- * - Interactivity: hover intensifies node glow + local speed boost; scroll affects global speed
- * - Performance: pauses when offscreen or tab hidden; reduced-motion fallback
+ * Concept: Living infrastructure mesh, not step-by-step explainer.
+ * Inspired by: Stripe product visuals, CloudWalk, Vercel deployment graphs.
+ *
+ * Design Philosophy:
+ * - No linear narrative (no "start → end")
+ * - No explicit approval/success states (no green flash)
+ * - Continuous operation (system always running)
+ * - Hypnotic, slow movement (almost meditative)
+ * - Abstract mesh, not literal flow chart
+ *
+ * Visual Elements:
+ * - 8-node mesh (abstract geometric positions)
+ * - Multiple simultaneous data pulses (not single packet)
+ * - Breathing nodes (subtle expand/contract)
+ * - Dynamic connection weights (reorganizing mesh)
+ * - Perlin-noise-like organic movement
  */
 
 "use client";
@@ -18,37 +26,22 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 
-type NodeId =
-  | "client"
-  | "checkout"
-  | "core"
-  | "decision"
-  | "network"
-  | "approval"
-  | "settlement"
-  | "acqA"
-  | "acqB"
-  | "acqC";
-
 type Point = { x: number; y: number };
 
-type MobileView = {
-  w: number;
-  h: number;
-  nodes: Record<NodeId, { p: Point; size: { w: number; h: number } }>;
-  mainPath: Point[];
+type Node = {
+  id: number;
+  p: Point;
+  size: number;
+  phase: number; // breathing phase offset
 };
 
-type DesktopView = {
-  w: number;
-  h: number;
-  nodes: Record<NodeId, { p: Point; size: { w: number; h: number } }>;
-  pre: Point[];
-  branches: Record<"A" | "B" | "C", Point[]>;
-  post: Point[];
+type Pulse = {
+  id: number;
+  path: number[]; // node IDs
+  progress: number; // 0..1 along current segment
+  speed: number;
+  intensity: number;
 };
-
-type View = MobileView | DesktopView;
 
 const BRAND = {
   blue: "#4FACFE",
@@ -58,30 +51,17 @@ const BRAND = {
   white: "#FFFFFF",
 };
 
-function clamp(n: number, a: number, b: number) {
-  return Math.max(a, Math.min(b, n));
-}
-
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-function easeInOutCubic(t: number) {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+function clamp(n: number, a: number, b: number) {
+  return Math.max(a, Math.min(b, n));
 }
 
-function buildPolylineSamples(points: Point[], samplesPerSegment = 40): Point[] {
-  const out: Point[] = [];
-  for (let i = 0; i < points.length - 1; i++) {
-    const a = points[i];
-    const b = points[i + 1];
-    for (let s = 0; s < samplesPerSegment; s++) {
-      const t = s / samplesPerSegment;
-      out.push({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t) });
-    }
-  }
-  out.push(points[points.length - 1]);
-  return out;
+// Smooth easing
+function easeInOutQuad(t: number) {
+  return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 }
 
 function useInViewport(ref: React.RefObject<Element | null>, rootMargin = "220px") {
@@ -115,62 +95,6 @@ function usePageVisible() {
   return visible;
 }
 
-function nodeGradient(id: NodeId) {
-  // Only brand colors + white
-  switch (id) {
-    case "client":
-      return `linear-gradient(135deg, ${BRAND.slate}, ${BRAND.blue})`;
-    case "checkout":
-      return `linear-gradient(135deg, ${BRAND.blue}, ${BRAND.cyan})`;
-    case "core":
-      return `linear-gradient(135deg, ${BRAND.blue}, ${BRAND.cyan})`;
-    case "decision":
-      return `linear-gradient(135deg, ${BRAND.cyan}, ${BRAND.green})`;
-    case "network":
-      return `linear-gradient(135deg, ${BRAND.slate}, ${BRAND.cyan})`;
-    case "approval":
-      return `linear-gradient(135deg, ${BRAND.blue}, ${BRAND.green})`;
-    case "settlement":
-      return `linear-gradient(135deg, ${BRAND.green}, ${BRAND.cyan})`;
-    case "acqA":
-      return `linear-gradient(135deg, ${BRAND.blue}, ${BRAND.cyan})`;
-    case "acqB":
-      return `linear-gradient(135deg, ${BRAND.cyan}, ${BRAND.green})`;
-    case "acqC":
-      return `linear-gradient(135deg, ${BRAND.slate}, ${BRAND.blue})`;
-    default:
-      return `linear-gradient(135deg, ${BRAND.blue}, ${BRAND.cyan})`;
-  }
-}
-
-function nodeStops(id: NodeId): [string, string] {
-  // Keep strictly within Kodano brand palette
-  switch (id) {
-    case "client":
-      return [BRAND.slate, BRAND.blue];
-    case "checkout":
-      return [BRAND.blue, BRAND.cyan];
-    case "core":
-      return [BRAND.blue, BRAND.cyan];
-    case "decision":
-      return [BRAND.cyan, BRAND.green];
-    case "network":
-      return [BRAND.slate, BRAND.cyan];
-    case "approval":
-      return [BRAND.blue, BRAND.green];
-    case "settlement":
-      return [BRAND.green, BRAND.cyan];
-    case "acqA":
-      return [BRAND.blue, BRAND.cyan];
-    case "acqB":
-      return [BRAND.cyan, BRAND.green];
-    case "acqC":
-      return [BRAND.slate, BRAND.blue];
-    default:
-      return [BRAND.blue, BRAND.cyan];
-  }
-}
-
 export function KodanoPaymentFlow({
   className,
   scrollProgress,
@@ -184,7 +108,7 @@ export function KodanoPaymentFlow({
   const inView = useInViewport(containerRef);
   const pageVisible = usePageVisible();
 
-  // Scroll speed modulation (0.9..1.6), no re-render
+  // Scroll modulation (subtle speed variation)
   const scrollRef = useRef(0);
   const fallbackScroll = useMotionValue(0);
   const scrollMV = scrollProgress ?? fallbackScroll;
@@ -192,294 +116,130 @@ export function KodanoPaymentFlow({
     scrollRef.current = typeof v === "number" ? v : 0;
   });
 
-  // Hover boosts (local), no re-render per frame
-  const [hovered, setHovered] = useState<NodeId | null>(null);
-  const hoverBoostRef = useRef(1);
+  const [hovered, setHovered] = useState(false);
 
-  // Narrative selection (routing choice) updated per-cycle only
-  const [routePick, setRoutePick] = useState<"A" | "B" | "C">("A");
-  const routePickRef = useRef<"A" | "B" | "C">("A");
-
-  // Motion values for the payment packet position in SVG space
-  const packetX = useMotionValue(0);
-  const packetY = useMotionValue(0);
-  const packetScale = useMotionValue(1);
-
-  // Visual state (approved flash) – toggled per cycle, not per frame
-  const [approvedPulse, setApprovedPulse] = useState(0);
-  const approvedPulseRef = useRef(0);
-  const [approvalState, setApprovalState] = useState<"pending" | "approved">("pending");
-  const approvalStateRef = useRef<"pending" | "approved">("pending");
-  const [settledState, setSettledState] = useState<"pending" | "settled">("pending");
-  const settledStateRef = useRef<"pending" | "settled">("pending");
-  const [activeNode, setActiveNode] = useState<NodeId | null>(null);
-  const activeNodeRef = useRef<NodeId | null>(null);
-
-  const view: View = useMemo(() => {
-    // SVG coordinate system
+  // Mesh topology (8 nodes, non-linear positions)
+  const mesh = useMemo(() => {
     const w = 760;
     const h = 460;
 
     if (isMobile) {
-      // Simplified: fewer nodes, no branching
-      const nodes: Record<NodeId, { p: Point; size: { w: number; h: number } }> = {
-        client: { p: { x: 80, y: 230 }, size: { w: 88, h: 56 } },
-        checkout: { p: { x: 230, y: 170 }, size: { w: 108, h: 64 } },
-        core: { p: { x: 380, y: 230 }, size: { w: 132, h: 76 } },
-        decision: { p: { x: 540, y: 170 }, size: { w: 120, h: 64 } },
-        approval: { p: { x: 620, y: 290 }, size: { w: 120, h: 64 } },
-        settlement: { p: { x: 700, y: 230 }, size: { w: 120, h: 64 } },
-        // unused in mobile
-        network: { p: { x: -999, y: -999 }, size: { w: 0, h: 0 } },
-        acqA: { p: { x: -999, y: -999 }, size: { w: 0, h: 0 } },
-        acqB: { p: { x: -999, y: -999 }, size: { w: 0, h: 0 } },
-        acqC: { p: { x: -999, y: -999 }, size: { w: 0, h: 0 } },
-      };
+      // Simplified: 6 nodes
+      const nodes: Node[] = [
+        { id: 0, p: { x: 120, y: 140 }, size: 72, phase: 0 },
+        { id: 1, p: { x: 280, y: 90 }, size: 88, phase: 0.3 },
+        { id: 2, p: { x: 460, y: 130 }, size: 96, phase: 0.6 },
+        { id: 3, p: { x: 640, y: 180 }, size: 76, phase: 0.9 },
+        { id: 4, p: { x: 520, y: 320 }, size: 82, phase: 1.2 },
+        { id: 5, p: { x: 240, y: 340 }, size: 78, phase: 1.5 },
+      ];
 
-      const mainPath = buildPolylineSamples(
-        [
-          nodes.client.p,
-          nodes.checkout.p,
-          nodes.core.p,
-          nodes.decision.p,
-          nodes.approval.p,
-          nodes.settlement.p,
-        ],
-        36
-      );
+      // Mesh connections (who connects to whom)
+      const edges: [number, number][] = [
+        [0, 1], [1, 2], [2, 3],
+        [3, 4], [4, 5], [5, 0],
+        [1, 4], [0, 2],
+      ];
 
-      return { w, h, nodes, mainPath };
+      return { w, h, nodes, edges };
     }
 
-    const nodes: Record<NodeId, { p: Point; size: { w: number; h: number } }> = {
-      client: { p: { x: 90, y: 240 }, size: { w: 90, h: 56 } },
-      checkout: { p: { x: 220, y: 150 }, size: { w: 112, h: 64 } },
-      core: { p: { x: 365, y: 240 }, size: { w: 140, h: 78 } },
-      decision: { p: { x: 485, y: 135 }, size: { w: 128, h: 64 } },
-      acqA: { p: { x: 600, y: 90 }, size: { w: 92, h: 52 } },
-      acqB: { p: { x: 640, y: 160 }, size: { w: 92, h: 52 } },
-      acqC: { p: { x: 600, y: 230 }, size: { w: 92, h: 52 } },
-      network: { p: { x: 560, y: 280 }, size: { w: 122, h: 64 } },
-      approval: { p: { x: 650, y: 300 }, size: { w: 126, h: 64 } },
-      settlement: { p: { x: 700, y: 235 }, size: { w: 126, h: 64 } },
-    };
+    // Desktop: 8 nodes, richer mesh
+    const nodes: Node[] = [
+      { id: 0, p: { x: 100, y: 160 }, size: 76, phase: 0 },
+      { id: 1, p: { x: 240, y: 100 }, size: 92, phase: 0.25 },
+      { id: 2, p: { x: 380, y: 140 }, size: 108, phase: 0.5 },
+      { id: 3, p: { x: 520, y: 90 }, size: 88, phase: 0.75 },
+      { id: 4, p: { x: 660, y: 180 }, size: 96, phase: 1.0 },
+      { id: 5, p: { x: 580, y: 320 }, size: 84, phase: 1.25 },
+      { id: 6, p: { x: 360, y: 360 }, size: 90, phase: 1.5 },
+      { id: 7, p: { x: 160, y: 300 }, size: 82, phase: 1.75 },
+    ];
 
-    // Main to decision
-    const pre = buildPolylineSamples([nodes.client.p, nodes.checkout.p, nodes.core.p, nodes.decision.p], 40);
+    const edges: [number, number][] = [
+      [0, 1], [1, 2], [2, 3], [3, 4],
+      [4, 5], [5, 6], [6, 7], [7, 0],
+      [1, 7], [2, 5], [0, 2], [3, 5],
+      [1, 6], [2, 4],
+    ];
 
-    // Branches (decision -> acquirer -> network)
-    const bA = buildPolylineSamples([nodes.decision.p, nodes.acqA.p, nodes.network.p], 34);
-    const bB = buildPolylineSamples([nodes.decision.p, nodes.acqB.p, nodes.network.p], 34);
-    const bC = buildPolylineSamples([nodes.decision.p, nodes.acqC.p, nodes.network.p], 34);
-
-    // Post (network -> approval -> settlement -> back "cycle close" to client with a soft curve-like polyline)
-    const post = buildPolylineSamples(
-      [nodes.network.p, nodes.approval.p, nodes.settlement.p, { x: 520, y: 390 }, { x: 240, y: 390 }, nodes.client.p],
-      42
-    );
-
-    return {
-      w,
-      h,
-      nodes,
-      pre,
-      branches: { A: bA, B: bB, C: bC },
-      post,
-    };
+    return { w, h, nodes, edges };
   }, [isMobile]);
 
-  // Initialize packet position
+  // Pulses (multiple simultaneous data flows)
+  const pulsesRef = useRef<Pulse[]>([]);
+  const [pulsesInitialized, setPulsesInitialized] = useState(false);
+
+  // Initialize pulses only on client (fix hydration)
   useEffect(() => {
-    const start = "mainPath" in view ? view.mainPath[0] : view.pre[0];
-    packetX.set(start.x);
-    packetY.set(start.y);
-  }, [view, packetX, packetY]);
+    if (prefersReducedMotion || pulsesInitialized) return;
+    
+    const numPulses = isMobile ? 3 : 5;
+    // Use deterministic seed for consistent initialization
+    let seed = 0.12345;
+    const seededRandom = () => {
+      seed = (seed * 9301 + 49297) % 233280;
+      return seed / 233280;
+    };
+    
+    pulsesRef.current = Array.from({ length: numPulses }, (_, i) => {
+      const path = generateRandomPath(mesh.nodes.length, isMobile ? 4 : 6, seededRandom);
+      return {
+        id: i,
+        path,
+        progress: seededRandom(),
+        speed: 0.04 + seededRandom() * 0.06, // Slower: 0.04-0.10
+        intensity: 0.7 + seededRandom() * 0.3,
+      };
+    });
+    setPulsesInitialized(true);
+  }, [prefersReducedMotion, isMobile, mesh.nodes.length, pulsesInitialized]);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
-    if (!inView || !pageVisible) return;
+    if (!inView || !pageVisible || !pulsesInitialized) return;
 
     let raf = 0;
-    let start = performance.now();
-    let lastCycle = -1;
-    let lastApprovalCycle = -1;
-    let lastSettledCycle = -1;
-
-    // Narrative timing (seconds)
-    const mobileMode = "mainPath" in view;
-    const preS = mobileMode ? 0 : 1.9;
-    const decisionHoldS = mobileMode ? 0 : 0.35;
-    const branchS = mobileMode ? 0 : 1.35;
-    const postS = mobileMode ? 4.4 : 2.4;
-    const totalS = mobileMode ? 4.8 : preS + decisionHoldS + branchS + postS;
-
-    // Choose a route per cycle (desktop)
-    const pickNextRoute = () => {
-      const r = Math.random();
-      const next = r < 0.34 ? "A" : r < 0.67 ? "B" : "C";
-      routePickRef.current = next;
-      setRoutePick(next);
-    };
-    pickNextRoute();
+    const startTime = performance.now();
 
     const loop = (now: number) => {
-      const active = inView && pageVisible;
-      if (!active) {
+      if (!inView || !pageVisible) {
         raf = requestAnimationFrame(loop);
         return;
       }
 
-      // Scroll-reactive speed (gentle)
-      const scrollFactor = 0.9 + clamp(scrollRef.current, 0, 1) * 0.7; // 0.9..1.6
-      const hoverBoost = hoverBoostRef.current;
-      const speed = scrollFactor * hoverBoost;
+      const elapsed = (now - startTime) / 1000;
 
-      const elapsed = (now - start) / 1000;
-      const tAll = elapsed * speed;
-      const cycle = Math.floor(tAll / totalS);
-      const tCycle = tAll % totalS;
+      // Scroll-reactive global speed (slower: 0.6..1.0 for fluid motion)
+      const scrollFactor = 0.6 + clamp(scrollRef.current, 0, 1) * 0.4;
+      const hoverBoost = hovered ? 1.15 : 1;
+      const globalSpeed = scrollFactor * hoverBoost;
 
-      // Per-cycle variation: change route ONCE per cycle (desktop)
-      if (!mobileMode && cycle !== lastCycle) {
-        lastCycle = cycle;
-        pickNextRoute();
-        // reset per-cycle states
-        if (approvalStateRef.current !== "pending") {
-          approvalStateRef.current = "pending";
-          setApprovalState("pending");
+      // Update pulses (slower, more fluid)
+      pulsesRef.current.forEach((pulse) => {
+        pulse.progress += pulse.speed * globalSpeed * 0.008; // Slower: ~30fps equivalent
+
+        // When pulse completes a segment, move to next
+        if (pulse.progress >= 1) {
+          pulse.progress = 0;
+          // Use deterministic random for consistency
+          const seed = (pulse.id * 1000 + elapsed * 100) % 10000;
+          const seededRandom = () => {
+            const s = (seed * 9301 + 49297) % 233280;
+            return s / 233280;
+          };
+          pulse.path = generateRandomPath(mesh.nodes.length, isMobile ? 4 : 6, seededRandom);
+          pulse.speed = 0.04 + seededRandom() * 0.06;
+          pulse.intensity = 0.7 + seededRandom() * 0.3;
         }
-        if (settledStateRef.current !== "pending") {
-          settledStateRef.current = "pending";
-          setSettledState("pending");
-        }
-        if (approvedPulseRef.current !== 0) {
-          approvedPulseRef.current = 0;
-          setApprovedPulse(0);
-        }
-      }
-
-      // Subtle "approved" pulse once per cycle around approval phase
-      // (when entering approval stage, fire a brief pulse)
-      const approvalTriggerT = mobileMode ? totalS * 0.62 : preS + decisionHoldS + branchS + postS * 0.22;
-      const approvalWindow = 0.14;
-      const inApprovalWindow = Math.abs(tCycle - approvalTriggerT) < approvalWindow;
-      if (inApprovalWindow && lastApprovalCycle !== cycle) {
-        lastApprovalCycle = cycle;
-        approvedPulseRef.current = 1;
-        setApprovedPulse(1);
-        approvalStateRef.current = "approved";
-        setApprovalState("approved");
-      }
-      if (!inApprovalWindow && approvedPulseRef.current !== 0) {
-        // decay the pulse shortly after
-        if (Math.abs(tCycle - approvalTriggerT) > 0.42) {
-          approvedPulseRef.current = 0;
-          setApprovedPulse(0);
-        }
-      }
-
-      // Settlement near end of post phase (desktop) / end of cycle (mobile)
-      const settledTriggerT = mobileMode ? totalS * 0.92 : preS + decisionHoldS + branchS + postS * 0.62;
-      if (tCycle > settledTriggerT && lastSettledCycle !== cycle) {
-        lastSettledCycle = cycle;
-        settledStateRef.current = "settled";
-        setSettledState("settled");
-      }
-
-      let p: Point | null = null;
-      let nodeNow: NodeId | null = null;
-
-      if (mobileMode) {
-        const path = view.mainPath;
-        const tt = tCycle / totalS;
-        const idx = Math.floor(tt * (path.length - 1));
-        const frac = tt * (path.length - 1) - idx;
-        const a = path[idx];
-        const b = path[Math.min(path.length - 1, idx + 1)];
-        p = { x: lerp(a.x, b.x, easeInOutCubic(frac)), y: lerp(a.y, b.y, easeInOutCubic(frac)) };
-        // coarse node inference by progress
-        if (tt < 0.17) nodeNow = "client";
-        else if (tt < 0.34) nodeNow = "checkout";
-        else if (tt < 0.52) nodeNow = "core";
-        else if (tt < 0.66) nodeNow = "decision";
-        else if (tt < 0.82) nodeNow = "approval";
-        else nodeNow = "settlement";
-      } else {
-        const pre = view.pre;
-        const br = view.branches[routePickRef.current];
-        const post = view.post;
-
-        if (tCycle < preS) {
-          const tt = tCycle / preS;
-          const idx = Math.floor(tt * (pre.length - 1));
-          const frac = tt * (pre.length - 1) - idx;
-          const a = pre[idx];
-          const b = pre[Math.min(pre.length - 1, idx + 1)];
-          p = { x: lerp(a.x, b.x, easeInOutCubic(frac)), y: lerp(a.y, b.y, easeInOutCubic(frac)) };
-          if (tt < 0.22) nodeNow = "client";
-          else if (tt < 0.56) nodeNow = "checkout";
-          else if (tt < 0.86) nodeNow = "core";
-          else nodeNow = "decision";
-        } else if (tCycle < preS + decisionHoldS) {
-          // pause at decision node (smart routing)
-          p = br[0];
-          nodeNow = "decision";
-        } else if (tCycle < preS + decisionHoldS + branchS) {
-          const tt = (tCycle - preS - decisionHoldS) / branchS;
-          const idx = Math.floor(tt * (br.length - 1));
-          const frac = tt * (br.length - 1) - idx;
-          const a = br[idx];
-          const b = br[Math.min(br.length - 1, idx + 1)];
-          p = { x: lerp(a.x, b.x, easeInOutCubic(frac)), y: lerp(a.y, b.y, easeInOutCubic(frac)) };
-          nodeNow = routePickRef.current === "A" ? "acqA" : routePickRef.current === "B" ? "acqB" : "acqC";
-        } else {
-          const tt = (tCycle - preS - decisionHoldS - branchS) / postS;
-          const idx = Math.floor(tt * (post.length - 1));
-          const frac = tt * (post.length - 1) - idx;
-          const a = post[idx];
-          const b = post[Math.min(post.length - 1, idx + 1)];
-          p = { x: lerp(a.x, b.x, easeInOutCubic(frac)), y: lerp(a.y, b.y, easeInOutCubic(frac)) };
-          if (tt < 0.22) nodeNow = "network";
-          else if (tt < 0.42) nodeNow = "approval";
-          else if (tt < 0.62) nodeNow = "settlement";
-          else nodeNow = "client";
-        }
-      }
-
-      if (p) {
-        packetX.set(p.x);
-        packetY.set(p.y);
-      }
-      if (nodeNow !== activeNodeRef.current) {
-        activeNodeRef.current = nodeNow;
-        setActiveNode(nodeNow);
-      }
-
-      // Micro “breathing” scale
-      packetScale.set(1 + Math.sin((elapsed * speed) * 2.2) * 0.03);
+      });
 
       raf = requestAnimationFrame(loop);
     };
 
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prefersReducedMotion, inView, pageVisible, view]);
-
-  // Hover boosts speed locally (no state updates per frame)
-  useEffect(() => {
-    hoverBoostRef.current = hovered ? 1.35 : 1;
-  }, [hovered]);
-
-  const nodesToRender = useMemo(() => {
-    const mobileMode = "mainPath" in view;
-    const all: NodeId[] = mobileMode
-      ? ["client", "checkout", "core", "decision", "approval", "settlement"]
-      : ["client", "checkout", "core", "decision", "acqA", "acqB", "acqC", "network", "approval", "settlement"];
-    return all;
-  }, [view]);
-
-  const activeBranch = "mainPath" in view ? null : routePick;
+  }, [prefersReducedMotion, inView, pageVisible, pulsesInitialized, mesh, isMobile, hovered]);
 
   return (
     <div
@@ -490,53 +250,46 @@ export function KodanoPaymentFlow({
         className
       )}
       aria-hidden="true"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      {/* Soft wash (kept in this component to make it standalone) */}
+      {/* Background wash */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/35 to-transparent" />
-        <div className="absolute -top-28 -right-28 w-[420px] h-[420px] rounded-full bg-[#4FACFE]/10 blur-[90px]" />
-        <div className="absolute -bottom-28 -left-28 w-[420px] h-[420px] rounded-full bg-[#43E97B]/10 blur-[100px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/40 to-white/20" />
+        <div className="absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full bg-[#4FACFE]/8 blur-[120px]" />
+        <div className="absolute -bottom-32 -left-32 w-[480px] h-[480px] rounded-full bg-[#43E97B]/8 blur-[120px]" />
       </div>
 
       <svg
         className="absolute inset-0 w-full h-full"
-        viewBox={`0 0 ${view.w} ${view.h}`}
+        viewBox={`0 0 ${mesh.w} ${mesh.h}`}
         preserveAspectRatio="xMidYMid meet"
       >
         <defs>
-          <linearGradient id="kodanoFlowStroke" x1="0" y1="0" x2="1" y2="0">
+          <linearGradient id="meshGradient" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor={BRAND.blue} />
             <stop offset="50%" stopColor={BRAND.cyan} />
             <stop offset="100%" stopColor={BRAND.green} />
           </linearGradient>
 
-          <radialGradient id="bgHaloA" cx="25%" cy="25%" r="60%">
-            <stop offset="0%" stopColor={BRAND.blue} stopOpacity="0.18" />
-            <stop offset="55%" stopColor={BRAND.cyan} stopOpacity="0.08" />
-            <stop offset="100%" stopColor={BRAND.green} stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="bgHaloB" cx="80%" cy="75%" r="65%">
-            <stop offset="0%" stopColor={BRAND.green} stopOpacity="0.14" />
-            <stop offset="60%" stopColor={BRAND.cyan} stopOpacity="0.06" />
-            <stop offset="100%" stopColor={BRAND.blue} stopOpacity="0" />
-          </radialGradient>
-
-          <linearGradient id="glassSheen" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={BRAND.white} stopOpacity="0.55" />
-            <stop offset="40%" stopColor={BRAND.white} stopOpacity="0.16" />
-            <stop offset="100%" stopColor={BRAND.white} stopOpacity="0" />
+          <linearGradient id="cardShimmer" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="transparent" />
+            <stop offset="50%" stopColor={BRAND.white} stopOpacity="0.6" />
+            <stop offset="100%" stopColor="transparent" />
           </linearGradient>
 
-          <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
+          <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor={BRAND.cyan} stopOpacity="0.9" />
+            <stop offset="60%" stopColor={BRAND.blue} stopOpacity="0.6" />
+            <stop offset="100%" stopColor={BRAND.slate} stopOpacity="0.1" />
+          </radialGradient>
+
+          <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="8" result="blur" />
             <feColorMatrix
               in="blur"
               type="matrix"
-              values="
-                1 0 0 0 0
-                0 1 0 0 0
-                0 0 1 0 0
-                0 0 0 0.55 0"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.7 0"
               result="glow"
             />
             <feMerge>
@@ -545,328 +298,405 @@ export function KodanoPaymentFlow({
             </feMerge>
           </filter>
 
-          <filter id="packetGlow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
+          <filter id="pulseGlow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="12" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
 
-          <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
-            <feDropShadow dx="0" dy="18" stdDeviation="18" floodColor="#0F172A" floodOpacity="0.14" />
+          <filter id="nodeShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="12" stdDeviation="16" floodColor="#0F172A" floodOpacity="0.12" />
           </filter>
-
-          <filter id="grain" x="-20%" y="-20%" width="140%" height="140%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="noise" />
-            <feColorMatrix
-              in="noise"
-              type="matrix"
-              values="
-                0 0 0 0 1
-                0 0 0 0 1
-                0 0 0 0 1
-                0 0 0 0.055 0"
-              result="grain"
-            />
-            <feComposite in="grain" in2="SourceGraphic" operator="over" />
-          </filter>
-
-          {nodesToRender.map((id) => {
-            const [a, b] = nodeStops(id);
-            return (
-              <linearGradient key={id} id={`nodeFill-${id}`} x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor={a} stopOpacity="0.95" />
-                <stop offset="55%" stopColor={b} stopOpacity="0.92" />
-                <stop offset="100%" stopColor={BRAND.white} stopOpacity="0.10" />
-              </linearGradient>
-            );
-          })}
-
-          <linearGradient id="packetFill" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor={BRAND.blue} stopOpacity="1" />
-            <stop offset="55%" stopColor={BRAND.cyan} stopOpacity="1" />
-            <stop offset="100%" stopColor={BRAND.green} stopOpacity="1" />
-          </linearGradient>
         </defs>
 
-        {/* Background polish (soft halos + subtle grain) */}
-        <rect x="0" y="0" width={view.w} height={view.h} fill="url(#bgHaloA)" opacity="1" />
-        <rect x="0" y="0" width={view.w} height={view.h} fill="url(#bgHaloB)" opacity="1" />
+        {/* Ambient background pulse (very subtle) */}
         {!prefersReducedMotion && (
           <motion.rect
             x="0"
             y="0"
-            width={view.w}
-            height={view.h}
-            fill="url(#kodanoFlowStroke)"
-            opacity="0.06"
-            animate={{ opacity: [0.04, 0.08, 0.04] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            width={mesh.w}
+            height={mesh.h}
+            fill="url(#meshGradient)"
+            opacity="0.04"
+            animate={{ opacity: [0.03, 0.06, 0.03] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           />
         )}
 
-        {/* Flow paths (drawn as polylines for precision + easy sampling) */}
-        {/* Pre path */}
-        {"pre" in view && (
-          <polyline
-            points={view.pre.map((p) => `${p.x},${p.y}`).join(" ")}
-            fill="none"
-            stroke="url(#kodanoFlowStroke)"
-            strokeWidth="3"
-            opacity="0.16"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        )}
-        {"mainPath" in view && (
-          <polyline
-            points={view.mainPath.map((p) => `${p.x},${p.y}`).join(" ")}
-            fill="none"
-            stroke="url(#kodanoFlowStroke)"
-            strokeWidth="3"
-            opacity="0.16"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        )}
-
-        {/* Branches */}
-        {"branches" in view && (
-          <>
-            {(["A", "B", "C"] as const).map((k) => (
-              <polyline
-                key={k}
-                points={view.branches[k].map((p) => `${p.x},${p.y}`).join(" ")}
-                fill="none"
-                stroke="url(#kodanoFlowStroke)"
-                strokeWidth={k === activeBranch ? 3.6 : 3}
-                opacity={k === activeBranch ? 0.26 : 0.10}
+        {/* Mesh connections (edges) */}
+        <g opacity="0.12">
+          {mesh.edges.map(([a, b], i) => {
+            const nodeA = mesh.nodes[a];
+            const nodeB = mesh.nodes[b];
+            return (
+              <motion.line
+                key={`edge-${i}`}
+                x1={nodeA.p.x}
+                y1={nodeA.p.y}
+                x2={nodeB.p.x}
+                y2={nodeB.p.y}
+                stroke="url(#meshGradient)"
+                strokeWidth="2"
                 strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            ))}
-          </>
-        )}
-
-        {/* Post path */}
-        {"post" in view && (
-          <polyline
-            points={view.post.map((p) => `${p.x},${p.y}`).join(" ")}
-            fill="none"
-            stroke="url(#kodanoFlowStroke)"
-            strokeWidth="3"
-            opacity="0.13"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        )}
-
-        {/* Animated “flow direction” — dashed stroke moving */}
-        {!prefersReducedMotion && (
-          <motion.g opacity="0.6">
-            <motion.polyline
-              points={
-                "mainPath" in view
-                  ? view.mainPath.map((p) => `${p.x},${p.y}`).join(" ")
-                  : view.pre.map((p) => `${p.x},${p.y}`).join(" ")
-              }
-              fill="none"
-              stroke="url(#kodanoFlowStroke)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeDasharray="10 14"
-              animate={{ strokeDashoffset: [0, -120] }}
-              transition={{ duration: 2.8, repeat: Infinity, ease: "linear" }}
-              opacity="0.20"
-            />
-            {"branches" in view && (
-              <>
-                {(["A", "B", "C"] as const).map((k) => (
-                  <motion.polyline
-                    key={`dash-${k}`}
-                    points={view.branches[k].map((p) => `${p.x},${p.y}`).join(" ")}
-                    fill="none"
-                    stroke="url(#kodanoFlowStroke)"
-                    strokeWidth={k === activeBranch ? 2.4 : 2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeDasharray="8 16"
-                    animate={{ strokeDashoffset: [0, k === activeBranch ? -160 : -90] }}
-                    transition={{ duration: k === activeBranch ? 2.2 : 3.2, repeat: Infinity, ease: "linear" }}
-                    opacity={k === activeBranch ? 0.22 : 0.10}
-                  />
-                ))}
-              </>
-            )}
-          </motion.g>
-        )}
-
-        {/* Nodes */}
-        {nodesToRender.map((id) => {
-          const n = view.nodes[id];
-          const w = n.size.w;
-          const h = n.size.h;
-          const rx = 16;
-          const x = n.p.x - w / 2;
-          const y = n.p.y - h / 2;
-          const isHovered = hovered === id;
-          const isApproval = id === "approval";
-          const showApproved = isApproval && approvedPulse === 1;
-          const isActive = activeNode === id;
-          const isSettled = id === "settlement" && settledState === "settled";
-
-          const baseOpacity = isActive ? 0.88 : 0.72;
-          const glowBoost = isActive ? 0.62 : isHovered ? 0.7 : 0.22;
-
-          return (
-            <motion.g
-              key={id}
-              onMouseEnter={() => setHovered(id)}
-              onMouseLeave={() => setHovered(null)}
-              style={{ cursor: "default" }}
-              animate={
-                prefersReducedMotion
-                  ? {}
-                  : {
-                      scale: isActive ? 1.02 : isHovered ? 1.015 : 1,
-                    }
-              }
-              transition={
-                prefersReducedMotion
-                  ? {}
-                  : { type: "spring", stiffness: 240, damping: 22 }
-              }
-            >
-              {/* Outer glow */}
-              <motion.rect
-                x={x}
-                y={y}
-                width={w}
-                height={h}
-                rx={rx}
-                fill="none"
-                stroke="url(#kodanoFlowStroke)"
-                strokeWidth="2.2"
-                opacity={glowBoost}
-                filter="url(#softGlow)"
                 animate={
                   prefersReducedMotion
                     ? {}
                     : {
-                        opacity: isActive
-                          ? [0.52, 0.88, 0.52]
-                          : isHovered
-                            ? [0.55, 0.85, 0.55]
-                            : [0.14, 0.28, 0.14],
+                        strokeWidth: [1.8, 2.4, 1.8],
+                        opacity: [0.08, 0.18, 0.08],
                       }
                 }
-                transition={
-                  prefersReducedMotion
-                    ? {}
-                    : { duration: isActive ? 1.05 : isHovered ? 1.2 : 2.4, repeat: Infinity, ease: "easeInOut" }
-                }
+                transition={{
+                  duration: 4 + (i % 3) * 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3,
+                }}
               />
-
-              {/* Node base (pure SVG, more consistent polish than foreignObject) */}
-              <rect
-                x={x}
-                y={y}
-                width={w}
-                height={h}
-                rx={rx}
-                fill={
-                  id === "approval" && approvalState === "approved"
-                    ? `url(#nodeFill-decision)`
-                    : id === "settlement" && isSettled
-                      ? `url(#nodeFill-settlement)`
-                      : `url(#nodeFill-${id})`
-                }
-                opacity={baseOpacity}
-                filter="url(#nodeShadow)"
-              />
-              {/* inner border */}
-              <rect x={x + 1} y={y + 1} width={w - 2} height={h - 2} rx={rx - 1} fill="none" stroke={BRAND.white} strokeOpacity="0.45" />
-              {/* glass sheen */}
-              <rect x={x} y={y} width={w} height={h} rx={rx} fill="url(#glassSheen)" opacity={isActive ? 0.35 : 0.22} />
-
-              {/* Approved flash (blue -> green) */}
-              {showApproved && !prefersReducedMotion && (
-                <motion.rect
-                  x={x - 6}
-                  y={y - 6}
-                  width={w + 12}
-                  height={h + 12}
-                  rx={rx + 6}
-                  fill="none"
-                  stroke={BRAND.green}
-                  strokeWidth="2.6"
-                  filter="url(#softGlow)"
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: [0, 0.9, 0], scale: [0.98, 1.02, 1.04] }}
-                  transition={{ duration: 0.55, ease: "easeOut" }}
-                />
-              )}
-            </motion.g>
           );
         })}
+        </g>
 
-        {/* Payment packet (the “story”) */}
-        <motion.g style={{ translateX: packetX, translateY: packetY, scale: packetScale }}>
-          {/* Trail */}
-          {!prefersReducedMotion && (
+        {/* Nodes (breathing, no labels) */}
+        {mesh.nodes.map((node) => (
+          <motion.g key={node.id}>
+            {/* Outer glow ring */}
             <motion.circle
-              r="22"
-              fill="url(#kodanoFlowStroke)"
-              opacity="0.10"
-              filter="url(#packetGlow)"
-              animate={{ r: [20, 26, 20], opacity: [0.08, 0.16, 0.08] }}
-              transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-            />
-          )}
-
-          {/* Packet */}
-          <rect x={-20} y={-13} width={40} height={26} rx={10} fill={BRAND.white} opacity="0.14" filter="url(#packetGlow)" />
-          <rect x={-18} y={-11} width={36} height={22} rx={9} fill="url(#packetFill)" opacity="0.98" />
-          {/* specular highlight */}
-          <path d="M -14 -9 H 10 C 14 -9 16 -7 16 -3 V -2 C 9 -6 0 -6 -14 -3 Z" fill={BRAND.white} opacity="0.24" />
-          <circle cx={-7} cy={0} r={2.6} fill={BRAND.white} opacity="0.92" />
-          <rect x={-2} y={-2} width={13} height={4.5} rx={2.2} fill={BRAND.white} opacity="0.52" />
-        </motion.g>
-
-        {/* Subtle “secure layer” rings around core (no text) */}
-        {!prefersReducedMotion && "post" in view && (
-          <motion.g opacity="0.35">
-            <motion.circle
-              cx={view.nodes.core.p.x}
-              cy={view.nodes.core.p.y}
-              r={92}
+              cx={node.p.x}
+              cy={node.p.y}
+              r={node.size / 2 + 12}
               fill="none"
-              stroke={BRAND.slate}
+              stroke="url(#meshGradient)"
+              strokeWidth="1.5"
+              opacity="0.2"
+              filter="url(#softGlow)"
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      r: [node.size / 2 + 10, node.size / 2 + 16, node.size / 2 + 10],
+                      opacity: [0.15, 0.3, 0.15],
+                    }
+              }
+              transition={{
+                duration: 3.5 + node.phase * 0.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: node.phase * 0.4,
+              }}
+            />
+
+            {/* Node base */}
+            <motion.circle
+              cx={node.p.x}
+              cy={node.p.y}
+              r={node.size / 2}
+              fill="url(#nodeGlow)"
+              opacity="0.85"
+              filter="url(#nodeShadow)"
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      r: [node.size / 2 - 1, node.size / 2 + 1, node.size / 2 - 1],
+                    }
+              }
+              transition={{
+                duration: 4 + node.phase * 0.6,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: node.phase * 0.5,
+              }}
+            />
+
+            {/* Inner highlight */}
+            <circle
+              cx={node.p.x}
+              cy={node.p.y}
+              r={node.size / 2 - 2}
+              fill="none"
+              stroke={BRAND.white}
               strokeWidth="1.2"
-              strokeDasharray="6 10"
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-              style={{ transformOrigin: `${view.nodes.core.p.x}px ${view.nodes.core.p.y}px` }}
+              opacity="0.4"
             />
+
+            {/* Core dot */}
             <motion.circle
-              cx={view.nodes.core.p.x}
-              cy={view.nodes.core.p.y}
-              r={110}
-              fill="none"
-              stroke={BRAND.cyan}
-              strokeWidth="1"
-              strokeDasharray="2 12"
-              animate={{ rotate: [360, 0] }}
-              transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-              style={{ transformOrigin: `${view.nodes.core.p.x}px ${view.nodes.core.p.y}px` }}
+              cx={node.p.x}
+              cy={node.p.y}
+              r={6}
+              fill={BRAND.white}
+              opacity="0.8"
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      opacity: [0.6, 0.95, 0.6],
+                      r: [5, 7, 5],
+                    }
+              }
+              transition={{
+                duration: 2.5 + node.phase * 0.3,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: node.phase * 0.3,
+              }}
             />
           </motion.g>
+        ))}
+
+        {/* Data pulses (traveling along edges) */}
+        {!prefersReducedMotion && (
+          <PulseLayer mesh={mesh} pulsesRef={pulsesRef} />
         )}
       </svg>
     </div>
   );
 }
 
+// Helper: generate random path through mesh
+function generateRandomPath(numNodes: number, length: number, randomFn: () => number = Math.random): number[] {
+  const path: number[] = [];
+  let current = Math.floor(randomFn() * numNodes);
+  path.push(current);
 
+  for (let i = 1; i < length; i++) {
+    // Pick a random neighbor (simplified: just pick random next node)
+    let next = Math.floor(randomFn() * numNodes);
+    while (next === current && numNodes > 1) {
+      next = Math.floor(randomFn() * numNodes);
+    }
+    path.push(next);
+    current = next;
+  }
+
+  return path;
+}
+
+// Pulse rendering (separate component for clarity)
+function PulseLayer({
+  mesh,
+  pulsesRef,
+}: {
+  mesh: { nodes: Node[]; edges: [number, number][] };
+  pulsesRef: React.RefObject<Pulse[]>;
+}) {
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 50); // Update pulse positions ~20fps (smoother than necessary, but good)
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!pulsesRef.current) return null;
+
+  return (
+    <g>
+      {pulsesRef.current.map((pulse) => {
+        if (pulse.path.length < 2) return null;
+
+        const segmentIndex = Math.floor(pulse.progress * (pulse.path.length - 1));
+        const segmentProgress = pulse.progress * (pulse.path.length - 1) - segmentIndex;
+        const nodeA = mesh.nodes[pulse.path[segmentIndex]];
+        const nodeB = mesh.nodes[pulse.path[Math.min(segmentIndex + 1, pulse.path.length - 1)]];
+
+        if (!nodeA || !nodeB) return null;
+
+        const x = lerp(nodeA.p.x, nodeB.p.x, easeInOutQuad(segmentProgress));
+        const y = lerp(nodeA.p.y, nodeB.p.y, easeInOutQuad(segmentProgress));
+
+        // Calculate angle for card rotation (follows path direction)
+        const dx = nodeB.p.x - nodeA.p.x;
+        const dy = nodeB.p.y - nodeA.p.y;
+        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+        // Card dimensions (larger and more prominent)
+        const cardWidth = 72;
+        const cardHeight = 44;
+        const cardRx = 8;
+
+        return (
+          <motion.g
+            key={pulse.id}
+            style={{
+              opacity: pulse.intensity,
+              transformOrigin: `${x}px ${y}px`,
+            }}
+            animate={{
+              rotate: [angle - 1.5, angle + 1.5, angle - 1.5],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            {/* Elegant trail with gradient */}
+            <motion.ellipse
+              cx={x}
+              cy={y}
+              rx={cardWidth * 0.8}
+              ry={cardHeight * 0.6}
+              fill="url(#meshGradient)"
+              opacity="0.08"
+              filter="url(#pulseGlow)"
+              animate={{
+                rx: [cardWidth * 0.8, cardWidth * 1.3, cardWidth * 0.8],
+                ry: [cardHeight * 0.6, cardHeight * 1.0, cardHeight * 0.6],
+                opacity: [0.08, 0.20, 0.08],
+              }}
+              transition={{
+                duration: 3.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+
+            {/* Card shadow layer */}
+            <ellipse
+              cx={x + 2}
+              cy={y + 3}
+              rx={cardWidth / 2}
+              ry={cardHeight / 2}
+              fill="#000000"
+              opacity="0.15"
+              filter="url(#pulseGlow)"
+            />
+
+            {/* Credit card base (premium gradient) */}
+            <motion.rect
+              x={x - cardWidth / 2}
+              y={y - cardHeight / 2}
+              width={cardWidth}
+              height={cardHeight}
+              rx={cardRx}
+              fill="url(#meshGradient)"
+              opacity="0.95"
+              filter="url(#pulseGlow)"
+              style={{
+                transformOrigin: `${x}px ${y}px`,
+              }}
+              animate={{
+                scale: [1, 1.08, 1],
+                opacity: [0.92, 1.0, 0.92],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+
+            {/* Card inner border (premium detail) */}
+            <rect
+              x={x - cardWidth / 2 + 2}
+              y={y - cardHeight / 2 + 2}
+              width={cardWidth - 4}
+              height={cardHeight - 4}
+              rx={cardRx - 1}
+              fill="none"
+              stroke={BRAND.white}
+              strokeWidth="1.5"
+              opacity="0.4"
+            />
+
+            {/* Shimmer effect (moving highlight) - slower and more visible */}
+            <motion.rect
+              x={x - cardWidth / 2}
+              y={y - cardHeight / 2}
+              width={cardWidth * 0.5}
+              height={cardHeight}
+              rx={cardRx}
+              fill={BRAND.white}
+              opacity="0"
+              animate={{
+                opacity: [0, 0.7, 0],
+                x: [x - cardWidth / 2 - cardWidth * 0.3, x + cardWidth / 2 + cardWidth * 0.3],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: pulse.id * 0.6,
+              }}
+            />
+
+            {/* Card chip (premium detail) - larger */}
+            <rect
+              x={x - cardWidth / 2 + 12}
+              y={y - cardHeight / 2 + 12}
+              width={18}
+              height={14}
+              rx={3}
+              fill={BRAND.white}
+              opacity="0.7"
+            />
+            <rect
+              x={x - cardWidth / 2 + 13}
+              y={y - cardHeight / 2 + 13}
+              width={16}
+              height={12}
+              rx={2}
+              fill="url(#meshGradient)"
+              opacity="0.5"
+            />
+
+            {/* Card number lines (abstract) - more visible */}
+            <rect
+              x={x - cardWidth / 2 + 36}
+              y={y - 3}
+              width={24}
+              height={3}
+              rx={1.5}
+              fill={BRAND.white}
+              opacity="0.6"
+            />
+            <rect
+              x={x - cardWidth / 2 + 36}
+              y={y + 2}
+              width={18}
+              height={3}
+              rx={1.5}
+              fill={BRAND.white}
+              opacity="0.5"
+            />
+            <rect
+              x={x - cardWidth / 2 + 36}
+              y={y + 7}
+              width={20}
+              height={3}
+              rx={1.5}
+              fill={BRAND.white}
+              opacity="0.45"
+            />
+
+            {/* Glow pulse when near nodes */}
+            <motion.circle
+              cx={x}
+              cy={y}
+              r={cardWidth * 0.6}
+              fill="none"
+              stroke={BRAND.cyan}
+              strokeWidth="1.5"
+              opacity="0"
+              animate={{
+                opacity: [0, 0.5, 0],
+                r: [cardWidth * 0.6, cardWidth * 1.5, cardWidth * 0.6],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: pulse.id * 0.5,
+              }}
+            />
+          </motion.g>
+        );
+      })}
+    </g>
+  );
+}

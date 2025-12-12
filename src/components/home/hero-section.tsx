@@ -6,6 +6,7 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
 import { FadeInView, TextReveal, TextRevealGradient } from "@/components/animations";
 import { AdvancedButton, ButtonGroup } from "@/components/animations/advanced-button";
 import { CursorSpotlight, GradientMesh, GradientMeshSimple, ScrollIndicator } from "@/components/animations";
@@ -13,7 +14,7 @@ import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animatio
 import { cn } from "@/lib/utils";
 import { KodanoFlowRail } from "@/components/home/kodano-flow-rail";
 import { useScroll } from "framer-motion";
-import { KodanoPaymentFlow } from "@/components/home/KodanoPaymentFlow";
+import { PremiumCardAnimation } from "@/components/home/PremiumCardAnimation";
 
 interface HeroSectionProps {
   className?: string;
@@ -23,8 +24,14 @@ export function HeroSection({ className }: HeroSectionProps) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const isLowEnd = useIsLowEndDevice();
-  const heavyEffectsEnabled = !prefersReducedMotion && !isMobile && !isLowEnd;
   const { scrollYProgress } = useScroll();
+
+  // Prevent hydration mismatch by only enabling heavy effects on client
+  const [heavyEffectsEnabled, setHeavyEffectsEnabled] = useState(false);
+
+  useEffect(() => {
+    setHeavyEffectsEnabled(!prefersReducedMotion && !isMobile && !isLowEnd);
+  }, [prefersReducedMotion, isMobile, isLowEnd]);
 
   return (
     <section
@@ -138,9 +145,9 @@ export function HeroSection({ className }: HeroSectionProps) {
         </FadeInView>
           </div>
 
-          {/* Right: Product visual (desktop only; fallback inside component) */}
+          {/* Right: Premium Card Animation (desktop only) */}
           <div className="hidden lg:block lg:col-span-6">
-            <KodanoPaymentFlow scrollProgress={scrollYProgress} />
+            <PremiumCardAnimation />
           </div>
         </div>
       </div>
