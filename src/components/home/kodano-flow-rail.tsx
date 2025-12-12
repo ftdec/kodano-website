@@ -9,7 +9,14 @@
 
 "use client";
 
-import { motion, useMotionValue, useScroll, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  motionValue,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { useEffect, useMemo, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useIsLowEndDevice, useReducedMotion } from "@/lib/animations/hooks";
@@ -30,9 +37,9 @@ interface KodanoFlowRailProps {
 }
 
 type Pulse = {
-  x: ReturnType<typeof useMotionValue<number>>;
-  y: ReturnType<typeof useMotionValue<number>>;
-  opacity: ReturnType<typeof useMotionValue<number>>;
+  x: ReturnType<typeof motionValue<number>>;
+  y: ReturnType<typeof motionValue<number>>;
+  opacity: ReturnType<typeof motionValue<number>>;
   phase: number;
   speed: number;
   size: number;
@@ -98,14 +105,14 @@ export function KodanoFlowRail({
     ];
 
     return configs.map((c) => ({
-      x: useMotionValue(0),
-      y: useMotionValue(0),
-      opacity: useMotionValue(0),
+      // IMPORTANT: use motionValue() here (not useMotionValue) to avoid calling hooks inside useMemo.
+      x: motionValue(0),
+      y: motionValue(0),
+      opacity: motionValue(0),
       phase: c.phase,
       speed: c.speed,
       size: c.size,
     }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Main RAF loop: update pulse positions via getPointAtLength
