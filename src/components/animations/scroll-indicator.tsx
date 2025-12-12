@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Mouse } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 interface ScrollIndicatorProps {
   className?: string;

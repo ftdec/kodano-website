@@ -6,9 +6,7 @@ export interface PromptInputMessage {
   text?: string
 }
 
-interface PromptInputContextValue {
-  // Add any shared state here if needed
-}
+type PromptInputContextValue = Record<string, never>
 
 const PromptInputContext = createContext<PromptInputContextValue | undefined>(undefined)
 

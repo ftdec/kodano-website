@@ -5,8 +5,8 @@
 
 "use client";
 
-import { useEffect, useState, useRef, RefObject } from "react";
-import { useScroll, useTransform, useMotionValue, useSpring, MotionValue } from "framer-motion";
+import { useEffect, useState, RefObject } from "react";
+import { useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 
 // ============================================
 // SCROLL HOOKS
@@ -302,11 +302,13 @@ export function useHasBeenSeen(ref: RefObject<HTMLElement | null>, threshold = 0
  * Detect if user prefers reduced motion
  */
 export function useReducedMotion() {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mediaQuery.matches);
 
     const handleChange = (e: MediaQueryListEvent) => {
       setPrefersReducedMotion(e.matches);
@@ -326,7 +328,13 @@ export function useReducedMotion() {
  * Detect if device is mobile
  */
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return (
+      window.innerWidth < 768 ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    );
+  });
 
   useEffect(() => {
     const checkMobile = () => {
@@ -335,8 +343,6 @@ export function useIsMobile() {
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
       );
     };
-
-    checkMobile();
     window.addEventListener("resize", checkMobile);
 
     return () => {

@@ -7,8 +7,8 @@
 
 import { motion, Variants } from "framer-motion";
 import { useMemo } from "react";
-import { splitTextIntoWords, calculateStaggerDelay } from "@/lib/animations/utils";
-import { fadeInUp, containerStagger } from "@/lib/animations/variants";
+import { splitTextIntoWords } from "@/lib/animations/utils";
+import { fadeInUp } from "@/lib/animations/variants";
 import { useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
 

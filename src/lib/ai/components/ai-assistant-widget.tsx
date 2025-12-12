@@ -24,18 +24,6 @@ import { ConversationSection } from "@/lib/ai/components/conversation-section"
 import { InputSection } from "@/lib/ai/components/input-section"
 
 export function AIAssistantWidget() {
-  const [mounted, setMounted] = useState(false)
-  
-  // Only render after mount to avoid hydration mismatch
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Don't render until mounted to avoid hydration mismatch
-  if (!mounted) {
-    return null
-  }
-
   return <AIAssistantWidgetContent />
 }
 

@@ -28,6 +28,43 @@ import { FinalCTASection } from "@/components/home/final-cta-section";
 // Removed - now handled by BenefitsSection component
 
 // Mobile Nav Component for One-Page
+function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
+  return (
+    <div className="relative w-6 h-6 flex items-center justify-center">
+      <motion.div
+        className="absolute w-6 h-5 flex flex-col justify-between"
+        initial={false}
+        animate={isOpen ? "open" : "closed"}
+      >
+        <motion.span
+          className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
+          variants={{
+            closed: { rotate: 0, y: 0 },
+            open: { rotate: 45, y: 8 },
+          }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
+        />
+        <motion.span
+          className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
+          variants={{
+            closed: { opacity: 1, scale: 1 },
+            open: { opacity: 0, scale: 0 },
+          }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
+        />
+        <motion.span
+          className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
+          variants={{
+            closed: { rotate: 0, y: 0 },
+            open: { rotate: -45, y: -8 },
+          }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
+        />
+      </motion.div>
+    </div>
+  );
+}
+
 function MobileNavOnePage() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -64,43 +101,6 @@ function MobileNavOnePage() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
-
-  function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
-    return (
-      <div className="relative w-6 h-6 flex items-center justify-center">
-        <motion.div
-          className="absolute w-6 h-5 flex flex-col justify-between"
-          initial={false}
-          animate={isOpen ? "open" : "closed"}
-        >
-          <motion.span
-            className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
-            variants={{
-              closed: { rotate: 0, y: 0 },
-              open: { rotate: 45, y: 8 },
-            }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-          />
-          <motion.span
-            className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
-            variants={{
-              closed: { opacity: 1, scale: 1 },
-              open: { opacity: 0, scale: 0 },
-            }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-          />
-          <motion.span
-            className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
-            variants={{
-              closed: { rotate: 0, y: 0 },
-              open: { rotate: -45, y: -8 },
-            }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-          />
-        </motion.div>
-      </div>
-    );
-  }
 
   return (
     <header

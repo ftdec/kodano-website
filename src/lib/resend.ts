@@ -3,13 +3,15 @@
  * Uses environment variables from lib/env.ts
  */
 import { Resend } from "resend";
-import { env } from "./env";
+import { env, requireResendApiKey } from "./env";
 
-if (!env.RESEND_API_KEY) {
-  throw new Error("RESEND_API_KEY is not set in environment variables");
+let resendClient: Resend | null = null;
+
+export function getResendClient(): Resend {
+  if (resendClient) return resendClient;
+  resendClient = new Resend(requireResendApiKey());
+  return resendClient;
 }
-
-export const resend = new Resend(env.RESEND_API_KEY);
 
 // Export email configuration helpers
 export const getFromEmail = () => {

@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useReducedMotion } from "@/lib/animations/hooks";
 import * as THREE from "three";
@@ -132,6 +132,19 @@ export function GradientMesh({
   className = "",
 }: MeshGradientProps) {
   const prefersReducedMotion = useReducedMotion();
+  const [webglSupported] = useState(() => {
+    // Progressive enhancement: if we can't check, assume supported and let Canvas handle it.
+    if (typeof window === "undefined") return true;
+    try {
+      const canvas = document.createElement("canvas");
+      const gl =
+        canvas.getContext("webgl") ||
+        canvas.getContext("experimental-webgl");
+      return Boolean(gl);
+    } catch {
+      return false;
+    }
+  });
 
   // Convert hex colors to THREE.Color
   const threeColors = useMemo(
@@ -140,7 +153,7 @@ export function GradientMesh({
   );
 
   // Fallback gradient for reduced motion or WebGL not supported
-  if (prefersReducedMotion) {
+  if (prefersReducedMotion || !webglSupported) {
     return (
       <div
         className={className}

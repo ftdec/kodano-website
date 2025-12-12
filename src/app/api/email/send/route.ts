@@ -10,11 +10,12 @@
  * - name?: string (optional sender name override)
  */
 import { NextResponse } from "next/server";
-import { resend, getFromEmail } from "@/lib/resend";
+import { getResendClient } from "@/lib/resend";
 import { env } from "@/lib/env";
 
 export async function POST(req: Request) {
   try {
+    const resend = getResendClient();
     // Parse JSON body
     const body = await req.json().catch(() => null);
 

@@ -5,7 +5,7 @@
 
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
 import { useEffect } from "react";
 import { useReducedMotion, useIsMobile } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,7 @@ interface CursorSpotlightProps {
   opacity?: number;
   blur?: number;
   color?: string;
+  position?: "fixed" | "absolute";
 }
 
 export function CursorSpotlight({
@@ -24,6 +25,7 @@ export function CursorSpotlight({
   opacity = 0.15,
   blur = 100,
   color = "rgba(99, 102, 241, 0.3)", // primary color with opacity
+  position = "fixed",
 }: CursorSpotlightProps) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -54,26 +56,21 @@ export function CursorSpotlight({
     return null;
   }
 
+  const background = useMotionTemplate`radial-gradient(${size}px circle at ${x}px ${y}px, ${color}, transparent 80%)`;
+
   return (
     <motion.div
-      className={cn("pointer-events-none fixed inset-0 z-30", className)}
+      className={cn(
+        "pointer-events-none inset-0 z-0",
+        position === "fixed" ? "fixed" : "absolute",
+        className
+      )}
       style={{
-        background: `radial-gradient(${size}px circle at var(--mouse-x) var(--mouse-y), ${color}, transparent 80%)`,
+        background,
         opacity,
         filter: `blur(${blur}px)`,
       }}
-    >
-      <motion.div
-        className="absolute w-full h-full"
-        style={{
-          left: x,
-          top: y,
-          transform: "translate(-50%, -50%)",
-          "--mouse-x": x,
-          "--mouse-y": y,
-        } as any}
-      />
-    </motion.div>
+    />
   );
 }
 

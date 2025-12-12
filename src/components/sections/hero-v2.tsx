@@ -5,8 +5,8 @@
 
 "use client";
 
-import React, { useRef, useEffect, useState, useMemo } from "react";
-import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import React, { useRef, useEffect, useState } from "react";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button-v2";
 import { cn } from "@/lib/utils";
@@ -197,12 +197,7 @@ function HeroMetrics() {
 
 function HeroVisual() {
   // Use useMemo to prevent recalculation on every render
-  const [isVisible, setIsVisible] = useState(false);
-  
-  useEffect(() => {
-    // Only start animations when component is visible
-    setIsVisible(true);
-  }, []);
+  const [isVisible] = useState(true);
 
   return (
     <motion.div

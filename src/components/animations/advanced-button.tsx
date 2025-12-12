@@ -6,7 +6,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { ReactNode, useState, useRef } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import { useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
 import { CheckCircle2, Loader2 } from "lucide-react";
@@ -22,7 +22,10 @@ interface AdvancedButtonProps {
   success?: boolean;
   ripple?: boolean;
   shimmer?: boolean;
-  magnetic?: boolean;
+  href?: string;
+  target?: string;
+  rel?: string;
+  type?: "button" | "submit" | "reset";
 }
 
 export function AdvancedButton({
@@ -36,35 +39,39 @@ export function AdvancedButton({
   success = false,
   ripple = true,
   shimmer = true,
-  magnetic = false,
+  href,
+  target,
+  rel,
+  type = "button",
 }: AdvancedButtonProps) {
   const [isLoading, setIsLoading] = useState(loading);
   const [isSuccess, setIsSuccess] = useState(success);
   const [ripples, setRipples] = useState<Array<{ x: number; y: number; id: number }>>([]);
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const prefersReducedMotion = useReducedMotion();
 
-  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async (
+    e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+  ) => {
     if (disabled || isLoading) return;
 
     // Ripple effect
     if (ripple && !prefersReducedMotion) {
-      const rect = buttonRef.current?.getBoundingClientRect();
-      if (rect) {
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const id = Date.now();
-        setRipples((prev) => [...prev, { x, y, id }]);
-        setTimeout(() => {
-          setRipples((prev) => prev.filter((r) => r.id !== id));
-        }, 600);
-      }
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const id = Date.now();
+      setRipples((prev) => [...prev, { x, y, id }]);
+      setTimeout(() => {
+        setRipples((prev) => prev.filter((r) => r.id !== id));
+      }, 600);
     }
 
     // Handle async onClick
     if (onClick) {
       const result = onClick();
       if (result instanceof Promise) {
+        // If link + async action, keep user on page until action finishes
+        if (href) e.preventDefault();
         setIsLoading(true);
         try {
           await result;
@@ -79,7 +86,8 @@ export function AdvancedButton({
     }
   };
 
-  const baseStyles = "relative inline-flex items-center justify-center font-medium transition-colors overflow-hidden";
+  const baseStyles =
+    "group relative inline-flex items-center justify-center font-medium transition-colors overflow-hidden";
 
   const variantStyles = {
     primary: "bg-primary text-primary-foreground hover:bg-primary/90",
@@ -94,32 +102,36 @@ export function AdvancedButton({
     lg: "h-13 px-8 text-lg rounded-xl",
   };
 
-  return (
-    <motion.button
-      ref={buttonRef}
-      className={cn(
-        baseStyles,
-        variantStyles[variant],
-        sizeStyles[size],
-        disabled && "opacity-50 cursor-not-allowed",
-        className
-      )}
-      onClick={handleClick}
-      disabled={disabled || isLoading}
-      whileHover={!prefersReducedMotion && !disabled ? { scale: 1.02 } : {}}
-      whileTap={!prefersReducedMotion && !disabled ? { scale: 0.98 } : {}}
-      transition={{
-        type: "spring",
+  const sharedClassName = cn(
+    baseStyles,
+    variantStyles[variant],
+    sizeStyles[size],
+    disabled && "opacity-50 cursor-not-allowed",
+    className
+  );
+
+  const sharedMotionProps = useMemo(
+    () => ({
+      whileHover: !prefersReducedMotion && !disabled ? { scale: 1.02 } : {},
+      whileTap: !prefersReducedMotion && !disabled ? { scale: 0.98 } : {},
+      transition: {
+        type: "spring" as const,
         stiffness: 400,
         damping: 30,
-      }}
-    >
+      },
+    }),
+    [disabled, prefersReducedMotion]
+  );
+
+  const content = (
+    <>
       {/* Shimmer effect */}
       {shimmer && !prefersReducedMotion && !disabled && (
         <motion.div
           className="absolute inset-0 -translate-x-full"
           style={{
-            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
+            background:
+              "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
           }}
           animate={{
             translateX: ["100%", "200%"],
@@ -192,10 +204,11 @@ export function AdvancedButton({
       {/* Border gradient animation for outline variant */}
       {variant === "outline" && !prefersReducedMotion && (
         <motion.div
-          className="absolute inset-0 rounded-[inherit] opacity-0 group-hover:opacity-100 transition-opacity"
+          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 group-hover:opacity-100 transition-opacity"
           style={{
-            background: "linear-gradient(90deg, #667eea, #764ba2, #f093fb, #4facfe)",
+            background: "linear-gradient(90deg, #4FACFE, #00DBDE, #43E97B, #415A77)",
             backgroundSize: "200% 100%",
+            mixBlendMode: "overlay",
           }}
           animate={{
             backgroundPosition: ["0% 0%", "100% 0%"],
@@ -207,6 +220,35 @@ export function AdvancedButton({
           }}
         />
       )}
+    </>
+  );
+
+  // Render as link when href is provided
+  if (href) {
+    return (
+      <motion.a
+        href={href}
+        target={target}
+        rel={rel}
+        aria-disabled={disabled || isLoading}
+        className={sharedClassName}
+        onClick={handleClick}
+        {...sharedMotionProps}
+      >
+        {content}
+      </motion.a>
+    );
+  }
+
+  return (
+    <motion.button
+      type={type}
+      className={sharedClassName}
+      onClick={handleClick}
+      disabled={disabled || isLoading}
+      {...sharedMotionProps}
+    >
+      {content}
     </motion.button>
   );
 }
@@ -244,13 +286,29 @@ export function ButtonGroup({
     animate: { opacity: 1, y: 0 },
   };
 
+  const gapClass = (() => {
+    const map: Record<number, string> = {
+      0: "gap-0",
+      1: "gap-1",
+      2: "gap-2",
+      3: "gap-3",
+      4: "gap-4",
+      5: "gap-5",
+      6: "gap-6",
+      8: "gap-8",
+      10: "gap-10",
+      12: "gap-12",
+    };
+    return map[gap] ?? "gap-4";
+  })();
+
   if (prefersReducedMotion) {
-    return <div className={cn("flex flex-wrap", `gap-${gap}`, className)}>{children}</div>;
+    return <div className={cn("flex flex-wrap", gapClass, className)}>{children}</div>;
   }
 
   return (
     <motion.div
-      className={cn("flex flex-wrap", `gap-${gap}`, className)}
+      className={cn("flex flex-wrap", gapClass, className)}
       variants={containerVariants}
       initial="initial"
       animate="animate"

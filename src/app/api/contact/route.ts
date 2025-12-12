@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { resend, FROM_EMAIL, TO_EMAIL, getAllRecipients } from "@/lib/resend";
+import { getResendClient, FROM_EMAIL, getAllRecipients } from "@/lib/resend";
 
 export async function POST(request: NextRequest) {
   try {
+    const resend = getResendClient();
     const body = await request.json();
     const { name, email, company, message, volume, phone, website, acquirers, subject } = body;
 

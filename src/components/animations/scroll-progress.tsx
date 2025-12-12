@@ -5,8 +5,8 @@
 
 "use client";
 
-import { motion, useScroll, useSpring } from "framer-motion";
-import { useRef, ReactNode } from "react";
+import { motion, useMotionValueEvent, useScroll, useSpring } from "framer-motion";
+import { useRef, ReactNode, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/lib/animations/hooks";
 
@@ -185,6 +185,11 @@ interface ScrollProgressStepsProps {
 export function ScrollProgressSteps({ steps, className }: ScrollProgressStepsProps) {
   const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
+  const [progress, setProgress] = useState(0);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    setProgress(latest);
+  });
 
   if (prefersReducedMotion) {
     return null;
@@ -194,17 +199,16 @@ export function ScrollProgressSteps({ steps, className }: ScrollProgressStepsPro
     <div className={cn("flex flex-col gap-4", className)}>
       {steps.map((step, index) => {
         const stepProgress = index / (steps.length - 1);
-        const nextStepProgress = (index + 1) / (steps.length - 1);
+        const isActive = progress >= stepProgress;
 
         return (
           <div key={step.id} className="flex items-center gap-3">
             <motion.div
               className="w-3 h-3 rounded-full border-2 border-primary"
-              style={{
-                backgroundColor: useSpring(
-                  scrollYProgress.get() >= stepProgress ? "currentColor" : "transparent"
-                ),
+              animate={{
+                backgroundColor: isActive ? "currentColor" : "transparent",
               }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
             />
             <span className="text-sm font-medium">{step.label}</span>
           </div>
@@ -229,15 +233,23 @@ export function ScrollProgressPercentage({
 }: ScrollProgressPercentageProps) {
   const { scrollYProgress } = useScroll();
   const prefersReducedMotion = useReducedMotion();
+  const [progress, setProgress] = useState(0);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    setProgress(latest);
+  });
 
   if (prefersReducedMotion) {
     return null;
   }
 
+  const pct = progress * 100;
+  const formatted = decimals > 0 ? pct.toFixed(decimals) : String(Math.round(pct));
+
   return (
     <motion.div className={className}>
       <motion.span>
-        {scrollYProgress.get() ? Math.round(scrollYProgress.get() * 100) : 0}%
+        {formatted}%
       </motion.span>
     </motion.div>
   );

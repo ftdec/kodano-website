@@ -9,23 +9,25 @@ export const env = {
   RESEND_FROM_NAME: process.env.RESEND_FROM_NAME ?? "Kodano Pagamentos",
 } as const;
 
-// Validate required environment variables
-if (!env.RESEND_API_KEY) {
-  // eslint-disable-next-line no-console
-  console.error("❌ Missing RESEND_API_KEY in environment variables");
-  if (process.env.NODE_ENV !== "development") {
+/**
+ * Avoid throwing at module-eval time (breaks `next build` if env is missing locally).
+ * Consumers that truly require the key should call `requireResendApiKey()` at runtime.
+ */
+export function requireResendApiKey(): string {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) {
+    console.error("❌ Missing RESEND_API_KEY in environment variables");
     throw new Error("RESEND_API_KEY is required");
   }
+  return key;
 }
 
 if (!env.RESEND_FROM_EMAIL) {
-  // eslint-disable-next-line no-console
   console.warn("⚠️  Missing RESEND_FROM_EMAIL, will use fallback: onboarding@resend.dev");
 }
 
 // Log configuration in development
 if (process.env.NODE_ENV === "development") {
-  // eslint-disable-next-line no-console
   console.log("📧 Resend Configuration:", {
     hasApiKey: !!env.RESEND_API_KEY,
     apiKeyPrefix: env.RESEND_API_KEY ? `${env.RESEND_API_KEY.substring(0, 10)}...` : "missing",

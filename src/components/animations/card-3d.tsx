@@ -55,6 +55,20 @@ export function Card3D({
               }
             : {}
         }
+        onMouseMove={(e) => {
+          if (!shouldAnimate) return;
+          const el = e.currentTarget as HTMLElement;
+          const rect = el.getBoundingClientRect();
+          const px = ((e.clientX - rect.left) / rect.width) * 100;
+          const py = ((e.clientY - rect.top) / rect.height) * 100;
+          el.style.setProperty("--mouse-x", `${px}%`);
+          el.style.setProperty("--mouse-y", `${py}%`);
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget as HTMLElement;
+          el.style.setProperty("--mouse-x", `50%`);
+          el.style.setProperty("--mouse-y", `50%`);
+        }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
         transition={{
@@ -72,7 +86,7 @@ export function Card3D({
             className="absolute inset-0 pointer-events-none overflow-hidden rounded-[inherit]"
             style={{
               background: isHovered
-                ? "radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.2) 0%, transparent 50%)"
+                ? "radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.22) 0%, transparent 55%)"
                 : "none",
               mixBlendMode: "overlay",
             }}
@@ -89,6 +103,8 @@ export function Card3D({
             style={{
               filter: "blur(20px)",
               opacity: 0.3,
+              background:
+                "radial-gradient(circle at 50% 50%, rgba(79,172,254,0.25), rgba(0,219,222,0.10) 35%, transparent 70%)",
             }}
             animate={{
               translateY: isHovered ? 10 : 0,

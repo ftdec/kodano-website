@@ -86,7 +86,15 @@ async function main() {
     const emails = await listRecentEmails();
     
     if (emails && emails.data) {
-      emails.data.forEach((email: any, index: number) => {
+      type ResendEmailSummary = {
+        id: string;
+        subject?: string;
+        to?: string | string[];
+        last_event?: string;
+        created_at?: string;
+      };
+
+      emails.data.forEach((email: ResendEmailSummary, index: number) => {
         console.log(`${index + 1}. ${email.subject}`);
         console.log(`   ID: ${email.id}`);
         console.log(`   To: ${Array.isArray(email.to) ? email.to.join(', ') : email.to}`);
