@@ -80,28 +80,28 @@ const steps = [
     description:
       "Conecte-se à nossa API RESTful moderna em minutos, com documentação clara e SDKs prontos.",
     icon: Layers,
-    gradient: "from-[#4FACFE] to-[#00DBDE]",
+    gradient: "from-[#6366F1] to-[#8B5CF6]", // Índigo → Roxo (tecnologia/conexão)
   },
   {
     title: "Configure Pagamentos",
     description:
       "Defina suas regras de negócio, métodos de pagamento aceitos e fluxo de checkout.",
     icon: Zap,
-    gradient: "from-[#00DBDE] to-[#43E97B]",
+    gradient: "from-[#10B981] to-[#14B8A6]", // Verde esmeralda → Turquesa (configuração/crescimento)
   },
   {
     title: "Processe Transações",
     description:
       "Nossa tecnologia processa cada transação com otimização inteligente para maximizar aprovações.",
     icon: BarChart3,
-    gradient: "from-[#4FACFE] to-[#43E97B]",
+    gradient: "from-[#F59E0B] to-[#EF4444]", // Âmbar → Vermelho (processamento/velocidade)
   },
   {
     title: "Monitore e Otimize",
     description:
       "Acompanhe tudo em tempo real pelo dashboard e deixe nossa IA otimizar as conversões.",
     icon: Shield,
-    gradient: "from-[#415A77] to-[#4FACFE]",
+    gradient: "from-[#EC4899] to-[#F97316]", // Rosa → Laranja (análise/otimização)
   },
 ];
 
@@ -205,7 +205,7 @@ export function HowItWorksSection() {
                       <div className="absolute left-2 top-1 bottom-1 w-px bg-border/70" />
                       {/* Progress */}
                       <motion.div
-                        className="absolute left-2 top-1 bottom-1 w-px origin-top bg-gradient-to-b from-[#4FACFE] via-[#00DBDE] to-[#43E97B]"
+                        className="absolute left-2 top-1 bottom-1 w-px origin-top bg-gradient-to-b from-[#6366F1] via-[#10B981] via-[#F59E0B] to-[#EC4899]"
                         style={{ scaleY: lineScale }}
                       />
 
@@ -262,8 +262,36 @@ export function HowItWorksSection() {
                     {/* Background wash */}
                     <div className="absolute inset-0 pointer-events-none">
                       <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/10 to-transparent" />
-                      <div className="absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full bg-[#4FACFE]/10 blur-[90px]" />
-                      <div className="absolute -bottom-28 -left-28 w-[480px] h-[480px] rounded-full bg-[#43E97B]/10 blur-[100px]" />
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={activeStep.title}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.4 }}
+                          className={cn(
+                            "absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full blur-[90px]",
+                            activeIndex === 0 && "bg-[#6366F1]/10",
+                            activeIndex === 1 && "bg-[#10B981]/10",
+                            activeIndex === 2 && "bg-[#F59E0B]/10",
+                            activeIndex === 3 && "bg-[#EC4899]/10"
+                          )}
+                        />
+                        <motion.div
+                          key={`${activeStep.title}-2`}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.4, delay: 0.1 }}
+                          className={cn(
+                            "absolute -bottom-28 -left-28 w-[480px] h-[480px] rounded-full blur-[100px]",
+                            activeIndex === 0 && "bg-[#8B5CF6]/10",
+                            activeIndex === 1 && "bg-[#14B8A6]/10",
+                            activeIndex === 2 && "bg-[#EF4444]/10",
+                            activeIndex === 3 && "bg-[#F97316]/10"
+                          )}
+                        />
+                      </AnimatePresence>
                     </div>
 
                     <div className="relative p-10 min-h-[340px]">
