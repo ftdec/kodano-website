@@ -299,6 +299,19 @@ export function HeroOrchestrationVisual({
   const enabled = !prefersReducedMotion && !isMobile && !isLowEnd;
   const enable3d = enabled && webglOk;
 
+  // 2D fallback: explicit “payment packets” travelling node-to-node
+  const flowPoints = STAGES.map((stage) => {
+    const x = ((stage.position.x + 4) / 8) * 100; // -4..4 -> 0..100%
+    const y = ((stage.position.y + 1) / 3) * 100; // -1..2 -> 0..100%
+    return { x, y };
+  });
+  const flowLefts = flowPoints.map((p) => `${p.x}%`);
+  const flowTops = flowPoints.map((p) => `${p.y}%`);
+  const flowTimes =
+    flowPoints.length > 1
+      ? flowPoints.map((_, i) => i / (flowPoints.length - 1))
+      : [0];
+
   return (
     <div
       ref={containerRef}
@@ -448,6 +461,67 @@ export function HeroOrchestrationVisual({
                 </div>
               );
             })}
+
+            {/* SUPER FLUXO: “payment packets” atravessando o pipeline inteiro */}
+            {!prefersReducedMotion && flowPoints.length >= 2 && (
+              <div className="absolute inset-0">
+                {[
+                  { label: "CARD", from: "#4FACFE", to: "#00DBDE", delay: 0.0 },
+                  { label: "PIX", from: "#00DBDE", to: "#43E97B", delay: 1.1 },
+                  { label: "BOL", from: "#415A77", to: "#4FACFE", delay: 2.2 },
+                ].map((p) => (
+                  <motion.div
+                    key={p.label}
+                    className="absolute"
+                    style={{
+                      left: flowLefts[0],
+                      top: flowTops[0],
+                      transform: "translate(-50%, -50%)",
+                      willChange: "left, top, transform",
+                    }}
+                    animate={{
+                      left: flowLefts,
+                      top: flowTops,
+                    }}
+                    transition={{
+                      duration: 5.8,
+                      repeat: Infinity,
+                      ease: "linear",
+                      times: flowTimes,
+                      delay: p.delay,
+                    }}
+                  >
+                    {/* trail */}
+                    <motion.div
+                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-8 rounded-full blur-xl"
+                      style={{
+                        background: `linear-gradient(90deg, transparent, ${p.from}55, ${p.to}55, transparent)`,
+                      }}
+                      animate={{ opacity: [0.15, 0.45, 0.15], scaleX: [0.85, 1.15, 0.85] }}
+                      transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
+                    />
+
+                    {/* packet */}
+                    <motion.div
+                      className="relative px-3 py-2 rounded-xl border border-white/60 shadow-[0_18px_40px_rgba(15,23,42,0.18)]"
+                      style={{
+                        background: `linear-gradient(135deg, ${p.from}CC, ${p.to}CC)`,
+                      }}
+                      animate={{ rotate: [0, 3, -3, 0], scale: [1, 1.05, 1] }}
+                      transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <div className="absolute inset-0 rounded-xl bg-white/15" />
+                      <div className="relative flex items-center gap-2">
+                        <div className="w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.75)]" />
+                        <div className="text-[11px] font-semibold tracking-[0.2em] text-white">
+                          {p.label}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
 
             {/* Linhas conectando os nós com fluxo contínuo */}
             {STAGES.slice(0, -1).map((stage, idx) => {
