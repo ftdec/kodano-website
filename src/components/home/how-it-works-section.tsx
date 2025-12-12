@@ -80,28 +80,28 @@ const steps = [
     description:
       "Conecte-se à nossa API RESTful moderna em minutos, com documentação clara e SDKs prontos.",
     icon: Layers,
-    gradient: "from-[#6366F1] to-[#8B5CF6]", // Índigo → Roxo (tecnologia/conexão)
+    gradient: "from-[#4FACFE] to-[#00DBDE]", // Azul claro → Ciano (paleta do site)
   },
   {
     title: "Configure Pagamentos",
     description:
       "Defina suas regras de negócio, métodos de pagamento aceitos e fluxo de checkout.",
     icon: Zap,
-    gradient: "from-[#10B981] to-[#14B8A6]", // Verde esmeralda → Turquesa (configuração/crescimento)
+    gradient: "from-[#00DBDE] to-[#43E97B]", // Ciano → Verde (paleta do site)
   },
   {
     title: "Processe Transações",
     description:
       "Nossa tecnologia processa cada transação com otimização inteligente para maximizar aprovações.",
     icon: BarChart3,
-    gradient: "from-[#F59E0B] to-[#EF4444]", // Âmbar → Vermelho (processamento/velocidade)
+    gradient: "from-[#415A77] to-[#4FACFE]", // Azul escuro → Azul claro (paleta do site)
   },
   {
     title: "Monitore e Otimize",
     description:
       "Acompanhe tudo em tempo real pelo dashboard e deixe nossa IA otimizar as conversões.",
     icon: Shield,
-    gradient: "from-[#EC4899] to-[#F97316]", // Rosa → Laranja (análise/otimização)
+    gradient: "from-[#43E97B] to-[#4FACFE]", // Verde → Azul claro (paleta do site)
   },
 ];
 
@@ -205,7 +205,7 @@ export function HowItWorksSection() {
                       <div className="absolute left-2 top-1 bottom-1 w-px bg-border/70" />
                       {/* Progress */}
                       <motion.div
-                        className="absolute left-2 top-1 bottom-1 w-px origin-top bg-gradient-to-b from-[#6366F1] via-[#10B981] via-[#F59E0B] to-[#EC4899]"
+                        className="absolute left-2 top-1 bottom-1 w-px origin-top bg-gradient-to-b from-[#4FACFE] via-[#00DBDE] via-[#43E97B] to-[#415A77]"
                         style={{ scaleY: lineScale }}
                       />
 
@@ -271,10 +271,10 @@ export function HowItWorksSection() {
                           transition={{ duration: 0.4 }}
                           className={cn(
                             "absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full blur-[90px]",
-                            activeIndex === 0 && "bg-[#6366F1]/10",
-                            activeIndex === 1 && "bg-[#10B981]/10",
-                            activeIndex === 2 && "bg-[#F59E0B]/10",
-                            activeIndex === 3 && "bg-[#EC4899]/10"
+                            activeIndex === 0 && "bg-[#4FACFE]/10",
+                            activeIndex === 1 && "bg-[#00DBDE]/10",
+                            activeIndex === 2 && "bg-[#415A77]/10",
+                            activeIndex === 3 && "bg-[#43E97B]/10"
                           )}
                         />
                         <motion.div
@@ -285,10 +285,10 @@ export function HowItWorksSection() {
                           transition={{ duration: 0.4, delay: 0.1 }}
                           className={cn(
                             "absolute -bottom-28 -left-28 w-[480px] h-[480px] rounded-full blur-[100px]",
-                            activeIndex === 0 && "bg-[#8B5CF6]/10",
-                            activeIndex === 1 && "bg-[#14B8A6]/10",
-                            activeIndex === 2 && "bg-[#EF4444]/10",
-                            activeIndex === 3 && "bg-[#F97316]/10"
+                            activeIndex === 0 && "bg-[#00DBDE]/10",
+                            activeIndex === 1 && "bg-[#43E97B]/10",
+                            activeIndex === 2 && "bg-[#4FACFE]/10",
+                            activeIndex === 3 && "bg-[#4FACFE]/10"
                           )}
                         />
                       </AnimatePresence>
