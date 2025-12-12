@@ -14,6 +14,7 @@ interface MeshGradientProps {
   colors?: string[];
   speed?: number;
   className?: string;
+  quality?: "high" | "balanced" | "low";
 }
 
 // Vertex shader
@@ -92,7 +93,15 @@ const fragmentShader = `
   }
 `;
 
-function AnimatedMesh({ colors, speed = 1 }: { colors: THREE.Color[]; speed: number }) {
+function AnimatedMesh({
+  colors,
+  speed = 1,
+  segments,
+}: {
+  colors: THREE.Color[];
+  speed: number;
+  segments: number;
+}) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
 
@@ -115,7 +124,7 @@ function AnimatedMesh({ colors, speed = 1 }: { colors: THREE.Color[]; speed: num
 
   return (
     <mesh ref={meshRef} scale={[2, 2, 1]}>
-      <planeGeometry args={[10, 10, 32, 32]} />
+      <planeGeometry args={[10, 10, segments, segments]} />
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}
@@ -130,6 +139,7 @@ export function GradientMesh({
   colors = ["#667eea", "#764ba2", "#f093fb", "#4facfe"],
   speed = 0.5,
   className = "",
+  quality = "balanced",
 }: MeshGradientProps) {
   const prefersReducedMotion = useReducedMotion();
   const [webglSupported] = useState(() => {
@@ -164,14 +174,25 @@ export function GradientMesh({
     );
   }
 
+  const settings = (() => {
+    if (quality === "high") {
+      return { dpr: [1, 2] as [number, number], segments: 32, antialias: true };
+    }
+    if (quality === "low") {
+      return { dpr: [1, 1] as [number, number], segments: 12, antialias: false };
+    }
+    // balanced
+    return { dpr: [1, 1.5] as [number, number], segments: 16, antialias: false };
+  })();
+
   return (
     <div className={className}>
       <Canvas
         camera={{ position: [0, 0, 5], fov: 75 }}
-        gl={{ antialias: true, alpha: true }}
-        dpr={[1, 2]}
+        gl={{ antialias: settings.antialias, alpha: true, powerPreference: "high-performance" }}
+        dpr={settings.dpr}
       >
-        <AnimatedMesh colors={threeColors} speed={speed} />
+        <AnimatedMesh colors={threeColors} speed={speed} segments={settings.segments} />
       </Canvas>
     </div>
   );

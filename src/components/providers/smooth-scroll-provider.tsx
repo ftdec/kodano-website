@@ -8,6 +8,7 @@
 import { ReactNode, useEffect, useRef } from "react";
 import Lenis from "@studio-freight/lenis";
 import { usePathname } from "next/navigation";
+import { useIsLowEndDevice, useReducedMotion } from "@/lib/animations/hooks";
 
 interface SmoothScrollProviderProps {
   children: ReactNode;
@@ -16,8 +17,13 @@ interface SmoothScrollProviderProps {
 export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   const lenisRef = useRef<Lenis | null>(null);
   const pathname = usePathname();
+  const prefersReducedMotion = useReducedMotion();
+  const isLowEnd = useIsLowEndDevice();
 
   useEffect(() => {
+    // Disable smooth scrolling on reduced motion or low-end devices (performance)
+    if (prefersReducedMotion || isLowEnd) return;
+
     // Initialize Lenis
     const lenis = new Lenis({
       duration: 1.2,
@@ -45,7 +51,7 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
       lenis.destroy();
       lenisRef.current = null;
     };
-  }, []);
+  }, [prefersReducedMotion, isLowEnd]);
 
   // Reset scroll on route change
   useEffect(() => {

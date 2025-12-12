@@ -8,8 +8,8 @@
 
 import { FadeInView, TextReveal, TextRevealGradient } from "@/components/animations";
 import { AdvancedButton, ButtonGroup } from "@/components/animations/advanced-button";
-import { CursorSpotlight, GradientMesh, ScrollIndicator } from "@/components/animations";
-import { useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
+import { CursorSpotlight, GradientMesh, GradientMeshSimple, ScrollIndicator } from "@/components/animations";
+import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
 
 interface HeroSectionProps {
@@ -19,6 +19,8 @@ interface HeroSectionProps {
 export function HeroSection({ className }: HeroSectionProps) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
+  const isLowEnd = useIsLowEndDevice();
+  const heavyEffectsEnabled = !prefersReducedMotion && !isMobile && !isLowEnd;
 
   return (
     <section
@@ -28,25 +30,36 @@ export function HeroSection({ className }: HeroSectionProps) {
       )}
     >
       {/* Premium Background (paleta atual) */}
-      <GradientMesh
-        className="absolute inset-0 -z-20 opacity-90"
-        colors={["#4FACFE", "#00DBDE", "#43E97B", "#415A77"]}
-        speed={0.35}
-      />
+      {heavyEffectsEnabled ? (
+        <GradientMesh
+          className="absolute inset-0 -z-20 opacity-85"
+          colors={["#4FACFE", "#00DBDE", "#43E97B", "#415A77"]}
+          speed={0.22}
+        />
+      ) : (
+        <GradientMeshSimple
+          className="absolute inset-0 -z-20 opacity-85"
+          colors={["#4FACFE", "#00DBDE", "#43E97B", "#415A77"]}
+        />
+      )}
 
       {/* Subtle overlays for depth/legibility */}
       <div className="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-b from-background/0 via-background/25 to-background/70" />
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 -z-10 w-[900px] h-[900px] rounded-full bg-[#4FACFE]/10 blur-[120px]" />
+      {!isLowEnd && (
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 -z-10 w-[820px] h-[820px] rounded-full bg-[#4FACFE]/10 blur-[90px]" />
+      )}
 
       {/* Spotlight follows cursor (desktop only; auto-disabled on mobile/reduced-motion) */}
-      <CursorSpotlight
-        position="absolute"
-        className="z-0"
-        size={760}
-        opacity={0.14}
-        blur={90}
-        color="rgba(79, 172, 254, 0.28)"
-      />
+      {heavyEffectsEnabled && (
+        <CursorSpotlight
+          position="absolute"
+          className="z-0"
+          size={620}
+          opacity={0.10}
+          blur={60}
+          color="rgba(79, 172, 254, 0.22)"
+        />
+      )}
 
       {/* Content */}
       <div className="container max-w-5xl mx-auto relative z-10 text-center">

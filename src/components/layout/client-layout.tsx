@@ -67,9 +67,9 @@ export function ClientLayout({ children }: ClientLayoutProps) {
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={pathname}
-              initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 8, filter: "blur(6px)" }}
-              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -8, filter: "blur(6px)" }}
+              initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 8 }}
+              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+              exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -8 }}
               transition={{
                 duration: prefersReducedMotion ? 0 : 0.25,
                 ease: [0.22, 1, 0.36, 1],

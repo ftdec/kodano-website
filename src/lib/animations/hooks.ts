@@ -354,6 +354,33 @@ export function useIsMobile() {
 }
 
 /**
+ * Heuristic for low-end devices where heavy effects (WebGL, backdrop-filter, smooth scrolling)
+ * can cause jank. We keep this conservative and client-only.
+ */
+export function useIsLowEndDevice() {
+  const [isLowEnd] = useState(() => {
+    if (typeof navigator === "undefined") return false;
+
+    const nav = navigator as Navigator & {
+      deviceMemory?: number;
+      connection?: { saveData?: boolean };
+    };
+
+    const memory = typeof nav.deviceMemory === "number" ? nav.deviceMemory : undefined;
+    const cores =
+      typeof navigator.hardwareConcurrency === "number"
+        ? navigator.hardwareConcurrency
+        : undefined;
+    const saveData = Boolean(nav.connection?.saveData);
+
+    // Typical thresholds: <=4GB or <=4 cores or Save-Data enabled.
+    return saveData || (memory !== undefined && memory <= 4) || (cores !== undefined && cores <= 4);
+  });
+
+  return isLowEnd;
+}
+
+/**
  * Counter animation hook
  */
 export function useCountAnimation(

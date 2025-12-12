@@ -18,7 +18,7 @@ import {
   defaultViewport,
   mobileViewport,
 } from "@/lib/animations/motion-variants";
-import { useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
+import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
 
 const steps = [
@@ -55,6 +55,7 @@ const steps = [
 export function HowItWorksSection() {
   const isMobile = useIsMobile();
   const prefersReducedMotion = useReducedMotion();
+  const isLowEnd = useIsLowEndDevice();
   const storyRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: storyRef,
@@ -69,11 +70,12 @@ export function HowItWorksSection() {
   useMotionValueEvent(smoothProgress, "change", (latest) => {
     const n = steps.length;
     const idx = Math.max(0, Math.min(n - 1, Math.floor(latest * n)));
-    setActiveIndex(idx);
+    setActiveIndex((prev) => (prev === idx ? prev : idx));
   });
 
   const activeStep = useMemo(() => steps[activeIndex] ?? steps[0], [activeIndex]);
   const isLastStep = activeIndex === steps.length - 1;
+  const enableStory = !isMobile && !prefersReducedMotion && !isLowEnd;
 
   return (
     <section
@@ -81,7 +83,7 @@ export function HowItWorksSection() {
       ref={storyRef}
       className={cn(
         "scroll-mt-28 py-16 sm:py-24 md:py-32 px-4 sm:px-6 relative overflow-hidden",
-        !isMobile && !prefersReducedMotion && "min-h-[240vh]"
+        enableStory && "min-h-[240vh]"
       )}
     >
       {/* Background decorations */}
@@ -129,13 +131,13 @@ export function HowItWorksSection() {
         </motion.div>
 
         {/* Desktop scroll storytelling */}
-        {!isMobile && !prefersReducedMotion ? (
+        {enableStory ? (
           <div className="relative">
             <div className="sticky top-24">
               <div className="grid grid-cols-12 gap-8 items-start">
                 {/* Left: Stepper */}
                 <div className="col-span-5">
-                  <div className="rounded-3xl border border-border/50 bg-card/40 backdrop-blur-xl shadow-[0_30px_80px_rgba(15,23,42,0.10)] p-8">
+                  <div className="rounded-3xl border border-border/50 bg-card/50 backdrop-blur-md shadow-[0_26px_70px_rgba(15,23,42,0.10)] p-8">
                     <div className="mb-6">
                       <div className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
                         Fluxo de ponta a ponta
@@ -203,7 +205,7 @@ export function HowItWorksSection() {
 
                 {/* Right: Active card */}
                 <div className="col-span-7">
-                  <div className="relative rounded-3xl border border-border/50 bg-card/40 backdrop-blur-xl shadow-[0_30px_80px_rgba(15,23,42,0.10)] overflow-hidden">
+                  <div className="relative rounded-3xl border border-border/50 bg-card/50 backdrop-blur-md shadow-[0_26px_70px_rgba(15,23,42,0.10)] overflow-hidden">
                     {/* Background wash */}
                     <div className="absolute inset-0 pointer-events-none">
                       <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/10 to-transparent" />
@@ -215,9 +217,9 @@ export function HowItWorksSection() {
                       <AnimatePresence mode="wait" initial={false}>
                         <motion.div
                           key={activeStep.title}
-                          initial={{ opacity: 0, y: 10, filter: "blur(8px)" }}
-                          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                          exit={{ opacity: 0, y: -10, filter: "blur(8px)" }}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                         >
                           <div className="flex items-start gap-4">
@@ -270,14 +272,14 @@ export function HowItWorksSection() {
                   <AnimatePresence>
                     {isLastStep && (
                       <motion.div
-                        initial={{ opacity: 0, y: 12, filter: "blur(10px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, y: 12, filter: "blur(10px)" }}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 12 }}
                         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                         className="mt-6 sticky bottom-8 z-20"
                         style={{ willChange: "transform, opacity" }}
                       >
-                        <div className="rounded-3xl border border-border/50 bg-background/70 backdrop-blur-xl shadow-[0_24px_70px_rgba(15,23,42,0.14)] p-6 flex items-center justify-between gap-6">
+                        <div className="rounded-3xl border border-border/50 bg-background/80 backdrop-blur-md shadow-[0_24px_70px_rgba(15,23,42,0.14)] p-6 flex items-center justify-between gap-6">
                           <div className="min-w-0">
                             <div className="text-sm font-semibold tracking-tight">
                               Pronto para colocar isso em produção?
