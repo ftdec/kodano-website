@@ -12,6 +12,8 @@ import { CursorSpotlight, GradientMesh, GradientMeshSimple, ScrollIndicator } fr
 import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
 import { KodanoFlowRail } from "@/components/home/kodano-flow-rail";
+import { HeroOrchestrationVisual } from "@/components/home/hero-orchestration-visual";
+import { useScroll } from "framer-motion";
 
 interface HeroSectionProps {
   className?: string;
@@ -22,6 +24,7 @@ export function HeroSection({ className }: HeroSectionProps) {
   const isMobile = useIsMobile();
   const isLowEnd = useIsLowEndDevice();
   const heavyEffectsEnabled = !prefersReducedMotion && !isMobile && !isLowEnd;
+  const { scrollYProgress } = useScroll();
 
   return (
     <section
@@ -51,7 +54,7 @@ export function HeroSection({ className }: HeroSectionProps) {
       )}
 
       {/* Signature rail (advanced but cheap; auto-disables pulses on low-end/reduced-motion) */}
-      <KodanoFlowRail className="-z-10 opacity-60" enabled />
+      <KodanoFlowRail className="-z-10 opacity-45" enabled />
 
       {/* Spotlight follows cursor (desktop only; auto-disabled on mobile/reduced-motion) */}
       {heavyEffectsEnabled && (
@@ -66,10 +69,13 @@ export function HeroSection({ className }: HeroSectionProps) {
       )}
 
       {/* Content */}
-      <div className="container max-w-5xl mx-auto relative z-10 text-center">
+      <div className="container max-w-6xl mx-auto relative z-10">
+        <div className="grid lg:grid-cols-12 gap-10 items-center">
+          {/* Left: Copy */}
+          <div className="lg:col-span-6 text-center lg:text-left">
         {/* Badge */}
-        <FadeInView className="flex justify-center mb-8" delay={0.05} margin="-20px">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 border border-border/60 backdrop-blur-xl">
+        <FadeInView className="flex justify-center lg:justify-start mb-8" delay={0.05} margin="-20px">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 border border-border/60 backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-sm font-medium text-muted-foreground">
               Subadquirente Digital com Tecnologia Avançada
@@ -107,7 +113,7 @@ export function HeroSection({ className }: HeroSectionProps) {
 
         {/* CTAs */}
         <FadeInView delay={0.35} margin="-40px">
-          <ButtonGroup className="flex flex-col sm:flex-row items-center justify-center flex-wrap" gap={4} stagger={0.08}>
+          <ButtonGroup className="flex flex-col sm:flex-row items-center justify-center lg:justify-start flex-wrap" gap={4} stagger={0.08}>
             <AdvancedButton
               href="#contact"
               variant="primary"
@@ -124,12 +130,19 @@ export function HeroSection({ className }: HeroSectionProps) {
               size="lg"
               shimmer={false}
               ripple={!prefersReducedMotion}
-              className="rounded-full bg-white/50 backdrop-blur-xl"
+              className="rounded-full bg-white/50 backdrop-blur-md"
             >
               Conheça nosso processo
             </AdvancedButton>
           </ButtonGroup>
         </FadeInView>
+          </div>
+
+          {/* Right: Product visual (desktop only; fallback inside component) */}
+          <div className="hidden lg:block lg:col-span-6">
+            <HeroOrchestrationVisual scrollProgress={scrollYProgress} />
+          </div>
+        </div>
       </div>
 
       {/* Scroll Indicator */}
