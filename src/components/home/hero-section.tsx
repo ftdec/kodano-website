@@ -12,8 +12,8 @@ import { CursorSpotlight, GradientMesh, GradientMeshSimple, ScrollIndicator } fr
 import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
 import { KodanoFlowRail } from "@/components/home/kodano-flow-rail";
-import { HeroOrchestrationVisual } from "@/components/home/hero-orchestration-visual";
 import { useScroll } from "framer-motion";
+import { KodanoPaymentFlow } from "@/components/home/KodanoPaymentFlow";
 
 interface HeroSectionProps {
   className?: string;
@@ -140,7 +140,7 @@ export function HeroSection({ className }: HeroSectionProps) {
 
           {/* Right: Product visual (desktop only; fallback inside component) */}
           <div className="hidden lg:block lg:col-span-6">
-            <HeroOrchestrationVisual scrollProgress={scrollYProgress} />
+            <KodanoPaymentFlow scrollProgress={scrollYProgress} />
           </div>
         </div>
       </div>
