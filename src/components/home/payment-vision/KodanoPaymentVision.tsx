@@ -89,7 +89,7 @@ export function KodanoPaymentVision({
           {/* Main scene */}
           <PaymentVisionScene
             isMobile={isMobile}
-            scrollProgress={scrollProgress}
+            scrollProgress={scrollProgress ?? null}
           />
         </Canvas>
       </Suspense>
