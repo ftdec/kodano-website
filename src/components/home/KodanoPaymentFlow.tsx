@@ -143,6 +143,34 @@ function nodeGradient(id: NodeId) {
   }
 }
 
+function nodeStops(id: NodeId): [string, string] {
+  // Keep strictly within Kodano brand palette
+  switch (id) {
+    case "client":
+      return [BRAND.slate, BRAND.blue];
+    case "checkout":
+      return [BRAND.blue, BRAND.cyan];
+    case "core":
+      return [BRAND.blue, BRAND.cyan];
+    case "decision":
+      return [BRAND.cyan, BRAND.green];
+    case "network":
+      return [BRAND.slate, BRAND.cyan];
+    case "approval":
+      return [BRAND.blue, BRAND.green];
+    case "settlement":
+      return [BRAND.green, BRAND.cyan];
+    case "acqA":
+      return [BRAND.blue, BRAND.cyan];
+    case "acqB":
+      return [BRAND.cyan, BRAND.green];
+    case "acqC":
+      return [BRAND.slate, BRAND.blue];
+    default:
+      return [BRAND.blue, BRAND.cyan];
+  }
+}
+
 export function KodanoPaymentFlow({
   className,
   scrollProgress,
@@ -482,6 +510,23 @@ export function KodanoPaymentFlow({
             <stop offset="100%" stopColor={BRAND.green} />
           </linearGradient>
 
+          <radialGradient id="bgHaloA" cx="25%" cy="25%" r="60%">
+            <stop offset="0%" stopColor={BRAND.blue} stopOpacity="0.18" />
+            <stop offset="55%" stopColor={BRAND.cyan} stopOpacity="0.08" />
+            <stop offset="100%" stopColor={BRAND.green} stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id="bgHaloB" cx="80%" cy="75%" r="65%">
+            <stop offset="0%" stopColor={BRAND.green} stopOpacity="0.14" />
+            <stop offset="60%" stopColor={BRAND.cyan} stopOpacity="0.06" />
+            <stop offset="100%" stopColor={BRAND.blue} stopOpacity="0" />
+          </radialGradient>
+
+          <linearGradient id="glassSheen" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={BRAND.white} stopOpacity="0.55" />
+            <stop offset="40%" stopColor={BRAND.white} stopOpacity="0.16" />
+            <stop offset="100%" stopColor={BRAND.white} stopOpacity="0" />
+          </linearGradient>
+
           <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
             <feGaussianBlur stdDeviation="6" result="blur" />
             <feColorMatrix
@@ -507,7 +552,59 @@ export function KodanoPaymentFlow({
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+
+          <filter id="nodeShadow" x="-40%" y="-40%" width="180%" height="180%">
+            <feDropShadow dx="0" dy="18" stdDeviation="18" floodColor="#0F172A" floodOpacity="0.14" />
+          </filter>
+
+          <filter id="grain" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="noise" />
+            <feColorMatrix
+              in="noise"
+              type="matrix"
+              values="
+                0 0 0 0 1
+                0 0 0 0 1
+                0 0 0 0 1
+                0 0 0 0.055 0"
+              result="grain"
+            />
+            <feComposite in="grain" in2="SourceGraphic" operator="over" />
+          </filter>
+
+          {nodesToRender.map((id) => {
+            const [a, b] = nodeStops(id);
+            return (
+              <linearGradient key={id} id={`nodeFill-${id}`} x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor={a} stopOpacity="0.95" />
+                <stop offset="55%" stopColor={b} stopOpacity="0.92" />
+                <stop offset="100%" stopColor={BRAND.white} stopOpacity="0.10" />
+              </linearGradient>
+            );
+          })}
+
+          <linearGradient id="packetFill" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor={BRAND.blue} stopOpacity="1" />
+            <stop offset="55%" stopColor={BRAND.cyan} stopOpacity="1" />
+            <stop offset="100%" stopColor={BRAND.green} stopOpacity="1" />
+          </linearGradient>
         </defs>
+
+        {/* Background polish (soft halos + subtle grain) */}
+        <rect x="0" y="0" width={view.w} height={view.h} fill="url(#bgHaloA)" opacity="1" />
+        <rect x="0" y="0" width={view.w} height={view.h} fill="url(#bgHaloB)" opacity="1" />
+        {!prefersReducedMotion && (
+          <motion.rect
+            x="0"
+            y="0"
+            width={view.w}
+            height={view.h}
+            fill="url(#kodanoFlowStroke)"
+            opacity="0.06"
+            animate={{ opacity: [0.04, 0.08, 0.04] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
+        )}
 
         {/* Flow paths (drawn as polylines for precision + easy sampling) */}
         {/* Pre path */}
@@ -517,7 +614,7 @@ export function KodanoPaymentFlow({
             fill="none"
             stroke="url(#kodanoFlowStroke)"
             strokeWidth="3"
-            opacity="0.22"
+            opacity="0.16"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -528,7 +625,7 @@ export function KodanoPaymentFlow({
             fill="none"
             stroke="url(#kodanoFlowStroke)"
             strokeWidth="3"
-            opacity="0.22"
+            opacity="0.16"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -544,7 +641,7 @@ export function KodanoPaymentFlow({
                 fill="none"
                 stroke="url(#kodanoFlowStroke)"
                 strokeWidth={k === activeBranch ? 3.6 : 3}
-                opacity={k === activeBranch ? 0.32 : 0.14}
+                opacity={k === activeBranch ? 0.26 : 0.10}
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
@@ -559,7 +656,7 @@ export function KodanoPaymentFlow({
             fill="none"
             stroke="url(#kodanoFlowStroke)"
             strokeWidth="3"
-            opacity="0.18"
+            opacity="0.13"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -582,7 +679,7 @@ export function KodanoPaymentFlow({
               strokeDasharray="10 14"
               animate={{ strokeDashoffset: [0, -120] }}
               transition={{ duration: 2.8, repeat: Infinity, ease: "linear" }}
-              opacity="0.25"
+              opacity="0.20"
             />
             {"branches" in view && (
               <>
@@ -598,7 +695,7 @@ export function KodanoPaymentFlow({
                     strokeDasharray="8 16"
                     animate={{ strokeDashoffset: [0, k === activeBranch ? -160 : -90] }}
                     transition={{ duration: k === activeBranch ? 2.2 : 3.2, repeat: Infinity, ease: "linear" }}
-                    opacity={k === activeBranch ? 0.28 : 0.12}
+                    opacity={k === activeBranch ? 0.22 : 0.10}
                   />
                 ))}
               </>
@@ -624,11 +721,23 @@ export function KodanoPaymentFlow({
           const glowBoost = isActive ? 0.62 : isHovered ? 0.7 : 0.22;
 
           return (
-            <g
+            <motion.g
               key={id}
               onMouseEnter={() => setHovered(id)}
               onMouseLeave={() => setHovered(null)}
               style={{ cursor: "default" }}
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      scale: isActive ? 1.02 : isHovered ? 1.015 : 1,
+                    }
+              }
+              transition={
+                prefersReducedMotion
+                  ? {}
+                  : { type: "spring", stiffness: 240, damping: 22 }
+              }
             >
               {/* Outer glow */}
               <motion.rect
@@ -660,24 +769,27 @@ export function KodanoPaymentFlow({
                 }
               />
 
-              {/* Node base */}
-              <foreignObject x={x} y={y} width={w} height={h}>
-                <div
-                  className="w-full h-full rounded-2xl border border-white/50"
-                  style={{
-                    background:
-                      id === "approval" && approvalState === "approved"
-                        ? `linear-gradient(135deg, ${BRAND.cyan}, ${BRAND.green})`
-                        : id === "settlement" && isSettled
-                          ? `linear-gradient(135deg, ${BRAND.green}, ${BRAND.cyan})`
-                          : nodeGradient(id),
-                    boxShadow: isHovered
-                      ? "0 18px 60px rgba(15,23,42,0.20)"
-                      : "0 12px 44px rgba(15,23,42,0.10)",
-                    opacity: baseOpacity,
-                  }}
-                />
-              </foreignObject>
+              {/* Node base (pure SVG, more consistent polish than foreignObject) */}
+              <rect
+                x={x}
+                y={y}
+                width={w}
+                height={h}
+                rx={rx}
+                fill={
+                  id === "approval" && approvalState === "approved"
+                    ? `url(#nodeFill-decision)`
+                    : id === "settlement" && isSettled
+                      ? `url(#nodeFill-settlement)`
+                      : `url(#nodeFill-${id})`
+                }
+                opacity={baseOpacity}
+                filter="url(#nodeShadow)"
+              />
+              {/* inner border */}
+              <rect x={x + 1} y={y + 1} width={w - 2} height={h - 2} rx={rx - 1} fill="none" stroke={BRAND.white} strokeOpacity="0.45" />
+              {/* glass sheen */}
+              <rect x={x} y={y} width={w} height={h} rx={rx} fill="url(#glassSheen)" opacity={isActive ? 0.35 : 0.22} />
 
               {/* Approved flash (blue -> green) */}
               {showApproved && !prefersReducedMotion && (
@@ -696,7 +808,7 @@ export function KodanoPaymentFlow({
                   transition={{ duration: 0.55, ease: "easeOut" }}
                 />
               )}
-            </g>
+            </motion.g>
           );
         })}
 
@@ -715,10 +827,12 @@ export function KodanoPaymentFlow({
           )}
 
           {/* Packet */}
-          <rect x={-18} y={-12} width={36} height={24} rx={10} fill={BRAND.white} opacity="0.18" />
-          <rect x={-16} y={-10} width={32} height={20} rx={9} fill="url(#kodanoFlowStroke)" opacity="0.95" />
-          <circle cx={-7} cy={0} r={2.4} fill={BRAND.white} opacity="0.95" />
-          <rect x={-2} y={-2} width={12} height={4} rx={2} fill={BRAND.white} opacity="0.55" />
+          <rect x={-20} y={-13} width={40} height={26} rx={10} fill={BRAND.white} opacity="0.14" filter="url(#packetGlow)" />
+          <rect x={-18} y={-11} width={36} height={22} rx={9} fill="url(#packetFill)" opacity="0.98" />
+          {/* specular highlight */}
+          <path d="M -14 -9 H 10 C 14 -9 16 -7 16 -3 V -2 C 9 -6 0 -6 -14 -3 Z" fill={BRAND.white} opacity="0.24" />
+          <circle cx={-7} cy={0} r={2.6} fill={BRAND.white} opacity="0.92" />
+          <rect x={-2} y={-2} width={13} height={4.5} rx={2.2} fill={BRAND.white} opacity="0.52" />
         </motion.g>
 
         {/* Subtle “secure layer” rings around core (no text) */}
