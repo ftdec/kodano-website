@@ -13,7 +13,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 import { useEffect, useMemo, useRef } from "react";
-import { MotionValue, useMotionValueEvent } from "framer-motion";
+import { MotionValue, useMotionValueEvent, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 
@@ -281,9 +281,122 @@ export function HeroOrchestrationVisual({
           <OrchestrationScene scrollProgress={scrollProgress} active={enabled && inViewportRef.current} />
         </Canvas>
       ) : (
-        // Lite/static fallback (still premium)
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-[82%] h-[2px] bg-gradient-to-r from-[#4FACFE] via-[#00DBDE] to-[#43E97B] opacity-60" />
+        // Lite/static fallback (still premium) - com animação super avançada
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="relative w-[82%] h-[2px] overflow-hidden">
+            {/* Linha base com gradiente */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#4FACFE] via-[#00DBDE] to-[#43E97B] opacity-60" />
+            
+            {/* Shimmer effect - brilho que passa pela linha */}
+            {!prefersReducedMotion && (
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent"
+                style={{
+                  width: "40%",
+                  height: "100%",
+                }}
+                animate={{
+                  x: ["-100%", "300%"],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              />
+            )}
+            
+            {/* Pulsos de energia que fluem */}
+            {!prefersReducedMotion &&
+              [0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  className="absolute top-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-gradient-to-r from-[#4FACFE] via-[#00DBDE] to-[#43E97B] opacity-0 blur-xl"
+                  style={{
+                    left: "0%",
+                  }}
+                  animate={{
+                    x: ["-100%", "200%"],
+                    opacity: [0, 0.4, 0],
+                    scale: [0.5, 1.2, 0.5],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: i * 1.3,
+                  }}
+                />
+              ))}
+            
+            {/* Partículas brilhantes que fluem */}
+            {!prefersReducedMotion &&
+              [0, 1, 2, 3].map((i) => (
+                <motion.div
+                  key={`particle-${i}`}
+                  className="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(79,172,254,0.8)]"
+                  style={{
+                    left: "0%",
+                  }}
+                  animate={{
+                    x: ["-10%", "110%"],
+                    opacity: [0, 1, 1, 0],
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "linear",
+                    delay: i * 0.6,
+                  }}
+                />
+              ))}
+            
+            {/* Glow pulsante nas extremidades */}
+            {!prefersReducedMotion && (
+              <>
+                <motion.div
+                  className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#4FACFE] blur-md"
+                  animate={{
+                    opacity: [0.3, 0.7, 0.3],
+                    scale: [0.8, 1.2, 0.8],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+                <motion.div
+                  className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#43E97B] blur-md"
+                  animate={{
+                    opacity: [0.3, 0.7, 0.3],
+                    scale: [0.8, 1.2, 0.8],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1,
+                  }}
+                />
+              </>
+            )}
+            
+            {/* Linha de energia interna que pulsa */}
+            {!prefersReducedMotion && (
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-[#4FACFE] via-[#00DBDE] to-[#43E97B]"
+                animate={{
+                  opacity: [0.4, 0.8, 0.4],
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            )}
+          </div>
         </div>
       )}
     </div>
