@@ -281,120 +281,169 @@ export function HeroOrchestrationVisual({
           <OrchestrationScene scrollProgress={scrollProgress} active={enabled && inViewportRef.current} />
         </Canvas>
       ) : (
-        // Lite/static fallback (still premium) - com animação super avançada
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="relative w-[82%] h-[2px] overflow-hidden">
-            {/* Linha base com gradiente */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#4FACFE] via-[#00DBDE] to-[#43E97B] opacity-60" />
-            
-            {/* Shimmer effect - brilho que passa pela linha */}
-            {!prefersReducedMotion && (
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent"
-                style={{
-                  width: "40%",
-                  height: "100%",
-                }}
-                animate={{
-                  x: ["-100%", "300%"],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-              />
-            )}
-            
-            {/* Pulsos de energia que fluem */}
-            {!prefersReducedMotion &&
-              [0, 1, 2].map((i) => (
-                <motion.div
-                  key={i}
-                  className="absolute top-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-gradient-to-r from-[#4FACFE] via-[#00DBDE] to-[#43E97B] opacity-0 blur-xl"
+        // Lite/static fallback - SUPER ANIMAÇÃO 2D do pipeline de orquestração
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+          <div className="relative w-full h-full max-w-[90%] max-h-[80%]">
+            {/* Pipeline Stages - Nós conectados */}
+            {STAGES.map((stage, idx) => {
+              // Converter posições 3D para 2D (normalizar para o container)
+              const x = ((stage.position.x + 4) / 8) * 100; // -4 a 4 -> 0 a 100%
+              const y = ((stage.position.y + 1) / 3) * 100; // -1 a 2 -> 0 a 100%
+              
+              return (
+                <div key={stage.id} className="absolute" style={{ left: `${x}%`, top: `${y}%`, transform: "translate(-50%, -50%)" }}>
+                  {/* Glow pulsante ao redor do nó */}
+                  {!prefersReducedMotion && (
+                    <motion.div
+                      className="absolute inset-0 rounded-full bg-gradient-to-r from-[#4FACFE] via-[#00DBDE] to-[#43E97B] blur-xl"
+                      style={{ width: "80px", height: "80px", margin: "-40px" }}
+                      animate={{
+                        opacity: [0.2, 0.5, 0.2],
+                        scale: [0.8, 1.2, 0.8],
+                      }}
+                      transition={{
+                        duration: 2.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: idx * 0.3,
+                      }}
+                    />
+                  )}
+                  
+                  {/* Nó principal */}
+                  <motion.div
+                    className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#4FACFE] via-[#00DBDE] to-[#43E97B] shadow-lg border-2 border-white/50"
+                    animate={!prefersReducedMotion ? {
+                      scale: [1, 1.1, 1],
+                      rotate: [0, 5, -5, 0],
+                    } : {}}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: idx * 0.4,
+                    }}
+                  >
+                    {/* Ícone interno pulsante */}
+                    {!prefersReducedMotion && (
+                      <motion.div
+                        className="absolute inset-2 rounded-lg bg-white/30"
+                        animate={{
+                          opacity: [0.3, 0.7, 0.3],
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    )}
+                  </motion.div>
+                </div>
+              );
+            })}
+
+            {/* Linhas conectando os nós */}
+            {STAGES.slice(0, -1).map((stage, idx) => {
+              const nextStage = STAGES[idx + 1];
+              const x1 = ((stage.position.x + 4) / 8) * 100;
+              const y1 = ((stage.position.y + 1) / 3) * 100;
+              const x2 = ((nextStage.position.x + 4) / 8) * 100;
+              const y2 = ((nextStage.position.y + 1) / 3) * 100;
+              
+              const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+              const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+              
+              return (
+                <div
+                  key={`line-${idx}`}
+                  className="absolute origin-left"
                   style={{
-                    left: "0%",
+                    left: `${x1}%`,
+                    top: `${y1}%`,
+                    width: `${length}%`,
+                    height: "2px",
+                    transform: `rotate(${angle}deg)`,
+                    transformOrigin: "0 50%",
                   }}
-                  animate={{
-                    x: ["-100%", "200%"],
-                    opacity: [0, 0.4, 0],
-                    scale: [0.5, 1.2, 0.5],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: i * 1.3,
-                  }}
-                />
-              ))}
-            
-            {/* Partículas brilhantes que fluem */}
+                >
+                  {/* Linha base */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#4FACFE] via-[#00DBDE] to-[#43E97B] opacity-40" />
+                  
+                  {/* Partículas fluindo pela linha */}
+                  {!prefersReducedMotion &&
+                    [0, 1, 2].map((i) => (
+                      <motion.div
+                        key={`flow-${idx}-${i}`}
+                        className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-[0_0_12px_rgba(79,172,254,0.9)]"
+                        style={{ left: "0%" }}
+                        animate={{
+                          left: ["0%", "100%"],
+                          opacity: [0, 1, 1, 0],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "linear",
+                          delay: i * 0.7,
+                        }}
+                      />
+                    ))}
+                  
+                  {/* Shimmer que passa pela linha */}
+                  {!prefersReducedMotion && (
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent"
+                      style={{ width: "30%" }}
+                      animate={{
+                        left: ["-30%", "130%"],
+                      }}
+                      transition={{
+                        duration: 2.5,
+                        repeat: Infinity,
+                        ease: "linear",
+                        delay: idx * 0.5,
+                      }}
+                    />
+                  )}
+                </div>
+              );
+            })}
+
+            {/* Partículas flutuantes ao redor */}
             {!prefersReducedMotion &&
-              [0, 1, 2, 3].map((i) => (
+              Array.from({ length: 8 }).map((_, i) => (
                 <motion.div
-                  key={`particle-${i}`}
-                  className="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(79,172,254,0.8)]"
+                  key={`float-${i}`}
+                  className="absolute w-2 h-2 rounded-full bg-gradient-to-r from-[#4FACFE] to-[#43E97B] blur-sm"
                   style={{
-                    left: "0%",
+                    left: `${20 + (i * 10)}%`,
+                    top: `${30 + (i % 3) * 20}%`,
                   }}
                   animate={{
-                    x: ["-10%", "110%"],
-                    opacity: [0, 1, 1, 0],
-                  }}
-                  transition={{
-                    duration: 2.5,
-                    repeat: Infinity,
-                    ease: "linear",
-                    delay: i * 0.6,
-                  }}
-                />
-              ))}
-            
-            {/* Glow pulsante nas extremidades */}
-            {!prefersReducedMotion && (
-              <>
-                <motion.div
-                  className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#4FACFE] blur-md"
-                  animate={{
-                    opacity: [0.3, 0.7, 0.3],
+                    y: [0, -20, 0],
+                    x: [0, Math.sin(i) * 15, 0],
+                    opacity: [0.3, 0.8, 0.3],
                     scale: [0.8, 1.2, 0.8],
                   }}
                   transition={{
-                    duration: 2,
+                    duration: 3 + i * 0.3,
                     repeat: Infinity,
                     ease: "easeInOut",
+                    delay: i * 0.4,
                   }}
                 />
-                <motion.div
-                  className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#43E97B] blur-md"
-                  animate={{
-                    opacity: [0.3, 0.7, 0.3],
-                    scale: [0.8, 1.2, 0.8],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1,
-                  }}
-                />
-              </>
-            )}
-            
-            {/* Linha de energia interna que pulsa */}
+              ))}
+
+            {/* Background grid sutil */}
             {!prefersReducedMotion && (
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-[#4FACFE] via-[#00DBDE] to-[#43E97B]"
-                animate={{
-                  opacity: [0.4, 0.8, 0.4],
-                }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: `
+                  linear-gradient(to right, rgba(79,172,254,0.1) 1px, transparent 1px),
+                  linear-gradient(to bottom, rgba(79,172,254,0.1) 1px, transparent 1px)
+                `,
+                backgroundSize: "40px 40px",
+              }} />
             )}
           </div>
         </div>
