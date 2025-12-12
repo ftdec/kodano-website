@@ -12,7 +12,7 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MotionValue, useMotionValueEvent, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
@@ -61,6 +61,19 @@ function useInViewport(ref: React.RefObject<Element | null>, rootMargin = "200px
   return visibleRef;
 }
 
+function hasWebGLSupport() {
+  if (typeof document === "undefined") return true;
+  try {
+    const canvas = document.createElement("canvas");
+    const gl =
+      canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true }) ||
+      canvas.getContext("experimental-webgl", { failIfMajorPerformanceCaveat: true });
+    return !!gl;
+  } catch {
+    return false;
+  }
+}
+
 function TickDriver({ active }: { active: boolean }) {
   const { invalidate } = useThree();
 
@@ -87,6 +100,45 @@ function TickDriver({ active }: { active: boolean }) {
   }, [active, invalidate]);
 
   return null;
+}
+
+function BackgroundParticles({ active }: { active: boolean }) {
+  const pointsRef = useRef<THREE.Points>(null);
+  const geom = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    const count = 420;
+    const positions = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      const r = 3.8 + Math.random() * 2.8;
+      const a = Math.random() * Math.PI * 2;
+      const y = (Math.random() - 0.5) * 3.0;
+      positions[i * 3 + 0] = Math.cos(a) * r;
+      positions[i * 3 + 1] = y;
+      positions[i * 3 + 2] = Math.sin(a) * r * 0.55;
+    }
+    g.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    return g;
+  }, []);
+
+  useFrame((state) => {
+    if (!active) return;
+    if (!pointsRef.current) return;
+    pointsRef.current.rotation.y = state.clock.elapsedTime * 0.06;
+    pointsRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.15) * 0.06;
+  });
+
+  return (
+    <points ref={pointsRef} geometry={geom}>
+      <pointsMaterial
+        size={0.018}
+        color="#00DBDE"
+        transparent
+        opacity={0.35}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </points>
+  );
 }
 
 function OrchestrationScene({
@@ -239,11 +291,13 @@ export function HeroOrchestrationVisual({
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const isLowEnd = useIsLowEndDevice();
+  const [webglOk, setWebglOk] = useState(() => hasWebGLSupport());
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const inViewportRef = useInViewport(containerRef, "250px");
 
   const enabled = !prefersReducedMotion && !isMobile && !isLowEnd;
+  const enable3d = enabled && webglOk;
 
   return (
     <div
@@ -262,7 +316,7 @@ export function HeroOrchestrationVisual({
         <div className="absolute -bottom-28 -left-28 w-[420px] h-[420px] rounded-full bg-[#43E97B]/10 blur-[100px]" />
       </div>
 
-      {enabled ? (
+      {enable3d ? (
         <Canvas
           camera={{ position: [0, 0, 7.5], fov: 45 }}
           dpr={[1, 1.5]}
@@ -274,16 +328,45 @@ export function HeroOrchestrationVisual({
             depth: true,
           }}
           frameloop="demand"
+          onCreated={({ gl }) => {
+            // If the context is lost, fall back to 2D so user never sees an empty square
+            gl.domElement.addEventListener(
+              "webglcontextlost",
+              () => {
+                setWebglOk(false);
+              },
+              { passive: true }
+            );
+          }}
         >
-          <TickDriver active={enabled && inViewportRef.current} />
+          <TickDriver active={enable3d && inViewportRef.current} />
           <ambientLight intensity={0.65} />
           <directionalLight position={[4, 5, 6]} intensity={0.35} color="#ffffff" />
-          <OrchestrationScene scrollProgress={scrollProgress} active={enabled && inViewportRef.current} />
+          <BackgroundParticles active={enable3d && inViewportRef.current} />
+          <OrchestrationScene scrollProgress={scrollProgress} active={enable3d && inViewportRef.current} />
         </Canvas>
       ) : (
-        // Lite/static fallback - SUPER ANIMAÇÃO 2D do pipeline de orquestração com FLUXO CONTÍNUO
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-          <div className="relative w-full h-full max-w-[90%] max-h-[80%]">
+        // Fallback 2D (sempre visível e “flowy”, mesmo se WebGL falhar)
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden"
+          animate={
+            prefersReducedMotion
+              ? {}
+              : {
+                  y: [0, -4, 0],
+                }
+          }
+          transition={
+            prefersReducedMotion
+              ? {}
+              : {
+                  duration: 3.6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }
+          }
+        >
+          <div className="relative w-full h-full max-w-[92%] max-h-[82%]">
             {/* Pipeline Stages - Nós conectados */}
             {STAGES.map((stage, idx) => {
               // Converter posições 3D para 2D (normalizar para o container)
@@ -554,7 +637,7 @@ export function HeroOrchestrationVisual({
               />
             )}
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );
