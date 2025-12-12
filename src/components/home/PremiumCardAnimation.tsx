@@ -120,31 +120,47 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
 
         {/* Card */}
         <div className="relative w-[420px] h-[260px]">
-          {/* Processing waves */}
+          {/* Processing waves - Ultra smooth and elegant */}
           <AnimatePresence>
             {phase === "processing" && (
               <>
-                {[0, 1, 2, 3].map((i) => (
+                {[0, 1, 2].map((i) => (
                   <motion.div
                     key={i}
                     className="absolute inset-0 rounded-3xl"
                     style={{
-                      border: "3px solid",
-                      borderImage: "linear-gradient(45deg, #4FACFE, #00DBDE, #43E97B) 1",
+                      border: "2px solid",
+                      borderImage: "linear-gradient(135deg, #4FACFE, #00DBDE, #43E97B) 1",
                     }}
                     initial={{ scale: 1, opacity: 0 }}
                     animate={{
-                      scale: [1, 1.4, 1.8],
-                      opacity: [0.8, 0.4, 0],
+                      scale: [1, 1.25, 1.5],
+                      opacity: [0.6, 0.3, 0],
                     }}
                     transition={{
-                      duration: 2,
+                      duration: 3.5,
                       repeat: Infinity,
-                      delay: i * 0.4,
-                      ease: "easeOut",
+                      delay: i * 0.6,
+                      ease: [0.25, 0.1, 0.25, 1], // Custom cubic-bezier for ultra smooth
                     }}
                   />
                 ))}
+                {/* Subtle inner glow pulse */}
+                <motion.div
+                  className="absolute inset-0 rounded-3xl"
+                  style={{
+                    background: "radial-gradient(circle at center, rgba(79, 172, 254, 0.15), transparent 70%)",
+                  }}
+                  animate={{
+                    opacity: [0.3, 0.6, 0.3],
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
               </>
             )}
           </AnimatePresence>
@@ -187,12 +203,16 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
               background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
             }}
             animate={{
-              scale: phase === "processing" ? [1, 1.03, 1] : 1,
-              rotateY: phase === "idle" ? [0, 5, 0] : 0,
+              scale: phase === "processing" ? [1, 1.015, 1] : 1, // More subtle breathing
+              rotateY: phase === "idle" ? [0, 3, 0] : 0, // More subtle rotation
             }}
             transition={{
-              scale: { duration: 2, repeat: phase === "processing" ? Infinity : 0 },
-              rotateY: { duration: 4, repeat: Infinity },
+              scale: { 
+                duration: 4, 
+                repeat: phase === "processing" ? Infinity : 0,
+                ease: [0.4, 0, 0.6, 1], // Smooth ease-in-out
+              },
+              rotateY: { duration: 6, repeat: Infinity, ease: "easeInOut" },
             }}
           >
             {/* Holographic moving gradient */}
@@ -211,16 +231,21 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
               }}
             />
 
-            {/* Shimmer effect */}
+            {/* Shimmer effect - More elegant and smooth */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              style={{
+                width: "40%",
+                transform: "skewX(-20deg)",
+              }}
               animate={{
-                x: ["-200%", "200%"],
+                x: phase === "processing" ? ["-100%", "300%"] : ["-100%", "300%"],
               }}
               transition={{
-                duration: 2,
+                duration: phase === "processing" ? 3.5 : 4,
                 repeat: Infinity,
-                repeatDelay: 1,
+                repeatDelay: phase === "processing" ? 0.5 : 1.5,
+                ease: "linear",
               }}
             />
 
@@ -236,10 +261,15 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
                   }}
                   animate={{
                     boxShadow: phase === "processing"
-                      ? ["0 0 20px rgba(246, 211, 101, 0.5)", "0 0 40px rgba(246, 211, 101, 0.8)", "0 0 20px rgba(246, 211, 101, 0.5)"]
+                      ? ["0 0 20px rgba(246, 211, 101, 0.4)", "0 0 35px rgba(246, 211, 101, 0.7)", "0 0 20px rgba(246, 211, 101, 0.4)"]
                       : "0 0 20px rgba(246, 211, 101, 0.3)",
+                    scale: phase === "processing" ? [1, 1.02, 1] : 1,
                   }}
-                  transition={{ duration: 1, repeat: phase === "processing" ? Infinity : 0 }}
+                  transition={{ 
+                    duration: 2.5, 
+                    repeat: phase === "processing" ? Infinity : 0,
+                    ease: [0.4, 0, 0.6, 1],
+                  }}
                 >
                   <div className="w-full h-full p-1.5">
                     <div className="w-full h-full rounded border-2 border-yellow-400/40 grid grid-cols-3 gap-0.5">
@@ -254,10 +284,15 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
                 <div className="flex gap-3">
                   <motion.div
                     animate={{
-                      scale: phase === "processing" ? [1, 1.2, 1] : 1,
-                      rotate: phase === "processing" ? [0, 10, -10, 0] : 0,
+                      scale: phase === "processing" ? [1, 1.1, 1] : 1,
+                      rotate: phase === "processing" ? [0, 5, -5, 0] : 0,
+                      opacity: phase === "processing" ? [0.8, 1, 0.8] : 1,
                     }}
-                    transition={{ duration: 1, repeat: phase === "processing" ? Infinity : 0 }}
+                    transition={{ 
+                      duration: 2.5, 
+                      repeat: phase === "processing" ? Infinity : 0,
+                      ease: [0.4, 0, 0.6, 1],
+                    }}
                   >
                     <Sparkles className="w-6 h-6 text-white" />
                   </motion.div>
@@ -265,9 +300,13 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
                   <motion.div
                     className="flex gap-0.5"
                     animate={{
-                      opacity: phase === "processing" ? [0.5, 1, 0.5] : 0.7,
+                      opacity: phase === "processing" ? [0.6, 0.95, 0.6] : 0.7,
                     }}
-                    transition={{ duration: 1, repeat: phase === "processing" ? Infinity : 0 }}
+                    transition={{ 
+                      duration: 2.5, 
+                      repeat: phase === "processing" ? Infinity : 0,
+                      ease: "easeInOut",
+                    }}
                   >
                     {[0, 1, 2, 3].map((i) => (
                       <div
@@ -346,39 +385,68 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
               </div>
             </div>
 
-            {/* Processing overlay */}
+            {/* Processing overlay - Ultra smooth and professional */}
             <AnimatePresence>
               {phase === "processing" && (
                 <motion.div
-                  className="absolute inset-0 flex items-center justify-center"
+                  className="absolute inset-0 flex items-center justify-center rounded-3xl overflow-hidden"
                   style={{
-                    background: "linear-gradient(135deg, rgba(79, 172, 254, 0.9), rgba(0, 219, 222, 0.9))",
-                    backdropFilter: "blur(8px)",
+                    background: "linear-gradient(135deg, rgba(79, 172, 254, 0.85), rgba(0, 219, 222, 0.85), rgba(67, 233, 123, 0.85))",
+                    backdropFilter: "blur(12px)",
                   }}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ 
+                    opacity: [0.85, 0.95, 0.85],
+                  }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    opacity: {
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    },
+                  }}
                 >
-                  <div className="flex flex-col items-center gap-4">
+                  {/* Subtle animated background pattern */}
+                  <motion.div
+                    className="absolute inset-0 opacity-20"
+                    style={{
+                      backgroundImage: "radial-gradient(circle at 30% 50%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 70% 50%, rgba(255,255,255,0.2) 0%, transparent 50%)",
+                    }}
+                    animate={{
+                      scale: [1, 1.1, 1],
+                      rotate: [0, 180, 360],
+                    }}
+                    transition={{
+                      duration: 8,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  />
+                  
+                  <div className="relative z-10 flex flex-col items-center gap-6">
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                      style={{ filter: "drop-shadow(0 0 20px rgba(255,255,255,0.5))" }}
                     >
-                      <Zap className="w-12 h-12 text-white" />
+                      <Zap className="w-14 h-14 text-white" strokeWidth={1.5} />
                     </motion.div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                       {[0, 1, 2].map((i) => (
                         <motion.div
                           key={i}
-                          className="w-3 h-3 rounded-full bg-white"
+                          className="w-2.5 h-2.5 rounded-full bg-white"
+                          style={{ boxShadow: "0 0 12px rgba(255,255,255,0.8)" }}
                           animate={{
-                            scale: [1, 1.5, 1],
-                            opacity: [0.5, 1, 0.5],
+                            scale: [1, 1.4, 1],
+                            opacity: [0.6, 1, 0.6],
                           }}
                           transition={{
-                            duration: 1,
+                            duration: 2,
                             repeat: Infinity,
-                            delay: i * 0.2,
+                            delay: i * 0.3,
+                            ease: [0.4, 0, 0.6, 1],
                           }}
                         />
                       ))}
