@@ -49,9 +49,9 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
 
   // IntersectionObserver: anima quando visível, dorme quando fora
   React.useEffect(() => {
-    if (!containerRef.current) return;
-
     const el = containerRef.current;
+    if (!el) return;
+
     const obs = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting),
       { threshold: 0.15 }
@@ -61,48 +61,33 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     return () => obs.disconnect();
   }, []);
 
-  // Se não montou ainda: placeholder SSR-safe
-  if (!mounted) {
-    return (
-      <div className={cn("w-full aspect-[1.1/1] rounded-3xl overflow-hidden", className)}>
-        <LoadingPlaceholder />
-      </div>
-    );
-  }
-
-  // Reduced motion ou low-tier -> fallback estático premium
-  if (prefersReducedMotion || tier === "low") {
-    return (
-      <div className={cn("w-full aspect-[1.1/1] rounded-3xl overflow-hidden", className)}>
-        <StaticPremiumFallback />
-      </div>
-    );
-  }
-
-  // Sem WebGL -> fallback
-  if (!webGLSupported) {
-    return (
-      <div className={cn("w-full aspect-[1.1/1] rounded-3xl overflow-hidden", className)}>
-        <FallbackShimmer />
-      </div>
+  let content: React.ReactNode = null;
+  if (!mounted) content = <LoadingPlaceholder />;
+  else if (prefersReducedMotion || tier === "low") content = <StaticPremiumFallback />;
+  else if (!webGLSupported) content = <FallbackShimmer />;
+  else {
+    content = (
+      <CanvasErrorBoundary fallback={<FallbackShimmer />}>
+        <PremiumCardCanvas performanceTier={tier} enableMotion={!prefersReducedMotion} inView={inView} />
+      </CanvasErrorBoundary>
     );
   }
 
   return (
     <div
       ref={containerRef}
-      className={cn("relative w-full aspect-[1.1/1] rounded-3xl overflow-hidden", className)}
+      className={cn(
+        "relative w-full aspect-[1.1/1] rounded-3xl overflow-hidden bg-gradient-to-br from-[#061E26] via-[#072A35] to-[#0B2A35]",
+        className
+      )}
       style={{ touchAction: "pan-y" }}
     >
       {process.env.NODE_ENV !== "production" && (
         <div className="absolute top-3 left-3 z-10 text-[11px] px-2 py-1 rounded bg-black/60 text-white">
-          {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion}`}
+          {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView}`}
         </div>
       )}
-
-      <CanvasErrorBoundary fallback={<FallbackShimmer />}>
-        <PremiumCardCanvas performanceTier={tier} enableMotion={!prefersReducedMotion} inView={inView} />
-      </CanvasErrorBoundary>
+      {content}
     </div>
   );
 }
