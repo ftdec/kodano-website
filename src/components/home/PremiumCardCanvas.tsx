@@ -36,7 +36,7 @@ export default function PremiumCardCanvas({
         alpha: true,
         toneMappingExposure: 0.95,
       }}
-      camera={{ fov: 33, position: [0, 0, 8] }}
+      camera={{ fov: 38, position: [0, 0, 8] }}
       frameloop="demand"
       onPointerMove={() => {
         // acorda por 1.8s após movimento
@@ -226,7 +226,7 @@ function Scene({
   });
 
   return (
-    <Bounds fit clip observe margin={1.12}>
+    <Bounds fit clip observe margin={1.15}>
       <group ref={groupRef}>
         {/* Lighting clean (hero branco) */}
         <ambientLight intensity={0.6} />

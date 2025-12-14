@@ -98,7 +98,7 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full max-w-[620px] md:max-w-[640px] aspect-[4/3] md:aspect-[16/10] rounded-[32px] overflow-hidden bg-white",
+        "relative w-full max-w-[640px] aspect-[4/3] md:aspect-[16/10] rounded-[28px] overflow-hidden bg-white",
         "shadow-[0_32px_64px_rgba(0,42,53,0.12),0_12px_24px_rgba(0,42,53,0.08)]",
         className
       )}
@@ -106,21 +106,21 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     >
       {/* Stage background: halo sutil + vignette (PRD: 6-10% opacity) */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Halo ciano Kodano (sutil, não chamativo) */}
+        {/* Halo ciano Kodano (6-8% opacity per PRD) */}
         <div
-          className="absolute inset-[-20%] rounded-[32px]"
+          className="absolute inset-[-20%] rounded-[28px]"
           style={{
             background:
-              "radial-gradient(55% 55% at 60% 40%, rgba(0,200,220,0.08), rgba(79,172,254,0.05), transparent 60%)",
+              "radial-gradient(55% 55% at 60% 40%, rgba(0,200,220,0.07), rgba(79,172,254,0.04), transparent 60%)",
             filter: "blur(36px)",
           }}
         />
-        {/* Vignette suave nas bordas (3-4%) */}
+        {/* Vignette suave nas bordas (3% per PRD) */}
         <div
-          className="absolute inset-0 rounded-[32px]"
+          className="absolute inset-0 rounded-[28px]"
           style={{
             background:
-              "radial-gradient(105% 105% at 50% 50%, transparent 50%, rgba(0,42,53,0.035) 100%)",
+              "radial-gradient(105% 105% at 50% 50%, transparent 50%, rgba(0,42,53,0.03) 100%)",
           }}
         />
       </div>
@@ -217,7 +217,7 @@ function PosterCard({ className }: { className?: string }) {
         alignItems: "center",
         justifyContent: "center",
         background: KODANO_WHITE,
-        borderRadius: 24,
+        borderRadius: 28,
         overflow: "hidden",
       }}
     >
@@ -226,7 +226,7 @@ function PosterCard({ className }: { className?: string }) {
         style={{
           position: "absolute",
           inset: -80,
-          background: `radial-gradient(55% 55% at 60% 40%, ${hexToRgba("#00C8DC", 0.08)}, ${hexToRgba(KODANO_BLUE, 0.05)}, transparent 55%)`,
+          background: `radial-gradient(55% 55% at 60% 40%, ${hexToRgba("#00C8DC", 0.07)}, ${hexToRgba(KODANO_BLUE, 0.04)}, transparent 55%)`,
           filter: "blur(36px)",
         }}
       />
