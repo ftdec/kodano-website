@@ -1,16 +1,31 @@
 "use client";
 
 import * as React from "react";
-import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/lib/animations/hooks";
+import PremiumCardCanvas from "./PremiumCardCanvas";
 
 type PerformanceTier = "high" | "medium" | "low";
 
-const PremiumCardCanvas = dynamic(() => import("./PremiumCardCanvas"), {
-  ssr: false, // IMPORTANTE: tira R3F do SSR e permite code splitting real
-  loading: () => <LoadingPlaceholder />,
-});
+class CanvasErrorBoundary extends React.Component<
+  { fallback: React.ReactNode; children: React.ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(err: unknown) {
+    console.error("[PremiumCardAnimation] Canvas failed to render", err);
+  }
+
+  render() {
+    if (this.state.hasError) return this.props.fallback;
+    return this.props.children;
+  }
+}
 
 export function PremiumCardAnimation({ className }: { className?: string }) {
   const prefersReducedMotion = useReducedMotion();
@@ -76,10 +91,18 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   return (
     <div
       ref={containerRef}
-      className={cn("w-full aspect-[1.1/1] rounded-3xl overflow-hidden", className)}
+      className={cn("relative w-full aspect-[1.1/1] rounded-3xl overflow-hidden", className)}
       style={{ touchAction: "pan-y" }}
     >
-      <PremiumCardCanvas performanceTier={tier} enableMotion={!prefersReducedMotion} inView={inView} />
+      {process.env.NODE_ENV !== "production" && (
+        <div className="absolute top-3 left-3 z-10 text-[11px] px-2 py-1 rounded bg-black/60 text-white">
+          {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion}`}
+        </div>
+      )}
+
+      <CanvasErrorBoundary fallback={<FallbackShimmer />}>
+        <PremiumCardCanvas performanceTier={tier} enableMotion={!prefersReducedMotion} inView={inView} />
+      </CanvasErrorBoundary>
     </div>
   );
 }
@@ -96,7 +119,7 @@ function detectWebGLSupport(): boolean {
       canvas.getContext("experimental-webgl");
     if (gl1) return true;
 
-    return !!(window as any).WebGLRenderingContext;
+    return typeof WebGLRenderingContext !== "undefined";
   } catch {
     return false;
   }
@@ -105,7 +128,7 @@ function detectWebGLSupport(): boolean {
 function detectPerformanceTier(): PerformanceTier {
   try {
     const cores = navigator.hardwareConcurrency || 4;
-    const memory = (navigator as any).deviceMemory || 4;
+    const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory || 4;
     const dpr = window.devicePixelRatio || 1;
 
     let score = 0;
