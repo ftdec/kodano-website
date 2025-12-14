@@ -4,6 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/lib/animations/hooks";
 import dynamic from "next/dynamic";
+import { PremiumCardPoster } from "./PremiumCardPoster";
 
 type PerformanceTier = "high" | "medium" | "low";
 
@@ -126,9 +127,9 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
       </div>
 
       {/* Poster sempre presente; fade imperceptível para 3D (PRD: 150-250ms) */}
-      <PosterCard
+      <PremiumCardPoster
         className={cn(
-          "absolute inset-0 transition-opacity duration-200",
+          "absolute inset-0 transition-opacity duration-200 ease-out",
           show3D ? "opacity-0 pointer-events-none" : "opacity-100"
         )}
       />
@@ -137,10 +138,9 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
       {shouldRender3D && (
         <div
           className={cn(
-            "absolute inset-0 transition-opacity duration-500",
+            "absolute inset-0 transition-opacity duration-200 ease-out",
             canvasReady ? "opacity-100" : "opacity-0"
           )}
-          style={{ transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)" }}
         >
           <CanvasErrorBoundary fallback={null} onError={() => setCanvasError(true)}>
             <PremiumCardCanvas
@@ -195,114 +195,3 @@ function detectPerformanceTier(): PerformanceTier {
   }
 }
 
-function PosterCard({ className }: { className?: string }) {
-  // Kodano Core
-  const KODANO_BLUE = "#4FACFE";
-  const KODANO_TEAL = "#2FE6C8";
-  const KODANO_WHITE = "#FFFFFF";
-  const KODANO_MUTED = "#A8C5D1";
-
-  // Kodano card base (definitivo)
-  const CARD_CYAN_BASE = "#00C8DC";
-  const CARD_CYAN_DEEP = "#00AFC7";
-  const CARD_NAVY_DEEP = "#002A35";
-
-  return (
-    <div
-      className={className}
-      style={{
-        position: "absolute",
-        inset: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: KODANO_WHITE,
-        borderRadius: 28,
-        overflow: "hidden",
-      }}
-    >
-      {/* Halo (ambiente, não “card dentro de card”) */}
-      <div
-        style={{
-          position: "absolute",
-          inset: -80,
-          background: `radial-gradient(55% 55% at 60% 40%, ${hexToRgba("#00C8DC", 0.07)}, ${hexToRgba(KODANO_BLUE, 0.04)}, transparent 55%)`,
-          filter: "blur(36px)",
-        }}
-      />
-
-      {/* Card (static-first) — maior para dominar o stage */}
-      <div
-        style={{
-          position: "relative",
-          width: "88%",
-          maxWidth: 560,
-          aspectRatio: "1.6 / 1",
-          borderRadius: 22,
-          padding: 24,
-          transform: "rotate3d(1, -1, 0, 8deg)", // perspectiva sutil
-          background: `linear-gradient(155deg, ${CARD_CYAN_BASE} 0%, ${CARD_CYAN_DEEP} 50%, ${CARD_NAVY_DEEP} 100%)`,
-          boxShadow: `0 50px 100px ${hexToRgba(CARD_NAVY_DEEP, 0.18)}, 0 24px 48px ${hexToRgba(CARD_NAVY_DEEP, 0.12)}`,
-        }}
-      >
-        {/* Highlight sheen */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 1,
-            borderRadius: 20,
-            background: `linear-gradient(120deg, ${hexToRgba(CARD_CYAN_BASE, 0.08)}, transparent 45%), radial-gradient(60% 55% at 25% 25%, ${hexToRgba(
-              "#ffffff",
-              0.10
-            )}, transparent 60%)`,
-            pointerEvents: "none",
-          }}
-        />
-
-        {/* Chip (tech Kodano, não laranja) */}
-        <div
-          style={{
-            width: 48,
-            height: 36,
-            borderRadius: 10,
-            background: `linear-gradient(135deg, ${KODANO_BLUE}, ${KODANO_TEAL})`,
-            boxShadow: `inset 0 0 0 1px ${hexToRgba("#ffffff", 0.25)}, 0 4px 12px ${hexToRgba(KODANO_TEAL, 0.35)}`,
-          }}
-        />
-
-        {/* Número */}
-        <div
-          style={{
-            marginTop: 32,
-            color: hexToRgba("#ffffff", 0.92),
-            letterSpacing: "0.18em",
-            fontWeight: 500,
-            fontSize: 13,
-          }}
-        >
-          4532 •••• •••• 9010
-        </div>
-
-        {/* Nome/identidade neutra (sem logo Kodano) */}
-        <div
-          style={{
-            marginTop: 8,
-            color: hexToRgba(KODANO_MUTED, 0.9),
-            fontSize: 12,
-            letterSpacing: "0.06em",
-          }}
-        >
-          PAYMENTS DEMO
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function hexToRgba(hex: string, alpha: number) {
-  const v = hex.replace("#", "").trim();
-  const r = parseInt(v.slice(0, 2), 16);
-  const g = parseInt(v.slice(2, 4), 16);
-  const b = parseInt(v.slice(4, 6), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}

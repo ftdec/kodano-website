@@ -44,12 +44,16 @@ export default function PremiumCardCanvas({
         activeUntilRef.current = Math.max(activeUntilRef.current, now + 1800);
       }}
       style={{ width: "100%", height: "100%", pointerEvents: "none" }}
-      onCreated={({ gl }) => {
+      onCreated={({ gl, scene, camera }) => {
         if (readyOnceRef.current) return;
-        // transparência total: deixa o poster/stage controlar o fundo
         glRef.current = gl;
-        gl.setClearColor(0x000000, 0);
-        // marca "pronto" após o primeiro frame útil
+        // Fundo transparente (poster controla background)
+        gl.setClearColor(0xFFFFFF, 0);
+
+        // Render primeiro frame imediatamente
+        gl.render(scene, camera);
+
+        // Marca "pronto" após primeiro render completo
         requestAnimationFrame(() => {
           if (readyOnceRef.current) return;
           readyOnceRef.current = true;
@@ -134,16 +138,16 @@ function Scene({
     return () => window.removeEventListener("mousemove", onMove);
   }, [enableMotion, invalidate, activeUntilRef]);
 
-  // Setup pose base (sem intro)
+  // Setup pose base (sem intro exagerado, Bounds controla escala)
   React.useEffect(() => {
     invalidate();
     const now = performance.now();
     activeUntilRef.current = Math.max(activeUntilRef.current ?? 0, now + 1600); // janela inicial de animação
 
     if (cardRef.current) {
-      cardRef.current.rotation.set(-0.18, 0.28, 0); // -10°, 16° (mais sutil)
+      cardRef.current.rotation.set(-0.18, 0.28, 0); // -10°, 16° (pose hero sutil)
       cardRef.current.position.set(0, 0, 0);
-      cardRef.current.scale.setScalar(1.4); // maior para dominar o stage
+      // Escala removida - Bounds controla automaticamente
     }
     if (cameraRef.current) cameraRef.current.position.z = 8;
     sweepRef.current = 0.6;
@@ -154,9 +158,13 @@ function Scene({
     if (!inView) return;
     if (!enableMotion) return;
 
-    // frameloop="demand": só invalida enquanto ativo
+    // frameloop="demand": invalidate inteligente por tier
     const now = performance.now();
-    if (activeUntilRef.current && now <= activeUntilRef.current) {
+    const isActive = activeUntilRef.current && now <= activeUntilRef.current;
+
+    // Tier medium/high: idle sempre ativo (cartão sempre vivo)
+    // Tier low: só invalida durante janela ativa (economia bateria)
+    if (isActive || performanceTier !== "low") {
       invalidate();
     }
 
@@ -165,13 +173,13 @@ function Scene({
     if (cardRef.current) {
       const g = cardRef.current;
 
-      // Mouse tilt sutil
+      // Mouse tilt enterprise (ultra suave)
       const mx = THREE.MathUtils.clamp(mouseRef.current.x, -1, 1);
       const my = THREE.MathUtils.clamp(mouseRef.current.y, -1, 1);
 
-      // Tilt máximo ~2.5° (≈0.044rad) - mais contido para não cortar
-      const targetX = my * 0.044;
-      const targetY = mx * 0.044;
+      // Tilt máximo ~2.0° (≈0.035rad) - PRD spec para enterprise
+      const targetX = my * 0.035;
+      const targetY = mx * 0.035;
 
       tiltRef.current.x = THREE.MathUtils.lerp(tiltRef.current.x, targetX, 0.04);
       tiltRef.current.y = THREE.MathUtils.lerp(tiltRef.current.y, targetY, 0.04);
@@ -181,13 +189,13 @@ function Scene({
       const baseRotX = -0.18; // ~-10°
       const baseRotY = 0.28; // ~16°
       const baseRotZ = 0.0;
-      g.scale.setScalar(1.4); // domina o stage
+      // Escala removida - Bounds auto-fit controla
 
-      // Idle sutil (premium, quase imperceptível)
+      // Idle zen (premium, perceptível mas sutil) - valores PRD
       const idleBlend = performanceTier !== "low" ? 1 : 0;
-      const floatY = Math.sin(t * (Math.PI * 0.35)) * 0.025 * idleBlend; // ~0.175 Hz
-      const floatZ = Math.cos(t * (Math.PI * 0.35)) * 0.008 * idleBlend;
-      const microRot = Math.sin(t * (Math.PI * 0.35)) * 0.028 * idleBlend; // ~1.6°
+      const floatY = Math.sin(t * (Math.PI * 0.30)) * 0.04 * idleBlend;   // Amplitude maior (0.025→0.04), freq mais lenta
+      const floatZ = Math.cos(t * (Math.PI * 0.30)) * 0.012 * idleBlend;  // Amplitude maior (0.008→0.012)
+      const microRot = Math.sin(t * (Math.PI * 0.30)) * 0.022 * idleBlend; // Rotação menor (~1.26°)
 
       g.position.set(0, floatY, basePosZ + floatZ);
       g.rotation.set(
@@ -218,22 +226,22 @@ function Scene({
       }
     }
 
-    // Breathing light (bem sutil)
+    // Breathing light (enterprise sutil)
     if (rimLightRef.current && performanceTier !== "low") {
-      const breathing = Math.sin(t * 0.25) * 0.25 + 1.0;
-      rimLightRef.current.intensity = 1.4 * breathing;
+      const breathing = Math.sin(t * 0.20) * 0.15 + 1.0; // Mais lento, menos amplitude
+      rimLightRef.current.intensity = 0.9 * breathing;    // 0.765 - 1.035 range (sutil)
     }
   });
 
   return (
-    <Bounds fit clip observe margin={1.15}>
+    <Bounds fit clip observe margin={1.35}>
       <group ref={groupRef}>
-        {/* Lighting clean (hero branco) */}
-        <ambientLight intensity={0.6} />
-        <hemisphereLight intensity={0.2} groundColor={"#f8fcff"} />
-        <pointLight position={[5, 4, 8]} intensity={1.4} color="#ffffff" />
-        <pointLight position={[-5, -2, 6]} intensity={1.0} color="#eaf7ff" />
-        <pointLight ref={rimLightRef} position={[4, 3, -4]} intensity={1.2} color="#4FACFE" />
+        {/* Lighting premium enterprise (Stripe-level) */}
+        <ambientLight intensity={0.65} />
+        <hemisphereLight intensity={0.25} groundColor={"#f8fcff"} />
+        <pointLight position={[5, 4, 8]} intensity={1.2} color="#ffffff" />
+        <pointLight position={[-5, -2, 6]} intensity={0.9} color="#eaf7ff" />
+        <pointLight ref={rimLightRef} position={[4, 3, -4]} intensity={0.9} color="#4FACFE" />
 
         {/* Sanity mesh (debug): confirma pipeline/câmera */}
         {debug && (
@@ -274,23 +282,27 @@ function CreditCard3D({
 }) {
   const baseMat = React.useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
-      metalness: 0.15,
-      roughness: 0.35,
-      clearcoat: 0.6,
-      clearcoatRoughness: 0.25,
-      envMapIntensity: 0.85,
-      color: new THREE.Color("#00C8DC"),
+      metalness: 0.12,          // Menos metálico para look mais premium
+      roughness: 0.38,          // Mais fosco (Apple Card style)
+      clearcoat: 0.55,          // Clearcoat controlado
+      clearcoatRoughness: 0.28, // Mais fosco
+      envMapIntensity: 0.75,    // Menos reflexo ambiente
+      color: new THREE.Color("#00C8DC"), // Kodano Cyan
+      ior: 1.5,                 // Index of refraction para realismo
+      reflectivity: 0.3,        // Reflexão moderada
     });
   }, []);
 
   const chipMat = React.useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
-      metalness: 0.95,
-      roughness: 0.08,
-      clearcoat: 0.35,
-      clearcoatRoughness: 0.18,
-      envMapIntensity: 1.2,
-      color: new THREE.Color("#d6b15a"),
+      metalness: 0.85,              // Menos metálico (era 0.95)
+      roughness: 0.12,              // Mais fosco (era 0.08)
+      clearcoat: 0.30,              // Menos clearcoat (era 0.35)
+      clearcoatRoughness: 0.20,     // Mais fosco (era 0.18)
+      envMapIntensity: 1.0,         // Menos reflexo (era 1.2)
+      color: new THREE.Color("#4FACFE"), // Kodano Tech Blue (não dourado!)
+      emissive: new THREE.Color("#4FACFE"),
+      emissiveIntensity: 0.08,      // Glow tech sutil
     });
   }, []);
 
@@ -366,17 +378,6 @@ function CreditCard3D({
           </Text>
         </group>
 
-        <Text
-          fontSize={0.12}
-          color={"#D8F6FB"}
-          fillOpacity={0.72}
-          anchorX="left"
-          anchorY="middle"
-          position={[-1.8, -0.9, 0.085]}
-          font="/fonts/Inter-SemiBold.ttf"
-        >
-          {"PAYMENTS DEMO"}
-        </Text>
 
         <Text
           fontSize={0.12}
@@ -389,31 +390,22 @@ function CreditCard3D({
         >
           {"12/28"}
         </Text>
+
+        {/* Marca KODANO sutil (top right) */}
+        <Text
+          fontSize={0.10}
+          color={"#FFFFFF"}
+          fillOpacity={0.25}
+          anchorX="right"
+          anchorY="top"
+          position={[1.8, 0.9, 0.085]}
+          font="/fonts/Inter-SemiBold.ttf"
+          letterSpacing={0.12}
+        >
+          {"KODANO"}
+        </Text>
       </group>
 
-      {/* Badges Kodano (canto inferior direito) */}
-      <group position={[1.6, 0.3, 0.09]}>
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.2, 0.2, 0.08, 32]} />
-          <meshStandardMaterial
-            emissive="#4facfe"
-            emissiveIntensity={0.8}
-            color="#0a1f2e"
-            metalness={0.7}
-            roughness={0.3}
-          />
-        </mesh>
-        <mesh position={[0.35, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.2, 0.2, 0.08, 32]} />
-          <meshStandardMaterial
-            emissive="#00dbde"
-            emissiveIntensity={0.8}
-            color="#0a1f2e"
-            metalness={0.7}
-            roughness={0.3}
-          />
-        </mesh>
-      </group>
 
       {/* Ícone contactless */}
       <group position={[1.5, -0.1, 0.09]}>
@@ -495,12 +487,17 @@ function createSheenMaterial() {
 
         a = saturate(a);
         a = pow(a, 1.1);
-        // Sheen premium: view-dependent, sem "washout" (alpha máx ~0.25)
+        // Sheen premium: view-dependent, ultra sutil (Stripe-level)
         a *= 0.55;
         a = smoothstep(0.02, 0.9, a);
-        a = clamp(a, 0.0, 0.25);
+        a = clamp(a, 0.0, 0.18); // Reduzido de 0.25 para 0.18
 
-        vec3 color = mix(vec3(0.29, 0.68, 1.0), vec3(0.0, 0.86, 0.87), fresnel);
+        // Cores mais sutis e dessaturadas
+        vec3 color = mix(
+          vec3(0.25, 0.60, 0.92), // Azul suave (era 0.29, 0.68, 1.0)
+          vec3(0.0, 0.78, 0.82),  // Ciano suave (era 0.0, 0.86, 0.87)
+          fresnel
+        );
 
         gl_FragColor = vec4(color, a);
       }
