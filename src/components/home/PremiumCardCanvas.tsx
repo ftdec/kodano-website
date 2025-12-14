@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { RoundedBox, Text, Environment, ContactShadows } from "@react-three/drei";
+import { RoundedBox, Text, ContactShadows } from "@react-three/drei";
 
 type PerformanceTier = "high" | "medium" | "low";
 
@@ -11,10 +11,12 @@ export default function PremiumCardCanvas({
   performanceTier,
   enableMotion,
   inView,
+  debug = false,
 }: {
   performanceTier: PerformanceTier;
   enableMotion: boolean;
   inView: boolean;
+  debug?: boolean;
 }) {
   return (
     <Canvas
@@ -25,10 +27,11 @@ export default function PremiumCardCanvas({
         alpha: true,
       }}
       camera={{ fov: 35, position: [0, 0, 8] }}
-      frameloop={inView ? "always" : "demand"}
+      // P0: manter sempre ativo até estabilizar 100%
+      frameloop="always"
       style={{ width: "100%", height: "100%", pointerEvents: "none" }}
     >
-      <Scene performanceTier={performanceTier} enableMotion={enableMotion} inView={inView} />
+      <Scene performanceTier={performanceTier} enableMotion={enableMotion} inView={inView} debug={debug} />
     </Canvas>
   );
 }
@@ -37,10 +40,12 @@ function Scene({
   performanceTier,
   enableMotion,
   inView,
+  debug,
 }: {
   performanceTier: PerformanceTier;
   enableMotion: boolean;
   inView: boolean;
+  debug: boolean;
 }) {
   const groupRef = React.useRef<THREE.Group>(null);
   const cardRef = React.useRef<THREE.Group>(null);
@@ -199,7 +204,13 @@ function Scene({
       <pointLight position={[-5, -3, 6]} intensity={1.2} color="#4facfe" />
       <pointLight ref={rimLightRef} position={[5, 4, -4]} intensity={2} color="#00dbde" />
 
-      {performanceTier !== "low" && <Environment preset="city" />}
+      {/* Sanity mesh (debug): confirma pipeline/câmera */}
+      {debug && (
+        <mesh position={[0, 0, -1.2]}>
+          <boxGeometry args={[0.6, 0.6, 0.6]} />
+          <meshStandardMaterial color="hotpink" />
+        </mesh>
+      )}
 
       <group ref={cardRef}>
         <CreditCard3D performanceTier={performanceTier} sheenMatRef={sheenMatRef} glowRef={glowRef} />
@@ -352,7 +363,7 @@ function CreditCard3D({
           anchorX="center"
           anchorY="middle"
           position={[0, 0.6, 0.09]}
-          font="/fonts/Inter-Bold.ttf"
+          font="/fonts/Inter-SemiBold.ttf"
           outlineWidth={0.01}
           outlineColor="#000000"
         >
@@ -391,7 +402,7 @@ function CreditCard3D({
           anchorX="center"
           anchorY="middle"
           letterSpacing={0.1}
-          font="/fonts/Inter-Bold.ttf"
+          font="/fonts/Inter-SemiBold.ttf"
         >
           {"4532  ••••  ••••  9010"}
         </Text>
@@ -404,6 +415,7 @@ function CreditCard3D({
         anchorX="left"
         anchorY="middle"
         position={[-1.8, -0.9, 0.09]}
+        font="/fonts/Inter-SemiBold.ttf"
       >
         {"KODANO DEMO"}
       </Text>
@@ -415,6 +427,7 @@ function CreditCard3D({
         anchorX="right"
         anchorY="middle"
         position={[1.8, -0.9, 0.09]}
+        font="/fonts/Inter-SemiBold.ttf"
       >
         {"12/28"}
       </Text>
@@ -523,8 +536,10 @@ function createSheenMaterial() {
 
         a = saturate(a);
         a = pow(a, 1.1);
-        // Shader safety: nunca deixar alpha global zerar
-        a = clamp(a, 0.15, 0.85);
+        // Shader safety: modela alpha e garante visibilidade sem "lavar"
+        a *= 0.55;
+        a = smoothstep(0.02, 0.9, a);
+        a = max(a, 0.06);
 
         vec3 color = mix(vec3(0.29, 0.68, 1.0), vec3(0.0, 0.86, 0.87), fresnel);
 

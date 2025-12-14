@@ -36,6 +36,7 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   const [tier, setTier] = React.useState<PerformanceTier>("medium");
   const [inView, setInView] = React.useState(true);
   const [canvasError, setCanvasError] = React.useState(false);
+  const [debug, setDebug] = React.useState(false);
 
   const containerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -47,6 +48,16 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     if (!mounted) return;
     setWebGLSupported(detectWebGLSupport());
     setTier(detectPerformanceTier());
+  }, [mounted]);
+
+  // Debug mode: habilita badge via ?cardDebug=1 (inclusive em produção)
+  React.useEffect(() => {
+    if (!mounted) return;
+    try {
+      setDebug(new URLSearchParams(window.location.search).has("cardDebug"));
+    } catch {
+      setDebug(false);
+    }
   }, [mounted]);
 
   // Se o ambiente muda (ou re-monta), limpamos erro anterior do Canvas
@@ -75,13 +86,18 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   else {
     content = (
       <CanvasErrorBoundary fallback={<FallbackShimmer />} onError={() => setCanvasError(true)}>
-        <PremiumCardCanvas performanceTier={tier} enableMotion={!prefersReducedMotion} inView={inView} />
+        <PremiumCardCanvas
+          performanceTier={tier}
+          enableMotion={!prefersReducedMotion}
+          inView={inView}
+          debug={debug}
+        />
       </CanvasErrorBoundary>
     );
   }
 
   const __DEV_BADGE =
-    process.env.NODE_ENV !== "production" ? (
+    debug || process.env.NODE_ENV !== "production" ? (
       <div className="absolute top-3 left-3 z-20 text-[11px] px-2 py-1 rounded bg-black/60 text-white">
         {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView} err=${canvasError}`}
       </div>
@@ -151,6 +167,9 @@ function StaticPremiumFallback() {
     <div className="w-full h-full bg-gradient-to-br from-[#061E26] via-[#072A35] to-[#0B2A35] relative">
       <div className="absolute inset-0 opacity-70 bg-[radial-gradient(circle_at_35%_35%,rgba(0,200,220,0.24),transparent_45%),radial-gradient(circle_at_75%_60%,rgba(155,123,214,0.14),transparent_55%)]" />
       <div className="absolute inset-0 opacity-35 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.08),transparent)]" />
+      <div className="absolute top-5 left-5 rounded-full border border-white/15 bg-black/25 px-3 py-1 text-[11px] text-white/80 backdrop-blur">
+        Visualização simplificada
+      </div>
       <div className="absolute bottom-6 left-6 text-white/80">
         <div className="text-sm tracking-wide">KODANO</div>
         <div className="mt-2 text-xs text-white/60">Pagamentos modernos, simples e seguros</div>
@@ -164,6 +183,9 @@ function FallbackShimmer() {
     <div className="w-full h-full bg-gradient-to-br from-[#061E26] via-[#072A35] to-[#0B2A35] relative">
       <div className="absolute inset-0 opacity-70 bg-[radial-gradient(circle_at_35%_35%,rgba(0,200,220,0.22),transparent_45%),radial-gradient(circle_at_75%_60%,rgba(124,243,255,0.16),transparent_55%)]" />
       <div className="absolute inset-0 animate-[shimmer_2.2s_infinite] opacity-40 bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.10),transparent)]" />
+      <div className="absolute top-5 left-5 rounded-full border border-white/15 bg-black/25 px-3 py-1 text-[11px] text-white/80 backdrop-blur">
+        Visualização simplificada
+      </div>
       <style jsx>{`
         @keyframes shimmer {
           0% { transform: translateX(-40%); }
