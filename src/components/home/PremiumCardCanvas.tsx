@@ -80,7 +80,7 @@ function Scene({
 
   React.useEffect(() => {
     cameraRef.current = camera as THREE.PerspectiveCamera;
-    cameraRef.current.position.set(0, 0, 8);
+    cameraRef.current.position.set(0, 0, 7.8);
     cameraRef.current.lookAt(0, 0, 0);
   }, [camera]);
 
@@ -118,9 +118,9 @@ function Scene({
     if (cardRef.current) {
       cardRef.current.rotation.set(-0.21, 0.314, 0); // -12°, 18°
       cardRef.current.position.set(0, 0, 0);
-      cardRef.current.scale.setScalar(1.18);
+      cardRef.current.scale.setScalar(1.22);
     }
-    if (cameraRef.current) cameraRef.current.position.z = 8.5;
+    if (cameraRef.current) cameraRef.current.position.z = 7.8;
     sweepRef.current = 0.6;
     invalidate();
   }, [invalidate]);
@@ -150,7 +150,7 @@ function Scene({
       const baseRotX = -0.21; // ~-12°
       const baseRotY = 0.314; // ~18°
       const baseRotZ = 0.0;
-      g.scale.setScalar(1.18);
+      g.scale.setScalar(1.22);
 
       // Idle sutil (premium)
       const idleBlend = performanceTier !== "low" ? 1 : 0;
