@@ -158,7 +158,7 @@ export function SegmentsSection({ className }: SegmentsSectionProps) {
             >
               <Card
                 className={cn(
-                  "group relative h-full overflow-hidden border border-border/40 bg-white/80 dark:bg-background/40 shadow-lg transition-all duration-500 cursor-pointer",
+                  "group relative h-full overflow-hidden border border-border/40 bg-white/80 dark:bg-background/40 shadow-lg transition-all duration-500",
                   isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
                 )}
               >
