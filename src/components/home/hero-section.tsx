@@ -15,7 +15,7 @@ import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animatio
 import { cn } from "@/lib/utils";
 import { KodanoFlowRail } from "@/components/home/kodano-flow-rail";
 import { useScroll } from "framer-motion";
-import { PremiumCardAnimation } from "@/components/home/PremiumCardAnimation";
+import { PaymentCardAnimation } from "@/components/home/PaymentCardAnimation";
 
 interface HeroSectionProps {
   className?: string;
@@ -138,9 +138,9 @@ export function HeroSection({ className }: HeroSectionProps) {
         </FadeInView>
           </div>
 
-          {/* Right: Premium Card Animation (desktop only) */}
-          <div className="hidden lg:block lg:col-span-6">
-            <PremiumCardAnimation />
+          {/* Right: Payment Processing Animation (desktop only) */}
+          <div className="hidden lg:flex lg:col-span-6 items-center justify-center">
+            <PaymentCardAnimation />
           </div>
         </div>
       </div>
