@@ -33,6 +33,7 @@ export default function PremiumCardCanvas({
       frameloop={inView ? "always" : "demand"}
       style={{ width: "100%", height: "100%", pointerEvents: "none" }}
     >
+      <color attach="background" args={["#ffffff"]} />
       <Scene performanceTier={performanceTier} enableMotion={enableMotion} inView={inView} debug={debug} />
     </Canvas>
   );
@@ -56,7 +57,8 @@ function Scene({
   const logoLayerRef = React.useRef<THREE.Group>(null);
   const sheenMatRef = React.useRef<THREE.ShaderMaterial | null>(null);
   const rimLightRef = React.useRef<THREE.PointLight>(null);
-  const glowRef = React.useRef<THREE.Mesh>(null);
+  const auraMainRef = React.useRef<THREE.Mesh>(null);
+  const auraSecondaryRef = React.useRef<THREE.Mesh>(null);
   const cameraRef = React.useRef<THREE.PerspectiveCamera | null>(null);
 
   const { invalidate, camera, gl } = useThree();
@@ -196,12 +198,20 @@ function Scene({
     }
 
     // Glow pulsante MUITO visível
-    if (glowRef.current && performanceTier !== "low") {
-      const pulse = Math.sin(t * 1.5) * 0.5 + 0.5;
-      glowRef.current.scale.setScalar(1 + pulse * 0.3);
-      const mat = glowRef.current.material as THREE.MeshStandardMaterial;
-      mat.opacity = 0.12 + pulse * 0.28;
-      mat.emissiveIntensity = 0.8 + pulse * 0.8;
+    if (performanceTier !== "low") {
+      const pulse = Math.sin(t * 0.65) * 0.5 + 0.5; // mais lento e elegante
+      const s = 1 + pulse * 0.03;
+
+      if (auraMainRef.current) {
+        auraMainRef.current.scale.set(s, s, 1);
+        const mat = auraMainRef.current.material as THREE.MeshStandardMaterial;
+        mat.opacity = 0.07 + pulse * 0.02;
+      }
+      if (auraSecondaryRef.current) {
+        auraSecondaryRef.current.scale.set(s * 0.98, s * 0.98, 1);
+        const mat = auraSecondaryRef.current.material as THREE.MeshStandardMaterial;
+        mat.opacity = 0.05 + pulse * 0.015;
+      }
     }
 
     // Breathing light DRAMÁTICO
@@ -214,23 +224,37 @@ function Scene({
   return (
     <group ref={groupRef}>
       {/* Lighting cinematográfica (3-point + rim) */}
-      <ambientLight intensity={0.35} />
-      <hemisphereLight intensity={0.25} groundColor={"#07141d"} />
-      <pointLight position={[5, 4, 8]} intensity={2.4} color="#ffffff" />
-      <pointLight position={[-6, -2, 6]} intensity={0.9} color="#cfe9ff" />
-      <pointLight ref={rimLightRef} position={[4, 3, -4]} intensity={2.0} color="#4facfe" />
+      <ambientLight intensity={0.6} />
+      <hemisphereLight intensity={0.25} groundColor={"#e7f7f6"} />
+      <pointLight position={[5, 4, 8]} intensity={2.0} color="#ffffff" />
+      <pointLight position={[-6, -2, 6]} intensity={1.2} color="#eaf7ff" />
+      <pointLight ref={rimLightRef} position={[4, 3, -4]} intensity={1.6} color="#0EA5A4" />
 
-      {/* Background volume sutil */}
-      <mesh position={[0, 0, -3.2]}>
-        <planeGeometry args={[14, 10]} />
+      {/* Aura Kodano suave (white premium background) */}
+      <mesh ref={auraMainRef} position={[0, 0, -4]} scale={[12, 8, 1]}>
+        <planeGeometry args={[1, 1]} />
         <meshStandardMaterial
-          color="#050b12"
-          emissive="#0b1b2a"
-          emissiveIntensity={0.9}
+          color="#0EA5A4"
+          emissive="#0EA5A4"
+          emissiveIntensity={0.25}
           transparent
-          opacity={0.55}
+          opacity={0.08}
           depthWrite={false}
           toneMapped={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+      <mesh ref={auraSecondaryRef} position={[1.5, -1, -4.5]} scale={[12, 8, 1]}>
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial
+          color="#7FE3E1"
+          emissive="#7FE3E1"
+          emissiveIntensity={0.22}
+          transparent
+          opacity={0.06}
+          depthWrite={false}
+          toneMapped={false}
+          blending={THREE.AdditiveBlending}
         />
       </mesh>
 
@@ -246,7 +270,6 @@ function Scene({
         <CreditCard3D
           performanceTier={performanceTier}
           sheenMatRef={sheenMatRef}
-          glowRef={glowRef}
           chipLayerRef={chipLayerRef}
           textLayerRef={textLayerRef}
           logoLayerRef={logoLayerRef}
@@ -269,16 +292,12 @@ function Scene({
 }
 
 function CreditCard3D({
-  performanceTier,
   sheenMatRef,
-  glowRef,
   chipLayerRef,
   textLayerRef,
   logoLayerRef,
 }: {
-  performanceTier: "high" | "medium" | "low";
   sheenMatRef: React.RefObject<THREE.ShaderMaterial | null>;
-  glowRef: React.RefObject<THREE.Mesh | null>;
   chipLayerRef: React.RefObject<THREE.Group | null>;
   textLayerRef: React.RefObject<THREE.Group | null>;
   logoLayerRef: React.RefObject<THREE.Group | null>;
@@ -303,8 +322,8 @@ function CreditCard3D({
     return new THREE.MeshPhysicalMaterial({
       metalness: 0.25,
       roughness: 0.22,
-      clearcoat: 0.55,
-      clearcoatRoughness: 0.15,
+      clearcoat: 0.4,
+      clearcoatRoughness: 0.25,
       envMapIntensity: 1.1,
       color: new THREE.Color("#10161f"),
     });
@@ -340,23 +359,6 @@ function CreditCard3D({
 
   return (
     <group>
-      {/* GLOW PULSANTE atrás do cartão */}
-      {performanceTier !== "low" && (
-        <mesh ref={glowRef} position={[0, 0, -0.4]}>
-          <planeGeometry args={[5.5, 3.5]} />
-          <meshStandardMaterial
-            color="#0a1f2e"
-            emissive="#4facfe"
-            emissiveIntensity={1.0}
-            transparent
-            opacity={0.25}
-            blending={THREE.AdditiveBlending}
-            depthWrite={false}
-            toneMapped={false}
-          />
-        </mesh>
-      )}
-
       {/* Base do cartão */}
       <RoundedBox args={[4.2, 2.6, 0.16]} radius={0.22} smoothness={12}>
         <primitive object={baseMat} attach="material" />
@@ -374,15 +376,26 @@ function CreditCard3D({
         {logoTexture && (
           <mesh position={[0, 0.62, 0.085]}>
             <planeGeometry args={[1.8, 0.52]} />
-            <meshBasicMaterial map={logoTexture} transparent opacity={0.92} toneMapped={false} />
+            <meshStandardMaterial
+              map={logoTexture}
+              transparent
+              opacity={0.9}
+              color="#6FBFBF"
+              metalness={0}
+              roughness={0.75}
+              emissive="#000000"
+              emissiveIntensity={0}
+              depthWrite={false}
+              toneMapped={false}
+            />
           </mesh>
         )}
 
         {!logoTexture && (
           <Text
             fontSize={0.32}
-            color={"#D8F6FB"}
-            fillOpacity={0.9}
+            color={"#6FBFBF"}
+            fillOpacity={0.85}
             anchorX="center"
             anchorY="middle"
             position={[0, 0.62, 0.085]}
