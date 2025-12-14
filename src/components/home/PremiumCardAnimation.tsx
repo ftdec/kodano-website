@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/lib/animations/hooks";
+import dynamic from "next/dynamic";
 
 type PerformanceTier = "high" | "medium" | "low";
 
@@ -112,13 +112,6 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     };
   }, [shouldRender3D, show3D]);
 
-  const __DEV_BADGE =
-    debug || process.env.NODE_ENV !== "production" ? (
-      <div className="absolute top-3 left-3 z-20 text-[11px] px-2 py-1 rounded bg-[#0A1F2C]/70 text-white">
-        {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView} err=${canvasError} ready=${canvasReady} show3D=${show3D} spinner=${showSpinner}`}
-      </div>
-    ) : null;
-
   return (
     <div
       ref={containerRef}
@@ -128,12 +121,10 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
       )}
       style={{ touchAction: "pan-y" }}
     >
-      {__DEV_BADGE}
-
       {/* Poster sempre presente; some só quando o 3D estiver pronto */}
       <PosterCard
         className={cn(
-          "absolute inset-0 transition-opacity duration-400",
+          "absolute inset-0 transition-opacity duration-500",
           show3D ? "opacity-0" : "opacity-100"
         )}
       />
@@ -150,9 +141,10 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
       {shouldRender3D && (
         <div
           className={cn(
-            "absolute inset-0 transition-opacity duration-400",
+            "absolute inset-0 transition-opacity duration-500",
             canvasReady ? "opacity-100" : "opacity-0"
           )}
+          style={{ transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)" }}
         >
           <CanvasErrorBoundary fallback={null} onError={() => setCanvasError(true)}>
             <PremiumCardCanvas
@@ -216,9 +208,9 @@ function PosterCard({ className }: { className?: string }) {
   const KODANO_MUTED = "#A8C5D1";
 
   // Kodano card base (definitivo)
-  const CARD_NAVY_1 = "#002A35";
-  const CARD_NAVY_2 = "#003F4D";
-  const CARD_HIGHLIGHT = "#00C8DC";
+  const CARD_CYAN_BASE = "#00C8DC";
+  const CARD_CYAN_DEEP = "#00AFC7";
+  const CARD_NAVY_DEEP = "#002A35";
 
   return (
     <div
@@ -256,8 +248,8 @@ function PosterCard({ className }: { className?: string }) {
           aspectRatio: "1.6 / 1",
           borderRadius: 18,
           padding: 24,
-          background: `linear-gradient(135deg, ${CARD_NAVY_1} 0%, ${CARD_NAVY_2} 100%)`,
-          boxShadow: `0 40px 80px ${hexToRgba(CARD_NAVY_1, 0.08)}, 0 12px 24px ${hexToRgba(CARD_NAVY_1, 0.06)}`,
+          background: `linear-gradient(160deg, ${CARD_CYAN_BASE} 0%, ${CARD_CYAN_DEEP} 55%, ${CARD_NAVY_DEEP} 100%)`,
+          boxShadow: `0 40px 80px ${hexToRgba(CARD_NAVY_DEEP, 0.16)}, 0 12px 28px ${hexToRgba(CARD_NAVY_DEEP, 0.12)}`,
         }}
       >
         {/* Highlight sheen */}
@@ -266,10 +258,10 @@ function PosterCard({ className }: { className?: string }) {
             position: "absolute",
             inset: 1,
             borderRadius: 17,
-            background: `radial-gradient(60% 55% at 25% 25%, ${hexToRgba("#ffffff", 0.10)}, transparent 60%), radial-gradient(60% 60% at 80% 40%, ${hexToRgba(
-              CARD_HIGHLIGHT,
+            background: `linear-gradient(120deg, ${hexToRgba(CARD_CYAN_BASE, 0.08)}, transparent 45%), radial-gradient(60% 55% at 25% 25%, ${hexToRgba(
+              "#ffffff",
               0.10
-            )}, transparent 65%)`,
+            )}, transparent 60%)`,
             pointerEvents: "none",
           }}
         />

@@ -33,8 +33,9 @@ export default function PremiumCardCanvas({
         antialias: performanceTier !== "low",
         powerPreference: "high-performance",
         alpha: true,
+        toneMappingExposure: 0.95,
       }}
-      camera={{ fov: 35, position: [0, 0, 8] }}
+      camera={{ fov: 33, position: [0, 0, 8] }}
       frameloop="demand"
       onPointerMove={() => {
         // acorda por 1.8s após movimento
@@ -139,7 +140,7 @@ function Scene({
       cardRef.current.position.set(0, 0, 0);
       cardRef.current.scale.setScalar(1.22);
     }
-    if (cameraRef.current) cameraRef.current.position.z = 7.8;
+    if (cameraRef.current) cameraRef.current.position.z = 8;
     sweepRef.current = 0.6;
     invalidate();
   }, [invalidate, activeUntilRef]);
@@ -177,11 +178,11 @@ function Scene({
       const baseRotZ = 0.0;
       g.scale.setScalar(1.22);
 
-      // Idle sutil (premium)
+      // Idle sutil (premium, quase imperceptível)
       const idleBlend = performanceTier !== "low" ? 1 : 0;
-      const floatY = Math.sin(t * (Math.PI * 0.5)) * 0.04 * idleBlend; // ~0.25 Hz
-      const floatZ = Math.cos(t * (Math.PI * 0.5)) * 0.01 * idleBlend;
-      const microRot = Math.sin(t * (Math.PI * 0.5)) * 0.035 * idleBlend; // ~2°
+      const floatY = Math.sin(t * (Math.PI * 0.35)) * 0.025 * idleBlend; // ~0.175 Hz
+      const floatZ = Math.cos(t * (Math.PI * 0.35)) * 0.008 * idleBlend;
+      const microRot = Math.sin(t * (Math.PI * 0.35)) * 0.028 * idleBlend; // ~1.6°
 
       g.position.set(0, floatY, basePosZ + floatZ);
       g.rotation.set(
@@ -294,11 +295,11 @@ function CreditCard3D({
   const baseMat = React.useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
       metalness: 0.25,
-      roughness: 0.38,
-      clearcoat: 0.28,
-      clearcoatRoughness: 0.35,
+      roughness: 0.28,
+      clearcoat: 0.4,
+      clearcoatRoughness: 0.2,
       envMapIntensity: 0.8,
-      color: new THREE.Color("#003F4D"),
+      color: new THREE.Color("#00C8DC"),
     });
   }, []);
 
