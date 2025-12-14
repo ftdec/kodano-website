@@ -18,6 +18,9 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   const [mounted, setMounted] = React.useState(false);
   const [webGLSupported, setWebGLSupported] = React.useState<boolean>(false);
   const [tier, setTier] = React.useState<PerformanceTier>("medium");
+  const [inView, setInView] = React.useState(true);
+
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
 
   // Montagem (hydration-safe)
   React.useEffect(() => setMounted(true), []);
@@ -28,6 +31,20 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     setWebGLSupported(detectWebGLSupport());
     setTier(detectPerformanceTier());
   }, [mounted]);
+
+  // IntersectionObserver: anima quando visível, dorme quando fora
+  React.useEffect(() => {
+    if (!containerRef.current) return;
+
+    const el = containerRef.current;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.15 }
+    );
+
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   // Se não montou ainda: placeholder SSR-safe
   if (!mounted) {
@@ -58,10 +75,11 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
 
   return (
     <div
+      ref={containerRef}
       className={cn("w-full aspect-[1.1/1] rounded-3xl overflow-hidden", className)}
       style={{ touchAction: "pan-y" }}
     >
-      <PremiumCardCanvas performanceTier={tier} enableMotion={!prefersReducedMotion} />
+      <PremiumCardCanvas performanceTier={tier} enableMotion={!prefersReducedMotion} inView={inView} />
     </div>
   );
 }

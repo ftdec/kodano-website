@@ -10,12 +10,14 @@ type PerformanceTier = "high" | "medium" | "low";
 export default function PremiumCardCanvas({
   performanceTier,
   enableMotion,
+  inView,
 }: {
   performanceTier: PerformanceTier;
   enableMotion: boolean;
+  inView: boolean;
 }) {
-  // Canvas em "demand" por padrão: só renderiza quando invalidate() é chamado.
-  // A lógica de invalidação fica dentro da Scene.
+  // frameloop="always" quando visível e motion habilitado
+  // frameloop="demand" quando fora da tela (GPU dorme)
   return (
     <Canvas
       dpr={performanceTier === "high" ? [1, 2] : performanceTier === "medium" ? [1, 1.5] : [1, 1.25]}
@@ -25,11 +27,11 @@ export default function PremiumCardCanvas({
         alpha: true,
       }}
       camera={{ fov: 35, position: [0, 0, 10] }}
-      frameloop="demand"
+      frameloop={enableMotion && inView ? "always" : "demand"}
       // Importante: não bloquear scroll/click do layout
       style={{ width: "100%", height: "100%", pointerEvents: "none" }}
     >
-      <Scene performanceTier={performanceTier} enableMotion={enableMotion} />
+      <Scene performanceTier={performanceTier} enableMotion={enableMotion} inView={inView} />
     </Canvas>
   );
 }
@@ -37,32 +39,30 @@ export default function PremiumCardCanvas({
 function Scene({
   performanceTier,
   enableMotion,
+  inView,
 }: {
   performanceTier: PerformanceTier;
   enableMotion: boolean;
+  inView: boolean;
 }) {
   const groupRef = React.useRef<THREE.Group>(null);
   const cardRef = React.useRef<THREE.Group>(null);
   const sheenMatRef = React.useRef<THREE.ShaderMaterial | null>(null);
+  const rimLightRef = React.useRef<THREE.PointLight>(null);
 
   const { invalidate, camera } = useThree();
 
   // Mouse via ref (sem re-render)
   const mouseRef = React.useRef({ x: 0, y: 0 });
 
-  // Controle de "janela de animação" para não gastar GPU para sempre
-  // - Intro: ~1.4s
-  // - Idle: roda por mais alguns segundos após interação, depois dorme.
-  const t0Ref = React.useRef<number | null>(null);
-  const animUntilRef = React.useRef<number>(0);
-
   // Sweep do intro
   const sweepRef = React.useRef(0);
+  const t0Ref = React.useRef<number | null>(null);
 
   // Helpers
   const easeOut = (t: number) => 1 - Math.pow(1 - t, 3.5);
 
-  // Captura mouse global apenas em desktop (o componente pai já só renderiza no lg+)
+  // Captura mouse global (sempre ativo quando motion habilitado)
   React.useEffect(() => {
     if (!enableMotion) return;
 
@@ -71,15 +71,11 @@ function Scene({
       const x = (e.clientX / window.innerWidth) * 2 - 1;
       const y = -((e.clientY / window.innerHeight) * 2 - 1);
       mouseRef.current = { x, y };
-
-      // Acorda animação por alguns segundos após movimento
-      animUntilRef.current = performance.now() + 2500;
-      invalidate();
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
     return () => window.removeEventListener("mousemove", onMove);
-  }, [enableMotion, invalidate]);
+  }, [enableMotion]);
 
   // Dispara intro ao montar
   React.useEffect(() => {
@@ -89,9 +85,7 @@ function Scene({
     // Intro somente se motion habilitado
     if (enableMotion) {
       t0Ref.current = performance.now();
-      animUntilRef.current = performance.now() + 1800; // intro + settle
       sweepRef.current = 0;
-      invalidate();
     } else {
       // Pose estática premium
       if (cardRef.current) {
@@ -106,11 +100,11 @@ function Scene({
   useFrame((state) => {
     const now = performance.now();
 
-    // Se motion desligado: cena estática (1 frame quando necessário)
-    if (!enableMotion) return;
+    // Para tudo quando fora da tela (GPU dorme com frameloop="demand")
+    if (!inView) return;
 
-    // Se "janela de animação" acabou: dorme (não chama invalidate -> não renderiza mais frames)
-    if (now > animUntilRef.current) return;
+    // Se motion desligado: cena estática
+    if (!enableMotion) return;
 
     const t = state.clock.getElapsedTime();
 
@@ -136,16 +130,16 @@ function Scene({
       g.rotation.y = THREE.MathUtils.lerp(0.1, 0.38, k);
       g.rotation.z = THREE.MathUtils.lerp(0.02, 0.0, k);
 
-      // Idle suave (após intro avançar um pouco)
-      if (introT > 0.7 && performanceTier !== "low") {
-        const floatY = Math.sin(t * 0.4) * 0.06;
-        const rotW = Math.sin(t * 0.35) * 0.03;
+      // Idle SEMPRE (mais visível para "wow factor")
+      if (performanceTier !== "low") {
+        const floatY = Math.sin(t * 0.4) * 0.08; // Aumentado de 0.06 para 0.08
+        const rotW = Math.sin(t * 0.35) * 0.04; // Aumentado de 0.03 para 0.04
 
         g.position.y = floatY;
         g.rotation.y += rotW * 0.15;
       }
 
-      // Tilt por mouse (clamp "não toy-like")
+      // Tilt por mouse (sempre ativo, clamp "não toy-like")
       const mx = THREE.MathUtils.clamp(mouseRef.current.x, -1, 1);
       const my = THREE.MathUtils.clamp(mouseRef.current.y, -1, 1);
 
@@ -166,8 +160,11 @@ function Scene({
       }
     }
 
-    // Renderiza apenas enquanto necessário
-    invalidate();
+    // Breathing light no rim light (mais visível)
+    if (rimLightRef.current && performanceTier !== "low") {
+      const breathing = Math.sin(t * 0.6) * 0.5 + 1; // Aumentado para mais visibilidade
+      rimLightRef.current.intensity = 1.6 * breathing;
+    }
   });
 
   return (
@@ -177,7 +174,7 @@ function Scene({
       <hemisphereLight intensity={0.35} groundColor={"#071A1F"} />
       <pointLight position={[5, 5, 8]} intensity={2.2} />
       <pointLight position={[-4, -2, 5]} intensity={0.9} />
-      <pointLight position={[4, 3, -3]} intensity={performanceTier === "low" ? 1.1 : 1.6} />
+      <pointLight ref={rimLightRef} position={[4, 3, -3]} intensity={performanceTier === "low" ? 1.1 : 1.6} />
 
       {/* Environment leve (dá reflexo premium) */}
       {performanceTier !== "low" && <Environment preset="city" />}
