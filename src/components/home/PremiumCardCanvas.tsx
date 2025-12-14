@@ -226,7 +226,7 @@ function Scene({
   });
 
   return (
-    <Bounds fit clip observe margin={1.05}>
+    <Bounds fit clip observe margin={1.12}>
       <group ref={groupRef}>
         {/* Lighting clean (hero branco) */}
         <ambientLight intensity={0.6} />
@@ -274,11 +274,11 @@ function CreditCard3D({
 }) {
   const baseMat = React.useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
-      metalness: 0.12,
-      roughness: 0.32,
-      clearcoat: 0.65,
-      clearcoatRoughness: 0.22,
-      envMapIntensity: 0.9,
+      metalness: 0.15,
+      roughness: 0.35,
+      clearcoat: 0.6,
+      clearcoatRoughness: 0.25,
+      envMapIntensity: 0.85,
       color: new THREE.Color("#00C8DC"),
     });
   }, []);

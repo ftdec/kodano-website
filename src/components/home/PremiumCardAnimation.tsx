@@ -44,7 +44,6 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   const [debug, setDebug] = React.useState(false);
   const [canvasReady, setCanvasReady] = React.useState(false);
   const [show3D, setShow3D] = React.useState(false);
-  const [showSpinner, setShowSpinner] = React.useState(false);
 
   const containerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -77,7 +76,6 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     setCanvasError(false);
     setCanvasReady(false);
     setShow3D(false);
-    setShowSpinner(false);
   }, [mounted, webGLSupported, tier, prefersReducedMotion]);
 
   // IntersectionObserver: anima quando visível, dorme quando fora
@@ -96,22 +94,6 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
 
   const shouldRender3D = mounted && !canvasError && !prefersReducedMotion && tier !== "low" && webGLSupported;
 
-  // Controla spinner: delay anti-flicker (200ms) e só até o 3D estar pronto
-  React.useEffect(() => {
-    if (!shouldRender3D || show3D) {
-      setShowSpinner(false);
-      return;
-    }
-    let cancelled = false;
-    const delay = window.setTimeout(() => {
-      if (!cancelled && !show3D) setShowSpinner(true);
-    }, 200);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(delay);
-    };
-  }, [shouldRender3D, show3D]);
-
   return (
     <div
       ref={containerRef}
@@ -122,40 +104,32 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
       )}
       style={{ touchAction: "pan-y" }}
     >
-      {/* Stage background: halo premium + vignette sutil */}
+      {/* Stage background: halo sutil + vignette (PRD: 6-10% opacity) */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Halo ciano Kodano forte */}
+        {/* Halo ciano Kodano (sutil, não chamativo) */}
         <div
-          className="absolute inset-[-25%] rounded-[32px]"
+          className="absolute inset-[-20%] rounded-[32px]"
           style={{
             background:
-              "radial-gradient(55% 55% at 65% 35%, rgba(0,200,220,0.18), rgba(79,172,254,0.12), rgba(47,230,200,0.06), transparent 65%)",
-            filter: "blur(40px)",
+              "radial-gradient(55% 55% at 60% 40%, rgba(0,200,220,0.08), rgba(79,172,254,0.05), transparent 60%)",
+            filter: "blur(36px)",
           }}
         />
-        {/* Vignette suave nas bordas */}
+        {/* Vignette suave nas bordas (3-4%) */}
         <div
           className="absolute inset-0 rounded-[32px]"
           style={{
             background:
-              "radial-gradient(110% 110% at 50% 50%, transparent 55%, rgba(0,42,53,0.03) 100%)",
+              "radial-gradient(105% 105% at 50% 50%, transparent 50%, rgba(0,42,53,0.035) 100%)",
           }}
         />
       </div>
 
-      {/* Poster sempre presente; some só quando o 3D estiver pronto */}
+      {/* Poster sempre presente; fade imperceptível para 3D (PRD: 150-250ms) */}
       <PosterCard
         className={cn(
-          "absolute inset-0 transition-opacity duration-500",
-          show3D ? "opacity-0" : "opacity-100"
-        )}
-      />
-
-      {/* Spinner ciano (sobreposto) enquanto 3D não pronto */}
-      <CyanSpinner
-        className={cn(
           "absolute inset-0 transition-opacity duration-200",
-          show3D || !showSpinner ? "opacity-0 pointer-events-none" : "opacity-100"
+          show3D ? "opacity-0 pointer-events-none" : "opacity-100"
         )}
       />
 
@@ -177,7 +151,6 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
               onReady={() => {
                 setCanvasReady(true);
                 setShow3D(true);
-                setShowSpinner(false);
               }}
             />
           </CanvasErrorBoundary>
@@ -252,12 +225,9 @@ function PosterCard({ className }: { className?: string }) {
       <div
         style={{
           position: "absolute",
-          inset: -100,
-          background: `radial-gradient(55% 55% at 65% 35%, ${hexToRgba("#00C8DC", 0.22)}, ${hexToRgba(KODANO_BLUE, 0.14)}, ${hexToRgba(
-            KODANO_TEAL,
-            0.08
-          )}, transparent 60%)`,
-          filter: "blur(48px)",
+          inset: -80,
+          background: `radial-gradient(55% 55% at 60% 40%, ${hexToRgba("#00C8DC", 0.08)}, ${hexToRgba(KODANO_BLUE, 0.05)}, transparent 55%)`,
+          filter: "blur(36px)",
         }}
       />
 
@@ -335,12 +305,4 @@ function hexToRgba(hex: string, alpha: number) {
   const g = parseInt(v.slice(2, 4), 16);
   const b = parseInt(v.slice(4, 6), 16);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
-
-function CyanSpinner({ className }: { className?: string }) {
-  return (
-    <div className={cn("grid place-items-center", className)} aria-label="Carregando cartão">
-      <div className="h-11 w-11 rounded-full border-[3px] border-[#00C8DC]/25 border-t-[#00C8DC] animate-spin opacity-90" />
-    </div>
-  );
 }
