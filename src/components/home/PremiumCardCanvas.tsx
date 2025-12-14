@@ -62,6 +62,18 @@ function Scene({
     cameraRef.current = camera as THREE.PerspectiveCamera;
   }, [camera]);
 
+  // Garante pelo menos 1 frame inicial (mesmo com frameloop="demand")
+  React.useEffect(() => {
+    invalidate();
+  }, [invalidate]);
+
+  // Se o IntersectionObserver ainda não marcou visível no primeiro render,
+  // isso garante o primeiro frame assim que entrar em view.
+  React.useEffect(() => {
+    if (!inView) return;
+    invalidate();
+  }, [inView, invalidate]);
+
   // Mouse tracking
   React.useEffect(() => {
     if (!enableMotion) return;
