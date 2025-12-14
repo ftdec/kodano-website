@@ -1,78 +1,16 @@
 /**
  * HowItWorksSection Component
- * Timeline showing Kodano's process flow
- * With sequential step animations
+ * Sophisticated scroll-driven timeline
+ * Each step appears progressively as user scrolls
  */
 
 "use client";
 
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring, useTransform } from "framer-motion";
-import { Layers, Zap, BarChart3, Shield, ArrowRight } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
-import { AdvancedButton } from "@/components/animations/advanced-button";
-import {
-  fadeInUp,
-  staggerContainer,
-  slideInLeft,
-  slideInRight,
-  defaultViewport,
-  mobileViewport,
-} from "@/lib/animations/motion-variants";
-import { useIsLowEndDevice, useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
+import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import { Layers, Zap, BarChart3, Shield, ArrowRight, Check } from "lucide-react";
+import { useRef } from "react";
+import { useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
-
-function SquareCTA({
-  href,
-  title,
-  description,
-  gradient,
-}: {
-  href: string;
-  title: string;
-  description: string;
-  gradient: string;
-}) {
-  return (
-    <motion.a
-      href={href}
-      className={cn(
-        "group relative w-full overflow-hidden rounded-2xl border border-border/50",
-        "bg-white/70 backdrop-blur-md shadow-[0_18px_40px_rgba(15,23,42,0.08)]",
-        "transition-all duration-300 hover:shadow-[0_28px_70px_rgba(15,23,42,0.12)]"
-      )}
-      whileHover={{ y: -2 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 380, damping: 28 }}
-    >
-      {/* Top border gradient (igual cards de cima) */}
-      <div className={cn("absolute inset-x-0 top-0 h-1 bg-gradient-to-r", gradient)} />
-
-      <div className="relative p-5 flex items-start gap-4">
-        <div
-          className={cn(
-            "shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br flex items-center justify-center shadow-inner shadow-white/50",
-            gradient
-          )}
-        >
-          <ArrowRight className="w-5 h-5 text-white" />
-        </div>
-
-        <div className="min-w-0">
-          <div className="text-base font-semibold leading-tight">{title}</div>
-          <div className="mt-1 text-sm text-muted-foreground leading-relaxed">
-            {description}
-          </div>
-        </div>
-      </div>
-
-      {/* Hover wash */}
-      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <div className="absolute -top-16 -right-16 w-[240px] h-[240px] rounded-full bg-[#4FACFE]/10 blur-[60px]" />
-        <div className="absolute -bottom-16 -left-16 w-[240px] h-[240px] rounded-full bg-[#43E97B]/10 blur-[60px]" />
-      </div>
-    </motion.a>
-  );
-}
 
 const steps = [
   {
@@ -80,427 +18,280 @@ const steps = [
     description:
       "Conecte-se à nossa API RESTful moderna em minutos, com documentação clara e SDKs prontos.",
     icon: Layers,
-    gradient: "from-[#4FACFE] to-[#00DBDE]", // Azul claro → Ciano (paleta do site)
+    gradient: "from-[#4FACFE] to-[#00DBDE]",
+    color: "#4FACFE",
+    details: ["SDK em 5 linguagens", "Sandbox completo", "Webhooks em tempo real"],
   },
   {
     title: "Configure Pagamentos",
     description:
       "Defina suas regras de negócio, métodos de pagamento aceitos e fluxo de checkout.",
     icon: Zap,
-    gradient: "from-[#00DBDE] to-[#43E97B]", // Ciano → Verde (paleta do site)
+    gradient: "from-[#00DBDE] to-[#43E97B]",
+    color: "#00DBDE",
+    details: ["Regras customizáveis", "Split automático", "Retry inteligente"],
   },
   {
     title: "Processe Transações",
     description:
       "Nossa tecnologia processa cada transação com otimização inteligente para maximizar aprovações.",
     icon: BarChart3,
-    gradient: "from-[#415A77] to-[#4FACFE]", // Azul escuro → Azul claro (paleta do site)
+    gradient: "from-[#415A77] to-[#4FACFE]",
+    color: "#415A77",
+    details: ["Roteamento inteligente", "Fallback automático", "Zero downtime"],
   },
   {
     title: "Monitore e Otimize",
     description:
       "Acompanhe tudo em tempo real pelo dashboard e deixe nossa IA otimizar as conversões.",
     icon: Shield,
-    gradient: "from-[#43E97B] to-[#4FACFE]", // Verde → Azul claro (paleta do site)
+    gradient: "from-[#43E97B] to-[#4FACFE]",
+    color: "#43E97B",
+    details: ["Dashboard em tempo real", "Alertas inteligentes", "Relatórios automáticos"],
   },
 ];
 
+// Individual step component with scroll-triggered animation
+function StepCard({ step, index, totalSteps }: { step: typeof steps[0]; index: number; totalSteps: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-20% 0px -20% 0px" });
+  const prefersReducedMotion = useReducedMotion();
+  const Icon = step.icon;
+
+  return (
+    <motion.div
+      ref={ref}
+      className="relative"
+      initial={{ opacity: 0 }}
+      animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Connection line to next step */}
+      {index < totalSteps - 1 && (
+        <div className="absolute left-6 md:left-8 top-16 bottom-0 w-px">
+          <motion.div
+            className="h-full w-full bg-gradient-to-b"
+            style={{
+              backgroundImage: `linear-gradient(to bottom, ${step.color}, ${steps[index + 1].color})`,
+            }}
+            initial={{ scaleY: 0, originY: 0 }}
+            animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}
+            transition={{ duration: 0.8, delay: prefersReducedMotion ? 0 : 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+          />
+        </div>
+      )}
+
+      <div className="flex gap-4 md:gap-6">
+        {/* Step indicator */}
+        <motion.div
+          className="relative z-10 shrink-0"
+          initial={{ scale: 0 }}
+          animate={isInView ? { scale: 1 } : { scale: 0 }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 20,
+            delay: prefersReducedMotion ? 0 : 0.1,
+          }}
+        >
+          <div
+            className={cn(
+              "w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center bg-gradient-to-br shadow-lg",
+              step.gradient
+            )}
+          >
+            <Icon className="w-6 h-6 md:w-7 md:h-7 text-white" />
+          </div>
+        </motion.div>
+
+        {/* Content card */}
+        <motion.div
+          className="flex-1 pb-12 md:pb-16"
+          initial={{ opacity: 0, x: -30 }}
+          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+          transition={{
+            duration: 0.5,
+            delay: prefersReducedMotion ? 0 : 0.2,
+            ease: [0.25, 0.1, 0.25, 1],
+          }}
+        >
+          <div className="relative p-6 md:p-8 rounded-2xl bg-white/90 border border-border/50 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            {/* Step number badge */}
+            <div
+              className="absolute -top-3 -right-3 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-lg"
+              style={{ background: `linear-gradient(135deg, ${step.color}, ${step.color}dd)` }}
+            >
+              {index + 1}
+            </div>
+
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-2">
+              Etapa {index + 1} de {totalSteps}
+            </div>
+
+            <h3 className="text-xl md:text-2xl font-bold mb-3">{step.title}</h3>
+
+            <p className="text-muted-foreground leading-relaxed mb-5">{step.description}</p>
+
+            {/* Details list */}
+            <motion.div
+              className="space-y-2"
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ delay: prefersReducedMotion ? 0 : 0.4 }}
+            >
+              {step.details.map((detail, i) => (
+                <motion.div
+                  key={detail}
+                  className="flex items-center gap-2 text-sm"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                  transition={{
+                    delay: prefersReducedMotion ? 0 : 0.5 + i * 0.1,
+                    duration: 0.3,
+                  }}
+                >
+                  <div
+                    className="w-5 h-5 rounded-full flex items-center justify-center"
+                    style={{ background: `${step.color}20` }}
+                  >
+                    <Check className="w-3 h-3" style={{ color: step.color }} />
+                  </div>
+                  <span className="text-foreground/80">{detail}</span>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
+
+// Progress indicator on the side
+function ScrollProgress({ containerRef }: { containerRef: React.RefObject<HTMLElement | null> }) {
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  const progressHeight = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
+
+  return (
+    <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-1">
+      <div className="sticky top-1/2 -translate-y-1/2 h-32">
+        <div className="relative h-full w-1 rounded-full bg-border/30 overflow-hidden">
+          <motion.div
+            className="absolute top-0 left-0 right-0 bg-gradient-to-b from-[#4FACFE] via-[#00DBDE] to-[#43E97B] rounded-full"
+            style={{ height: progressHeight }}
+          />
+        </div>
+        <motion.div
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-white border-2 border-primary shadow-lg"
+          style={{ top: progressHeight }}
+        />
+      </div>
+    </div>
+  );
+}
+
 export function HowItWorksSection() {
+  const containerRef = useRef<HTMLElement>(null);
   const isMobile = useIsMobile();
   const prefersReducedMotion = useReducedMotion();
-  const isLowEnd = useIsLowEndDevice();
-  const storyRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: storyRef,
-    // map whole section scroll to 0..1
-    offset: ["start start", "end end"],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, restDelta: 0.001 });
-  const lineScale = useTransform(smoothProgress, [0, 1], [0, 1]);
-
-  const [activeIndex, setActiveIndex] = useState(0);
-  useMotionValueEvent(smoothProgress, "change", (latest) => {
-    const n = steps.length;
-    const idx = Math.max(0, Math.min(n - 1, Math.floor(latest * n)));
-    setActiveIndex((prev) => (prev === idx ? prev : idx));
-  });
-
-  const activeStep = useMemo(() => steps[activeIndex] ?? steps[0], [activeIndex]);
-  const isLastStep = activeIndex === steps.length - 1;
-  const enableStory = !isMobile && !prefersReducedMotion && !isLowEnd;
+  const headerRef = useRef<HTMLDivElement>(null);
+  const headerInView = useInView(headerRef, { once: true, margin: "-100px" });
 
   return (
     <section
       id="process"
-      ref={storyRef}
-      className={cn(
-        "scroll-mt-28 py-16 sm:py-24 md:py-32 px-4 sm:px-6 relative overflow-hidden",
-        enableStory && "min-h-[240vh]"
-      )}
+      ref={containerRef}
+      className="scroll-mt-28 py-16 sm:py-24 md:py-32 px-4 sm:px-6 relative overflow-hidden"
     >
       {/* Background decorations */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-secondary/20 to-background" />
-        <div className="absolute top-20 right-0 w-[420px] h-[420px] bg-[#4FACFE]/6 rounded-full blur-[110px]" />
-        <div className="absolute bottom-10 left-[-120px] w-[520px] h-[520px] bg-[#43E97B]/5 rounded-full blur-[130px]" />
       </div>
 
-      <div className="container max-w-5xl mx-auto relative z-10">
+      <div className="container max-w-4xl mx-auto relative z-10">
+        {/* Scroll progress indicator */}
+        {!isMobile && !prefersReducedMotion && <ScrollProgress containerRef={containerRef} />}
+
         {/* Section Header */}
         <motion.div
-          className="text-center mb-12 sm:mb-16 md:mb-20"
-          initial="hidden"
-          whileInView="visible"
-          viewport={isMobile ? mobileViewport : defaultViewport}
-          variants={staggerContainer}
+          ref={headerRef}
+          className="text-center mb-16 md:mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
         >
-          <motion.div
-            variants={fadeInUp}
-            className={cn(
-              "inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 rounded-full bg-white/70 dark:bg-white/5 border border-border/60 mb-4 sm:mb-6",
-              isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
-            )}
-          >
-            <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 rounded-full bg-white/80 border border-border/60 mb-4 sm:mb-6">
+            <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-[#4FACFE] to-[#43E97B]" />
             <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] text-muted-foreground">
               Processo Simplificado
             </span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            variants={fadeInUp}
-            className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4"
-          >
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
             Como Funciona
-          </motion.h2>
+          </h2>
 
-          <motion.p
-            variants={fadeInUp}
-            className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-2"
-          >
-            Do setup à primeira transação em poucos passos.
-          </motion.p>
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
+            Do setup à primeira transação em poucos passos. Role para descobrir cada etapa.
+          </p>
         </motion.div>
 
-        {/* Desktop scroll storytelling */}
-        {enableStory ? (
-          <div className="relative">
-            <div className="sticky top-24">
-              <div className="grid grid-cols-12 gap-8 items-start">
-                {/* Left: Stepper */}
-                <div className="col-span-5">
-                  <div className="rounded-3xl border border-border/50 bg-card/50 backdrop-blur-md shadow-[0_26px_70px_rgba(15,23,42,0.10)] p-8">
-                    <div className="mb-6">
-                      <div className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
-                        Fluxo de ponta a ponta
-                      </div>
-                      <div className="mt-3 text-2xl font-semibold tracking-tight">
-                        Da integração ao controle total
-                      </div>
-                    </div>
+        {/* Steps Timeline */}
+        <div className="relative pl-4 md:pl-8">
+          {steps.map((step, index) => (
+            <StepCard
+              key={step.title}
+              step={step}
+              index={index}
+              totalSteps={steps.length}
+            />
+          ))}
+        </div>
 
-                    <div className="relative pl-6">
-                      {/* Track */}
-                      <div className="absolute left-2 top-1 bottom-1 w-px bg-border/70" />
-                      {/* Progress */}
-                      <motion.div
-                        className="absolute left-2 top-1 bottom-1 w-px origin-top bg-gradient-to-b from-[#4FACFE] via-[#00DBDE] via-[#43E97B] to-[#415A77]"
-                        style={{ scaleY: lineScale }}
-                      />
-
-                      <div className="space-y-4">
-                        {steps.map((step, idx) => {
-                          const isActive = idx === activeIndex;
-                          const isPassed = idx < activeIndex;
-                          return (
-                            <motion.div
-                              key={step.title}
-                              className={cn(
-                                "relative flex items-start gap-4 rounded-2xl p-4 transition-colors",
-                                isActive ? "bg-white/60" : "hover:bg-white/40"
-                              )}
-                              animate={{
-                                opacity: isPassed || isActive ? 1 : 0.65,
-                              }}
-                              transition={{ duration: 0.2, ease: "easeOut" }}
-                            >
-                              <div className="relative mt-1">
-                                <div
-                                  className={cn(
-                                    "w-3 h-3 rounded-full border-2",
-                                    isActive || isPassed ? "border-primary" : "border-border"
-                                  )}
-                                />
-                                <motion.div
-                                  className={cn(
-                                    "absolute inset-0 rounded-full",
-                                    isActive || isPassed ? "bg-primary" : "bg-transparent"
-                                  )}
-                                  animate={{ scale: isActive ? 1 : isPassed ? 0.9 : 0 }}
-                                  transition={{ type: "spring", stiffness: 260, damping: 22 }}
-                                />
-                              </div>
-
-                              <div className="min-w-0">
-                                <div className="font-semibold leading-tight">{step.title}</div>
-                                <div className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                                  {step.description}
-                                </div>
-                              </div>
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right: Active card */}
-                <div className="col-span-7">
-                  <div className="relative rounded-3xl border border-border/50 bg-card/50 backdrop-blur-md shadow-[0_26px_70px_rgba(15,23,42,0.10)] overflow-hidden">
-                    {/* Background wash */}
-                    <div className="absolute inset-0 pointer-events-none">
-                      <div className="absolute inset-0 bg-gradient-to-b from-white/40 via-white/10 to-transparent" />
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={activeStep.title}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.4 }}
-                          className={cn(
-                            "absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full blur-[90px]",
-                            activeIndex === 0 && "bg-[#4FACFE]/10",
-                            activeIndex === 1 && "bg-[#00DBDE]/10",
-                            activeIndex === 2 && "bg-[#415A77]/10",
-                            activeIndex === 3 && "bg-[#43E97B]/10"
-                          )}
-                        />
-                        <motion.div
-                          key={`${activeStep.title}-2`}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.4, delay: 0.1 }}
-                          className={cn(
-                            "absolute -bottom-28 -left-28 w-[480px] h-[480px] rounded-full blur-[100px]",
-                            activeIndex === 0 && "bg-[#00DBDE]/10",
-                            activeIndex === 1 && "bg-[#43E97B]/10",
-                            activeIndex === 2 && "bg-[#4FACFE]/10",
-                            activeIndex === 3 && "bg-[#4FACFE]/10"
-                          )}
-                        />
-                      </AnimatePresence>
-                    </div>
-
-                    <div className="relative p-10 min-h-[340px]">
-                      <AnimatePresence mode="wait" initial={false}>
-                        <motion.div
-                          key={activeStep.title}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                        >
-                          <div className="flex items-start gap-4">
-                            <div
-                              className={cn(
-                                "shrink-0 inline-flex w-14 h-14 rounded-2xl items-center justify-center bg-gradient-to-br",
-                                activeStep.gradient
-                              )}
-                            >
-                              <activeStep.icon className="w-7 h-7 text-white" />
-                            </div>
-
-                            <div className="min-w-0">
-                              <div className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
-                                Etapa {activeIndex + 1} de {steps.length}
-                              </div>
-                              <h3 className="mt-3 text-3xl font-semibold tracking-tight leading-tight">
-                                {activeStep.title}
-                              </h3>
-                              <p className="mt-4 text-base text-muted-foreground leading-relaxed max-w-xl">
-                                {activeStep.description}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Visual detail */}
-                          <div className="mt-10 grid grid-cols-3 gap-4">
-                            {[
-                              { label: "Tempo de integração", value: "Minutos" },
-                              { label: "Controle", value: "Total" },
-                              { label: "Escala", value: "Alta" },
-                            ].map((item) => (
-                              <div
-                                key={item.label}
-                                className="rounded-2xl border border-border/50 bg-white/50 backdrop-blur-xl p-5"
-                              >
-                                <div className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">
-                                  {item.label}
-                                </div>
-                                <div className="mt-2 text-xl font-semibold">{item.value}</div>
-                              </div>
-                            ))}
-                          </div>
-                        </motion.div>
-                      </AnimatePresence>
-                    </div>
-                  </div>
-
-                  {/* Pinned CTA (only when reaching the last step) */}
-                  <AnimatePresence>
-                    {isLastStep && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 12 }}
-                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                        className="mt-6 sticky bottom-8 z-20"
-                        style={{ willChange: "transform, opacity" }}
-                      >
-                        <div className="rounded-3xl border border-border/50 bg-background/80 backdrop-blur-md shadow-[0_24px_70px_rgba(15,23,42,0.14)] p-6 flex items-center justify-between gap-6">
-                          <div className="min-w-0">
-                            <div className="text-sm font-semibold tracking-tight">
-                              Pronto para colocar isso em produção?
-                            </div>
-                            <div className="mt-1 text-sm text-muted-foreground">
-                              Fale com a Kodano e desenhe a arquitetura ideal para o seu fluxo.
-                            </div>
-                          </div>
-
-                          <div className="shrink-0 grid grid-cols-2 gap-3 w-[520px]">
-                            <SquareCTA
-                              href="#contact"
-                              title="Fale com o Kodano"
-                              description="Receba um desenho de arquitetura para o seu fluxo."
-                              gradient="from-[#4FACFE] via-[#00DBDE] to-[#43E97B]"
-                            />
-                            <SquareCTA
-                              href="#concept"
-                              title="Rever benefícios"
-                              description="Volte para os diferenciais e use-cases."
-                              gradient="from-[#415A77] via-[#4FACFE] to-[#00DBDE]"
-                            />
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+        {/* Final CTA */}
+        <motion.div
+          className="mt-8 md:mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <motion.a
+            href="#contact"
+            className={cn(
+              "group relative flex items-center gap-4 p-6 rounded-2xl border border-border/50",
+              "bg-gradient-to-r from-[#4FACFE]/5 via-[#00DBDE]/5 to-[#43E97B]/5",
+              "hover:from-[#4FACFE]/10 hover:via-[#00DBDE]/10 hover:to-[#43E97B]/10",
+              "shadow-lg hover:shadow-xl transition-all duration-300"
+            )}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.99 }}
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4FACFE] via-[#00DBDE] to-[#43E97B] flex items-center justify-center shadow-lg">
+              <ArrowRight className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1">
+              <div className="font-semibold text-lg">Pronto para começar?</div>
+              <div className="text-sm text-muted-foreground">
+                Fale com o Kodano e tenha sua integração rodando em minutos.
               </div>
             </div>
-          </div>
-        ) : (
-          /* Mobile / Reduced Motion: keep timeline */
-          <div className="relative">
-            {/* Connecting Line - Desktop */}
-            <div className="absolute left-6 sm:left-[20px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-border to-transparent md:-translate-x-1/2 hidden md:block" />
-
-            <div className="space-y-10 sm:space-y-12 md:space-y-16">
-              {steps.map((step, i) => {
-                const Icon = step.icon;
-                const isEven = i % 2 === 0;
-
-                return (
-                  <motion.div
-                    key={i}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={isMobile ? mobileViewport : defaultViewport}
-                    variants={isMobile ? fadeInUp : isEven ? slideInLeft : slideInRight}
-                    className={cn(
-                      "relative flex flex-col md:flex-row gap-4 sm:gap-6 md:gap-8",
-                      isEven ? "md:text-right" : "md:flex-row-reverse md:text-left"
-                    )}
-                  >
-                    {/* Content */}
-                    <div
-                      className={cn(
-                        "flex-1 pl-12 sm:pl-14",
-                        isEven ? "md:pl-0 md:pr-12" : "md:pl-12 md:pr-0"
-                      )}
-                    >
-                      {/* Card */}
-                      <motion.div
-                        className={cn(
-                          "p-6 sm:p-8 rounded-2xl bg-card/50 border border-border/50 shadow-lg",
-                          isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
-                        )}
-                        whileHover={
-                          !isMobile
-                            ? {
-                                scale: 1.02,
-                                boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.15)",
-                                transition: {
-                                  duration: 0.3,
-                                  ease: [0.25, 0.1, 0.25, 1],
-                                },
-                              }
-                            : {}
-                        }
-                      >
-                        {/* Icon Badge */}
-                        <div
-                          className={cn(
-                            "inline-flex w-12 h-12 sm:w-14 sm:h-14 rounded-xl items-center justify-center mb-4 bg-gradient-to-br",
-                            step.gradient
-                          )}
-                        >
-                          <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-                        </div>
-
-                        <h3 className="text-lg sm:text-xl font-bold mb-1.5 sm:mb-2">
-                          {step.title}
-                        </h3>
-                        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                          {step.description}
-                        </p>
-                      </motion.div>
-                    </div>
-
-                    {/* Circle Indicator */}
-                    <div className="absolute left-0 md:left-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-background border-2 border-primary flex items-center justify-center z-10 md:-translate-x-1/2 shrink-0">
-                      <motion.div
-                        className={cn(
-                          "w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-gradient-to-br",
-                          step.gradient
-                        )}
-                        initial={{ scale: 0 }}
-                        whileInView={{ scale: 1 }}
-                        viewport={isMobile ? mobileViewport : defaultViewport}
-                        transition={{
-                          delay: 0.2,
-                          type: "spring",
-                          stiffness: 200,
-                          damping: 15,
-                        }}
-                      />
-                    </div>
-
-                    {/* Spacer for desktop alternating layout */}
-                    <div className="flex-1 hidden md:block" />
-                  </motion.div>
-                );
-              })}
+            <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium">
+              Fale Conosco
+              <ArrowRight className="w-4 h-4" />
             </div>
-          </div>
-        )}
-
-        {/* Mobile/Reduced motion CTA (simple) */}
-        {(isMobile || prefersReducedMotion) && (
-          <div className="mt-12 flex justify-center">
-            <div className="w-full max-w-md">
-              <SquareCTA
-                href="#contact"
-                title="Fale com o Kodano"
-                description="Vamos desenhar a arquitetura ideal para sua operação."
-                gradient="from-[#4FACFE] via-[#00DBDE] to-[#43E97B]"
-              />
-            </div>
-          </div>
-        )}
+          </motion.a>
+        </motion.div>
       </div>
     </section>
   );
