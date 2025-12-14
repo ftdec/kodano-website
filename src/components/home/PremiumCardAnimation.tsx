@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
+import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/lib/animations/hooks";
-import PremiumCardCanvas from "./PremiumCardCanvas";
 
 type PerformanceTier = "high" | "medium" | "low";
 
@@ -28,6 +28,11 @@ class CanvasErrorBoundary extends React.Component<
   }
 }
 
+const PremiumCardCanvas = dynamic(() => import("./PremiumCardCanvas"), {
+  ssr: false,
+  loading: () => null,
+});
+
 export function PremiumCardAnimation({ className }: { className?: string }) {
   const prefersReducedMotion = useReducedMotion();
 
@@ -37,7 +42,9 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   const [inView, setInView] = React.useState(true);
   const [canvasError, setCanvasError] = React.useState(false);
   const [debug, setDebug] = React.useState(false);
-  const [canvasVisible, setCanvasVisible] = React.useState(true); // Canvas sempre visível para hero
+  const [canvasReady, setCanvasReady] = React.useState(false);
+  const [show3D, setShow3D] = React.useState(false);
+  const [showSpinner, setShowSpinner] = React.useState(false);
 
   const containerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -49,6 +56,10 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     if (!mounted) return;
     setWebGLSupported(detectWebGLSupport());
     setTier(detectPerformanceTier());
+    // Preload do chunk 3D para reduzir atraso
+    import("./PremiumCardCanvas").catch(() => {
+      /* ignore */
+    });
   }, [mounted]);
 
   // Debug mode: habilita badge via ?cardDebug=1 (inclusive em produção)
@@ -64,7 +75,9 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   // Se o ambiente muda (ou re-monta), limpamos erro anterior do Canvas
   React.useEffect(() => {
     setCanvasError(false);
-    setCanvasVisible(true);
+    setCanvasReady(false);
+    setShow3D(false);
+    setShowSpinner(false);
   }, [mounted, webGLSupported, tier, prefersReducedMotion]);
 
   // IntersectionObserver: anima quando visível, dorme quando fora
@@ -83,10 +96,26 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
 
   const shouldRender3D = mounted && !canvasError && !prefersReducedMotion && tier !== "low" && webGLSupported;
 
+  // Controla spinner: delay anti-flicker (200ms) e só até o 3D estar pronto
+  React.useEffect(() => {
+    if (!shouldRender3D || show3D) {
+      setShowSpinner(false);
+      return;
+    }
+    let cancelled = false;
+    const delay = window.setTimeout(() => {
+      if (!cancelled && !show3D) setShowSpinner(true);
+    }, 200);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(delay);
+    };
+  }, [shouldRender3D, show3D]);
+
   const __DEV_BADGE =
     debug || process.env.NODE_ENV !== "production" ? (
       <div className="absolute top-3 left-3 z-20 text-[11px] px-2 py-1 rounded bg-[#0A1F2C]/70 text-white">
-        {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView} err=${canvasError} canvas=${canvasVisible}`}
+        {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView} err=${canvasError} ready=${canvasReady} show3D=${show3D} spinner=${showSpinner}`}
       </div>
     ) : null;
 
@@ -101,21 +130,44 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     >
       {__DEV_BADGE}
 
-      {/* Canvas direto (hero prioritário); fallback só em edge cases */}
-      {shouldRender3D ? (
-        <div className="absolute inset-0">
+      {/* Poster sempre presente; some só quando o 3D estiver pronto */}
+      <PosterCard
+        className={cn(
+          "absolute inset-0 transition-opacity duration-400",
+          show3D ? "opacity-0" : "opacity-100"
+        )}
+      />
+
+      {/* Spinner ciano (sobreposto) enquanto 3D não pronto */}
+      <CyanSpinner
+        className={cn(
+          "absolute inset-0 transition-opacity duration-200",
+          show3D || !showSpinner ? "opacity-0 pointer-events-none" : "opacity-100"
+        )}
+      />
+
+      {/* Canvas 3D enhancement */}
+      {shouldRender3D && (
+        <div
+          className={cn(
+            "absolute inset-0 transition-opacity duration-400",
+            canvasReady ? "opacity-100" : "opacity-0"
+          )}
+        >
           <CanvasErrorBoundary fallback={null} onError={() => setCanvasError(true)}>
             <PremiumCardCanvas
               performanceTier={tier}
               enableMotion={!prefersReducedMotion}
               inView={inView}
               debug={debug}
-              onReady={() => setCanvasVisible(true)}
+              onReady={() => {
+                setCanvasReady(true);
+                setShow3D(true);
+                setShowSpinner(false);
+              }}
             />
           </CanvasErrorBoundary>
         </div>
-      ) : (
-        <PosterCard className="absolute inset-0" />
       )}
     </div>
   );
@@ -285,4 +337,12 @@ function hexToRgba(hex: string, alpha: number) {
   const g = parseInt(v.slice(2, 4), 16);
   const b = parseInt(v.slice(4, 6), 16);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function CyanSpinner({ className }: { className?: string }) {
+  return (
+    <div className={cn("grid place-items-center", className)} aria-label="Carregando cartão">
+      <div className="h-11 w-11 rounded-full border-[3px] border-[#00C8DC]/25 border-t-[#00C8DC] animate-spin opacity-90" />
+    </div>
+  );
 }

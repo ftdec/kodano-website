@@ -24,6 +24,7 @@ export default function PremiumCardCanvas({
     performanceTier === "high" ? [1, 2] : [1, 1.5];
 
   const readyOnceRef = React.useRef(false);
+  const activeUntilRef = React.useRef<number>(0);
 
   return (
     <Canvas
@@ -34,7 +35,12 @@ export default function PremiumCardCanvas({
         alpha: true,
       }}
       camera={{ fov: 35, position: [0, 0, 8] }}
-      frameloop={inView ? "always" : "demand"}
+      frameloop="demand"
+      onPointerMove={() => {
+        // acorda por 1.8s após movimento
+        const now = performance.now();
+        activeUntilRef.current = Math.max(activeUntilRef.current, now + 1800);
+      }}
       style={{ width: "100%", height: "100%", pointerEvents: "none" }}
       onCreated={() => {
         if (readyOnceRef.current) return;
@@ -47,7 +53,13 @@ export default function PremiumCardCanvas({
       }}
     >
       <color attach="background" args={["#ffffff"]} />
-      <Scene performanceTier={performanceTier} enableMotion={enableMotion} inView={inView} debug={debug} />
+      <Scene
+        performanceTier={performanceTier}
+        enableMotion={enableMotion}
+        inView={inView}
+        debug={debug}
+        activeUntilRef={activeUntilRef}
+      />
     </Canvas>
   );
 }
@@ -57,11 +69,13 @@ function Scene({
   enableMotion,
   inView,
   debug,
+  activeUntilRef,
 }: {
   performanceTier: PerformanceTier;
   enableMotion: boolean;
   inView: boolean;
   debug: boolean;
+  activeUntilRef: React.RefObject<number>;
 }) {
   const groupRef = React.useRef<THREE.Group>(null);
   const cardRef = React.useRef<THREE.Group>(null);
@@ -105,15 +119,20 @@ function Scene({
       const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
       mouseRef.current = { x, y };
+      const now = performance.now();
+      activeUntilRef.current = Math.max(activeUntilRef.current ?? 0, now + 1800);
+      invalidate();
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
     return () => window.removeEventListener("mousemove", onMove);
-  }, [enableMotion, gl.domElement]);
+  }, [enableMotion, gl.domElement, invalidate, activeUntilRef]);
 
   // Setup pose base (sem intro)
   React.useEffect(() => {
     invalidate();
+    const now = performance.now();
+    activeUntilRef.current = Math.max(activeUntilRef.current ?? 0, now + 1600); // janela inicial de animação
 
     if (cardRef.current) {
       cardRef.current.rotation.set(-0.21, 0.314, 0); // -12°, 18°
@@ -123,11 +142,17 @@ function Scene({
     if (cameraRef.current) cameraRef.current.position.z = 7.8;
     sweepRef.current = 0.6;
     invalidate();
-  }, [invalidate]);
+  }, [invalidate, activeUntilRef]);
 
   useFrame((state) => {
     if (!inView) return;
     if (!enableMotion) return;
+
+    // frameloop="demand": só invalida enquanto ativo
+    const now = performance.now();
+    if (activeUntilRef.current && now <= activeUntilRef.current) {
+      invalidate();
+    }
 
     const t = state.clock.elapsedTime;
 
