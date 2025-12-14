@@ -18,17 +18,19 @@ export default function PremiumCardCanvas({
   inView: boolean;
   debug?: boolean;
 }) {
+  const dpr: [number, number] =
+    performanceTier === "high" ? [1, 2] : [1, 1.5];
+
   return (
     <Canvas
-      dpr={[1, 1.5]}
+      dpr={dpr}
       gl={{
-        antialias: true,
+        antialias: performanceTier !== "low",
         powerPreference: "high-performance",
         alpha: true,
       }}
       camera={{ fov: 35, position: [0, 0, 8] }}
-      // P0: manter sempre ativo até estabilizar 100%
-      frameloop="always"
+      frameloop={inView ? "always" : "demand"}
       style={{ width: "100%", height: "100%", pointerEvents: "none" }}
     >
       <Scene performanceTier={performanceTier} enableMotion={enableMotion} inView={inView} debug={debug} />
@@ -49,19 +51,22 @@ function Scene({
 }) {
   const groupRef = React.useRef<THREE.Group>(null);
   const cardRef = React.useRef<THREE.Group>(null);
+  const chipLayerRef = React.useRef<THREE.Group>(null);
+  const textLayerRef = React.useRef<THREE.Group>(null);
+  const logoLayerRef = React.useRef<THREE.Group>(null);
   const sheenMatRef = React.useRef<THREE.ShaderMaterial | null>(null);
   const rimLightRef = React.useRef<THREE.PointLight>(null);
   const glowRef = React.useRef<THREE.Mesh>(null);
   const cameraRef = React.useRef<THREE.PerspectiveCamera | null>(null);
 
-  const { invalidate, camera } = useThree();
+  const { invalidate, camera, gl } = useThree();
 
   const mouseRef = React.useRef({ x: 0, y: 0 });
   const tiltRef = React.useRef({ x: 0, y: 0 });
   const sweepRef = React.useRef(0);
   const t0Ref = React.useRef<number | null>(null);
 
-  const easeOut = (t: number) => 1 - Math.pow(1 - t, 4); // Mais dramático
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
   React.useEffect(() => {
     cameraRef.current = camera as THREE.PerspectiveCamera;
@@ -81,19 +86,20 @@ function Scene({
     invalidate();
   }, [inView, invalidate]);
 
-  // Mouse tracking
+  // Mouse tracking (relativo ao container/canvas, sem depender de pointer events)
   React.useEffect(() => {
     if (!enableMotion) return;
 
     const onMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth) * 2 - 1;
-      const y = -((e.clientY / window.innerHeight) * 2 - 1);
+      const rect = gl.domElement.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
       mouseRef.current = { x, y };
     };
 
     window.addEventListener("mousemove", onMove, { passive: true });
     return () => window.removeEventListener("mousemove", onMove);
-  }, [enableMotion]);
+  }, [enableMotion, gl.domElement]);
 
   // Intro setup
   React.useEffect(() => {
@@ -120,13 +126,13 @@ function Scene({
 
     const t = state.clock.elapsedTime;
 
-    // INTRO DRAMÁTICO (0-1s)
+    // INTRO cinematográfico (0–1.2s)
     const t0 = t0Ref.current ?? now;
-    const introT = THREE.MathUtils.clamp((now - t0) / 1000, 0, 1); // Mais rápido
-    const k = easeOut(introT);
+    const introT = THREE.MathUtils.clamp((now - t0) / 1200, 0, 1);
+    const k = easeOutCubic(introT);
 
-    // Camera zoom dramático
-    if (cameraRef.current) cameraRef.current.position.z = THREE.MathUtils.lerp(14, 10, k);
+    // Dolly sutil (filmic)
+    if (cameraRef.current) cameraRef.current.position.z = THREE.MathUtils.lerp(10.5, 8.8, k);
 
     if (cardRef.current) {
       const g = cardRef.current;
@@ -135,40 +141,50 @@ function Scene({
       const mx = THREE.MathUtils.clamp(mouseRef.current.x, -1, 1);
       const my = THREE.MathUtils.clamp(mouseRef.current.y, -1, 1);
 
-      // Mouse tilt <= ±5° (≈0.087rad)
-      const targetX = my * 0.087;
-      const targetY = mx * 0.087;
+      // Mouse tilt <= ±6° (≈0.105rad)
+      const targetX = my * 0.105;
+      const targetY = mx * 0.105;
 
       tiltRef.current.x = THREE.MathUtils.lerp(tiltRef.current.x, targetX, 0.08);
       tiltRef.current.y = THREE.MathUtils.lerp(tiltRef.current.y, targetY, 0.08);
 
-      // Safe zone: o cartão sempre nasce em [0, 0, 0]
-      const basePosZ = 0;
-      const basePosY = 0;
+      // Intro: z-in + rotate + scale → pose 3/4
+      const basePosZ = THREE.MathUtils.lerp(-2.0, 0.0, k);
+      const baseRotX = THREE.MathUtils.lerp(0.28, -0.15, k);
+      const baseRotY = THREE.MathUtils.lerp(0.75, 0.38, k);
+      const baseRotZ = THREE.MathUtils.lerp(0.08, 0.0, k);
 
-      const baseRotX = THREE.MathUtils.lerp(Math.PI * 0.5, -0.15, k);
-      const baseRotY = THREE.MathUtils.lerp(-Math.PI * 0.3, 0.4, k);
-      const baseRotZ = THREE.MathUtils.lerp(0.3, 0, k);
-
-      // Scale punch GRANDE
-      const scale = THREE.MathUtils.lerp(0.5, 1, k);
+      const scale = THREE.MathUtils.lerp(0.92, 1.0, k);
       g.scale.setScalar(scale);
 
-      // IDLE visível (quando motion habilitado e device OK)
+      // Idle sutil (premium)
       const idleBlend = performanceTier !== "low" ? 1 : 0;
-      const floatY = Math.sin(t * 0.5) * 0.25 * idleBlend; // 3x maior (spec)
-      const floatZ = Math.cos(t * 0.3) * 0.15 * idleBlend; // Z float (spec)
+      const floatY = Math.sin(t * 0.5) * 0.06 * idleBlend;
+      const floatZ = Math.cos(t * 0.35) * 0.02 * idleBlend;
+      const microRot = Math.sin(t * 0.35) * 0.015 * idleBlend;
 
-      const rotX = Math.sin(t * 0.2) * 0.15 * idleBlend; // (spec)
-      const rotY = Math.cos(t * 0.25) * 0.2 * idleBlend; // (spec)
-      const rotZ = Math.sin(t * 0.15) * 0.08 * idleBlend; // (spec)
-
-      g.position.set(0, basePosY + floatY, basePosZ + floatZ);
+      g.position.set(0, floatY, basePosZ + floatZ);
       g.rotation.set(
-        baseRotX + rotX + tiltRef.current.x,
-        baseRotY + rotY + tiltRef.current.y,
-        baseRotZ + rotZ
+        baseRotX + microRot + tiltRef.current.x,
+        baseRotY + microRot * 0.35 + tiltRef.current.y,
+        baseRotZ
       );
+
+      // Parallax por layers (extras sobre o tilt base)
+      const tx = tiltRef.current.x;
+      const ty = tiltRef.current.y;
+      if (chipLayerRef.current) {
+        chipLayerRef.current.rotation.x = tx * 0.1;
+        chipLayerRef.current.rotation.y = ty * 0.1;
+      }
+      if (textLayerRef.current) {
+        textLayerRef.current.rotation.x = tx * 0.15;
+        textLayerRef.current.rotation.y = ty * 0.15;
+      }
+      if (logoLayerRef.current) {
+        logoLayerRef.current.rotation.x = tx * 0.12;
+        logoLayerRef.current.rotation.y = ty * 0.12;
+      }
 
       // Sheen update
       if (sheenMatRef.current) {
@@ -190,19 +206,33 @@ function Scene({
 
     // Breathing light DRAMÁTICO
     if (rimLightRef.current && performanceTier !== "low") {
-      const breathing = Math.sin(t * 0.8) * 0.6 + 1.2;
-      rimLightRef.current.intensity = 2 * breathing;
+      const breathing = Math.sin(t * 0.7) * 0.25 + 1.0;
+      rimLightRef.current.intensity = 2.0 * breathing;
     }
   });
 
   return (
     <group ref={groupRef}>
-      {/* Luzes mais dramáticas */}
-      <ambientLight intensity={0.5} />
-      <hemisphereLight intensity={0.4} groundColor={"#0a1f2e"} />
-      <pointLight position={[6, 6, 8]} intensity={2.5} color="#ffffff" />
-      <pointLight position={[-5, -3, 6]} intensity={1.2} color="#4facfe" />
-      <pointLight ref={rimLightRef} position={[5, 4, -4]} intensity={2} color="#00dbde" />
+      {/* Lighting cinematográfica (3-point + rim) */}
+      <ambientLight intensity={0.35} />
+      <hemisphereLight intensity={0.25} groundColor={"#07141d"} />
+      <pointLight position={[5, 4, 8]} intensity={2.4} color="#ffffff" />
+      <pointLight position={[-6, -2, 6]} intensity={0.9} color="#cfe9ff" />
+      <pointLight ref={rimLightRef} position={[4, 3, -4]} intensity={2.0} color="#4facfe" />
+
+      {/* Background volume sutil */}
+      <mesh position={[0, 0, -3.2]}>
+        <planeGeometry args={[14, 10]} />
+        <meshStandardMaterial
+          color="#050b12"
+          emissive="#0b1b2a"
+          emissiveIntensity={0.9}
+          transparent
+          opacity={0.55}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </mesh>
 
       {/* Sanity mesh (debug): confirma pipeline/câmera */}
       {debug && (
@@ -213,7 +243,14 @@ function Scene({
       )}
 
       <group ref={cardRef}>
-        <CreditCard3D performanceTier={performanceTier} sheenMatRef={sheenMatRef} glowRef={glowRef} />
+        <CreditCard3D
+          performanceTier={performanceTier}
+          sheenMatRef={sheenMatRef}
+          glowRef={glowRef}
+          chipLayerRef={chipLayerRef}
+          textLayerRef={textLayerRef}
+          logoLayerRef={logoLayerRef}
+        />
       </group>
 
       {/* ContactShadows */}
@@ -235,10 +272,16 @@ function CreditCard3D({
   performanceTier,
   sheenMatRef,
   glowRef,
+  chipLayerRef,
+  textLayerRef,
+  logoLayerRef,
 }: {
   performanceTier: "high" | "medium" | "low";
   sheenMatRef: React.RefObject<THREE.ShaderMaterial | null>;
   glowRef: React.RefObject<THREE.Mesh | null>;
+  chipLayerRef: React.RefObject<THREE.Group | null>;
+  textLayerRef: React.RefObject<THREE.Group | null>;
+  logoLayerRef: React.RefObject<THREE.Group | null>;
 }) {
   // Carregar logo Kodano (com fallback se falhar)
   const [logoTexture, setLogoTexture] = React.useState<THREE.Texture | null>(null);
@@ -258,25 +301,23 @@ function CreditCard3D({
 
   const baseMat = React.useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
-      metalness: 0.4,
-      roughness: 0.2,
-      clearcoat: 0.3,
-      clearcoatRoughness: 0.25,
-      envMapIntensity: 1.2,
-      color: new THREE.Color("#1a2332"), // Mais escuro para contraste
+      metalness: 0.25,
+      roughness: 0.22,
+      clearcoat: 0.55,
+      clearcoatRoughness: 0.15,
+      envMapIntensity: 1.1,
+      color: new THREE.Color("#10161f"),
     });
   }, []);
 
   const chipMat = React.useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
-      metalness: 1,
-      roughness: 0.05,
-      clearcoat: 0.5,
-      clearcoatRoughness: 0.1,
-      envMapIntensity: 1.5,
-      color: new THREE.Color("#ffd700"), // Ouro verdadeiro
-      emissive: new THREE.Color("#ff8c00"),
-      emissiveIntensity: 0.3,
+      metalness: 0.95,
+      roughness: 0.08,
+      clearcoat: 0.35,
+      clearcoatRoughness: 0.18,
+      envMapIntensity: 1.2,
+      color: new THREE.Color("#d6b15a"),
     });
   }, []);
 
@@ -317,120 +358,106 @@ function CreditCard3D({
       )}
 
       {/* Base do cartão */}
-      <RoundedBox args={[4.2, 2.6, 0.15]} radius={0.15} smoothness={6}>
+      <RoundedBox args={[4.2, 2.6, 0.16]} radius={0.22} smoothness={12}>
         <primitive object={baseMat} attach="material" />
       </RoundedBox>
 
-      {/* Overlay gradiente VIBRANTE */}
-      <mesh position={[0, 0, 0.076]}>
-        <planeGeometry args={[4.15, 2.55]} />
-        <meshPhysicalMaterial
-          color="#2a3f5f"
-          metalness={0.6}
-          roughness={0.15}
-          clearcoat={0.4}
-          transparent
-          opacity={0.9}
-          emissive="#4facfe"
-          emissiveIntensity={0.2}
-        />
-      </mesh>
+      {/* Top coat / sheen view-dependent (rounded, não "overlay chapado") */}
+      <group position={[0, 0, 0.085]}>
+        <RoundedBox args={[4.16, 2.56, 0.002]} radius={0.22} smoothness={10}>
+          <primitive object={sheenMaterial} attach="material" />
+        </RoundedBox>
+      </group>
 
-      {/* Sheen holográfico */}
-      <mesh position={[0, 0, 0.08]}>
-        <planeGeometry args={[4.15, 2.55]} />
-        <primitive object={sheenMaterial} attach="material" />
-      </mesh>
+      {/* LOGO LAYER (parallax leve) */}
+      <group ref={logoLayerRef} position={[0, 0, 0.01]}>
+        {logoTexture && (
+          <mesh position={[0, 0.62, 0.085]}>
+            <planeGeometry args={[1.8, 0.52]} />
+            <meshBasicMaterial map={logoTexture} transparent opacity={0.92} toneMapped={false} />
+          </mesh>
+        )}
 
-      {/* LOGO KODANO (centro-superior) */}
-      {logoTexture && (
-        <mesh position={[0, 0.6, 0.09]}>
-          <planeGeometry args={[2, 0.6]} />
-          <meshBasicMaterial
-            map={logoTexture}
-            transparent
-            opacity={0.95}
-            toneMapped={false}
-          />
-        </mesh>
-      )}
-
-      {/* Fallback: texto KODANO se logo não carregar */}
-      {!logoTexture && (
-        <Text
-          fontSize={0.35}
-          color={"#4facfe"}
-          anchorX="center"
-          anchorY="middle"
-          position={[0, 0.6, 0.09]}
-          font="/fonts/Inter-SemiBold.ttf"
-          outlineWidth={0.01}
-          outlineColor="#000000"
-        >
-          {"KODANO"}
-        </Text>
-      )}
+        {!logoTexture && (
+          <Text
+            fontSize={0.32}
+            color={"#D8F6FB"}
+            fillOpacity={0.9}
+            anchorX="center"
+            anchorY="middle"
+            position={[0, 0.62, 0.085]}
+            font="/fonts/Inter-SemiBold.ttf"
+          >
+            {"KODANO"}
+          </Text>
+        )}
+      </group>
 
       {/* Chip EMV */}
-      <group position={[-1.25, -0.1, 0.09]}>
-        <RoundedBox args={[0.95, 0.75, 0.08]} radius={0.08} smoothness={4}>
-          <primitive object={chipMat} attach="material" />
-        </RoundedBox>
+      <group ref={chipLayerRef} position={[0, 0, 0.02]}>
+        <group position={[-1.25, -0.1, 0.085]}>
+          <RoundedBox args={[0.95, 0.75, 0.09]} radius={0.09} smoothness={8}>
+            <primitive object={chipMat} attach="material" />
+          </RoundedBox>
 
-        {/* Contactos do chip */}
-        {Array.from({ length: 9 }).map((_, i) => {
-          const row = Math.floor(i / 3);
-          const col = i % 3;
-          return (
-            <mesh
-              key={i}
-              position={[-0.28 + col * 0.28, 0.2 - row * 0.2, 0.045]}
-              scale={[0.18, 0.12, 0.02]}
-            >
-              <boxGeometry />
-              <primitive object={goldMat} attach="material" />
-            </mesh>
-          );
-        })}
+          {/* Contactos do chip (micro relevo) */}
+          {Array.from({ length: 9 }).map((_, i) => {
+            const row = Math.floor(i / 3);
+            const col = i % 3;
+            return (
+              <mesh
+                key={i}
+                position={[-0.28 + col * 0.28, 0.2 - row * 0.2, 0.06]}
+                scale={[0.18, 0.12, 0.02]}
+              >
+                <boxGeometry />
+                <primitive object={goldMat} attach="material" />
+              </mesh>
+            );
+          })}
+        </group>
       </group>
 
       {/* Número do cartão */}
-      <group position={[0, -0.5, 0.09]}>
+      <group ref={textLayerRef} position={[0, 0, 0.01]}>
+        <group position={[0, -0.48, 0.085]}>
+          <Text
+            fontSize={0.19}
+            color={"#D8F6FB"}
+            fillOpacity={0.86}
+            anchorX="center"
+            anchorY="middle"
+            letterSpacing={0.095}
+            font="/fonts/Inter-SemiBold.ttf"
+          >
+            {"4532  ••••  ••••  9010"}
+          </Text>
+        </group>
+
         <Text
-          fontSize={0.2}
-          color={"#ffffff"}
-          anchorX="center"
+          fontSize={0.12}
+          color={"#D8F6FB"}
+          fillOpacity={0.72}
+          anchorX="left"
           anchorY="middle"
-          letterSpacing={0.1}
+          position={[-1.8, -0.9, 0.085]}
           font="/fonts/Inter-SemiBold.ttf"
         >
-          {"4532  ••••  ••••  9010"}
+          {"KODANO DEMO"}
+        </Text>
+
+        <Text
+          fontSize={0.12}
+          color={"#D8F6FB"}
+          fillOpacity={0.72}
+          anchorX="right"
+          anchorY="middle"
+          position={[1.8, -0.9, 0.085]}
+          font="/fonts/Inter-SemiBold.ttf"
+        >
+          {"12/28"}
         </Text>
       </group>
-
-      {/* Info do titular */}
-      <Text
-        fontSize={0.12}
-        color={"#b0c4de"}
-        anchorX="left"
-        anchorY="middle"
-        position={[-1.8, -0.9, 0.09]}
-        font="/fonts/Inter-SemiBold.ttf"
-      >
-        {"KODANO DEMO"}
-      </Text>
-
-      {/* Validade */}
-      <Text
-        fontSize={0.12}
-        color={"#b0c4de"}
-        anchorX="right"
-        anchorY="middle"
-        position={[1.8, -0.9, 0.09]}
-        font="/fonts/Inter-SemiBold.ttf"
-      >
-        {"12/28"}
-      </Text>
 
       {/* Badges Kodano (canto inferior direito) */}
       <group position={[1.6, 0.3, 0.09]}>
@@ -536,10 +563,10 @@ function createSheenMaterial() {
 
         a = saturate(a);
         a = pow(a, 1.1);
-        // Shader safety: modela alpha e garante visibilidade sem "lavar"
+        // Sheen premium: view-dependent, sem "washout" (alpha máx ~0.25)
         a *= 0.55;
         a = smoothstep(0.02, 0.9, a);
-        a = max(a, 0.06);
+        a = clamp(a, 0.0, 0.25);
 
         vec3 color = mix(vec3(0.29, 0.68, 1.0), vec3(0.0, 0.86, 0.87), fresnel);
 
