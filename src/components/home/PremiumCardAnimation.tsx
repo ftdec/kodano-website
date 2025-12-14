@@ -102,14 +102,12 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
       {__DEV_BADGE}
 
       {/* Poster sempre presente no primeiro paint (zero flash) */}
-      <PosterCard className={cn("absolute inset-0 transition-opacity duration-300", canvasVisible ? "opacity-0" : "opacity-100")} />
-
-      {/* Fallback explícito se o 3D não deve/pode rodar */}
-      {!shouldRender3D && (
-        <div className="absolute top-5 left-5 z-10 rounded-full border border-[#0A1F2C]/10 bg-white/70 px-3 py-1 text-[11px] text-[#0A1F2C]/80 backdrop-blur">
-          Visualização simplificada
-        </div>
-      )}
+      <PosterCard
+        className={cn(
+          "absolute inset-0 transition-opacity duration-300",
+          canvasVisible ? "opacity-0" : "opacity-100"
+        )}
+      />
 
       {/* 3D por cima com fade-in quando pronto */}
       {shouldRender3D && (
@@ -167,53 +165,132 @@ function detectPerformanceTier(): PerformanceTier {
 }
 
 function PosterCard({ className }: { className?: string }) {
-  return (
-    <div className={cn("absolute inset-0 flex items-center justify-center rounded-3xl bg-white", className)}>
-      {/* Halo */}
-      <div className="absolute inset-0 rounded-3xl overflow-hidden">
-        <div
-          className="absolute inset-[-20%]"
-          style={{
-            background:
-              "radial-gradient(60% 60% at 70% 30%, rgba(79,172,254,0.25), rgba(47,230,200,0.12), transparent 70%)",
-            filter: "blur(40px)",
-          }}
-        />
-      </div>
+  // Kodano Core
+  const KODANO_BLUE = "#4FACFE";
+  const KODANO_TEAL = "#2FE6C8";
+  const KODANO_WHITE = "#FFFFFF";
+  const KODANO_MUTED = "#A8C5D1";
 
-      {/* Card */}
+  // Kodano card base (definitivo)
+  const CARD_NAVY_1 = "#002A35";
+  const CARD_NAVY_2 = "#003F4D";
+  const CARD_HIGHLIGHT = "#00C8DC";
+
+  return (
+    <div
+      className={className}
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: KODANO_WHITE,
+        borderRadius: 24,
+        overflow: "hidden",
+      }}
+    >
+      {/* Halo (ambiente, não “card dentro de card”) */}
       <div
-        className="relative w-[78%] aspect-[1.6/1] rounded-2xl p-6"
         style={{
-          background: "linear-gradient(135deg, #0A1F2C 0%, #0D2C3F 45%, #071821 100%)",
-          boxShadow: "0 30px 80px rgba(10,31,44,0.45)",
+          position: "absolute",
+          inset: -80,
+          background: `radial-gradient(60% 60% at 70% 30%, ${hexToRgba(KODANO_BLUE, 0.25)}, ${hexToRgba(
+            KODANO_TEAL,
+            0.12
+          )}, transparent 70%)`,
+          filter: "blur(40px)",
+        }}
+      />
+
+      {/* Card (static-first) */}
+      <div
+        style={{
+          position: "relative",
+          width: "78%",
+          maxWidth: 520,
+          aspectRatio: "1.6 / 1",
+          borderRadius: 18,
+          padding: 24,
+          background: `linear-gradient(135deg, ${CARD_NAVY_1} 0%, ${CARD_NAVY_2} 100%)`,
+          boxShadow: `0 40px 80px ${hexToRgba(CARD_NAVY_1, 0.08)}, 0 12px 24px ${hexToRgba(CARD_NAVY_1, 0.06)}`,
         }}
       >
-        {/* Logo */}
-        <div className="absolute top-5 right-6 text-white" style={{ opacity: 0.85 }}>
+        {/* Highlight sheen */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 1,
+            borderRadius: 17,
+            background: `radial-gradient(60% 55% at 25% 25%, ${hexToRgba("#ffffff", 0.10)}, transparent 60%), radial-gradient(60% 60% at 80% 40%, ${hexToRgba(
+              CARD_HIGHLIGHT,
+              0.10
+            )}, transparent 65%)`,
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* Logo (nunca branco puro) */}
+        <div
+          style={{
+            position: "absolute",
+            top: 18,
+            right: 22,
+            color: "#CFEFFF",
+            opacity: 0.85,
+            letterSpacing: "0.22em",
+            fontWeight: 600,
+            fontSize: 12,
+            filter: `drop-shadow(0 2px 8px ${hexToRgba(KODANO_BLUE, 0.25)})`,
+          }}
+        >
           KODANO
         </div>
 
-        {/* Chip */}
+        {/* Chip (tech Kodano, não laranja) */}
         <div
-          className="w-12 h-9 rounded-md"
           style={{
-            background: "linear-gradient(135deg, #4FACFE, #2FE6C8)",
-            boxShadow:
-              "inset 0 0 0 1px rgba(255,255,255,0.25), 0 4px 12px rgba(47,230,200,0.35)",
+            width: 48,
+            height: 36,
+            borderRadius: 10,
+            background: `linear-gradient(135deg, ${KODANO_BLUE}, ${KODANO_TEAL})`,
+            boxShadow: `inset 0 0 0 1px ${hexToRgba("#ffffff", 0.25)}, 0 4px 12px ${hexToRgba(KODANO_TEAL, 0.35)}`,
           }}
         />
 
-        {/* Number */}
-        <div className="mt-8 text-white tracking-[0.18em] text-sm opacity-95">
+        {/* Número */}
+        <div
+          style={{
+            marginTop: 32,
+            color: hexToRgba("#ffffff", 0.92),
+            letterSpacing: "0.18em",
+            fontWeight: 500,
+            fontSize: 13,
+          }}
+        >
           4532 •••• •••• 9010
         </div>
 
-        {/* Name */}
-        <div className="mt-2 text-xs text-[#A8C5D1]">
+        {/* Nome */}
+        <div
+          style={{
+            marginTop: 8,
+            color: hexToRgba(KODANO_MUTED, 0.9),
+            fontSize: 12,
+            letterSpacing: "0.06em",
+          }}
+        >
           KODANO DEMO
         </div>
       </div>
     </div>
   );
+}
+
+function hexToRgba(hex: string, alpha: number) {
+  const v = hex.replace("#", "").trim();
+  const r = parseInt(v.slice(0, 2), 16);
+  const g = parseInt(v.slice(2, 4), 16);
+  const b = parseInt(v.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }

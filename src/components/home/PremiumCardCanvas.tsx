@@ -70,8 +70,6 @@ function Scene({
   const logoLayerRef = React.useRef<THREE.Group>(null);
   const sheenMatRef = React.useRef<THREE.ShaderMaterial | null>(null);
   const rimLightRef = React.useRef<THREE.PointLight>(null);
-  const auraMainRef = React.useRef<THREE.Mesh>(null);
-  const auraSecondaryRef = React.useRef<THREE.Mesh>(null);
   const cameraRef = React.useRef<THREE.PerspectiveCamera | null>(null);
 
   const { invalidate, camera, gl } = useThree();
@@ -80,8 +78,6 @@ function Scene({
   const tiltRef = React.useRef({ x: 0, y: 0 });
   const sweepRef = React.useRef(0);
   const t0Ref = React.useRef<number | null>(null);
-
-  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
   React.useEffect(() => {
     cameraRef.current = camera as THREE.PerspectiveCamera;
@@ -125,29 +121,20 @@ function Scene({
       sweepRef.current = 0;
     } else {
       if (cardRef.current) {
-        cardRef.current.rotation.set(-0.15, 0.4, 0);
+        cardRef.current.rotation.set(-0.15, 0.38, 0);
         cardRef.current.position.set(0, 0, 0);
+        cardRef.current.scale.setScalar(1);
       }
-      if (cameraRef.current) cameraRef.current.position.z = 10;
+      if (cameraRef.current) cameraRef.current.position.z = 8;
       invalidate();
     }
   }, [enableMotion, invalidate]);
 
   useFrame((state) => {
-    const now = performance.now();
-
     if (!inView) return;
     if (!enableMotion) return;
 
     const t = state.clock.elapsedTime;
-
-    // INTRO cinematográfico (0–1.2s)
-    const t0 = t0Ref.current ?? now;
-    const introT = THREE.MathUtils.clamp((now - t0) / 1200, 0, 1);
-    const k = easeOutCubic(introT);
-
-    // Dolly sutil (filmic)
-    if (cameraRef.current) cameraRef.current.position.z = THREE.MathUtils.lerp(10.5, 8.8, k);
 
     if (cardRef.current) {
       const g = cardRef.current;
@@ -156,32 +143,30 @@ function Scene({
       const mx = THREE.MathUtils.clamp(mouseRef.current.x, -1, 1);
       const my = THREE.MathUtils.clamp(mouseRef.current.y, -1, 1);
 
-      // Mouse tilt <= ±6° (≈0.105rad)
-      const targetX = my * 0.105;
-      const targetY = mx * 0.105;
+      // Tilt máximo ~4° (≈0.07rad)
+      const targetX = my * 0.07;
+      const targetY = mx * 0.07;
 
       tiltRef.current.x = THREE.MathUtils.lerp(tiltRef.current.x, targetX, 0.08);
       tiltRef.current.y = THREE.MathUtils.lerp(tiltRef.current.y, targetY, 0.08);
 
-      // Intro: z-in + rotate + scale → pose 3/4
-      const basePosZ = THREE.MathUtils.lerp(-2.0, 0.0, k);
-      const baseRotX = THREE.MathUtils.lerp(0.28, -0.15, k);
-      const baseRotY = THREE.MathUtils.lerp(0.75, 0.38, k);
-      const baseRotZ = THREE.MathUtils.lerp(0.08, 0.0, k);
-
-      const scale = THREE.MathUtils.lerp(0.92, 1.0, k);
-      g.scale.setScalar(scale);
+      // Pose hero persistente (sem entrada)
+      const basePosZ = 0;
+      const baseRotX = -0.15;
+      const baseRotY = 0.38;
+      const baseRotZ = 0.0;
+      g.scale.setScalar(1);
 
       // Idle sutil (premium)
       const idleBlend = performanceTier !== "low" ? 1 : 0;
-      const floatY = Math.sin(t * 0.5) * 0.06 * idleBlend;
-      const floatZ = Math.cos(t * 0.35) * 0.02 * idleBlend;
-      const microRot = Math.sin(t * 0.35) * 0.015 * idleBlend;
+      const floatY = Math.sin(t * 0.35) * 0.04 * idleBlend;
+      const floatZ = Math.cos(t * 0.25) * 0.015 * idleBlend;
+      const microRot = Math.sin(t * 0.25) * 0.035 * idleBlend; // ~2°
 
       g.position.set(0, floatY, basePosZ + floatZ);
       g.rotation.set(
         baseRotX + microRot + tiltRef.current.x,
-        baseRotY + microRot * 0.35 + tiltRef.current.y,
+        baseRotY + microRot * 0.25 + tiltRef.current.y,
         baseRotZ
       );
 
@@ -204,72 +189,28 @@ function Scene({
       // Sheen update
       if (sheenMatRef.current) {
         sheenMatRef.current.uniforms.uMouse.value.set(mx, my);
-        sweepRef.current = THREE.MathUtils.lerp(sweepRef.current, introT, 0.1);
+        // Sem sweep de intro: mantém sheen vivo porém sutil
+        sweepRef.current = THREE.MathUtils.lerp(sweepRef.current, 1, 0.02);
         sheenMatRef.current.uniforms.uSweep.value = sweepRef.current;
         sheenMatRef.current.uniforms.uTime.value = t;
       }
     }
 
-    // Glow pulsante MUITO visível
-    if (performanceTier !== "low") {
-      const pulse = Math.sin(t * 0.65) * 0.5 + 0.5; // mais lento e elegante
-      const s = 1 + pulse * 0.03;
-
-      if (auraMainRef.current) {
-        auraMainRef.current.scale.set(s, s, 1);
-        const mat = auraMainRef.current.material as THREE.MeshStandardMaterial;
-        mat.opacity = 0.07 + pulse * 0.02;
-      }
-      if (auraSecondaryRef.current) {
-        auraSecondaryRef.current.scale.set(s * 0.98, s * 0.98, 1);
-        const mat = auraSecondaryRef.current.material as THREE.MeshStandardMaterial;
-        mat.opacity = 0.05 + pulse * 0.015;
-      }
-    }
-
-    // Breathing light DRAMÁTICO
+    // Breathing light (bem sutil)
     if (rimLightRef.current && performanceTier !== "low") {
-      const breathing = Math.sin(t * 0.7) * 0.25 + 1.0;
-      rimLightRef.current.intensity = 2.0 * breathing;
+      const breathing = Math.sin(t * 0.25) * 0.25 + 1.0;
+      rimLightRef.current.intensity = 1.4 * breathing;
     }
   });
 
   return (
     <group ref={groupRef}>
-      {/* Lighting cinematográfica (3-point + rim) */}
-      <ambientLight intensity={0.6} />
-      <hemisphereLight intensity={0.25} groundColor={"#e7f7f6"} />
-      <pointLight position={[5, 4, 8]} intensity={2.0} color="#ffffff" />
-      <pointLight position={[-6, -2, 6]} intensity={1.2} color="#eaf7ff" />
-      <pointLight ref={rimLightRef} position={[4, 3, -4]} intensity={1.6} color="#0EA5A4" />
-
-      {/* Aura Kodano suave (white premium background) */}
-      <mesh ref={auraMainRef} position={[0, 0, -4]} scale={[12, 8, 1]}>
-        <planeGeometry args={[1, 1]} />
-        <meshStandardMaterial
-          color="#0EA5A4"
-          emissive="#0EA5A4"
-          emissiveIntensity={0.25}
-          transparent
-          opacity={0.08}
-          depthWrite={false}
-          toneMapped={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-      <mesh ref={auraSecondaryRef} position={[1.5, -1, -4.5]} scale={[12, 8, 1]}>
-        <planeGeometry args={[1, 1]} />
-        <meshStandardMaterial
-          color="#7FE3E1"
-          emissive="#7FE3E1"
-          emissiveIntensity={0.22}
-          transparent
-          opacity={0.06}
-          depthWrite={false}
-          toneMapped={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
+      {/* Lighting clean (hero branco) */}
+      <ambientLight intensity={0.55} />
+      <hemisphereLight intensity={0.2} groundColor={"#f5fbff"} />
+      <pointLight position={[5, 4, 8]} intensity={1.6} color="#ffffff" />
+      <pointLight position={[-6, -2, 6]} intensity={1.1} color="#eaf7ff" />
+      <pointLight ref={rimLightRef} position={[4, 3, -4]} intensity={1.4} color="#4FACFE" />
 
       {/* Sanity mesh (debug): confirma pipeline/câmera */}
       {debug && (
@@ -292,7 +233,7 @@ function Scene({
       {performanceTier !== "low" && (
         <ContactShadows
           position={[0, -1.4, 0]}
-          opacity={0.5}
+          opacity={0.25}
           scale={10}
           blur={3}
           far={4}
@@ -333,11 +274,11 @@ function CreditCard3D({
   const baseMat = React.useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
       metalness: 0.25,
-      roughness: 0.22,
-      clearcoat: 0.4,
-      clearcoatRoughness: 0.25,
-      envMapIntensity: 1.1,
-      color: new THREE.Color("#10161f"),
+      roughness: 0.35,
+      clearcoat: 0.25,
+      clearcoatRoughness: 0.3,
+      envMapIntensity: 1.0,
+      color: new THREE.Color("#003F4D"),
     });
   }, []);
 
@@ -392,11 +333,11 @@ function CreditCard3D({
               map={logoTexture}
               transparent
               opacity={0.9}
-              color="#6FBFBF"
+              color="#00C8DC"
               metalness={0}
-              roughness={0.75}
-              emissive="#000000"
-              emissiveIntensity={0}
+              roughness={0.9}
+              emissive="#00C8DC"
+              emissiveIntensity={0.05}
               depthWrite={false}
               toneMapped={false}
             />
@@ -406,8 +347,8 @@ function CreditCard3D({
         {!logoTexture && (
           <Text
             fontSize={0.32}
-            color={"#6FBFBF"}
-            fillOpacity={0.85}
+            color={"#00C8DC"}
+            fillOpacity={0.9}
             anchorX="center"
             anchorY="middle"
             position={[0, 0.62, 0.085]}
