@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { RoundedBox, Text, Environment, ContactShadows, useTexture } from "@react-three/drei";
+import { RoundedBox, Text, Environment, ContactShadows } from "@react-three/drei";
 
 type PerformanceTier = "high" | "medium" | "low";
 
@@ -229,8 +229,21 @@ function CreditCard3D({
   sheenMatRef: React.RefObject<THREE.ShaderMaterial | null>;
   glowRef: React.RefObject<THREE.Mesh | null>;
 }) {
-  // Carregar logo Kodano
-  const logoTexture = useTexture("/kodano-logo.png");
+  // Carregar logo Kodano (com fallback se falhar)
+  const [logoTexture, setLogoTexture] = React.useState<THREE.Texture | null>(null);
+
+  React.useEffect(() => {
+    const loader = new THREE.TextureLoader();
+    loader.load(
+      "/kodano-logo.png",
+      (texture) => setLogoTexture(texture),
+      undefined,
+      (error) => {
+        console.warn("Failed to load Kodano logo:", error);
+        setLogoTexture(null);
+      }
+    );
+  }, []);
 
   const baseMat = React.useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
@@ -319,15 +332,33 @@ function CreditCard3D({
       </mesh>
 
       {/* LOGO KODANO (centro-superior) */}
-      <mesh position={[0, 0.6, 0.09]}>
-        <planeGeometry args={[2, 0.6]} />
-        <meshBasicMaterial
-          map={logoTexture}
-          transparent
-          opacity={0.95}
-          toneMapped={false}
-        />
-      </mesh>
+      {logoTexture && (
+        <mesh position={[0, 0.6, 0.09]}>
+          <planeGeometry args={[2, 0.6]} />
+          <meshBasicMaterial
+            map={logoTexture}
+            transparent
+            opacity={0.95}
+            toneMapped={false}
+          />
+        </mesh>
+      )}
+
+      {/* Fallback: texto KODANO se logo não carregar */}
+      {!logoTexture && (
+        <Text
+          fontSize={0.35}
+          color={"#4facfe"}
+          anchorX="center"
+          anchorY="middle"
+          position={[0, 0.6, 0.09]}
+          font="/fonts/Inter-Bold.ttf"
+          outlineWidth={0.01}
+          outlineColor="#000000"
+        >
+          {"KODANO"}
+        </Text>
+      )}
 
       {/* Chip EMV */}
       <group position={[-1.25, -0.1, 0.09]}>
