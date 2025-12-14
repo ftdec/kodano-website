@@ -85,7 +85,7 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
 
   const __DEV_BADGE =
     debug || process.env.NODE_ENV !== "production" ? (
-      <div className="absolute top-3 left-3 z-20 text-[11px] px-2 py-1 rounded bg-black/60 text-white">
+      <div className="absolute top-3 left-3 z-20 text-[11px] px-2 py-1 rounded bg-[#0A1F2C]/70 text-white">
         {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView} err=${canvasError} canvas=${canvasVisible}`}
       </div>
     ) : null;
@@ -94,7 +94,7 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full aspect-[1.1/1] rounded-3xl overflow-hidden bg-gradient-to-br from-[#061E26] via-[#072A35] to-[#0B2A35]",
+        "relative w-full aspect-[1.1/1] rounded-3xl overflow-hidden bg-white",
         className
       )}
       style={{ touchAction: "pan-y" }}
@@ -106,7 +106,7 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
 
       {/* Fallback explícito se o 3D não deve/pode rodar */}
       {!shouldRender3D && (
-        <div className="absolute top-5 left-5 z-10 rounded-full border border-black/10 bg-white/70 px-3 py-1 text-[11px] text-[#0B1F2A]/80 backdrop-blur">
+        <div className="absolute top-5 left-5 z-10 rounded-full border border-[#0A1F2C]/10 bg-white/70 px-3 py-1 text-[11px] text-[#0A1F2C]/80 backdrop-blur">
           Visualização simplificada
         </div>
       )}
@@ -168,47 +168,50 @@ function detectPerformanceTier(): PerformanceTier {
 
 function PosterCard({ className }: { className?: string }) {
   return (
-    <div
-      className={cn(
-        "w-full h-full bg-white relative",
-        "bg-[radial-gradient(circle_at_35%_38%,rgba(14,165,164,0.10),transparent_52%),radial-gradient(circle_at_72%_58%,rgba(127,227,225,0.08),transparent_55%)]",
-        className
-      )}
-    >
-      {/* Aura extra */}
-      <div className="absolute inset-0 opacity-60 blur-2xl bg-[radial-gradient(circle_at_40%_42%,rgba(14,165,164,0.18),transparent_55%),radial-gradient(circle_at_80%_70%,rgba(127,227,225,0.12),transparent_55%)]" />
+    <div className={cn("absolute inset-0 flex items-center justify-center rounded-3xl bg-white", className)}>
+      {/* Halo */}
+      <div className="absolute inset-0 rounded-3xl overflow-hidden">
+        <div
+          className="absolute inset-[-20%]"
+          style={{
+            background:
+              "radial-gradient(60% 60% at 70% 30%, rgba(79,172,254,0.25), rgba(47,230,200,0.12), transparent 70%)",
+            filter: "blur(40px)",
+          }}
+        />
+      </div>
 
-      {/* Card poster */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-[78%] h-[52%]">
-          <div className="absolute inset-0 rounded-[26px] bg-[#10161f] shadow-[0_36px_80px_rgba(0,0,0,0.22)]" />
-          <div className="absolute inset-0 rounded-[26px] ring-1 ring-black/10" />
+      {/* Card */}
+      <div
+        className="relative w-[78%] aspect-[1.6/1] rounded-2xl p-6"
+        style={{
+          background: "linear-gradient(135deg, #0A1F2C 0%, #0D2C3F 45%, #071821 100%)",
+          boxShadow: "0 30px 80px rgba(10,31,44,0.45)",
+        }}
+      >
+        {/* Logo */}
+        <div className="absolute top-5 right-6 text-white" style={{ opacity: 0.85 }}>
+          KODANO
+        </div>
 
-          {/* Top coat highlight (bem sutil) */}
-          <div className="absolute inset-[1px] rounded-[25px] bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.10),transparent_55%),linear-gradient(120deg,rgba(127,227,225,0.08),transparent_40%)] opacity-70" />
+        {/* Chip */}
+        <div
+          className="w-12 h-9 rounded-md"
+          style={{
+            background: "linear-gradient(135deg, #4FACFE, #2FE6C8)",
+            boxShadow:
+              "inset 0 0 0 1px rgba(255,255,255,0.25), 0 4px 12px rgba(47,230,200,0.35)",
+          }}
+        />
 
-          {/* Logo */}
-          <div className="absolute top-[14%] left-1/2 -translate-x-1/2 text-[12px] tracking-[0.32em] font-semibold text-[#6FBFBF]">
-            KODANO
-          </div>
+        {/* Number */}
+        <div className="mt-8 text-white tracking-[0.18em] text-sm opacity-95">
+          4532 •••• •••• 9010
+        </div>
 
-          {/* Chip */}
-          <div className="absolute left-[14%] top-[38%] w-[22%] h-[22%] rounded-[10px] bg-[#d6b15a] shadow-inner shadow-black/20 ring-1 ring-black/10" />
-          <div className="absolute left-[16.5%] top-[45%] w-[17%] h-[2px] bg-black/20" />
-          <div className="absolute left-[16.5%] top-[52%] w-[17%] h-[2px] bg-black/20" />
-
-          {/* Número */}
-          <div className="absolute left-1/2 -translate-x-1/2 bottom-[26%] text-[13px] tracking-[0.32em] text-[#D8F6FB]/85">
-            4532 •••• •••• 9010
-          </div>
-
-          {/* Footer */}
-          <div className="absolute left-[10%] bottom-[12%] text-[10px] tracking-[0.18em] text-[#D8F6FB]/70">
-            KODANO DEMO
-          </div>
-          <div className="absolute right-[10%] bottom-[12%] text-[10px] tracking-[0.18em] text-[#D8F6FB]/70">
-            12/28
-          </div>
+        {/* Name */}
+        <div className="mt-2 text-xs text-[#A8C5D1]">
+          KODANO DEMO
         </div>
       </div>
     </div>
