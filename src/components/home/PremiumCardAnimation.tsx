@@ -8,7 +8,7 @@ import PremiumCardCanvas from "./PremiumCardCanvas";
 type PerformanceTier = "high" | "medium" | "low";
 
 class CanvasErrorBoundary extends React.Component<
-  { fallback: React.ReactNode; children: React.ReactNode },
+  { fallback: React.ReactNode; children: React.ReactNode; onError?: () => void },
   { hasError: boolean }
 > {
   state = { hasError: false };
@@ -19,6 +19,7 @@ class CanvasErrorBoundary extends React.Component<
 
   componentDidCatch(err: unknown) {
     console.error("[PremiumCardAnimation] Canvas failed to render", err);
+    this.props.onError?.();
   }
 
   render() {
@@ -34,6 +35,7 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   const [webGLSupported, setWebGLSupported] = React.useState<boolean>(false);
   const [tier, setTier] = React.useState<PerformanceTier>("medium");
   const [inView, setInView] = React.useState(true);
+  const [canvasError, setCanvasError] = React.useState(false);
 
   const containerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -46,6 +48,11 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     setWebGLSupported(detectWebGLSupport());
     setTier(detectPerformanceTier());
   }, [mounted]);
+
+  // Se o ambiente muda (ou re-monta), limpamos erro anterior do Canvas
+  React.useEffect(() => {
+    setCanvasError(false);
+  }, [mounted, webGLSupported, tier, prefersReducedMotion]);
 
   // IntersectionObserver: anima quando visível, dorme quando fora
   React.useEffect(() => {
@@ -63,15 +70,22 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
 
   let content: React.ReactNode = null;
   if (!mounted) content = <LoadingPlaceholder />;
-  else if (prefersReducedMotion || tier === "low") content = <StaticPremiumFallback />;
-  else if (!webGLSupported) content = <FallbackShimmer />;
+  else if (canvasError) content = <FallbackShimmer />;
+  else if (prefersReducedMotion || tier === "low" || !webGLSupported) content = <StaticPremiumFallback />;
   else {
     content = (
-      <CanvasErrorBoundary fallback={<FallbackShimmer />}>
+      <CanvasErrorBoundary fallback={<FallbackShimmer />} onError={() => setCanvasError(true)}>
         <PremiumCardCanvas performanceTier={tier} enableMotion={!prefersReducedMotion} inView={inView} />
       </CanvasErrorBoundary>
     );
   }
+
+  const __DEV_BADGE =
+    process.env.NODE_ENV !== "production" ? (
+      <div className="absolute top-3 left-3 z-20 text-[11px] px-2 py-1 rounded bg-black/60 text-white">
+        {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView} err=${canvasError}`}
+      </div>
+    ) : null;
 
   return (
     <div
@@ -82,6 +96,7 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
       )}
       style={{ touchAction: "pan-y" }}
     >
+      {__DEV_BADGE}
       {content}
     </div>
   );
@@ -97,9 +112,7 @@ function detectWebGLSupport(): boolean {
     const gl1 =
       canvas.getContext("webgl") ||
       canvas.getContext("experimental-webgl");
-    if (gl1) return true;
-
-    return typeof WebGLRenderingContext !== "undefined";
+    return !!gl1;
   } catch {
     return false;
   }

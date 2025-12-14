@@ -60,6 +60,8 @@ function Scene({
 
   React.useEffect(() => {
     cameraRef.current = camera as THREE.PerspectiveCamera;
+    cameraRef.current.position.set(0, 0, 8);
+    cameraRef.current.lookAt(0, 0, 0);
   }, [camera]);
 
   // Garante pelo menos 1 frame inicial (mesmo com frameloop="demand")
