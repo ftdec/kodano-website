@@ -141,9 +141,9 @@ function Scene({
     activeUntilRef.current = Math.max(activeUntilRef.current ?? 0, now + 1600); // janela inicial de animação
 
     if (cardRef.current) {
-      cardRef.current.rotation.set(-0.21, 0.314, 0); // -12°, 18°
+      cardRef.current.rotation.set(-0.18, 0.28, 0); // -10°, 16° (mais sutil)
       cardRef.current.position.set(0, 0, 0);
-      cardRef.current.scale.setScalar(1.22);
+      cardRef.current.scale.setScalar(1.4); // maior para dominar o stage
     }
     if (cameraRef.current) cameraRef.current.position.z = 8;
     sweepRef.current = 0.6;
@@ -169,19 +169,19 @@ function Scene({
       const mx = THREE.MathUtils.clamp(mouseRef.current.x, -1, 1);
       const my = THREE.MathUtils.clamp(mouseRef.current.y, -1, 1);
 
-      // Tilt máximo ~3° (≈0.052rad)
-      const targetX = my * 0.052;
-      const targetY = mx * 0.052;
+      // Tilt máximo ~2.5° (≈0.044rad) - mais contido para não cortar
+      const targetX = my * 0.044;
+      const targetY = mx * 0.044;
 
       tiltRef.current.x = THREE.MathUtils.lerp(tiltRef.current.x, targetX, 0.04);
       tiltRef.current.y = THREE.MathUtils.lerp(tiltRef.current.y, targetY, 0.04);
 
       // Pose hero persistente (sem entrada)
       const basePosZ = 0;
-      const baseRotX = -0.21; // ~-12°
-      const baseRotY = 0.314; // ~18°
+      const baseRotX = -0.18; // ~-10°
+      const baseRotY = 0.28; // ~16°
       const baseRotZ = 0.0;
-      g.scale.setScalar(1.22);
+      g.scale.setScalar(1.4); // domina o stage
 
       // Idle sutil (premium, quase imperceptível)
       const idleBlend = performanceTier !== "low" ? 1 : 0;
@@ -226,7 +226,7 @@ function Scene({
   });
 
   return (
-    <Bounds fit clip observe margin={1.2}>
+    <Bounds fit clip observe margin={1.05}>
       <group ref={groupRef}>
         {/* Lighting clean (hero branco) */}
         <ambientLight intensity={0.6} />
@@ -274,11 +274,11 @@ function CreditCard3D({
 }) {
   const baseMat = React.useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
-      metalness: 0.05,
-      roughness: 0.28,
-      clearcoat: 0.4,
-      clearcoatRoughness: 0.2,
-      envMapIntensity: 0.8,
+      metalness: 0.12,
+      roughness: 0.32,
+      clearcoat: 0.65,
+      clearcoatRoughness: 0.22,
+      envMapIntensity: 0.9,
       color: new THREE.Color("#00C8DC"),
     });
   }, []);

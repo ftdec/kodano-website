@@ -122,21 +122,23 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
       )}
       style={{ touchAction: "pan-y" }}
     >
-      {/* Stage background: halo + vignette */}
+      {/* Stage background: halo premium + vignette sutil */}
       <div className="absolute inset-0 pointer-events-none">
+        {/* Halo ciano Kodano forte */}
         <div
-          className="absolute inset-[-15%] rounded-[32px]"
+          className="absolute inset-[-25%] rounded-[32px]"
           style={{
             background:
-              "radial-gradient(60% 60% at 70% 30%, rgba(79,172,254,0.12), rgba(47,230,200,0.08), transparent 70%)",
-            filter: "blur(32px)",
+              "radial-gradient(55% 55% at 65% 35%, rgba(0,200,220,0.18), rgba(79,172,254,0.12), rgba(47,230,200,0.06), transparent 65%)",
+            filter: "blur(40px)",
           }}
         />
+        {/* Vignette suave nas bordas */}
         <div
           className="absolute inset-0 rounded-[32px]"
           style={{
             background:
-              "radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.04) 100%)",
+              "radial-gradient(110% 110% at 50% 50%, transparent 55%, rgba(0,42,53,0.03) 100%)",
           }}
         />
       </div>
@@ -250,26 +252,27 @@ function PosterCard({ className }: { className?: string }) {
       <div
         style={{
           position: "absolute",
-          inset: -80,
-          background: `radial-gradient(60% 60% at 70% 30%, ${hexToRgba(KODANO_BLUE, 0.25)}, ${hexToRgba(
+          inset: -100,
+          background: `radial-gradient(55% 55% at 65% 35%, ${hexToRgba("#00C8DC", 0.22)}, ${hexToRgba(KODANO_BLUE, 0.14)}, ${hexToRgba(
             KODANO_TEAL,
-            0.12
-          )}, transparent 70%)`,
-          filter: "blur(40px)",
+            0.08
+          )}, transparent 60%)`,
+          filter: "blur(48px)",
         }}
       />
 
-      {/* Card (static-first) */}
+      {/* Card (static-first) — maior para dominar o stage */}
       <div
         style={{
           position: "relative",
-          width: "78%",
-          maxWidth: 520,
+          width: "88%",
+          maxWidth: 560,
           aspectRatio: "1.6 / 1",
           borderRadius: 22,
           padding: 24,
-          background: `linear-gradient(160deg, ${CARD_CYAN_BASE} 0%, ${CARD_CYAN_DEEP} 55%, ${CARD_NAVY_DEEP} 100%)`,
-          boxShadow: `0 40px 80px ${hexToRgba(CARD_NAVY_DEEP, 0.14)}, 0 18px 34px ${hexToRgba(CARD_NAVY_DEEP, 0.10)}`,
+          transform: "rotate3d(1, -1, 0, 8deg)", // perspectiva sutil
+          background: `linear-gradient(155deg, ${CARD_CYAN_BASE} 0%, ${CARD_CYAN_DEEP} 50%, ${CARD_NAVY_DEEP} 100%)`,
+          boxShadow: `0 50px 100px ${hexToRgba(CARD_NAVY_DEEP, 0.18)}, 0 24px 48px ${hexToRgba(CARD_NAVY_DEEP, 0.12)}`,
         }}
       >
         {/* Highlight sheen */}
