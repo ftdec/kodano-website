@@ -268,7 +268,6 @@ function Scene({
 
       <group ref={cardRef}>
         <CreditCard3D
-          performanceTier={performanceTier}
           sheenMatRef={sheenMatRef}
           chipLayerRef={chipLayerRef}
           textLayerRef={textLayerRef}
