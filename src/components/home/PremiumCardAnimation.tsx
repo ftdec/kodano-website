@@ -82,11 +82,6 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
       )}
       style={{ touchAction: "pan-y" }}
     >
-      {process.env.NODE_ENV !== "production" && (
-        <div className="absolute top-3 left-3 z-10 text-[11px] px-2 py-1 rounded bg-black/60 text-white">
-          {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView}`}
-        </div>
-      )}
       {content}
     </div>
   );

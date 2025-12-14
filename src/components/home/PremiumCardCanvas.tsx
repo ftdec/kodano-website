@@ -18,14 +18,14 @@ export default function PremiumCardCanvas({
 }) {
   return (
     <Canvas
-      dpr={performanceTier === "high" ? [1, 2] : performanceTier === "medium" ? [1, 1.5] : [1, 1.25]}
+      dpr={[1, 1.5]}
       gl={{
-        antialias: performanceTier !== "low",
+        antialias: true,
         powerPreference: "high-performance",
         alpha: true,
       }}
-      camera={{ fov: 35, position: [0, 0, 10] }}
-      frameloop={enableMotion && inView ? "always" : "demand"}
+      camera={{ fov: 35, position: [0, 0, 8] }}
+      frameloop={inView ? "always" : "demand"}
       style={{ width: "100%", height: "100%", pointerEvents: "none" }}
     >
       <Scene performanceTier={performanceTier} enableMotion={enableMotion} inView={inView} />
@@ -128,15 +128,16 @@ function Scene({
       const mx = THREE.MathUtils.clamp(mouseRef.current.x, -1, 1);
       const my = THREE.MathUtils.clamp(mouseRef.current.y, -1, 1);
 
-      const targetX = my * 0.15; // Mais sensível
-      const targetY = mx * 0.15;
+      // Mouse tilt <= ±5° (≈0.087rad)
+      const targetX = my * 0.087;
+      const targetY = mx * 0.087;
 
       tiltRef.current.x = THREE.MathUtils.lerp(tiltRef.current.x, targetX, 0.08);
       tiltRef.current.y = THREE.MathUtils.lerp(tiltRef.current.y, targetY, 0.08);
 
-      // Entrada EXPLOSIVA do fundo (base transform)
-      const basePosZ = THREE.MathUtils.lerp(-8, 0, k);
-      const basePosY = THREE.MathUtils.lerp(2, 0, k);
+      // Safe zone: o cartão sempre nasce em [0, 0, 0]
+      const basePosZ = 0;
+      const basePosY = 0;
 
       const baseRotX = THREE.MathUtils.lerp(Math.PI * 0.5, -0.15, k);
       const baseRotY = THREE.MathUtils.lerp(-Math.PI * 0.3, 0.4, k);
@@ -146,8 +147,8 @@ function Scene({
       const scale = THREE.MathUtils.lerp(0.5, 1, k);
       g.scale.setScalar(scale);
 
-      // IDLE MUITO MAIS VISÍVEL (composição estável: sem drift e sem cancelamento pelo mouse)
-      const idleBlend = performanceTier !== "low" ? (0.2 + 0.8 * k) : 0; // entra junto com a intro
+      // IDLE visível (quando motion habilitado e device OK)
+      const idleBlend = performanceTier !== "low" ? 1 : 0;
       const floatY = Math.sin(t * 0.5) * 0.25 * idleBlend; // 3x maior (spec)
       const floatZ = Math.cos(t * 0.3) * 0.15 * idleBlend; // Z float (spec)
 
@@ -274,7 +275,7 @@ function CreditCard3D({
     <group>
       {/* GLOW PULSANTE atrás do cartão */}
       {performanceTier !== "low" && (
-        <mesh ref={glowRef} position={[0, 0, -0.5]}>
+        <mesh ref={glowRef} position={[0, 0, -0.4]}>
           <planeGeometry args={[5.5, 3.5]} />
           <meshStandardMaterial
             color="#0a1f2e"
@@ -489,6 +490,8 @@ function createSheenMaterial() {
 
         a = saturate(a);
         a = pow(a, 1.1);
+        // Shader safety: nunca deixar alpha global zerar
+        a = clamp(a, 0.15, 0.85);
 
         vec3 color = mix(vec3(0.29, 0.68, 1.0), vec3(0.0, 0.86, 0.87), fresnel);
 
