@@ -37,8 +37,7 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   const [inView, setInView] = React.useState(true);
   const [canvasError, setCanvasError] = React.useState(false);
   const [debug, setDebug] = React.useState(false);
-  const [canvasVisible, setCanvasVisible] = React.useState(false);
-  const [loaderVisible, setLoaderVisible] = React.useState(false);
+  const [canvasVisible, setCanvasVisible] = React.useState(true); // Canvas sempre visível para hero
 
   const containerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -65,7 +64,7 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   // Se o ambiente muda (ou re-monta), limpamos erro anterior do Canvas
   React.useEffect(() => {
     setCanvasError(false);
-    setCanvasVisible(false);
+    setCanvasVisible(true);
   }, [mounted, webGLSupported, tier, prefersReducedMotion]);
 
   // IntersectionObserver: anima quando visível, dorme quando fora
@@ -84,40 +83,10 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
 
   const shouldRender3D = mounted && !canvasError && !prefersReducedMotion && tier !== "low" && webGLSupported;
 
-  // Loader: anti-flicker (200ms delay) + timeout (1.2s)
-  React.useEffect(() => {
-    if (!shouldRender3D) {
-      setLoaderVisible(false);
-      return;
-    }
-    if (canvasVisible) {
-      setLoaderVisible(false);
-      return;
-    }
-
-    let cancelled = false;
-    const delayId = window.setTimeout(() => {
-      if (cancelled) return;
-      // Só mostra se ainda não ficou ready
-      if (!canvasVisible) setLoaderVisible(true);
-    }, 200);
-
-    const timeoutId = window.setTimeout(() => {
-      if (cancelled) return;
-      setLoaderVisible(false);
-    }, 1200);
-
-    return () => {
-      cancelled = true;
-      window.clearTimeout(delayId);
-      window.clearTimeout(timeoutId);
-    };
-  }, [shouldRender3D, canvasVisible]);
-
   const __DEV_BADGE =
     debug || process.env.NODE_ENV !== "production" ? (
       <div className="absolute top-3 left-3 z-20 text-[11px] px-2 py-1 rounded bg-[#0A1F2C]/70 text-white">
-        {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView} err=${canvasError} canvas=${canvasVisible} loader=${loaderVisible}`}
+        {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView} err=${canvasError} canvas=${canvasVisible}`}
       </div>
     ) : null;
 
@@ -132,27 +101,9 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     >
       {__DEV_BADGE}
 
-      {/* Poster sempre presente no primeiro paint (zero flash) */}
-      <PosterCard
-        className={cn(
-          "absolute inset-0 transition-opacity duration-300",
-          canvasVisible ? "opacity-0" : "opacity-100"
-        )}
-      />
-
-      {/* Loader (só aparece se demorar >200ms; some em no máximo 1.2s) */}
-      <CyanLoader
-        className={cn(
-          "absolute inset-0 transition-opacity duration-300",
-          loaderVisible ? "opacity-100" : "opacity-0 pointer-events-none"
-        )}
-      />
-
-      {/* 3D por cima com fade-in quando pronto */}
-      {shouldRender3D && (
-        <div
-          className={cn("absolute inset-0 transition-opacity duration-300", canvasVisible ? "opacity-100" : "opacity-0")}
-        >
+      {/* Canvas direto (hero prioritário); fallback só em edge cases */}
+      {shouldRender3D ? (
+        <div className="absolute inset-0">
           <CanvasErrorBoundary fallback={null} onError={() => setCanvasError(true)}>
             <PremiumCardCanvas
               performanceTier={tier}
@@ -163,6 +114,8 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
             />
           </CanvasErrorBoundary>
         </div>
+      ) : (
+        <PosterCard className="absolute inset-0" />
       )}
     </div>
   );
@@ -332,12 +285,4 @@ function hexToRgba(hex: string, alpha: number) {
   const g = parseInt(v.slice(2, 4), 16);
   const b = parseInt(v.slice(4, 6), 16);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
-
-function CyanLoader({ className }: { className?: string }) {
-  return (
-    <div className={cn("grid place-items-center", className)} aria-label="Carregando">
-      <div className="h-11 w-11 rounded-full border-[3px] border-[#00C8DC]/25 border-t-[#00C8DC] animate-spin opacity-90" />
-    </div>
-  );
 }

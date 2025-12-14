@@ -77,7 +77,6 @@ function Scene({
   const mouseRef = React.useRef({ x: 0, y: 0 });
   const tiltRef = React.useRef({ x: 0, y: 0 });
   const sweepRef = React.useRef(0);
-  const t0Ref = React.useRef<number | null>(null);
 
   React.useEffect(() => {
     cameraRef.current = camera as THREE.PerspectiveCamera;
@@ -112,23 +111,19 @@ function Scene({
     return () => window.removeEventListener("mousemove", onMove);
   }, [enableMotion, gl.domElement]);
 
-  // Intro setup
+  // Setup pose base (sem intro)
   React.useEffect(() => {
     invalidate();
 
-    if (enableMotion) {
-      t0Ref.current = performance.now();
-      sweepRef.current = 0;
-    } else {
-      if (cardRef.current) {
-        cardRef.current.rotation.set(-0.15, 0.38, 0);
-        cardRef.current.position.set(0, 0, 0);
-        cardRef.current.scale.setScalar(1);
-      }
-      if (cameraRef.current) cameraRef.current.position.z = 8;
-      invalidate();
+    if (cardRef.current) {
+      cardRef.current.rotation.set(-0.21, 0.314, 0); // -12°, 18°
+      cardRef.current.position.set(0, 0, 0);
+      cardRef.current.scale.setScalar(1.18);
     }
-  }, [enableMotion, invalidate]);
+    if (cameraRef.current) cameraRef.current.position.z = 8.5;
+    sweepRef.current = 0.6;
+    invalidate();
+  }, [invalidate]);
 
   useFrame((state) => {
     if (!inView) return;
@@ -139,29 +134,29 @@ function Scene({
     if (cardRef.current) {
       const g = cardRef.current;
 
-      // Mouse tilt AMPLIFICADO (suavizado, mas sem “matar” o idle)
+      // Mouse tilt sutil
       const mx = THREE.MathUtils.clamp(mouseRef.current.x, -1, 1);
       const my = THREE.MathUtils.clamp(mouseRef.current.y, -1, 1);
 
-      // Tilt máximo ~4° (≈0.07rad)
-      const targetX = my * 0.07;
-      const targetY = mx * 0.07;
+      // Tilt máximo ~3° (≈0.052rad)
+      const targetX = my * 0.052;
+      const targetY = mx * 0.052;
 
-      tiltRef.current.x = THREE.MathUtils.lerp(tiltRef.current.x, targetX, 0.08);
-      tiltRef.current.y = THREE.MathUtils.lerp(tiltRef.current.y, targetY, 0.08);
+      tiltRef.current.x = THREE.MathUtils.lerp(tiltRef.current.x, targetX, 0.04);
+      tiltRef.current.y = THREE.MathUtils.lerp(tiltRef.current.y, targetY, 0.04);
 
       // Pose hero persistente (sem entrada)
       const basePosZ = 0;
-      const baseRotX = -0.15;
-      const baseRotY = 0.38;
+      const baseRotX = -0.21; // ~-12°
+      const baseRotY = 0.314; // ~18°
       const baseRotZ = 0.0;
-      g.scale.setScalar(1);
+      g.scale.setScalar(1.18);
 
       // Idle sutil (premium)
       const idleBlend = performanceTier !== "low" ? 1 : 0;
-      const floatY = Math.sin(t * 0.35) * 0.04 * idleBlend;
-      const floatZ = Math.cos(t * 0.25) * 0.015 * idleBlend;
-      const microRot = Math.sin(t * 0.25) * 0.035 * idleBlend; // ~2°
+      const floatY = Math.sin(t * (Math.PI * 0.5)) * 0.04 * idleBlend; // ~0.25 Hz
+      const floatZ = Math.cos(t * (Math.PI * 0.5)) * 0.01 * idleBlend;
+      const microRot = Math.sin(t * (Math.PI * 0.5)) * 0.035 * idleBlend; // ~2°
 
       g.position.set(0, floatY, basePosZ + floatZ);
       g.rotation.set(
@@ -189,8 +184,8 @@ function Scene({
       // Sheen update
       if (sheenMatRef.current) {
         sheenMatRef.current.uniforms.uMouse.value.set(mx, my);
-        // Sem sweep de intro: mantém sheen vivo porém sutil
-        sweepRef.current = THREE.MathUtils.lerp(sweepRef.current, 1, 0.02);
+        // Sheen sutil, sempre ligado (sem entrada/sweep chamativo)
+        sweepRef.current = THREE.MathUtils.lerp(sweepRef.current, 0.6, 0.02);
         sheenMatRef.current.uniforms.uSweep.value = sweepRef.current;
         sheenMatRef.current.uniforms.uTime.value = t;
       }
@@ -206,11 +201,11 @@ function Scene({
   return (
     <group ref={groupRef}>
       {/* Lighting clean (hero branco) */}
-      <ambientLight intensity={0.55} />
-      <hemisphereLight intensity={0.2} groundColor={"#f5fbff"} />
-      <pointLight position={[5, 4, 8]} intensity={1.6} color="#ffffff" />
-      <pointLight position={[-6, -2, 6]} intensity={1.1} color="#eaf7ff" />
-      <pointLight ref={rimLightRef} position={[4, 3, -4]} intensity={1.4} color="#4FACFE" />
+      <ambientLight intensity={0.6} />
+      <hemisphereLight intensity={0.2} groundColor={"#f8fcff"} />
+      <pointLight position={[5, 4, 8]} intensity={1.4} color="#ffffff" />
+      <pointLight position={[-5, -2, 6]} intensity={1.0} color="#eaf7ff" />
+      <pointLight ref={rimLightRef} position={[4, 3, -4]} intensity={1.2} color="#4FACFE" />
 
       {/* Sanity mesh (debug): confirma pipeline/câmera */}
       {debug && (
@@ -274,10 +269,10 @@ function CreditCard3D({
   const baseMat = React.useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
       metalness: 0.25,
-      roughness: 0.35,
-      clearcoat: 0.25,
-      clearcoatRoughness: 0.3,
-      envMapIntensity: 1.0,
+      roughness: 0.38,
+      clearcoat: 0.28,
+      clearcoatRoughness: 0.35,
+      envMapIntensity: 0.8,
       color: new THREE.Color("#003F4D"),
     });
   }, []);
@@ -336,8 +331,8 @@ function CreditCard3D({
               color="#00C8DC"
               metalness={0}
               roughness={0.9}
-              emissive="#00C8DC"
-              emissiveIntensity={0.05}
+              emissive="#000000"
+              emissiveIntensity={0}
               depthWrite={false}
               toneMapped={false}
             />
