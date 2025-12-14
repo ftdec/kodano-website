@@ -87,23 +87,11 @@ export function PaymentCardAnimation({ className }: { className?: string }) {
       role="img"
       aria-label="Demonstração de processamento de pagamento Kodano"
     >
-      {/* Card Stage */}
-      <div
-        className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden bg-white"
-        style={{ boxShadow: "0 24px 48px rgba(15,163,177,0.10), 0 8px 16px rgba(15,163,177,0.06)" }}
-      >
-        {/* Static ambient gradient (no animation = no cost) */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-60"
-          style={{
-            background: "radial-gradient(ellipse 80% 60% at 50% 40%, rgba(15,163,177,0.08), transparent)",
-          }}
-        />
+      {/* Card Stage - no white background */}
+      <div className="relative w-full aspect-[16/10] flex items-center justify-center">
 
         {/* Card */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <PaymentCard state={state} />
-        </div>
+        <PaymentCard state={state} />
 
         {/* Lightweight confetti */}
         <AnimatePresence>
@@ -132,15 +120,15 @@ function PaymentCard({ state }: { state: AnimationState }) {
 
   return (
     <motion.div
-      className="relative w-[80%] max-w-[420px] rounded-2xl will-change-transform"
+      className="relative w-full max-w-[520px] rounded-2xl will-change-transform"
       style={{
         aspectRatio: "1.586 / 1",
         background: `linear-gradient(155deg, ${COLORS.cyanLight} 0%, ${COLORS.cyanBase} 50%, ${COLORS.cyanDark} 100%)`,
-        boxShadow: "0 20px 40px rgba(15, 163, 177, 0.15)",
+        boxShadow: "0 30px 60px rgba(15, 163, 177, 0.25), 0 10px 20px rgba(15, 163, 177, 0.15)",
       }}
       animate={{
-        scale: isSuccess ? 1.02 : 1,
-        y: isSuccess ? -4 : 0,
+        scale: isSuccess ? 1.03 : 1,
+        y: isSuccess ? -6 : 0,
       }}
       transition={SMOOTH_TRANSITION}
     >
@@ -192,10 +180,6 @@ function PaymentCard({ state }: { state: AnimationState }) {
         </div>
       </div>
 
-      {/* Success overlay */}
-      <AnimatePresence>
-        {isSuccess && <SuccessOverlay />}
-      </AnimatePresence>
     </motion.div>
   );
 }
@@ -296,40 +280,6 @@ function SimpleShimmer() {
   );
 }
 
-function SuccessOverlay() {
-  return (
-    <motion.div
-      className="absolute inset-0 flex items-center justify-center pointer-events-none"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* Checkmark circle */}
-      <motion.div
-        className="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center bg-white shadow-lg"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
-      >
-        <svg viewBox="0 0 24 24" className="w-8 h-8 md:w-10 md:h-10">
-          <motion.path
-            d="M4 12l6 6L20 6"
-            fill="none"
-            stroke={COLORS.teal}
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 0.4, delay: 0.25, ease: "easeOut" }}
-          />
-        </svg>
-      </motion.div>
-    </motion.div>
-  );
-}
-
 // Lightweight confetti - only 8 pieces, CSS animation
 const CONFETTI = [
   { x: 10, delay: 0, color: COLORS.teal },
@@ -416,15 +366,13 @@ function StatusText({ state }: { state: AnimationState }) {
 function StaticSuccessCard() {
   return (
     <div className="flex flex-col items-center gap-5">
-      <div
-        className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden bg-white flex items-center justify-center"
-        style={{ boxShadow: "0 24px 48px rgba(15,163,177,0.10)" }}
-      >
+      <div className="relative w-full aspect-[16/10] flex items-center justify-center">
         <div
-          className="w-[80%] max-w-[420px] rounded-2xl p-5 flex flex-col justify-between"
+          className="w-full max-w-[520px] rounded-2xl p-5 flex flex-col justify-between"
           style={{
             aspectRatio: "1.586 / 1",
             background: `linear-gradient(155deg, ${COLORS.cyanLight}, ${COLORS.cyanBase}, ${COLORS.cyanDark})`,
+            boxShadow: "0 30px 60px rgba(15,163,177,0.25), 0 10px 20px rgba(15,163,177,0.15)",
           }}
         >
           <div className="flex justify-between">
