@@ -37,6 +37,7 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   const [inView, setInView] = React.useState(true);
   const [canvasError, setCanvasError] = React.useState(false);
   const [debug, setDebug] = React.useState(false);
+  const [canvasVisible, setCanvasVisible] = React.useState(false);
 
   const containerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -63,6 +64,7 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
   // Se o ambiente muda (ou re-monta), limpamos erro anterior do Canvas
   React.useEffect(() => {
     setCanvasError(false);
+    setCanvasVisible(false);
   }, [mounted, webGLSupported, tier, prefersReducedMotion]);
 
   // IntersectionObserver: anima quando visível, dorme quando fora
@@ -79,27 +81,12 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     return () => obs.disconnect();
   }, []);
 
-  let content: React.ReactNode = null;
-  if (!mounted) content = <LoadingPlaceholder />;
-  else if (canvasError) content = <FallbackShimmer />;
-  else if (prefersReducedMotion || tier === "low" || !webGLSupported) content = <StaticPremiumFallback />;
-  else {
-    content = (
-      <CanvasErrorBoundary fallback={<FallbackShimmer />} onError={() => setCanvasError(true)}>
-        <PremiumCardCanvas
-          performanceTier={tier}
-          enableMotion={!prefersReducedMotion}
-          inView={inView}
-          debug={debug}
-        />
-      </CanvasErrorBoundary>
-    );
-  }
+  const shouldRender3D = mounted && !canvasError && !prefersReducedMotion && tier !== "low" && webGLSupported;
 
   const __DEV_BADGE =
     debug || process.env.NODE_ENV !== "production" ? (
       <div className="absolute top-3 left-3 z-20 text-[11px] px-2 py-1 rounded bg-black/60 text-white">
-        {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView} err=${canvasError}`}
+        {`mounted=${mounted} webgl=${webGLSupported} tier=${tier} reduced=${prefersReducedMotion} inView=${inView} err=${canvasError} canvas=${canvasVisible}`}
       </div>
     ) : null;
 
@@ -113,7 +100,33 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
       style={{ touchAction: "pan-y" }}
     >
       {__DEV_BADGE}
-      {content}
+
+      {/* Poster sempre presente no primeiro paint (zero flash) */}
+      <PosterCard className={cn("absolute inset-0 transition-opacity duration-300", canvasVisible ? "opacity-0" : "opacity-100")} />
+
+      {/* Fallback explícito se o 3D não deve/pode rodar */}
+      {!shouldRender3D && (
+        <div className="absolute top-5 left-5 z-10 rounded-full border border-black/10 bg-white/70 px-3 py-1 text-[11px] text-[#0B1F2A]/80 backdrop-blur">
+          Visualização simplificada
+        </div>
+      )}
+
+      {/* 3D por cima com fade-in quando pronto */}
+      {shouldRender3D && (
+        <div
+          className={cn("absolute inset-0 transition-opacity duration-300", canvasVisible ? "opacity-100" : "opacity-0")}
+        >
+          <CanvasErrorBoundary fallback={null} onError={() => setCanvasError(true)}>
+            <PremiumCardCanvas
+              performanceTier={tier}
+              enableMotion={!prefersReducedMotion}
+              inView={inView}
+              debug={debug}
+              onReady={() => setCanvasVisible(true)}
+            />
+          </CanvasErrorBoundary>
+        </div>
+      )}
     </div>
   );
 }
@@ -153,45 +166,51 @@ function detectPerformanceTier(): PerformanceTier {
   }
 }
 
-function LoadingPlaceholder() {
+function PosterCard({ className }: { className?: string }) {
   return (
-    <div className="w-full h-full bg-gradient-to-br from-[#061E26] via-[#072A35] to-[#0B2A35] relative">
-      <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_30%_30%,rgba(0,200,220,0.28),transparent_45%),radial-gradient(circle_at_70%_60%,rgba(124,243,255,0.18),transparent_50%)]" />
-      <div className="absolute inset-0 animate-pulse opacity-40 bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.06),transparent)]" />
-    </div>
-  );
-}
+    <div
+      className={cn(
+        "w-full h-full bg-white relative",
+        "bg-[radial-gradient(circle_at_35%_38%,rgba(14,165,164,0.10),transparent_52%),radial-gradient(circle_at_72%_58%,rgba(127,227,225,0.08),transparent_55%)]",
+        className
+      )}
+    >
+      {/* Aura extra */}
+      <div className="absolute inset-0 opacity-60 blur-2xl bg-[radial-gradient(circle_at_40%_42%,rgba(14,165,164,0.18),transparent_55%),radial-gradient(circle_at_80%_70%,rgba(127,227,225,0.12),transparent_55%)]" />
 
-function StaticPremiumFallback() {
-  return (
-    <div className="w-full h-full bg-gradient-to-br from-[#061E26] via-[#072A35] to-[#0B2A35] relative">
-      <div className="absolute inset-0 opacity-70 bg-[radial-gradient(circle_at_35%_35%,rgba(0,200,220,0.24),transparent_45%),radial-gradient(circle_at_75%_60%,rgba(155,123,214,0.14),transparent_55%)]" />
-      <div className="absolute inset-0 opacity-35 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.08),transparent)]" />
-      <div className="absolute top-5 left-5 rounded-full border border-white/15 bg-black/25 px-3 py-1 text-[11px] text-white/80 backdrop-blur">
-        Visualização simplificada
-      </div>
-      <div className="absolute bottom-6 left-6 text-white/80">
-        <div className="text-sm tracking-wide">KODANO</div>
-        <div className="mt-2 text-xs text-white/60">Pagamentos modernos, simples e seguros</div>
-      </div>
-    </div>
-  );
-}
+      {/* Card poster */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative w-[78%] h-[52%]">
+          <div className="absolute inset-0 rounded-[26px] bg-[#10161f] shadow-[0_36px_80px_rgba(0,0,0,0.22)]" />
+          <div className="absolute inset-0 rounded-[26px] ring-1 ring-black/10" />
 
-function FallbackShimmer() {
-  return (
-    <div className="w-full h-full bg-gradient-to-br from-[#061E26] via-[#072A35] to-[#0B2A35] relative">
-      <div className="absolute inset-0 opacity-70 bg-[radial-gradient(circle_at_35%_35%,rgba(0,200,220,0.22),transparent_45%),radial-gradient(circle_at_75%_60%,rgba(124,243,255,0.16),transparent_55%)]" />
-      <div className="absolute inset-0 animate-[shimmer_2.2s_infinite] opacity-40 bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.10),transparent)]" />
-      <div className="absolute top-5 left-5 rounded-full border border-white/15 bg-black/25 px-3 py-1 text-[11px] text-white/80 backdrop-blur">
-        Visualização simplificada
+          {/* Top coat highlight (bem sutil) */}
+          <div className="absolute inset-[1px] rounded-[25px] bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.10),transparent_55%),linear-gradient(120deg,rgba(127,227,225,0.08),transparent_40%)] opacity-70" />
+
+          {/* Logo */}
+          <div className="absolute top-[14%] left-1/2 -translate-x-1/2 text-[12px] tracking-[0.32em] font-semibold text-[#6FBFBF]">
+            KODANO
+          </div>
+
+          {/* Chip */}
+          <div className="absolute left-[14%] top-[38%] w-[22%] h-[22%] rounded-[10px] bg-[#d6b15a] shadow-inner shadow-black/20 ring-1 ring-black/10" />
+          <div className="absolute left-[16.5%] top-[45%] w-[17%] h-[2px] bg-black/20" />
+          <div className="absolute left-[16.5%] top-[52%] w-[17%] h-[2px] bg-black/20" />
+
+          {/* Número */}
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-[26%] text-[13px] tracking-[0.32em] text-[#D8F6FB]/85">
+            4532 •••• •••• 9010
+          </div>
+
+          {/* Footer */}
+          <div className="absolute left-[10%] bottom-[12%] text-[10px] tracking-[0.18em] text-[#D8F6FB]/70">
+            KODANO DEMO
+          </div>
+          <div className="absolute right-[10%] bottom-[12%] text-[10px] tracking-[0.18em] text-[#D8F6FB]/70">
+            12/28
+          </div>
+        </div>
       </div>
-      <style jsx>{`
-        @keyframes shimmer {
-          0% { transform: translateX(-40%); }
-          100% { transform: translateX(40%); }
-        }
-      `}</style>
     </div>
   );
 }

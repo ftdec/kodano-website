@@ -12,14 +12,18 @@ export default function PremiumCardCanvas({
   enableMotion,
   inView,
   debug = false,
+  onReady,
 }: {
   performanceTier: PerformanceTier;
   enableMotion: boolean;
   inView: boolean;
   debug?: boolean;
+  onReady?: () => void;
 }) {
   const dpr: [number, number] =
     performanceTier === "high" ? [1, 2] : [1, 1.5];
+
+  const readyOnceRef = React.useRef(false);
 
   return (
     <Canvas
@@ -32,6 +36,15 @@ export default function PremiumCardCanvas({
       camera={{ fov: 35, position: [0, 0, 8] }}
       frameloop={inView ? "always" : "demand"}
       style={{ width: "100%", height: "100%", pointerEvents: "none" }}
+      onCreated={() => {
+        if (readyOnceRef.current) return;
+        // marca "pronto" após o primeiro frame útil
+        requestAnimationFrame(() => {
+          if (readyOnceRef.current) return;
+          readyOnceRef.current = true;
+          onReady?.();
+        });
+      }}
     >
       <color attach="background" args={["#ffffff"]} />
       <Scene performanceTier={performanceTier} enableMotion={enableMotion} inView={inView} debug={debug} />
