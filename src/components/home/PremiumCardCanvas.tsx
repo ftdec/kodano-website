@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { RoundedBox, Text, ContactShadows } from "@react-three/drei";
+import { RoundedBox, Text, ContactShadows, Bounds } from "@react-three/drei";
 
 type PerformanceTier = "high" | "medium" | "low";
 
@@ -25,6 +25,7 @@ export default function PremiumCardCanvas({
 
   const readyOnceRef = React.useRef(false);
   const activeUntilRef = React.useRef<number>(0);
+  const glRef = React.useRef<THREE.WebGLRenderer | null>(null);
 
   return (
     <Canvas
@@ -43,8 +44,11 @@ export default function PremiumCardCanvas({
         activeUntilRef.current = Math.max(activeUntilRef.current, now + 1800);
       }}
       style={{ width: "100%", height: "100%", pointerEvents: "none" }}
-      onCreated={() => {
+      onCreated={({ gl }) => {
         if (readyOnceRef.current) return;
+        // transparência total: deixa o poster/stage controlar o fundo
+        glRef.current = gl;
+        gl.setClearColor(0x000000, 0);
         // marca "pronto" após o primeiro frame útil
         requestAnimationFrame(() => {
           if (readyOnceRef.current) return;
@@ -82,12 +86,12 @@ function Scene({
   const cardRef = React.useRef<THREE.Group>(null);
   const chipLayerRef = React.useRef<THREE.Group>(null);
   const textLayerRef = React.useRef<THREE.Group>(null);
-  const logoLayerRef = React.useRef<THREE.Group>(null);
   const sheenMatRef = React.useRef<THREE.ShaderMaterial | null>(null);
   const rimLightRef = React.useRef<THREE.PointLight>(null);
   const cameraRef = React.useRef<THREE.PerspectiveCamera | null>(null);
+  const glRef = React.useRef<THREE.WebGLRenderer | null>(null);
 
-  const { invalidate, camera, gl } = useThree();
+  const { invalidate, camera } = useThree();
 
   const mouseRef = React.useRef({ x: 0, y: 0 });
   const tiltRef = React.useRef({ x: 0, y: 0 });
@@ -116,7 +120,8 @@ function Scene({
     if (!enableMotion) return;
 
     const onMove = (e: MouseEvent) => {
-      const rect = gl.domElement.getBoundingClientRect();
+      if (!glRef.current) return;
+      const rect = glRef.current.domElement.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
       mouseRef.current = { x, y };
@@ -127,7 +132,7 @@ function Scene({
 
     window.addEventListener("mousemove", onMove, { passive: true });
     return () => window.removeEventListener("mousemove", onMove);
-  }, [enableMotion, gl.domElement, invalidate, activeUntilRef]);
+  }, [enableMotion, invalidate, activeUntilRef]);
 
   // Setup pose base (sem intro)
   React.useEffect(() => {
@@ -202,10 +207,6 @@ function Scene({
         textLayerRef.current.rotation.x = tx * 0.15;
         textLayerRef.current.rotation.y = ty * 0.15;
       }
-      if (logoLayerRef.current) {
-        logoLayerRef.current.rotation.x = tx * 0.12;
-        logoLayerRef.current.rotation.y = ty * 0.12;
-      }
 
       // Sheen update
       if (sheenMatRef.current) {
@@ -225,43 +226,40 @@ function Scene({
   });
 
   return (
-    <group ref={groupRef}>
-      {/* Lighting clean (hero branco) */}
-      <ambientLight intensity={0.6} />
-      <hemisphereLight intensity={0.2} groundColor={"#f8fcff"} />
-      <pointLight position={[5, 4, 8]} intensity={1.4} color="#ffffff" />
-      <pointLight position={[-5, -2, 6]} intensity={1.0} color="#eaf7ff" />
-      <pointLight ref={rimLightRef} position={[4, 3, -4]} intensity={1.2} color="#4FACFE" />
+    <Bounds fit clip observe margin={1.2}>
+      <group ref={groupRef}>
+        {/* Lighting clean (hero branco) */}
+        <ambientLight intensity={0.6} />
+        <hemisphereLight intensity={0.2} groundColor={"#f8fcff"} />
+        <pointLight position={[5, 4, 8]} intensity={1.4} color="#ffffff" />
+        <pointLight position={[-5, -2, 6]} intensity={1.0} color="#eaf7ff" />
+        <pointLight ref={rimLightRef} position={[4, 3, -4]} intensity={1.2} color="#4FACFE" />
 
-      {/* Sanity mesh (debug): confirma pipeline/câmera */}
-      {debug && (
-        <mesh position={[0, 0, -1.2]}>
-          <boxGeometry args={[0.6, 0.6, 0.6]} />
-          <meshStandardMaterial color="hotpink" />
-        </mesh>
-      )}
+        {/* Sanity mesh (debug): confirma pipeline/câmera */}
+        {debug && (
+          <mesh position={[0, 0, -1.2]}>
+            <boxGeometry args={[0.6, 0.6, 0.6]} />
+            <meshStandardMaterial color="hotpink" />
+          </mesh>
+        )}
 
-      <group ref={cardRef}>
-        <CreditCard3D
-          sheenMatRef={sheenMatRef}
-          chipLayerRef={chipLayerRef}
-          textLayerRef={textLayerRef}
-          logoLayerRef={logoLayerRef}
-        />
+        <group ref={cardRef}>
+          <CreditCard3D sheenMatRef={sheenMatRef} chipLayerRef={chipLayerRef} textLayerRef={textLayerRef} />
+        </group>
+
+        {/* ContactShadows */}
+        {performanceTier !== "low" && (
+          <ContactShadows
+            position={[0, -1.4, 0]}
+            opacity={0.25}
+            scale={10}
+            blur={3}
+            far={4}
+            frames={1}
+          />
+        )}
       </group>
-
-      {/* ContactShadows */}
-      {performanceTier !== "low" && (
-        <ContactShadows
-          position={[0, -1.4, 0]}
-          opacity={0.25}
-          scale={10}
-          blur={3}
-          far={4}
-          frames={1}
-        />
-      )}
-    </group>
+    </Bounds>
   );
 }
 
@@ -269,32 +267,14 @@ function CreditCard3D({
   sheenMatRef,
   chipLayerRef,
   textLayerRef,
-  logoLayerRef,
 }: {
   sheenMatRef: React.RefObject<THREE.ShaderMaterial | null>;
   chipLayerRef: React.RefObject<THREE.Group | null>;
   textLayerRef: React.RefObject<THREE.Group | null>;
-  logoLayerRef: React.RefObject<THREE.Group | null>;
 }) {
-  // Carregar logo Kodano (com fallback se falhar)
-  const [logoTexture, setLogoTexture] = React.useState<THREE.Texture | null>(null);
-
-  React.useEffect(() => {
-    const loader = new THREE.TextureLoader();
-    loader.load(
-      "/kodano-logo.png",
-      (texture) => setLogoTexture(texture),
-      undefined,
-      (error) => {
-        console.warn("Failed to load Kodano logo:", error);
-        setLogoTexture(null);
-      }
-    );
-  }, []);
-
   const baseMat = React.useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
-      metalness: 0.25,
+      metalness: 0.05,
       roughness: 0.28,
       clearcoat: 0.4,
       clearcoatRoughness: 0.2,
@@ -343,41 +323,6 @@ function CreditCard3D({
         <RoundedBox args={[4.16, 2.56, 0.002]} radius={0.22} smoothness={10}>
           <primitive object={sheenMaterial} attach="material" />
         </RoundedBox>
-      </group>
-
-      {/* LOGO LAYER (parallax leve) */}
-      <group ref={logoLayerRef} position={[0, 0, 0.01]}>
-        {logoTexture && (
-          <mesh position={[0, 0.62, 0.085]}>
-            <planeGeometry args={[1.8, 0.52]} />
-            <meshStandardMaterial
-              map={logoTexture}
-              transparent
-              opacity={0.9}
-              color="#00C8DC"
-              metalness={0}
-              roughness={0.9}
-              emissive="#000000"
-              emissiveIntensity={0}
-              depthWrite={false}
-              toneMapped={false}
-            />
-          </mesh>
-        )}
-
-        {!logoTexture && (
-          <Text
-            fontSize={0.32}
-            color={"#00C8DC"}
-            fillOpacity={0.9}
-            anchorX="center"
-            anchorY="middle"
-            position={[0, 0.62, 0.085]}
-            font="/fonts/Inter-SemiBold.ttf"
-          >
-            {"KODANO"}
-          </Text>
-        )}
       </group>
 
       {/* Chip EMV */}
@@ -430,7 +375,7 @@ function CreditCard3D({
           position={[-1.8, -0.9, 0.085]}
           font="/fonts/Inter-SemiBold.ttf"
         >
-          {"KODANO DEMO"}
+          {"PAYMENTS DEMO"}
         </Text>
 
         <Text

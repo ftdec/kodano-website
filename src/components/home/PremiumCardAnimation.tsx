@@ -116,11 +116,31 @@ export function PremiumCardAnimation({ className }: { className?: string }) {
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full aspect-[1.1/1] rounded-3xl overflow-hidden bg-white",
+        "relative w-full max-w-[620px] md:max-w-[640px] aspect-[4/3] md:aspect-[16/10] rounded-[32px] overflow-hidden bg-white",
+        "shadow-[0_32px_64px_rgba(0,42,53,0.12),0_12px_24px_rgba(0,42,53,0.08)]",
         className
       )}
       style={{ touchAction: "pan-y" }}
     >
+      {/* Stage background: halo + vignette */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-[-15%] rounded-[32px]"
+          style={{
+            background:
+              "radial-gradient(60% 60% at 70% 30%, rgba(79,172,254,0.12), rgba(47,230,200,0.08), transparent 70%)",
+            filter: "blur(32px)",
+          }}
+        />
+        <div
+          className="absolute inset-0 rounded-[32px]"
+          style={{
+            background:
+              "radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.04) 100%)",
+          }}
+        />
+      </div>
+
       {/* Poster sempre presente; some só quando o 3D estiver pronto */}
       <PosterCard
         className={cn(
@@ -246,10 +266,10 @@ function PosterCard({ className }: { className?: string }) {
           width: "78%",
           maxWidth: 520,
           aspectRatio: "1.6 / 1",
-          borderRadius: 18,
+          borderRadius: 22,
           padding: 24,
           background: `linear-gradient(160deg, ${CARD_CYAN_BASE} 0%, ${CARD_CYAN_DEEP} 55%, ${CARD_NAVY_DEEP} 100%)`,
-          boxShadow: `0 40px 80px ${hexToRgba(CARD_NAVY_DEEP, 0.16)}, 0 12px 28px ${hexToRgba(CARD_NAVY_DEEP, 0.12)}`,
+          boxShadow: `0 40px 80px ${hexToRgba(CARD_NAVY_DEEP, 0.14)}, 0 18px 34px ${hexToRgba(CARD_NAVY_DEEP, 0.10)}`,
         }}
       >
         {/* Highlight sheen */}
@@ -257,7 +277,7 @@ function PosterCard({ className }: { className?: string }) {
           style={{
             position: "absolute",
             inset: 1,
-            borderRadius: 17,
+            borderRadius: 20,
             background: `linear-gradient(120deg, ${hexToRgba(CARD_CYAN_BASE, 0.08)}, transparent 45%), radial-gradient(60% 55% at 25% 25%, ${hexToRgba(
               "#ffffff",
               0.10
@@ -265,23 +285,6 @@ function PosterCard({ className }: { className?: string }) {
             pointerEvents: "none",
           }}
         />
-
-        {/* Logo (nunca branco puro) */}
-        <div
-          style={{
-            position: "absolute",
-            top: 18,
-            right: 22,
-            color: "#CFEFFF",
-            opacity: 0.85,
-            letterSpacing: "0.22em",
-            fontWeight: 600,
-            fontSize: 12,
-            filter: `drop-shadow(0 2px 8px ${hexToRgba(KODANO_BLUE, 0.25)})`,
-          }}
-        >
-          KODANO
-        </div>
 
         {/* Chip (tech Kodano, não laranja) */}
         <div
@@ -307,7 +310,7 @@ function PosterCard({ className }: { className?: string }) {
           4532 •••• •••• 9010
         </div>
 
-        {/* Nome */}
+        {/* Nome/identidade neutra (sem logo Kodano) */}
         <div
           style={{
             marginTop: 8,
@@ -316,7 +319,7 @@ function PosterCard({ className }: { className?: string }) {
             letterSpacing: "0.06em",
           }}
         >
-          KODANO DEMO
+          PAYMENTS DEMO
         </div>
       </div>
     </div>
