@@ -1,613 +1,141 @@
-/**
- * Premium Card Animation - Ultra Version
- *
- * Bigger, more colorful, more animated!
- * Maximum visual impact
- */
-
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
-import { Check, Sparkles, Zap, CreditCard } from "lucide-react";
+import * as React from "react";
+import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
+import { useReducedMotion } from "@/lib/animations/hooks";
 
-type AnimationPhase = "idle" | "processing" | "success";
+type PerformanceTier = "high" | "medium" | "low";
+
+const PremiumCardCanvas = dynamic(() => import("./PremiumCardCanvas"), {
+  ssr: false, // IMPORTANTE: tira R3F do SSR e permite code splitting real
+  loading: () => <LoadingPlaceholder />,
+});
 
 export function PremiumCardAnimation({ className }: { className?: string }) {
-  const [mounted, setMounted] = useState(false);
-  const [phase, setPhase] = useState<AnimationPhase>("idle");
+  const prefersReducedMotion = useReducedMotion();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [mounted, setMounted] = React.useState(false);
+  const [webGLSupported, setWebGLSupported] = React.useState<boolean>(false);
+  const [tier, setTier] = React.useState<PerformanceTier>("medium");
 
-  useEffect(() => {
+  // Montagem (hydration-safe)
+  React.useEffect(() => setMounted(true), []);
+
+  // Detecta WebGL e tier só no client
+  React.useEffect(() => {
     if (!mounted) return;
-
-    const sequence = async () => {
-      setPhase("idle");
-      await wait(4000); // Mais tempo no idle
-
-      setPhase("processing");
-      await wait(4500); // Processamento mais lento
-
-      setPhase("success");
-      await wait(3000); // Sucesso mais longo
-
-      sequence();
-    };
-
-    sequence();
+    setWebGLSupported(detectWebGLSupport());
+    setTier(detectPerformanceTier());
   }, [mounted]);
 
+  // Se não montou ainda: placeholder SSR-safe
   if (!mounted) {
     return (
-      <div
-        className={cn(
-          "relative w-full aspect-[1.1/1] rounded-3xl overflow-hidden",
-          "bg-gradient-to-br from-slate-50 via-white to-slate-50",
-          className
-        )}
-      />
+      <div className={cn("w-full aspect-[1.1/1] rounded-3xl overflow-hidden", className)}>
+        <LoadingPlaceholder />
+      </div>
+    );
+  }
+
+  // Reduced motion ou low-tier -> fallback estático premium
+  if (prefersReducedMotion || tier === "low") {
+    return (
+      <div className={cn("w-full aspect-[1.1/1] rounded-3xl overflow-hidden", className)}>
+        <StaticPremiumFallback />
+      </div>
+    );
+  }
+
+  // Sem WebGL -> fallback
+  if (!webGLSupported) {
+    return (
+      <div className={cn("w-full aspect-[1.1/1] rounded-3xl overflow-hidden", className)}>
+        <FallbackShimmer />
+      </div>
     );
   }
 
   return (
     <div
-      className={cn(
-        "relative w-full aspect-[1.1/1] rounded-3xl overflow-hidden",
-        "bg-gradient-to-br from-violet-50 via-blue-50 to-cyan-50",
-        "flex items-center justify-center p-6",
-        className
-      )}
+      className={cn("w-full aspect-[1.1/1] rounded-3xl overflow-hidden", className)}
+      style={{ touchAction: "pan-y" }}
     >
-      {/* Animated background gradient */}
-      <motion.div
-        className="absolute inset-0 opacity-20"
-        animate={{
-          background: [
-            "radial-gradient(circle at 20% 50%, #4FACFE 0%, transparent 50%)",
-            "radial-gradient(circle at 80% 50%, #00DBDE 0%, transparent 50%)",
-            "radial-gradient(circle at 50% 80%, #43E97B 0%, transparent 50%)",
-            "radial-gradient(circle at 20% 50%, #4FACFE 0%, transparent 50%)",
-          ],
-        }}
-        transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-      />
-
-      {/* Floating particles */}
-      {[...Array(8)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-2 h-2 rounded-full bg-gradient-to-r from-[#4FACFE] to-[#00DBDE]"
-          style={{
-            left: `${10 + i * 12}%`,
-            top: `${20 + (i % 3) * 20}%`,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.3, 0.7, 0.3],
-            scale: [1, 1.5, 1],
-          }}
-          transition={{
-            duration: 3 + i * 0.5,
-            repeat: Infinity,
-            delay: i * 0.3,
-          }}
-        />
-      ))}
-
-      {/* Main card container */}
-      <motion.div
-        className="relative z-10"
-        initial={{ scale: 0.8, opacity: 0, y: 50 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
-      >
-        {/* Glow effect */}
-        <motion.div
-          className="absolute -inset-4 rounded-3xl opacity-50 blur-2xl"
-          animate={{
-            background: phase === "processing"
-              ? "linear-gradient(45deg, #4FACFE, #00DBDE, #43E97B)"
-              : phase === "success"
-              ? "linear-gradient(45deg, #43E97B, #38d66a)"
-              : "linear-gradient(45deg, #4FACFE, #00DBDE)",
-          }}
-          transition={{ duration: 0.5 }}
-        />
-
-        {/* Card */}
-        <div className="relative w-[420px] h-[260px]">
-          {/* Processing waves - Ultra smooth and elegant */}
-          <AnimatePresence>
-            {phase === "processing" && (
-              <>
-                {[0, 1, 2].map((i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute inset-0 rounded-3xl"
-                    style={{
-                      border: "2px solid",
-                      borderImage: "linear-gradient(135deg, #4FACFE, #00DBDE, #43E97B) 1",
-                    }}
-                    initial={{ scale: 1, opacity: 0 }}
-                    animate={{
-                      scale: [1, 1.25, 1.5],
-                      opacity: [0.6, 0.3, 0],
-                    }}
-                    transition={{
-                      duration: 3.5,
-                      repeat: Infinity,
-                      delay: i * 0.6,
-                      ease: [0.25, 0.1, 0.25, 1], // Custom cubic-bezier for ultra smooth
-                    }}
-                  />
-                ))}
-                {/* Subtle inner glow pulse */}
-                <motion.div
-                  className="absolute inset-0 rounded-3xl"
-                  style={{
-                    background: "radial-gradient(circle at center, rgba(79, 172, 254, 0.15), transparent 70%)",
-                  }}
-                  animate={{
-                    opacity: [0.3, 0.6, 0.3],
-                    scale: [1, 1.05, 1],
-                  }}
-                  transition={{
-                    duration: 2.5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                />
-              </>
-            )}
-          </AnimatePresence>
-
-          {/* Success confetti */}
-          <AnimatePresence>
-            {phase === "success" && (
-              <>
-                {[...Array(20)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-3 h-3 rounded-full"
-                    style={{
-                      background: i % 3 === 0 ? "#4FACFE" : i % 3 === 1 ? "#00DBDE" : "#43E97B",
-                      left: "50%",
-                      top: "50%",
-                    }}
-                    initial={{ scale: 0, x: 0, y: 0 }}
-                    animate={{
-                      scale: [0, 1, 0],
-                      x: (Math.random() - 0.5) * 300,
-                      y: (Math.random() - 0.5) * 300,
-                      opacity: [1, 1, 0],
-                    }}
-                    exit={{ opacity: 0 }}
-                    transition={{
-                      duration: 1.5,
-                      delay: i * 0.03,
-                    }}
-                  />
-                ))}
-              </>
-            )}
-          </AnimatePresence>
-
-          {/* Main card */}
-          <motion.div
-            className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl"
-            style={{
-              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            }}
-            animate={{
-              scale: phase === "processing" ? [1, 1.015, 1] : 1, // More subtle breathing
-              rotateY: phase === "idle" ? [0, 3, 0] : 0, // More subtle rotation
-            }}
-            transition={{
-              scale: { 
-                duration: 4, 
-                repeat: phase === "processing" ? Infinity : 0,
-                ease: [0.4, 0, 0.6, 1], // Smooth ease-in-out
-              },
-              rotateY: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-            }}
-          >
-            {/* Holographic moving gradient */}
-            <motion.div
-              className="absolute inset-0"
-              style={{
-                background: "linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%)",
-                backgroundSize: "200% 200%",
-              }}
-              animate={{
-                backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-              }}
-            />
-
-            {/* Shimmer effect - More elegant and smooth */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-              style={{
-                width: "40%",
-                transform: "skewX(-20deg)",
-              }}
-              animate={{
-                x: phase === "processing" ? ["-100%", "300%"] : ["-100%", "300%"],
-              }}
-              transition={{
-                duration: phase === "processing" ? 3.5 : 4,
-                repeat: Infinity,
-                repeatDelay: phase === "processing" ? 0.5 : 1.5,
-                ease: "linear",
-              }}
-            />
-
-            {/* Card content */}
-            <div className="relative w-full h-full p-8 flex flex-col justify-between">
-              {/* Top row */}
-              <div className="flex items-start justify-between">
-                {/* Chip */}
-                <motion.div
-                  className="w-16 h-12 rounded-lg shadow-lg overflow-hidden"
-                  style={{
-                    background: "linear-gradient(135deg, #f6d365 0%, #fda085 100%)",
-                  }}
-                  animate={{
-                    boxShadow: phase === "processing"
-                      ? ["0 0 20px rgba(246, 211, 101, 0.4)", "0 0 35px rgba(246, 211, 101, 0.7)", "0 0 20px rgba(246, 211, 101, 0.4)"]
-                      : "0 0 20px rgba(246, 211, 101, 0.3)",
-                    scale: phase === "processing" ? [1, 1.02, 1] : 1,
-                  }}
-                  transition={{ 
-                    duration: 2.5, 
-                    repeat: phase === "processing" ? Infinity : 0,
-                    ease: [0.4, 0, 0.6, 1],
-                  }}
-                >
-                  <div className="w-full h-full p-1.5">
-                    <div className="w-full h-full rounded border-2 border-yellow-400/40 grid grid-cols-3 gap-0.5">
-                      {[...Array(9)].map((_, i) => (
-                        <div key={i} className="bg-yellow-600/20 rounded-sm" />
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Contactless + Sparkles */}
-                <div className="flex gap-3">
-                  <motion.div
-                    animate={{
-                      scale: phase === "processing" ? [1, 1.1, 1] : 1,
-                      rotate: phase === "processing" ? [0, 5, -5, 0] : 0,
-                      opacity: phase === "processing" ? [0.8, 1, 0.8] : 1,
-                    }}
-                    transition={{ 
-                      duration: 2.5, 
-                      repeat: phase === "processing" ? Infinity : 0,
-                      ease: [0.4, 0, 0.6, 1],
-                    }}
-                  >
-                    <Sparkles className="w-6 h-6 text-white" />
-                  </motion.div>
-
-                  <motion.div
-                    className="flex gap-0.5"
-                    animate={{
-                      opacity: phase === "processing" ? [0.6, 0.95, 0.6] : 0.7,
-                    }}
-                    transition={{ 
-                      duration: 2.5, 
-                      repeat: phase === "processing" ? Infinity : 0,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    {[0, 1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className="w-1.5 h-4 bg-white/60 rounded-full"
-                        style={{
-                          height: `${16 + i * 5}px`,
-                          transform: "rotate(-25deg)",
-                        }}
-                      />
-                    ))}
-                  </motion.div>
-                </div>
-              </div>
-
-              {/* Card number */}
-              <div className="space-y-6">
-                <div className="flex gap-4 text-white font-mono text-2xl tracking-widest">
-                  {["4532", "••••", "••••", "9010"].map((group, i) => (
-                    <motion.span
-                      key={i}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        delay: 0.2 * i + 0.5,
-                        type: "spring",
-                        bounce: 0.5,
-                      }}
-                    >
-                      {group}
-                    </motion.span>
-                  ))}
-                </div>
-
-                <div className="flex items-end justify-between">
-                  <div>
-                    <div className="text-xs text-white/50 uppercase tracking-wider mb-1.5">
-                      Card Holder
-                    </div>
-                    <div className="text-base text-white font-semibold tracking-wide">
-                      KODANO DEMO
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-white/50 uppercase tracking-wider mb-1.5">
-                      Expires
-                    </div>
-                    <div className="text-base text-white font-semibold tracking-wide">
-                      12/28
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom: Kodano logo */}
-              <div className="flex justify-between items-end">
-                <CreditCard className="w-8 h-8 text-white/40" />
-                <div className="flex items-center gap-2">
-                  <motion.div
-                    className="w-10 h-10 rounded-full"
-                    style={{
-                      background: "linear-gradient(135deg, #4FACFE 0%, #00DBDE 100%)",
-                    }}
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                  <motion.div
-                    className="w-10 h-10 rounded-full -ml-5"
-                    style={{
-                      background: "linear-gradient(135deg, #00DBDE 0%, #43E97B 100%)",
-                    }}
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Processing overlay - Ultra smooth and professional */}
-            <AnimatePresence>
-              {phase === "processing" && (
-                <motion.div
-                  className="absolute inset-0 flex items-center justify-center rounded-3xl overflow-hidden"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(79, 172, 254, 0.85), rgba(0, 219, 222, 0.85), rgba(67, 233, 123, 0.85))",
-                    backdropFilter: "blur(12px)",
-                  }}
-                  initial={{ opacity: 0 }}
-                  animate={{ 
-                    opacity: [0.85, 0.95, 0.85],
-                  }}
-                  exit={{ opacity: 0 }}
-                  transition={{
-                    opacity: {
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    },
-                  }}
-                >
-                  {/* Subtle animated background pattern */}
-                  <motion.div
-                    className="absolute inset-0 opacity-20"
-                    style={{
-                      backgroundImage: "radial-gradient(circle at 30% 50%, rgba(255,255,255,0.3) 0%, transparent 50%), radial-gradient(circle at 70% 50%, rgba(255,255,255,0.2) 0%, transparent 50%)",
-                    }}
-                    animate={{
-                      scale: [1, 1.1, 1],
-                      rotate: [0, 180, 360],
-                    }}
-                    transition={{
-                      duration: 8,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                  />
-                  
-                  <div className="relative z-10 flex flex-col items-center gap-6">
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                      style={{ filter: "drop-shadow(0 0 20px rgba(255,255,255,0.5))" }}
-                    >
-                      <Zap className="w-14 h-14 text-white" strokeWidth={1.5} />
-                    </motion.div>
-                    <div className="flex gap-3">
-                      {[0, 1, 2].map((i) => (
-                        <motion.div
-                          key={i}
-                          className="w-2.5 h-2.5 rounded-full bg-white"
-                          style={{ boxShadow: "0 0 12px rgba(255,255,255,0.8)" }}
-                          animate={{
-                            scale: [1, 1.4, 1],
-                            opacity: [0.6, 1, 0.6],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            delay: i * 0.3,
-                            ease: [0.4, 0, 0.6, 1],
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Success overlay */}
-            <AnimatePresence>
-              {phase === "success" && (
-                <motion.div
-                  className="absolute inset-0 flex items-center justify-center"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(67, 233, 123, 0.95), rgba(56, 214, 106, 0.95))",
-                    backdropFilter: "blur(8px)",
-                  }}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                >
-                  <motion.div
-                    initial={{ scale: 0, rotate: -180 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 200,
-                      damping: 12,
-                      delay: 0.1,
-                    }}
-                  >
-                    <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-2xl">
-                      <Check className="w-12 h-12 text-[#43E97B]" strokeWidth={4} />
-                    </div>
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        </div>
-
-        {/* Status text */}
-        <motion.div
-          className="mt-8 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          <AnimatePresence mode="wait">
-            {phase === "idle" && (
-              <motion.div
-                key="idle"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  scale: [1, 1.05, 1],
-                }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{
-                  scale: {
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }
-                }}
-                className="relative"
-              >
-                {/* Subtle glow background */}
-                <motion.div
-                  className="absolute -inset-4 rounded-2xl opacity-30 blur-xl"
-                  animate={{
-                    background: [
-                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                      "linear-gradient(135deg, #4FACFE 0%, #00DBDE 100%)",
-                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    ],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                />
-
-                {/* Badge container */}
-                <div className="relative px-6 py-3 rounded-2xl bg-white/80 backdrop-blur-sm border-2 border-violet-200/60 shadow-lg">
-                  <div className="flex items-center justify-center gap-3">
-                    <motion.div
-                      animate={{
-                        rotate: [0, 10, -10, 0],
-                        scale: [1, 1.2, 1],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    >
-                      <Sparkles className="w-6 h-6 text-violet-600" />
-                    </motion.div>
-                    <p className="text-2xl font-bold bg-gradient-to-r from-violet-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
-                      Pronto para processar
-                    </p>
-                    <motion.div
-                      className="w-2.5 h-2.5 rounded-full bg-violet-500"
-                      animate={{
-                        opacity: [1, 0.3, 1],
-                        scale: [1, 1.3, 1],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    />
-                  </div>
-                </div>
-              </motion.div>
-            )}
-            {phase === "processing" && (
-              <motion.div
-                key="processing"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="flex items-center justify-center gap-2"
-              >
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                >
-                  <Zap className="w-5 h-5 text-blue-600" />
-                </motion.div>
-                <p className="text-lg font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                  Processando pagamento...
-                </p>
-              </motion.div>
-            )}
-            {phase === "success" && (
-              <motion.div
-                key="success"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="flex items-center justify-center gap-2"
-              >
-                <Check className="w-6 h-6 text-green-600" strokeWidth={3} />
-                <p className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                  Pagamento aprovado!
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </motion.div>
+      <PremiumCardCanvas performanceTier={tier} enableMotion={!prefersReducedMotion} />
     </div>
   );
 }
 
-function wait(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+function detectWebGLSupport(): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+
+    const gl2 = canvas.getContext("webgl2");
+    if (gl2) return true;
+
+    const gl1 =
+      canvas.getContext("webgl") ||
+      canvas.getContext("experimental-webgl");
+    if (gl1) return true;
+
+    return !!(window as any).WebGLRenderingContext;
+  } catch {
+    return false;
+  }
+}
+
+function detectPerformanceTier(): PerformanceTier {
+  try {
+    const cores = navigator.hardwareConcurrency || 4;
+    const memory = (navigator as any).deviceMemory || 4;
+    const dpr = window.devicePixelRatio || 1;
+
+    let score = 0;
+    if (cores >= 8) score += 2;
+    if (memory >= 8) score += 2;
+    if (dpr <= 1.5) score += 1;
+
+    if (score >= 4) return "high";
+    if (score >= 2) return "medium";
+    return "low";
+  } catch {
+    return "medium";
+  }
+}
+
+function LoadingPlaceholder() {
+  return (
+    <div className="w-full h-full bg-gradient-to-br from-[#061E26] via-[#072A35] to-[#0B2A35] relative">
+      <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_30%_30%,rgba(0,200,220,0.28),transparent_45%),radial-gradient(circle_at_70%_60%,rgba(124,243,255,0.18),transparent_50%)]" />
+      <div className="absolute inset-0 animate-pulse opacity-40 bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.06),transparent)]" />
+    </div>
+  );
+}
+
+function StaticPremiumFallback() {
+  return (
+    <div className="w-full h-full bg-gradient-to-br from-[#061E26] via-[#072A35] to-[#0B2A35] relative">
+      <div className="absolute inset-0 opacity-70 bg-[radial-gradient(circle_at_35%_35%,rgba(0,200,220,0.24),transparent_45%),radial-gradient(circle_at_75%_60%,rgba(155,123,214,0.14),transparent_55%)]" />
+      <div className="absolute inset-0 opacity-35 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.08),transparent)]" />
+      <div className="absolute bottom-6 left-6 text-white/80">
+        <div className="text-sm tracking-wide">KODANO</div>
+        <div className="mt-2 text-xs text-white/60">Pagamentos modernos, simples e seguros</div>
+      </div>
+    </div>
+  );
+}
+
+function FallbackShimmer() {
+  return (
+    <div className="w-full h-full bg-gradient-to-br from-[#061E26] via-[#072A35] to-[#0B2A35] relative">
+      <div className="absolute inset-0 opacity-70 bg-[radial-gradient(circle_at_35%_35%,rgba(0,200,220,0.22),transparent_45%),radial-gradient(circle_at_75%_60%,rgba(124,243,255,0.16),transparent_55%)]" />
+      <div className="absolute inset-0 animate-[shimmer_2.2s_infinite] opacity-40 bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.10),transparent)]" />
+      <style jsx>{`
+        @keyframes shimmer {
+          0% { transform: translateX(-40%); }
+          100% { transform: translateX(40%); }
+        }
+      `}</style>
+    </div>
+  );
 }
