@@ -70,11 +70,6 @@ function PolicyMobileNav() {
   const lastScrollY = useRef(0);
   const scrollThreshold = 20;
 
-  const menuItems = [
-    { label: "Produtos", href: "/#concept", key: "produtos" },
-    { label: "Como Funciona", href: "/#process", key: "como-funciona" },
-  ];
-
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -152,28 +147,15 @@ function PolicyMobileNav() {
           >
             <div className="overflow-y-auto" style={{ maxHeight: "50vh" }}>
               <nav className="p-4 pb-4 space-y-1">
-                {menuItems.map((item, index) => (
-                  <motion.div key={item.key}>
-                    <Link
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  </motion.div>
-                ))}
-                <div className="pt-4 mt-4 border-t border-gray-100 pb-2 space-y-2">
-                  <motion.div whileTap={{ scale: 0.98 }}>
-                    <Link
-                      href="/#contact"
-                      onClick={() => setIsOpen(false)}
-                      className="block w-full px-4 py-3 text-base font-semibold text-white text-center rounded-lg bg-[#0D1B2A] hover:bg-[#415A77] active:bg-[#0D1B2A]/90 transition-all duration-200"
-                    >
-                      Fale Conosco
-                    </Link>
-                  </motion.div>
-                </div>
+                <motion.div>
+                  <Link
+                    href="/"
+                    onClick={() => setIsOpen(false)}
+                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    Home
+                  </Link>
+                </motion.div>
               </nav>
             </div>
           </motion.div>
@@ -190,11 +172,6 @@ export function PolicyPage({ title, subtitle, year, sections }: PolicyPageProps)
   });
 
   const [isScrolled, setIsScrolled] = useState(false);
-
-  const navItems = [
-    { label: "Produtos", href: "/#concept", key: "produtos" },
-    { label: "Como Funciona", href: "/#process", key: "como-funciona" },
-  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -243,32 +220,16 @@ export function PolicyPage({ title, subtitle, year, sections }: PolicyPageProps)
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  className="relative px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors rounded-md hover:bg-accent/5 group"
-                >
-                  <span className="relative">
-                    {item.label}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full" />
-                  </span>
-                </Link>
-              ))}
-            </nav>
-
-            {/* CTA Button */}
-            <div className="flex items-center gap-3 shrink-0">
-              <Button
-                asChild
-                size="sm"
-                variant="kodano"
-                rounded="full"
-                className="hidden lg:flex"
+              <Link
+                href="/"
+                className="relative px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors rounded-md hover:bg-accent/5 group"
               >
-                <Link href="/#contact">Fale Conosco</Link>
-              </Button>
-            </div>
+                <span className="relative">
+                  Home
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full" />
+                </span>
+              </Link>
+            </nav>
           </div>
         </div>
       </header>
