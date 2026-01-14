@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { BRAND } from "@/lib/constants/brand";
-import { Mail } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -11,9 +11,9 @@ export function Footer() {
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-screen-xl px-4 md:px-6 py-12 md:py-16">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand Column */}
-          <div>
+          <div className="lg:col-span-2">
             <Link
               href="/"
               className="flex items-center gap-3 group"
@@ -36,12 +36,20 @@ export function Footer() {
             <p className="mt-4 text-sm text-muted-foreground max-w-xs">
               {BRAND.description}
             </p>
+            
+            {/* Institutional Info */}
+            <div className="mt-6 space-y-2 text-sm text-muted-foreground">
+              <p className="font-medium text-foreground">
+                Kodano Tecnologia da Informação LTDA
+              </p>
+              <p>CNPJ: 63.611.170/0001-22</p>
+            </div>
           </div>
 
-          {/* Contato */}
+          {/* Contact Column */}
           <div>
             <h3 className="font-semibold text-foreground mb-4">Contato</h3>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               <li>
                 <a
                   href="mailto:contato@kodano.com.br"
@@ -54,6 +62,74 @@ export function Footer() {
                   </div>
                 </a>
               </li>
+              <li>
+                <a
+                  href="tel:+5511982225822"
+                  className="flex items-start gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+                >
+                  <Phone className="h-4 w-4 mt-0.5 shrink-0 group-hover:text-primary transition-colors" />
+                  <div>
+                    <p className="font-medium text-foreground">(11) 98222-5822</p>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <div className="flex items-start gap-3 text-sm text-muted-foreground">
+                  <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
+                  <div>
+                    <p>Rua Oscar Freire, 1437</p>
+                    <p>6º andar — Conjuntos 61 ao 66</p>
+                    <p>São Paulo – SP</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          {/* Policies Column */}
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Políticas</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  href="/politica-de-privacidade"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Política de Privacidade
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/politica-kyc-kyb"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Política de KYC/KYB
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/politica-pld-ft"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Política de PLD-FT
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/politica-seguranca-informacao"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Política de Segurança da Informação
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contato"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Contato
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -62,27 +138,44 @@ export function Footer() {
 
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <p className="text-sm text-muted-foreground">
-            © {currentYear} {BRAND.name}. Todos os direitos reservados.
-          </p>
-          <div className="flex items-center space-x-6">
+          <div className="text-center md:text-left">
+            <p className="text-sm text-muted-foreground">
+              © {currentYear} {BRAND.name}. Todos os direitos reservados.
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Kodano Tecnologia da Informação LTDA — CNPJ: 63.611.170/0001-22
+            </p>
+          </div>
+          <div className="flex items-center flex-wrap justify-center gap-x-6 gap-y-2">
             <Link
-              href="/privacidade"
+              href="/politica-de-privacidade"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               Privacidade
             </Link>
             <Link
-              href="/termos"
+              href="/politica-kyc-kyb"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Termos de Uso
+              KYC/KYB
             </Link>
             <Link
-              href="/cookies"
+              href="/politica-pld-ft"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Cookies
+              PLD-FT
+            </Link>
+            <Link
+              href="/politica-seguranca-informacao"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Segurança
+            </Link>
+            <Link
+              href="/contato"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Contato
             </Link>
           </div>
         </div>

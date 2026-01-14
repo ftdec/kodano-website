@@ -25,9 +25,9 @@ export const NAVIGATION_ITEMS = [
     description: "Conheça a Kodano",
   },
   {
-    label: "Desenvolvedores",
-    href: "/desenvolvedores",
-    description: "Documentação e APIs",
+    label: "Contato",
+    href: "/contato",
+    description: "Fale conosco",
   },
 ];
 
@@ -54,6 +54,12 @@ export const FOOTER_LINKS = {
   ],
   empresa: [
     { label: "Sobre", href: "/sobre" },
-    { label: "Fale Conosco", href: "/fale-conosco" },
+    { label: "Contato", href: "/contato" },
+  ],
+  politicas: [
+    { label: "Política de Privacidade", href: "/politica-de-privacidade" },
+    { label: "Política de KYC/KYB", href: "/politica-kyc-kyb" },
+    { label: "Política de PLD-FT", href: "/politica-pld-ft" },
+    { label: "Política de Segurança da Informação", href: "/politica-seguranca-informacao" },
   ],
 };

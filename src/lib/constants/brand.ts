@@ -3,9 +3,20 @@ export const BRAND = {
   tagline: "Gateway de Pagamentos B2B",
   description:
     "Subadquirente digital com APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades. Integração simples, segurança bancária e compliance total.",
-  url: "https://kodano.com",
-  email: "contato@kodano.com",
-  phone: "+55 11 99999-9999",
+  url: "https://kodano.com.br",
+  email: "contato@kodano.com.br",
+  phone: "+55 11 98222-5822",
+  phoneFormatted: "(11) 98222-5822",
+  // Institutional Information
+  legalName: "Kodano Tecnologia da Informação LTDA",
+  cnpj: "63.611.170/0001-22",
+  address: {
+    street: "Rua Oscar Freire, 1437",
+    floor: "6º andar — Conjuntos 61 ao 66",
+    city: "São Paulo",
+    state: "SP",
+    full: "Rua Oscar Freire, 1437, 6º andar — Conjuntos 61 ao 66, São Paulo – SP"
+  }
 } as const;
 
 export const COLORS = {
@@ -54,4 +65,3 @@ export const KEY_FEATURES = [
     icon: "code",
   },
 ] as const;
-
