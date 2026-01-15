@@ -136,7 +136,7 @@ export default function PoliticaKYCKYBPage() {
     <PolicyPage
       title="Política de KYC/KYB"
       subtitle="Know Your Customer / Know Your Business — Kodano Tecnologia da Informação LTDA"
-      year="2025"
+      year="2026"
       sections={sections}
     />
   );

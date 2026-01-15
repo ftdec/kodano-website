@@ -143,7 +143,7 @@ export default function PoliticaPrivacidadePage() {
     <PolicyPage
       title="Política de Privacidade e Proteção de Dados Pessoais (LGPD)"
       subtitle="Kodano Tecnologia da Informação LTDA"
-      year="2025"
+      year="2026"
       sections={sections}
     />
   );

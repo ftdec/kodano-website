@@ -146,7 +146,7 @@ export default function PoliticaSegurancaInformacaoPage() {
     <PolicyPage
       title="Política de Segurança da Informação e Cibersegurança"
       subtitle="Kodano Tecnologia da Informação LTDA"
-      year="2025"
+      year="2026"
       sections={sections}
     />
   );

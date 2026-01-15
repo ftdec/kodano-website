@@ -154,7 +154,7 @@ export default function PoliticaPLDFTPage() {
     <PolicyPage
       title="Política de Prevenção à Lavagem de Dinheiro e ao Financiamento do Terrorismo (PLD/FT)"
       subtitle="Kodano Tecnologia da Informação LTDA"
-      year="2025"
+      year="2026"
       sections={sections}
     />
   );

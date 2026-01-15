@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Footer } from "@/components/layout/footer";
@@ -65,6 +66,7 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
 }
 
 function PolicyMobileNav() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const lastScrollY = useRef(0);
@@ -148,13 +150,16 @@ function PolicyMobileNav() {
             <div className="overflow-y-auto" style={{ maxHeight: "50vh" }}>
               <nav className="p-4 pb-4 space-y-1">
                 <motion.div>
-                  <Link
-                    href="/"
-                    onClick={() => setIsOpen(false)}
-                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      router.push("/");
+                      window.location.href = "/";
+                    }}
+                    className="block w-full text-left px-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                   >
                     Home
-                  </Link>
+                  </button>
                 </motion.div>
               </nav>
             </div>
@@ -166,6 +171,7 @@ function PolicyMobileNav() {
 }
 
 export function PolicyPage({ title, subtitle, year, sections }: PolicyPageProps) {
+  const router = useRouter();
   const [heroRef, heroInView] = useInView({
     triggerOnce: true,
     threshold: 0.1
@@ -220,15 +226,18 @@ export function PolicyPage({ title, subtitle, year, sections }: PolicyPageProps)
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-1">
-              <Link
-                href="/"
+              <button
+                onClick={() => {
+                  router.push("/");
+                  window.location.href = "/";
+                }}
                 className="relative px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors rounded-md hover:bg-accent/5 group"
               >
                 <span className="relative">
                   Home
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full" />
                 </span>
-              </Link>
+              </button>
             </nav>
           </div>
         </div>
