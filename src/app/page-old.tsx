@@ -24,7 +24,7 @@ export default function Home() {
       {/* Hero Section */}
       <HeroSection
         title="Pagamentos inteligentes para empresas modernas"
-        subtitle="Subadquirente Digital com Tecnologia Avançada"
+        subtitle="Infraestrutura de Pagamentos com Tecnologia Avançada"
         description="Maximize aprovação, reduza custos e tenha controle total com APIs modernas e orquestração inteligente de funcionalidades."
         primaryCta={{ label: "Começar Agora", href: "/fale-conosco" }}
         secondaryCta={{ label: "Ver Demonstração", href: "/como-funciona" }}

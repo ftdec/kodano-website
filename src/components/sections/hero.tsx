@@ -151,7 +151,7 @@ export function HeroSection() {
           {/* Real-time Metrics */}
           <div className="mt-24 pt-12 border-t border-border/50">
             <p className="text-xs md:text-sm text-muted-foreground mb-12 text-center uppercase tracking-wider font-semibold">
-              Subadquirente digital com tecnologia avançada
+              Infraestrutura de pagamentos com tecnologia avançada
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto">

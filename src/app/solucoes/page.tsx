@@ -20,7 +20,7 @@ import {
 export const metadata: Metadata = {
   title: "Para Empresas - Kodano",
   description:
-    "Menor custo efetivo, maior aprovação e liquidação previsível. Subadquirente digital com tecnologia avançada e orquestração inteligente de funcionalidades.",
+    "Menor custo efetivo, maior aprovação e liquidação previsível. Infraestrutura de pagamentos com tecnologia avançada e orquestração inteligente de funcionalidades.",
 };
 
 const benefits = [
@@ -93,7 +93,7 @@ export default function SolucoesPage() {
               </span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Subadquirente digital com APIs modernas, taxas competitivas e tecnologia superior.
+              Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia superior.
             </p>
           </div>
         </div>

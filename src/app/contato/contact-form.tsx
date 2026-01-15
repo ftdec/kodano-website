@@ -135,7 +135,7 @@ export function ContactForm() {
           <Input
             id="acquirers"
             name="acquirers"
-            placeholder="Ex: Gateway próprio, outro subadquirente"
+            placeholder="Ex: Gateway próprio, outra plataforma"
           />
         </div>
       </div>

@@ -21,17 +21,16 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'),
   title: {
-    default: "Kodano — Subadquirente com tecnologia avançada para empresas (SaaS de pagamentos, sem custódia)",
+    default: "Kodano — Infraestrutura de pagamentos com tecnologia avançada para empresas",
     template: "%s | Kodano",
   },
-  description: "Subadquirente digital que oferece APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades. Antifraude avançado, checkout otimizado e suporte especializado — sem custódia.",
+  description: "Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada. Antifraude, checkout otimizado e suporte especializado.",
   keywords: [
-    "subadquirente",
-    "facilitador de pagamentos",
-    "plataforma SaaS pagamentos",
+    "infraestrutura de pagamentos",
+    "plataforma de pagamentos",
     "APIs de pagamento",
     "gateway de pagamentos B2B",
-    "orquestração de funcionalidades",
+    "tecnologia financeira",
     "taxas competitivas",
     "aprovação transações",
     "liquidação previsível",
@@ -49,8 +48,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     url: "https://kodano.com.br",
-    title: "Kodano — Subadquirente com tecnologia avançada",
-    description: "Subadquirente digital que oferece APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades.",
+    title: "Kodano — Infraestrutura de pagamentos com tecnologia avançada",
+    description: "Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada.",
     siteName: "Kodano",
     images: [
       {
@@ -71,8 +70,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kodano — Subadquirente com tecnologia avançada",
-    description: "Subadquirente digital com APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades.",
+    title: "Kodano — Infraestrutura de pagamentos com tecnologia avançada",
+    description: "Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada.",
     images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`],
     creator: "@kodano",
   },
@@ -155,8 +154,8 @@ export default function RootLayout({
         {/* Open Graph / Facebook / WhatsApp */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://kodano.com.br" />
-        <meta property="og:title" content="Kodano — Subadquirente com tecnologia avançada" />
-        <meta property="og:description" content="Subadquirente digital que oferece APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades." />
+        <meta property="og:title" content="Kodano — Infraestrutura de pagamentos com tecnologia avançada" />
+        <meta property="og:description" content="Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada." />
         <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -168,8 +167,8 @@ export default function RootLayout({
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://kodano.com.br" />
-        <meta name="twitter:title" content="Kodano — Subadquirente com tecnologia avançada" />
-        <meta name="twitter:description" content="Subadquirente digital com APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades." />
+        <meta name="twitter:title" content="Kodano — Infraestrutura de pagamentos com tecnologia avançada" />
+        <meta name="twitter:description" content="Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada." />
         <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`} />
         <meta name="twitter:creator" content="@kodano" />
         

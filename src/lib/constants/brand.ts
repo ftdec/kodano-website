@@ -2,14 +2,14 @@ export const BRAND = {
   name: "Kodano",
   tagline: "Gateway de Pagamentos B2B",
   description:
-    "Subadquirente digital com APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades. Integração simples, segurança bancária e compliance total.",
+    "Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada. Integração simples, segurança bancária e compliance total.",
   url: "https://kodano.com.br",
   email: "contato@kodano.com.br",
   phone: "+55 11 98222-5822",
   phoneFormatted: "(11) 98222-5822",
   // Institutional Information
   legalName: "Kodano Tecnologia da Informação LTDA",
-  cnpj: "63.611.170/0001-22",
+  cnpj: "09.688.215/0001-11",
   address: {
     street: "Rua Oscar Freire, 1437",
     floor: "6º andar — Conjuntos 61 ao 66",

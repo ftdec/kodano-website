@@ -55,7 +55,7 @@ export default function ContatoPage() {
                     <div>
                       <h3 className="font-semibold text-foreground mb-2">CNPJ</h3>
                       <p className="text-muted-foreground">
-                        63.611.170/0001-22
+                        09.688.215/0001-11
                       </p>
                     </div>
                   </div>

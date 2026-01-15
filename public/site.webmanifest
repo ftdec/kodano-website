@@ -1,7 +1,7 @@
 {
-  "name": "Kodano - Subadquirente com tecnologia avançada",
+  "name": "Kodano - Infraestrutura de pagamentos",
   "short_name": "Kodano",
-  "description": "Subadquirente digital que oferece APIs modernas, taxas competitivas e orquestração inteligente de funcionalidades.",
+  "description": "Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada.",
   "icons": [
     {
       "src": "/kodano-logo.png",
