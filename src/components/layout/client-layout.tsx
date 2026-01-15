@@ -9,7 +9,7 @@ import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provi
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useReducedMotion } from "@/lib/animations/hooks";
-import { ScrollProgressBar, ScrollToTop } from "@/components/animations";
+import { ScrollProgressBar } from "@/components/animations";
 
 interface ClientLayoutProps {
   children: ReactNode;
@@ -82,7 +82,6 @@ export function ClientLayout({ children }: ClientLayoutProps) {
           <ErrorBoundary level="component">
             <AIAssistantWidget />
           </ErrorBoundary>
-          <ScrollToTop />
         </I18nProvider>
       </SmoothScrollProvider>
     </ThemeProvider>

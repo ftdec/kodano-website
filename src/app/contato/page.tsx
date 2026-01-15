@@ -34,7 +34,7 @@ export default function ContatoPage() {
           <div className="max-w-4xl mx-auto">
             {/* Institutional Info Card */}
             <Card className="border-border mb-8">
-              <CardHeader>
+                <CardHeader>
                 <div className="flex items-center gap-3">
                   <Building2 className="h-6 w-6 text-accent" />
                   <h2 className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-foreground">
@@ -55,7 +55,7 @@ export default function ContatoPage() {
                     <div>
                       <h3 className="font-semibold text-foreground mb-2">CNPJ</h3>
                       <p className="text-muted-foreground">
-                        09.688.215/0001-11
+                        63.611.170/0001-22
                       </p>
                     </div>
                   </div>

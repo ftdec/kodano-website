@@ -42,7 +42,7 @@ export function Footer() {
               <p className="font-medium text-foreground">
                 Kodano Tecnologia da Informação LTDA
               </p>
-              <p>CNPJ: 09.688.215/0001-11</p>
+              <p>CNPJ: 63.611.170/0001-22</p>
             </div>
           </div>
 
@@ -139,11 +139,11 @@ export function Footer() {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="text-center md:text-left">
-            <p className="text-sm text-muted-foreground">
-              © {currentYear} {BRAND.name}. Todos os direitos reservados.
-            </p>
+          <p className="text-sm text-muted-foreground">
+            © {currentYear} {BRAND.name}. Todos os direitos reservados.
+          </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Kodano Tecnologia da Informação LTDA — CNPJ: 09.688.215/0001-11
+              Kodano Tecnologia da Informação LTDA — CNPJ: 63.611.170/0001-22
             </p>
           </div>
           <div className="flex items-center flex-wrap justify-center gap-x-6 gap-y-2">
