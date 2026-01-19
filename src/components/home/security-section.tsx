@@ -88,18 +88,8 @@ export function SecuritySection({ className }: SecuritySectionProps) {
         </div>
 
         {/* Gradient Overlays */}
-        <div
-          className={cn(
-            "absolute top-0 left-0 w-full h-[400px] bg-gradient-to-b from-primary/5 to-transparent",
-            isMobile ? "blur-[60px]" : "blur-[120px]"
-          )}
-        />
-        <div
-          className={cn(
-            "absolute bottom-0 right-0 w-[500px] h-[500px] bg-gradient-to-t from-blue-500/5 to-transparent rounded-full",
-            isMobile ? "blur-[70px]" : "blur-[140px]"
-          )}
-        />
+        {/* Simplified background - no blur */}
+        <div className="absolute top-0 left-0 w-full h-[400px] bg-gradient-to-b from-slate-50 to-transparent" />
       </div>
 
       <div className="container relative z-10 max-w-6xl mx-auto">
@@ -113,10 +103,7 @@ export function SecuritySection({ className }: SecuritySectionProps) {
         >
           <motion.div
             variants={fadeInUp}
-            className={cn(
-              "inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/70 dark:bg-white/5 border border-border/60 mb-6",
-              isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
-            )}
+            className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white border border-border/60 mb-6"
           >
             <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-emerald-400 to-green-400 animate-pulse" />
             <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
@@ -160,24 +147,14 @@ export function SecuritySection({ className }: SecuritySectionProps) {
               }
               viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className={cn(
-                "relative p-6 rounded-2xl border border-border/40 bg-white/80 dark:bg-background/40 backdrop-blur-xl shadow-lg transition-all duration-500",
+                className={cn(
+                "relative p-6 rounded-2xl border border-border/40 bg-white shadow-sm transition-all duration-200",
                 feature.highlight &&
                   "ring-2 ring-primary/20 bg-gradient-to-br from-primary/5 to-transparent"
               )}
             >
               {/* Animated Background Line */}
-              {!prefersReducedMotion && (
-                <motion.div
-                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100"
-                  style={{
-                    background: `linear-gradient(90deg, transparent, rgba(79, 172, 254, 0.1), transparent)`,
-                  }}
-                  initial={{ x: "-100%" }}
-                  whileHover={{ x: "100%" }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
-              )}
+              {/* Removed heavy animation */}
 
               <div className="relative z-10 flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center text-primary shrink-0">

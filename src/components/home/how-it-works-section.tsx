@@ -6,7 +6,7 @@
 
 "use client";
 
-import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { CreditCard, UserCheck, CheckCircle, Banknote, ArrowRight, Check } from "lucide-react";
 import { useRef } from "react";
 import { useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
@@ -167,45 +167,12 @@ function StepCard({ step, index, totalSteps }: { step: typeof steps[0]; index: n
   );
 }
 
-// Progress indicator on the side
-function ScrollProgress({ containerRef }: { containerRef: React.RefObject<HTMLElement | null> }) {
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start center", "end center"],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  const progressHeight = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
-
-  return (
-    <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-1">
-      <div className="sticky top-1/2 -translate-y-1/2 h-32">
-        <div className="relative h-full w-1 rounded-full bg-border/30 overflow-hidden">
-          <motion.div
-            className="absolute top-0 left-0 right-0 bg-gradient-to-b from-[#4FACFE] via-[#00DBDE] to-[#43E97B] rounded-full"
-            style={{ height: progressHeight }}
-          />
-        </div>
-        <motion.div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-white border-2 border-primary shadow-lg"
-          style={{ top: progressHeight }}
-        />
-      </div>
-    </div>
-  );
-}
+// ScrollProgress removed for performance
 
 export function HowItWorksSection() {
   const containerRef = useRef<HTMLElement>(null);
-  const isMobile = useIsMobile();
-  const prefersReducedMotion = useReducedMotion();
   const headerRef = useRef<HTMLDivElement>(null);
-  const headerInView = useInView(headerRef, { once: true, margin: "-100px" });
+  const headerInView = useInView(headerRef, { once: true, margin: "-50px" });
 
   return (
     <section
@@ -219,8 +186,7 @@ export function HowItWorksSection() {
       </div>
 
       <div className="container max-w-4xl mx-auto relative z-10">
-        {/* Scroll progress indicator */}
-        {!isMobile && !prefersReducedMotion && <ScrollProgress containerRef={containerRef} />}
+        {/* Scroll progress removed for performance */}
 
         {/* Section Header */}
         <motion.div

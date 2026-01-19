@@ -56,21 +56,9 @@ export function SegmentsSection({ className }: SegmentsSectionProps) {
         className
       )}
     >
-      {/* Background Gradients */}
+      {/* Simplified Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-secondary/40 via-background to-background" />
-        <div
-          className={cn(
-            "absolute -top-32 right-0 w-[420px] h-[420px] bg-[radial-gradient(circle_at_center,_rgba(79,172,254,0.15),_transparent_65%)]",
-            isMobile ? "blur-[60px]" : "blur-[120px]"
-          )}
-        />
-        <div
-          className={cn(
-            "absolute bottom-[-20%] left-[-5%] w-[520px] h-[520px] bg-[radial-gradient(circle_at_center,_rgba(0,219,222,0.12),_transparent_65%)]",
-            isMobile ? "blur-[70px]" : "blur-[140px]"
-          )}
-        />
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-slate-50/50 to-white" />
       </div>
 
       <div className="container relative z-10 max-w-6xl mx-auto">
@@ -84,10 +72,7 @@ export function SegmentsSection({ className }: SegmentsSectionProps) {
         >
           <motion.div
             variants={fadeInUp}
-            className={cn(
-              "inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/70 dark:bg-white/5 border border-border/60 mb-6",
-              isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
-            )}
+            className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white border border-border/60 mb-6"
           >
             <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
             <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
@@ -135,10 +120,7 @@ export function SegmentsSection({ className }: SegmentsSectionProps) {
               transition={{ delay: index * 0.1 }}
             >
               <Card
-                className={cn(
-                  "group relative h-full overflow-hidden border border-border/40 bg-white/80 dark:bg-background/40 shadow-lg transition-all duration-500",
-                  isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
-                )}
+                className="group relative h-full overflow-hidden border border-border/40 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
               >
                 {/* Animated Border Gradient */}
                 <div

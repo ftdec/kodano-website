@@ -313,11 +313,10 @@ export default function Home() {
         {/* Desktop Header */}
         <header
           className={cn(
-            "hidden lg:block sticky top-0 z-50 w-full border-b transition-all duration-300 relative",
+            "hidden lg:block sticky top-0 z-50 w-full border-b transition-all duration-200 relative",
             isScrolled
-              ? "border-border/50 bg-background/80 shadow-sm"
-              : "border-border/50 bg-background/80",
-            isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
+              ? "border-border/50 bg-white shadow-sm"
+              : "border-transparent bg-white/95"
           )}
         >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -400,10 +399,7 @@ export default function Home() {
                 className="space-y-8 pt-4"
               >
                 <div className="space-y-6">
-                  <div className={cn(
-                    "inline-flex items-center gap-3 px-5 py-2 rounded-full bg-primary/5 border border-primary/10",
-                    isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
-                  )}>
+                  <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-primary/5 border border-primary/10">
                     <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
                     <span className="text-xs font-semibold uppercase tracking-[0.35em] text-primary">Fale Conosco</span>
                   </div>
@@ -443,14 +439,11 @@ export default function Home() {
 
               {/* Right Column: Form */}
               <motion.div
-                initial={{ opacity: prefersReducedMotion ? 1 : 0, x: prefersReducedMotion || isMobile ? 0 : 20 }}
-                whileInView={prefersReducedMotion ? {} : { opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
-                transition={{ duration: isMobile ? 0.3 : 0.6, delay: isMobile ? 0 : 0.2 }}
-                className={cn(
-                  "bg-card/50 border border-border/50 rounded-[2rem] p-8 md:p-10 shadow-2xl shadow-black/5",
-                  isMobile ? "backdrop-blur-sm" : "backdrop-blur-sm"
-                )}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4 }}
+                className="bg-white border border-border/50 rounded-2xl p-8 md:p-10 shadow-lg"
               >
                 {isSuccess ? (
                   <div className="flex flex-col items-center justify-center py-16 text-center h-full min-h-[400px]">

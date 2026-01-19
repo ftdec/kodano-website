@@ -32,15 +32,9 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
         className
       )}
     >
-      {/* Gradient Background */}
+      {/* Simplified Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-blue-500/5 to-purple-500/10" />
-        <div
-          className={cn(
-            "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary/20 via-blue-500/15 to-purple-500/20 rounded-full",
-            isMobile ? "blur-[100px]" : "blur-[150px]"
-          )}
-        />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-50" />
       </div>
 
       <div className="container relative z-10 max-w-4xl mx-auto">
@@ -54,10 +48,7 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
           {/* Badge */}
           <motion.div
             variants={fadeInUp}
-            className={cn(
-              "inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/70 dark:bg-white/5 border border-border/60 mb-6",
-              isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
-            )}
+            className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white border border-border/60 mb-6"
           >
             <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
             <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">

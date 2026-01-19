@@ -1,20 +1,18 @@
 /**
- * Card3D Component
- * Card with 3D tilt effect based on mouse position
+ * Card3D Component - Performance Optimized
+ * Simple hover effect without heavy 3D transforms
  */
 
 "use client";
 
-import { motion } from "framer-motion";
-import { ReactNode, useRef, useState } from "react";
-import { useMouseTilt, useReducedMotion, useIsMobile } from "@/lib/animations/hooks";
+import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 interface Card3DProps {
   children: ReactNode;
   className?: string;
-  maxRotation?: number; // degrees
-  perspective?: number; // px
+  maxRotation?: number;
+  perspective?: number;
   glare?: boolean;
   shadow?: boolean;
 }
@@ -22,127 +20,26 @@ interface Card3DProps {
 export function Card3D({
   children,
   className,
-  maxRotation = 15,
-  perspective = 1000,
-  glare = true,
-  shadow = true,
 }: Card3DProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
-  const isMobile = useIsMobile();
-
-  const { rotateX, rotateY } = useMouseTilt(ref, maxRotation);
-
-  const shouldAnimate = !prefersReducedMotion && !isMobile;
-
+  // Simplified: just render children without heavy 3D effects
   return (
-    <div
-      style={{
-        perspective: shouldAnimate ? `${perspective}px` : undefined,
-      }}
-      className={cn("relative", className)}
-    >
-      <motion.div
-        ref={ref}
-        className="relative w-full h-full"
-        style={
-          shouldAnimate
-            ? {
-                rotateX,
-                rotateY,
-                transformStyle: "preserve-3d",
-              }
-            : {}
-        }
-        onMouseMove={(e) => {
-          if (!shouldAnimate) return;
-          const el = e.currentTarget as HTMLElement;
-          const rect = el.getBoundingClientRect();
-          const px = ((e.clientX - rect.left) / rect.width) * 100;
-          const py = ((e.clientY - rect.top) / rect.height) * 100;
-          el.style.setProperty("--mouse-x", `${px}%`);
-          el.style.setProperty("--mouse-y", `${py}%`);
-        }}
-        onMouseLeave={(e) => {
-          const el = e.currentTarget as HTMLElement;
-          el.style.setProperty("--mouse-x", `50%`);
-          el.style.setProperty("--mouse-y", `50%`);
-        }}
-        onHoverStart={() => setIsHovered(true)}
-        onHoverEnd={() => setIsHovered(false)}
-        transition={{
-          type: "spring",
-          stiffness: 300,
-          damping: 30,
-        }}
-      >
-        {/* Content */}
-        <div className="relative z-10">{children}</div>
-
-        {/* Glare effect */}
-        {glare && shouldAnimate && (
-          <motion.div
-            className="absolute inset-0 pointer-events-none overflow-hidden rounded-[inherit]"
-            style={{
-              background: isHovered
-                ? "radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.22) 0%, transparent 55%)"
-                : "none",
-              mixBlendMode: "overlay",
-            }}
-            animate={{
-              opacity: isHovered ? 1 : 0,
-            }}
-          />
-        )}
-
-        {/* Dynamic shadow */}
-        {shadow && shouldAnimate && (
-          <motion.div
-            className="absolute inset-0 -z-10 rounded-[inherit]"
-            style={{
-              filter: "blur(20px)",
-              opacity: 0.3,
-              background:
-                "radial-gradient(circle at 50% 50%, rgba(79,172,254,0.25), rgba(0,219,222,0.10) 35%, transparent 70%)",
-            }}
-            animate={{
-              translateY: isHovered ? 10 : 0,
-              scale: isHovered ? 1.05 : 1,
-            }}
-          />
-        )}
-      </motion.div>
+    <div className={cn("relative", className)}>
+      <div className="relative w-full h-full transition-transform duration-200 hover:scale-[1.02]">
+        {children}
+      </div>
     </div>
   );
 }
 
 /**
- * Card3DLayer Component
- * For creating parallax layers inside 3D card
+ * Card3DLayer Component - Simplified
  */
 interface Card3DLayerProps {
   children: ReactNode;
   className?: string;
-  depth?: number; // 0-100, how far the layer is
+  depth?: number;
 }
 
-export function Card3DLayer({ children, className, depth = 20 }: Card3DLayerProps) {
-  const prefersReducedMotion = useReducedMotion();
-  const isMobile = useIsMobile();
-
-  return (
-    <div
-      className={className}
-      style={
-        !prefersReducedMotion && !isMobile
-          ? {
-              transform: `translateZ(${depth}px)`,
-            }
-          : {}
-      }
-    >
-      {children}
-    </div>
-  );
+export function Card3DLayer({ children, className }: Card3DLayerProps) {
+  return <div className={className}>{children}</div>;
 }
