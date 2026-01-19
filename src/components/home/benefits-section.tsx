@@ -1,6 +1,6 @@
 /**
  * BenefitsSection Component
- * "O Problema" - Clean, minimal design
+ * "O Problema" - Clean design with gradient transition
  */
 
 "use client";
@@ -28,36 +28,43 @@ const risks = [
 
 export function BenefitsSection() {
   return (
-    <section id="problem" className="relative py-24 md:py-32 px-6">
-      {/* Background matching site pattern */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background via-slate-50/50 to-background" />
+    <section id="problem" className="relative py-16 sm:py-20 md:py-28 px-4 sm:px-6 overflow-hidden">
+      {/* Background gradient - transitions from hero colors */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#43E97B]/5 via-background to-slate-50/30" />
+      </div>
       
-      <div className="container max-w-5xl mx-auto">
+      <div className="container max-w-5xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-12 md:mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
         >
-          <span className="inline-block text-[#00C8DC] text-sm font-medium tracking-wider uppercase mb-4">
-            O Problema
-          </span>
+          <div className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 rounded-full bg-white/80 border border-border/60 mb-4 sm:mb-6">
+            <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-[#00C8DC] to-[#002A35]" />
+            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] text-muted-foreground">
+              O Problema
+            </span>
+          </div>
           
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#002A35] leading-tight mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-4 sm:mb-6 px-2">
             Pagamentos de alto valor exigem{" "}
-            <span className="text-[#00C8DC]">outro nível de cuidado</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00C8DC] to-[#002A35]">
+              outro nível de cuidado
+            </span>
           </h2>
 
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
             Quando o valor de uma transação é relevante, fraudes, contestações e incertezas 
             sobre quem paga se tornam riscos reais para o negócio.
           </p>
         </motion.div>
 
         {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {risks.map((risk, index) => {
             const Icon = risk.icon;
 
@@ -69,16 +76,16 @@ export function BenefitsSection() {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
               >
-                <div className="h-full p-8 rounded-2xl bg-white border border-slate-100 hover:border-[#00C8DC]/30 hover:shadow-lg transition-all duration-300">
-                  <div className="w-12 h-12 rounded-xl bg-[#00C8DC]/10 flex items-center justify-center mb-5">
-                    <Icon className="w-6 h-6 text-[#00C8DC]" />
+                <div className="h-full p-6 sm:p-8 rounded-2xl bg-white/90 border border-border/40 shadow-sm hover:shadow-lg hover:border-[#00C8DC]/30 transition-all duration-300">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-[#00C8DC]/10 to-[#002A35]/5 flex items-center justify-center mb-4 sm:mb-5">
+                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-[#00C8DC]" />
                   </div>
 
-                  <h3 className="text-xl font-semibold text-[#002A35] mb-3">
+                  <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2 sm:mb-3">
                     {risk.title}
                   </h3>
                   
-                  <p className="text-slate-500 leading-relaxed">
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                     {risk.description}
                   </p>
                 </div>
