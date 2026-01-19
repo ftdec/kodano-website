@@ -50,8 +50,11 @@ export function SecuritySection({ className }: SecuritySectionProps) {
   return (
     <section
       id="solution"
-      className={cn("relative py-24 md:py-32 px-6 bg-white", className)}
+      className={cn("relative py-24 md:py-32 px-6", className)}
     >
+      {/* Background matching site pattern */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-slate-50/50 via-background to-background" />
+      
       <div className="container max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           
@@ -78,7 +81,7 @@ export function SecuritySection({ className }: SecuritySectionProps) {
             </p>
 
             {/* Benefits */}
-            <div className="flex flex-wrap gap-3 mb-8">
+            <div className="flex flex-wrap gap-3">
               {benefits.map((benefit, i) => (
                 <motion.div
                   key={benefit}
@@ -93,14 +96,6 @@ export function SecuritySection({ className }: SecuritySectionProps) {
                 </motion.div>
               ))}
             </div>
-
-            <a
-              href="#how-it-works"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#002A35] text-white font-medium hover:bg-[#003a4a] transition-colors"
-            >
-              Saiba como funciona
-              <span className="text-white/60">→</span>
-            </a>
           </motion.div>
 
           {/* Right - Feature cards */}

@@ -7,7 +7,6 @@
 
 import { motion } from "framer-motion";
 import { AlertTriangle, ShieldX, Target } from "lucide-react";
-import { useIsMobile } from "@/lib/animations/hooks";
 
 const risks = [
   {
@@ -28,10 +27,11 @@ const risks = [
 ];
 
 export function BenefitsSection() {
-  const isMobile = useIsMobile();
-
   return (
-    <section id="problem" className="relative py-24 md:py-32 px-6 bg-[#002A35]">
+    <section id="problem" className="relative py-24 md:py-32 px-6">
+      {/* Background matching site pattern */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background via-slate-50/50 to-background" />
+      
       <div className="container max-w-5xl mx-auto">
         {/* Header */}
         <motion.div
@@ -45,12 +45,12 @@ export function BenefitsSection() {
             O Problema
           </span>
           
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#002A35] leading-tight mb-6">
             Pagamentos de alto valor exigem{" "}
             <span className="text-[#00C8DC]">outro nível de cuidado</span>
           </h2>
 
-          <p className="text-lg text-white/60 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             Quando o valor de uma transação é relevante, fraudes, contestações e incertezas 
             sobre quem paga se tornam riscos reais para o negócio.
           </p>
@@ -68,18 +68,17 @@ export function BenefitsSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="group"
               >
-                <div className="h-full p-8 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/[0.08] hover:border-white/20 transition-all duration-300">
+                <div className="h-full p-8 rounded-2xl bg-white border border-slate-100 hover:border-[#00C8DC]/30 hover:shadow-lg transition-all duration-300">
                   <div className="w-12 h-12 rounded-xl bg-[#00C8DC]/10 flex items-center justify-center mb-5">
                     <Icon className="w-6 h-6 text-[#00C8DC]" />
                   </div>
 
-                  <h3 className="text-xl font-semibold text-white mb-3">
+                  <h3 className="text-xl font-semibold text-[#002A35] mb-3">
                     {risk.title}
                   </h3>
                   
-                  <p className="text-white/50 leading-relaxed">
+                  <p className="text-slate-500 leading-relaxed">
                     {risk.description}
                   </p>
                 </div>
@@ -87,19 +86,6 @@ export function BenefitsSection() {
             );
           })}
         </div>
-
-        {/* Connector */}
-        <motion.div
-          className="flex justify-center mt-16"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-        >
-          <span className="text-white/40 text-sm font-medium">
-            Existe uma solução →
-          </span>
-        </motion.div>
       </div>
     </section>
   );
