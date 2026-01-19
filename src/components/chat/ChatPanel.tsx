@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Send, MessageCircle } from "lucide-react";
 
 interface ChatPanelProps {
   isOpen: boolean;
@@ -11,17 +13,48 @@ interface Message {
   id: number;
   text: string;
   sender: "bot" | "user";
+  timestamp: Date;
 }
 
 export function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
   const [message, setMessage] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Olá! 👋 Bem-vindo à Kodano. Como posso te ajudar?",
+      text: "Olá! 👋 Bem-vindo à Kodano. Como posso te ajudar hoje?",
       sender: "bot",
+      timestamp: new Date(),
     },
   ]);
+  
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Focus input when panel opens
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => inputRef.current?.focus(), 300);
+    }
+  }, [isOpen]);
+
+  // Handle keyboard on mobile
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleResize = () => {
+      // Scroll to bottom when keyboard opens
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    window.visualViewport?.addEventListener("resize", handleResize);
+    return () => window.visualViewport?.removeEventListener("resize", handleResize);
+  }, [isOpen]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,97 +65,174 @@ export function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
       id: messages.length + 1,
       text: message,
       sender: "user",
+      timestamp: new Date(),
     };
     setMessages([...messages, newMessage]);
     setMessage("");
+    setIsTyping(true);
 
-    // Simulate bot response (you can replace this with actual API call)
+    // Simulate bot response
     setTimeout(() => {
+      setIsTyping(false);
       const botResponse: Message = {
         id: messages.length + 2,
-        text: "Obrigado pela sua mensagem! Em breve nossa equipe entrará em contato.",
+        text: "Obrigado pela sua mensagem! Em breve nossa equipe entrará em contato. Se preferir, você também pode nos enviar um email para contato@kodano.com.br",
         sender: "bot",
+        timestamp: new Date(),
       };
       setMessages((prev) => [...prev, botResponse]);
-    }, 1000);
+    }, 1500);
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div
-      id="chatPanel"
-      className="fixed inset-x-0 bottom-0 z-50
-        flex items-end justify-center
-        lg:inset-auto lg:right-6 lg:bottom-24 lg:items-center lg:justify-end
-        pointer-events-none"
-    >
-      <div
-        className="pointer-events-auto
-          w-full max-w-md mx-2 mb-2
-          rounded-t-3xl bg-white shadow-2xl border border-slate-100
-          h-[70vh] flex flex-col overflow-hidden
-          lg:rounded-3xl lg:mx-0 lg:mb-0 lg:h-[560px]"
-      >
-        {/* Header */}
-        <div className="px-4 py-3 flex items-center justify-between border-b border-slate-100">
-          <div className="text-sm">
-            <p className="font-semibold text-[#002A35]">Chat Kodano</p>
-            <p className="text-xs text-slate-500">Consultor comercial online</p>
-          </div>
-          <button
-            type="button"
-            className="w-7 h-7 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 transition-colors"
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop for mobile */}
+          <motion.div
+            className="fixed inset-0 bg-black/20 z-40 lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={onClose}
-            aria-label="Fechar chat"
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 bg-slate-50/60">
-          {messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`flex ${
-                msg.sender === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
-              <div
-                className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm shadow-sm ${
-                  msg.sender === "user"
-                    ? "bg-[#002A35] text-white"
-                    : "bg-white text-slate-800"
-                }`}
-              >
-                {msg.text}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Input Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="border-t border-slate-200 px-3 py-2 flex items-center gap-2 bg-white"
-        >
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className="flex-1 rounded-full border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#00C8DC] focus:ring-2 focus:ring-[#00C8DC]/30 transition-all"
-            placeholder="Digite sua mensagem..."
           />
-          <button
-            type="submit"
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-[#00C8DC] hover:bg-[#00B0C2] text-white text-xs font-semibold shadow-md transition-all hover:scale-105 active:scale-95"
-            aria-label="Enviar mensagem"
+
+          {/* Chat Panel */}
+          <motion.div
+            id="chatPanel"
+            className="fixed z-50
+              inset-0 
+              lg:inset-auto lg:right-4 lg:bottom-4
+              lg:w-[380px] lg:h-[520px]
+              flex flex-col"
+            style={{
+              // Safe areas for iOS
+              paddingTop: "env(safe-area-inset-top, 0px)",
+              paddingBottom: "env(safe-area-inset-bottom, 0px)",
+            }}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
           >
-            ➤
-          </button>
-        </form>
-      </div>
-    </div>
+            <div
+              className="flex-1 flex flex-col
+                bg-white
+                lg:rounded-2xl lg:shadow-2xl lg:border lg:border-slate-200
+                overflow-hidden"
+            >
+              {/* Header */}
+              <div className="flex-shrink-0 px-4 py-3 flex items-center justify-between 
+                bg-gradient-to-r from-[#002A35] to-[#003847] text-white
+                lg:rounded-t-2xl">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                    <MessageCircle className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm">Chat Kodano</p>
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <p className="text-xs text-white/70">Online agora</p>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="w-9 h-9 flex items-center justify-center rounded-full 
+                    bg-white/10 hover:bg-white/20 text-white transition-colors
+                    touch-manipulation"
+                  onClick={onClose}
+                  aria-label="Fechar chat"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Messages Area */}
+              <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-slate-50">
+                {messages.map((msg) => (
+                  <motion.div
+                    key={msg.id}
+                    className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-sm ${
+                        msg.sender === "user"
+                          ? "bg-[#002A35] text-white rounded-br-md"
+                          : "bg-white text-slate-800 rounded-bl-md border border-slate-100"
+                      }`}
+                    >
+                      <p className="leading-relaxed">{msg.text}</p>
+                      <p className={`text-[10px] mt-1 ${
+                        msg.sender === "user" ? "text-white/50" : "text-slate-400"
+                      }`}>
+                        {msg.timestamp.toLocaleTimeString("pt-BR", { 
+                          hour: "2-digit", 
+                          minute: "2-digit" 
+                        })}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+
+                {/* Typing indicator */}
+                {isTyping && (
+                  <motion.div
+                    className="flex justify-start"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <div className="bg-white rounded-2xl rounded-bl-md px-4 py-3 shadow-sm border border-slate-100">
+                      <div className="flex gap-1">
+                        <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                        <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                        <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Input Form */}
+              <form
+                onSubmit={handleSubmit}
+                className="flex-shrink-0 border-t border-slate-200 px-3 py-3 flex items-center gap-2 bg-white
+                  lg:rounded-b-2xl"
+              >
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="flex-1 rounded-full border border-slate-200 px-4 py-2.5 text-sm 
+                    outline-none focus:border-[#00C8DC] focus:ring-2 focus:ring-[#00C8DC]/20 
+                    transition-all placeholder:text-slate-400"
+                  placeholder="Digite sua mensagem..."
+                  autoComplete="off"
+                />
+                <button
+                  type="submit"
+                  disabled={!message.trim()}
+                  className="w-10 h-10 flex items-center justify-center rounded-full 
+                    bg-[#00C8DC] hover:bg-[#00B0C2] disabled:bg-slate-200 disabled:cursor-not-allowed
+                    text-white shadow-md transition-all 
+                    hover:scale-105 active:scale-95 disabled:scale-100
+                    touch-manipulation"
+                  aria-label="Enviar mensagem"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </form>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }

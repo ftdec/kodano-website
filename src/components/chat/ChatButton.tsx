@@ -1,28 +1,39 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 interface ChatButtonProps {
   onClick: () => void;
 }
 
 export function ChatButton({ onClick }: ChatButtonProps) {
   return (
-    <button
+    <motion.button
       id="chatButton"
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-40
-        w-16 h-16 sm:w-14 sm:h-14
+      className="fixed bottom-4 right-4 z-40
+        w-14 h-14 sm:w-14 sm:h-14
         bg-[#002A35] hover:bg-[#00C8DC] active:bg-[#00C8DC]
         text-white rounded-full
         shadow-lg hover:shadow-xl active:shadow-xl
-        transition-all duration-300
-        hover:scale-110 active:scale-95
+        transition-colors duration-200
         flex items-center justify-center
         border-2 border-[#00C8DC]
-        cursor-pointer touch-manipulation"
-      aria-label="Chat Kodano"
+        cursor-pointer touch-manipulation
+        safe-bottom"
+      style={{
+        // Safe area for iOS notch/home indicator
+        marginBottom: "env(safe-area-inset-bottom, 0px)",
+      }}
+      initial={{ scale: 0, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      aria-label="Abrir chat Kodano"
     >
       <svg
-        className="w-8 h-8 sm:w-7 sm:h-7 text-white"
+        className="w-6 h-6 text-white"
         fill="currentColor"
         viewBox="0 0 20 20"
         aria-hidden="true"
@@ -34,13 +45,14 @@ export function ChatButton({ onClick }: ChatButtonProps) {
         />
       </svg>
 
+      {/* Notification dot */}
       <span
-        className="absolute -top-1 -right-1
-          w-4 h-4 sm:w-3.5 sm:h-3.5
+        className="absolute -top-0.5 -right-0.5
+          w-3 h-3
           bg-[#00C8DC] rounded-full
           border-2 border-[#002A35]
           animate-pulse"
       />
-    </button>
+    </motion.button>
   );
 }
