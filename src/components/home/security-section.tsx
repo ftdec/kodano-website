@@ -1,43 +1,59 @@
 /**
  * SecuritySection Component
- * Segurança & Confiabilidade com visual robusto
- * Stripe/CloudWalk inspired design
+ * "A Solução" - Clean, modern design
  */
 
 "use client";
 
 import { motion } from "framer-motion";
-import { UserCheck, Clock, ShieldCheck, TrendingUp, CheckCircle2 } from "lucide-react";
+import { UserCheck, Clock, ShieldCheck, TrendingUp, Check, ArrowRight } from "lucide-react";
 import {
   fadeInUp,
   staggerContainer,
-  fadeIn,
 } from "@/lib/animations/motion-variants";
-import { useReducedMotion, useIsMobile } from "@/lib/animations/hooks";
+import { useIsMobile } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
 
 const solutionFeatures = [
   {
-    title: "Verificação de identidade do pagador",
-    description: "Confirmamos quem está realizando o pagamento antes da aprovação.",
-    icon: <UserCheck className="w-6 h-6" />,
-    highlight: true,
+    title: "Verificação de identidade",
+    description: "Confirmamos quem está pagando antes da aprovação.",
+    icon: UserCheck,
+    color: "text-emerald-600",
+    bgColor: "bg-emerald-50",
+    borderColor: "border-emerald-100",
   },
   {
-    title: "Atuação antes da aprovação do pagamento",
-    description: "A Kodano atua no momento certo, antes que a transação seja finalizada.",
-    icon: <Clock className="w-6 h-6" />,
+    title: "Atuação pré-aprovação",
+    description: "Agimos antes que a transação seja finalizada.",
+    icon: Clock,
+    color: "text-blue-600",
+    bgColor: "bg-blue-50",
+    borderColor: "border-blue-100",
   },
   {
-    title: "Redução de fraude e contestação",
-    description: "Menos disputas, menos prejuízos e mais previsibilidade na operação.",
-    icon: <ShieldCheck className="w-6 h-6" />,
+    title: "Menos fraude e contestação",
+    description: "Redução de disputas e prejuízos na operação.",
+    icon: ShieldCheck,
+    color: "text-violet-600",
+    bgColor: "bg-violet-50",
+    borderColor: "border-violet-100",
   },
   {
-    title: "Mais previsibilidade em transações relevantes",
-    description: "Tranquilidade para vender valores elevados com confiança.",
-    icon: <TrendingUp className="w-6 h-6" />,
+    title: "Mais previsibilidade",
+    description: "Confiança para vender valores elevados.",
+    icon: TrendingUp,
+    color: "text-amber-600",
+    bgColor: "bg-amber-50",
+    borderColor: "border-amber-100",
   },
+];
+
+const benefits = [
+  "Segurança para alto valor",
+  "Menos contestações",
+  "Menos fraudes",
+  "Mais confiança",
 ];
 
 interface SecuritySectionProps {
@@ -45,168 +61,143 @@ interface SecuritySectionProps {
 }
 
 export function SecuritySection({ className }: SecuritySectionProps) {
-  const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
 
   return (
     <section
       id="security"
       className={cn(
-        "relative py-28 px-6 overflow-hidden bg-gradient-to-b from-background via-secondary/20 to-background",
+        "relative py-20 md:py-28 px-6 overflow-hidden",
         className
       )}
     >
-      {/* Dark Background with Grid Pattern */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Grid Pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: "50px 50px",
-          }}
-        />
-
-        {/* Circuit-like dots */}
-        <div className="absolute inset-0 opacity-[0.02]">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 rounded-full bg-foreground"
-              style={{
-                left: `${(i * 7) % 100}%`,
-                top: `${(i * 11) % 100}%`,
-                animation: prefersReducedMotion
-                  ? "none"
-                  : `pulse 3s ease-in-out ${i * 0.2}s infinite`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Gradient Overlays */}
-        {/* Simplified background - no blur */}
-        <div className="absolute top-0 left-0 w-full h-[400px] bg-gradient-to-b from-slate-50 to-transparent" />
-      </div>
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-emerald-50/50 via-white to-white" />
 
       <div className="container relative z-10 max-w-6xl mx-auto">
-        {/* Section Header */}
-        <motion.div
-          className="max-w-3xl mx-auto text-center mb-16"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
-        >
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          
+          {/* Left side - Content */}
           <motion.div
-            variants={fadeInUp}
-            className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white border border-border/60 mb-6"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-emerald-400 to-green-400 animate-pulse" />
-            <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
-              A Solução
-            </span>
+            <motion.div variants={fadeInUp} className="space-y-6">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-200">
+                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">
+                  A Solução
+                </span>
+              </div>
+
+              {/* Title */}
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
+                A Kodano adiciona{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+                  segurança
+                </span>{" "}
+                ao pagamento
+              </h2>
+
+              {/* Description */}
+              <p className="text-lg text-slate-600 leading-relaxed max-w-xl">
+                Atuamos no momento da aprovação, verificando a identidade do pagador. 
+                Isso reduz riscos e dá mais tranquilidade para vender valores elevados.
+              </p>
+
+              {/* Benefits list */}
+              <div className="flex flex-wrap gap-3 pt-2">
+                {benefits.map((benefit) => (
+                  <div
+                    key={benefit}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm"
+                  >
+                    <Check className="w-4 h-4 text-emerald-500" />
+                    <span className="text-sm font-medium text-slate-700">{benefit}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <motion.a
+                href="#contact"
+                className="inline-flex items-center gap-2 mt-4 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors group"
+                whileHover={{ x: 4 }}
+              >
+                Saiba como funciona
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </motion.a>
+            </motion.div>
           </motion.div>
 
-          <motion.h2
-            variants={fadeInUp}
-            className="text-3xl md:text-4xl font-heading font-semibold leading-[1.2] text-balance mb-4"
+          {/* Right side - Feature cards */}
+          <motion.div
+            className="grid grid-cols-2 gap-4"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
           >
-            A Kodano adiciona segurança ao pagamento
-          </motion.h2>
+            {solutionFeatures.map((feature, index) => {
+              const Icon = feature.icon;
+              const isOdd = index % 2 === 1;
 
-          <motion.p
-            variants={fadeInUp}
-            className="text-lg text-muted-foreground/80 leading-relaxed text-balance"
-          >
-            A Kodano atua no momento da aprovação do pagamento, realizando a verificação de identidade do pagador. Isso reduz riscos, aumenta a previsibilidade da operação e dá mais tranquilidade para a empresa vender valores elevados.
-          </motion.p>
-        </motion.div>
+              return (
+                <motion.div
+                  key={feature.title}
+                  variants={fadeInUp}
+                  className={cn(
+                    "relative p-5 rounded-2xl border bg-white shadow-sm hover:shadow-md transition-shadow duration-200",
+                    feature.borderColor,
+                    isOdd && "mt-6" // Stagger effect
+                  )}
+                >
+                  {/* Icon */}
+                  <div
+                    className={cn(
+                      "w-12 h-12 rounded-xl flex items-center justify-center mb-4",
+                      feature.bgColor
+                    )}
+                  >
+                    <Icon className={cn("w-6 h-6", feature.color)} />
+                  </div>
 
-        {/* Solution Features Grid */}
-        <motion.div
-          className="grid md:grid-cols-2 gap-6 mb-12"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
-        >
-          {solutionFeatures.map((feature, index) => (
-            <motion.div
-              key={feature.title}
-              variants={fadeInUp}
-              custom={index}
-              initial={prefersReducedMotion ? {} : { opacity: 0, filter: "blur(4px)" }}
-              whileInView={
-                prefersReducedMotion
-                  ? {}
-                  : { opacity: 1, filter: "blur(0px)" }
-              }
-              viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={cn(
-                "relative p-6 rounded-2xl border border-border/40 bg-white shadow-sm transition-all duration-200",
-                feature.highlight &&
-                  "ring-2 ring-primary/20 bg-gradient-to-br from-primary/5 to-transparent"
-              )}
-            >
-              {/* Animated Background Line */}
-              {/* Removed heavy animation */}
-
-              <div className="relative z-10 flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center text-primary shrink-0">
-                  {feature.icon}
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground/90 leading-relaxed">
+                  {/* Content */}
+                  <h3 className="text-lg font-semibold text-slate-900 mb-1">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
                     {feature.description}
                   </p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </div>
 
-        {/* Trust Indicators */}
+        {/* Visual connector to next section */}
         <motion.div
-          className="flex flex-wrap items-center justify-center gap-8 pt-8 border-t border-border/40"
-          variants={fadeIn}
-          initial="hidden"
-          whileInView="visible"
+          className="flex justify-center mt-16"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
         >
-          {[
-            "Segurança para alto valor",
-            "Menos contestações",
-            "Menos fraudes",
-            "Mais confiança",
-          ].map((item, index) => (
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-sm text-slate-500 font-medium">Veja como funciona na prática</span>
             <motion.div
-              key={item}
-              className="flex items-center gap-2 text-muted-foreground"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              className="w-6 h-6 rounded-full border-2 border-slate-300 flex items-center justify-center"
+              animate={{ y: [0, 4, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
             >
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span className="text-sm font-medium">{item}</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400" />
             </motion.div>
-          ))}
+          </div>
         </motion.div>
       </div>
-
-      <style jsx>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 0.02; }
-          50% { opacity: 0.08; }
-        }
-      `}</style>
     </section>
   );
 }
-
