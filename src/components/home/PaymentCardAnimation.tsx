@@ -4,13 +4,13 @@ import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useReducedMotion, useIsMobile } from "@/lib/animations/hooks";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Shield, User, CreditCard, Lock } from "lucide-react";
 
 // ============================================================================
-// TYPES & CONFIG - Simplified for performance
+// TYPES & CONFIG
 // ============================================================================
 
-type AnimationState = "idle" | "processing" | "success";
+type AnimationState = "payment" | "verifying" | "identity" | "approved";
 
 const COLORS = {
   cyanBase: "#0FA3B1",
@@ -19,35 +19,33 @@ const COLORS = {
   white: "#FFFFFF",
 } as const;
 
+const STATE_DURATION = 2200; // ms per state
+
 // ============================================================================
-// MAIN COMPONENT - Performance optimized
+// MAIN COMPONENT
 // ============================================================================
 
 export function PaymentCardAnimation({ className }: { className?: string }) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
-  const [state, setState] = React.useState<AnimationState>("idle");
+  const [state, setState] = React.useState<AnimationState>("payment");
   const [mounted, setMounted] = React.useState(false);
   const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
 
   React.useEffect(() => {
     setMounted(true);
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, []);
 
   React.useEffect(() => {
-    // Skip animation on mobile or reduced motion preference
     if (!mounted || prefersReducedMotion || isMobile) {
-      setState("success");
+      setState("approved");
       return;
     }
 
-    // Simple state machine with longer intervals
-    const states: AnimationState[] = ["idle", "processing", "success"];
+    const states: AnimationState[] = ["payment", "verifying", "identity", "approved"];
     let index = 0;
 
     const cycle = () => {
@@ -55,58 +53,63 @@ export function PaymentCardAnimation({ className }: { className?: string }) {
       setState(states[index]);
     };
 
-    intervalRef.current = setInterval(cycle, 2500);
+    intervalRef.current = setInterval(cycle, STATE_DURATION);
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [mounted, prefersReducedMotion, isMobile]);
 
-  // Static card for mobile/reduced motion
+  // Static for mobile/reduced motion
   if (prefersReducedMotion || isMobile) {
     return (
-      <div className={cn("relative w-full max-w-[480px]", className)}>
-        <StaticCard />
+      <div className={cn("relative w-full max-w-[520px]", className)}>
+        <StaticApprovedCard />
       </div>
     );
   }
 
   return (
     <div
-      className={cn("relative w-full max-w-[480px] flex flex-col items-center gap-4", className)}
+      className={cn("relative w-full max-w-[520px] flex flex-col items-center gap-6", className)}
       role="img"
-      aria-label="Demonstração de pagamento seguro"
+      aria-label="Demonstração de verificação de identidade em pagamentos"
     >
+      {/* Card with verification overlay */}
       <div className="relative w-full aspect-[1.6/1]">
-        <SimplePaymentCard state={state} />
+        <PaymentCard state={state} />
+        <VerificationOverlay state={state} />
       </div>
-      <StatusBadge state={state} />
+
+      {/* Process steps */}
+      <ProcessSteps state={state} />
+
+      {/* Status message */}
+      <StatusMessage state={state} />
     </div>
   );
 }
 
 // ============================================================================
-// SIMPLE PAYMENT CARD - No heavy effects
+// PAYMENT CARD
 // ============================================================================
 
-function SimplePaymentCard({ state }: { state: AnimationState }) {
-  const isSuccess = state === "success";
+function PaymentCard({ state }: { state: AnimationState }) {
+  const isApproved = state === "approved";
 
   return (
     <motion.div
       className="relative w-full h-full rounded-2xl overflow-hidden"
       style={{
         background: `linear-gradient(135deg, ${COLORS.cyanLight} 0%, ${COLORS.cyanBase} 100%)`,
-        boxShadow: isSuccess 
-          ? "0 20px 40px rgba(15, 163, 177, 0.3)" 
-          : "0 15px 30px rgba(15, 163, 177, 0.2)",
+        boxShadow: isApproved 
+          ? "0 25px 50px rgba(47, 230, 200, 0.25)" 
+          : "0 20px 40px rgba(15, 163, 177, 0.2)",
       }}
       animate={{
-        scale: isSuccess ? 1.02 : 1,
+        scale: isApproved ? 1.02 : 1,
       }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.4 }}
     >
       {/* Card content */}
       <div className="relative h-full p-6 flex flex-col justify-between">
@@ -114,9 +117,7 @@ function SimplePaymentCard({ state }: { state: AnimationState }) {
         <div className="flex justify-between items-start">
           <div
             className="w-12 h-8 rounded"
-            style={{
-              background: "linear-gradient(145deg, #FFD700, #E5A800)",
-            }}
+            style={{ background: "linear-gradient(145deg, #FFD700, #E5A800)" }}
           />
           <span className="text-sm font-semibold text-white/90 tracking-wider">KODANO</span>
         </div>
@@ -128,28 +129,23 @@ function SimplePaymentCard({ state }: { state: AnimationState }) {
 
         {/* Footer */}
         <div className="flex justify-between text-xs text-white/70">
-          <span>DEMO USER</span>
+          <span>TITULAR DO CARTÃO</span>
           <span>12/28</span>
         </div>
       </div>
 
-      {/* Simple success overlay */}
+      {/* Approved glow */}
       <AnimatePresence>
-        {isSuccess && (
+        {isApproved && (
           <motion.div
-            className="absolute inset-0 bg-emerald-500/20 flex items-center justify-center"
+            className="absolute inset-0 pointer-events-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-          >
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center"
-            >
-              <CheckCircle className="w-8 h-8 text-white" />
-            </motion.div>
-          </motion.div>
+            style={{
+              background: "radial-gradient(circle at 50% 50%, rgba(47, 230, 200, 0.15), transparent 70%)",
+            }}
+          />
         )}
       </AnimatePresence>
     </motion.div>
@@ -157,40 +153,204 @@ function SimplePaymentCard({ state }: { state: AnimationState }) {
 }
 
 // ============================================================================
-// STATUS BADGE
+// VERIFICATION OVERLAY
 // ============================================================================
 
-function StatusBadge({ state }: { state: AnimationState }) {
-  return (
-    <div className="h-8 flex items-center justify-center">
-      <AnimatePresence mode="wait">
-        {state === "processing" && (
-          <motion.div
-            key="processing"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 text-slate-600 text-sm"
-          >
-            <div className="w-3 h-3 rounded-full border-2 border-slate-400 border-t-transparent animate-spin" />
-            <span>Processando...</span>
-          </motion.div>
-        )}
+function VerificationOverlay({ state }: { state: AnimationState }) {
+  const showOverlay = state === "verifying" || state === "identity";
 
-        {state === "success" && (
+  return (
+    <AnimatePresence>
+      {showOverlay && (
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Scanning effect */}
           <motion.div
-            key="success"
+            className="absolute inset-0 overflow-hidden rounded-2xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-sm font-medium"
           >
-            <CheckCircle className="w-4 h-4" />
-            <span>Aprovado</span>
+            <motion.div
+              className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-white/60 to-transparent"
+              animate={{ y: ["0%", "400%", "0%"] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
+
+          {/* Center verification icon */}
+          <motion.div
+            className="relative z-10 w-20 h-20 rounded-full bg-white/95 shadow-xl flex items-center justify-center"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+          >
+            {state === "verifying" && (
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+              >
+                <Shield className="w-9 h-9 text-cyan-600" />
+              </motion.div>
+            )}
+            {state === "identity" && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              >
+                <User className="w-9 h-9 text-emerald-600" />
+              </motion.div>
+            )}
+          </motion.div>
+
+          {/* Pulse rings */}
+          {state === "verifying" && (
+            <>
+              <motion.div
+                className="absolute w-24 h-24 rounded-full border-2 border-white/30"
+                animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+                transition={{ duration: 1.2, repeat: Infinity }}
+              />
+              <motion.div
+                className="absolute w-24 h-24 rounded-full border-2 border-white/30"
+                animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+                transition={{ duration: 1.2, repeat: Infinity, delay: 0.4 }}
+              />
+            </>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// ============================================================================
+// PROCESS STEPS
+// ============================================================================
+
+const steps = [
+  { id: "payment", icon: CreditCard, label: "Pagamento" },
+  { id: "verifying", icon: Shield, label: "Segurança" },
+  { id: "identity", icon: User, label: "Identidade" },
+  { id: "approved", icon: CheckCircle, label: "Aprovado" },
+];
+
+function ProcessSteps({ state }: { state: AnimationState }) {
+  const currentIndex = steps.findIndex(s => s.id === state);
+
+  return (
+    <div className="flex items-center gap-2 w-full max-w-md">
+      {steps.map((step, index) => {
+        const Icon = step.icon;
+        const isActive = index === currentIndex;
+        const isCompleted = index < currentIndex;
+
+        return (
+          <React.Fragment key={step.id}>
+            <motion.div
+              className={cn(
+                "flex flex-col items-center gap-1.5 flex-1",
+                isActive && "scale-105"
+              )}
+              animate={{ opacity: isActive || isCompleted ? 1 : 0.4 }}
+            >
+              <motion.div
+                className={cn(
+                  "w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300",
+                  isCompleted && "bg-emerald-100",
+                  isActive && step.id === "approved" && "bg-emerald-100",
+                  isActive && step.id !== "approved" && "bg-cyan-100",
+                  !isActive && !isCompleted && "bg-slate-100"
+                )}
+                animate={isActive ? { scale: [1, 1.1, 1] } : {}}
+                transition={{ duration: 0.5 }}
+              >
+                <Icon
+                  className={cn(
+                    "w-5 h-5 transition-colors duration-300",
+                    isCompleted && "text-emerald-600",
+                    isActive && step.id === "approved" && "text-emerald-600",
+                    isActive && step.id !== "approved" && "text-cyan-600",
+                    !isActive && !isCompleted && "text-slate-400"
+                  )}
+                />
+              </motion.div>
+              <span
+                className={cn(
+                  "text-xs font-medium transition-colors duration-300",
+                  isActive || isCompleted ? "text-slate-700" : "text-slate-400"
+                )}
+              >
+                {step.label}
+              </span>
+            </motion.div>
+
+            {/* Connector line */}
+            {index < steps.length - 1 && (
+              <div className="flex-shrink-0 w-8 h-0.5 bg-slate-200 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-emerald-400 rounded-full"
+                  initial={{ width: "0%" }}
+                  animate={{ width: index < currentIndex ? "100%" : "0%" }}
+                  transition={{ duration: 0.4 }}
+                />
+              </div>
+            )}
+          </React.Fragment>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============================================================================
+// STATUS MESSAGE
+// ============================================================================
+
+const statusMessages: Record<AnimationState, { text: string; color: string }> = {
+  payment: { text: "Cliente inicia o pagamento", color: "text-slate-600" },
+  verifying: { text: "Kodano analisa a transação", color: "text-cyan-700" },
+  identity: { text: "Verificando identidade do pagador", color: "text-emerald-700" },
+  approved: { text: "Pagamento aprovado com segurança", color: "text-emerald-700" },
+};
+
+function StatusMessage({ state }: { state: AnimationState }) {
+  const { text, color } = statusMessages[state];
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={state}
+        initial={{ opacity: 0, y: 5 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -5 }}
+        transition={{ duration: 0.2 }}
+        className={cn(
+          "flex items-center gap-2 px-4 py-2 rounded-full",
+          state === "approved" ? "bg-emerald-50" : "bg-slate-50"
+        )}
+      >
+        {state === "verifying" && (
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+          >
+            <Lock className="w-4 h-4 text-cyan-600" />
           </motion.div>
         )}
-      </AnimatePresence>
-    </div>
+        {state === "identity" && <User className="w-4 h-4 text-emerald-600" />}
+        {state === "approved" && <CheckCircle className="w-4 h-4 text-emerald-600" />}
+        {state === "payment" && <CreditCard className="w-4 h-4 text-slate-500" />}
+        
+        <span className={cn("text-sm font-medium", color)}>{text}</span>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
@@ -198,14 +358,14 @@ function StatusBadge({ state }: { state: AnimationState }) {
 // STATIC CARD (for mobile/reduced motion)
 // ============================================================================
 
-function StaticCard() {
+function StaticApprovedCard() {
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-5">
       <div
         className="relative w-full aspect-[1.6/1] rounded-2xl p-6 flex flex-col justify-between"
         style={{
           background: `linear-gradient(135deg, ${COLORS.cyanLight}, ${COLORS.cyanBase})`,
-          boxShadow: "0 15px 30px rgba(15,163,177,0.2)",
+          boxShadow: "0 20px 40px rgba(15,163,177,0.2)",
         }}
       >
         <div className="flex justify-between items-start">
@@ -219,13 +379,43 @@ function StaticCard() {
           4532 •••• •••• 9010
         </div>
         <div className="flex justify-between text-xs text-white/70">
-          <span>DEMO USER</span>
+          <span>TITULAR DO CARTÃO</span>
           <span>12/28</span>
         </div>
+
+        {/* Static verification badge */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="w-16 h-16 rounded-full bg-white/95 shadow-lg flex items-center justify-center">
+            <Shield className="w-8 h-8 text-emerald-600" />
+          </div>
+        </div>
       </div>
-      <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-sm font-medium">
-        <CheckCircle className="w-4 h-4" />
-        <span>Pagamento Seguro</span>
+
+      {/* Static steps */}
+      <div className="flex items-center gap-3">
+        {[
+          { icon: CreditCard, label: "Pagamento" },
+          { icon: Shield, label: "Segurança" },
+          { icon: User, label: "Identidade" },
+          { icon: CheckCircle, label: "Aprovado" },
+        ].map((step, i) => (
+          <React.Fragment key={step.label}>
+            <div className="flex flex-col items-center gap-1">
+              <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                <step.icon className="w-4 h-4 text-emerald-600" />
+              </div>
+              <span className="text-xs text-slate-600">{step.label}</span>
+            </div>
+            {i < 3 && <div className="w-4 h-0.5 bg-emerald-300 rounded-full" />}
+          </React.Fragment>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50">
+        <CheckCircle className="w-4 h-4 text-emerald-600" />
+        <span className="text-sm font-medium text-emerald-700">
+          Pagamento seguro com verificação de identidade
+        </span>
       </div>
     </div>
   );
