@@ -1,6 +1,6 @@
 /**
  * SecuritySection Component
- * "A Solução" - Clean, modern design
+ * "A Solução" - Clean, modern design with Kodano brand colors
  */
 
 "use client";
@@ -19,33 +19,21 @@ const solutionFeatures = [
     title: "Verificação de identidade",
     description: "Confirmamos quem está pagando antes da aprovação.",
     icon: UserCheck,
-    color: "text-emerald-600",
-    bgColor: "bg-emerald-50",
-    borderColor: "border-emerald-100",
   },
   {
     title: "Atuação pré-aprovação",
     description: "Agimos antes que a transação seja finalizada.",
     icon: Clock,
-    color: "text-blue-600",
-    bgColor: "bg-blue-50",
-    borderColor: "border-blue-100",
   },
   {
     title: "Menos fraude e contestação",
     description: "Redução de disputas e prejuízos na operação.",
     icon: ShieldCheck,
-    color: "text-violet-600",
-    bgColor: "bg-violet-50",
-    borderColor: "border-violet-100",
   },
   {
     title: "Mais previsibilidade",
     description: "Confiança para vender valores elevados.",
     icon: TrendingUp,
-    color: "text-amber-600",
-    bgColor: "bg-amber-50",
-    borderColor: "border-amber-100",
   },
 ];
 
@@ -71,8 +59,8 @@ export function SecuritySection({ className }: SecuritySectionProps) {
         className
       )}
     >
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-emerald-50/50 via-white to-white" />
+      {/* Background - Kodano teal gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#002A35]/5 via-white to-white" />
 
       <div className="container relative z-10 max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -85,18 +73,18 @@ export function SecuritySection({ className }: SecuritySectionProps) {
             viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
           >
             <motion.div variants={fadeInUp} className="space-y-6">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-200">
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">
+              {/* Badge - Kodano colors */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00C8DC]/10 border border-[#00C8DC]/30">
+                <div className="w-2 h-2 rounded-full bg-[#00C8DC]" />
+                <span className="text-xs font-semibold text-[#002A35] uppercase tracking-wider">
                   A Solução
                 </span>
               </div>
 
               {/* Title */}
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#002A35] leading-tight">
                 A Kodano adiciona{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00C8DC] to-[#00D4E8]">
                   segurança
                 </span>{" "}
                 ao pagamento
@@ -113,10 +101,10 @@ export function SecuritySection({ className }: SecuritySectionProps) {
                 {benefits.map((benefit) => (
                   <div
                     key={benefit}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-[#00C8DC]/20 shadow-sm"
                   >
-                    <Check className="w-4 h-4 text-emerald-500" />
-                    <span className="text-sm font-medium text-slate-700">{benefit}</span>
+                    <Check className="w-4 h-4 text-[#00C8DC]" />
+                    <span className="text-sm font-medium text-[#002A35]">{benefit}</span>
                   </div>
                 ))}
               </div>
@@ -124,7 +112,7 @@ export function SecuritySection({ className }: SecuritySectionProps) {
               {/* CTA */}
               <motion.a
                 href="#contact"
-                className="inline-flex items-center gap-2 mt-4 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors group"
+                className="inline-flex items-center gap-2 mt-4 text-[#002A35] font-semibold hover:text-[#00C8DC] transition-colors group"
                 whileHover={{ x: 4 }}
               >
                 Saiba como funciona
@@ -133,7 +121,7 @@ export function SecuritySection({ className }: SecuritySectionProps) {
             </motion.div>
           </motion.div>
 
-          {/* Right side - Feature cards */}
+          {/* Right side - Feature cards - All same size with Kodano colors */}
           <motion.div
             className="grid grid-cols-2 gap-4"
             variants={staggerContainer}
@@ -141,35 +129,25 @@ export function SecuritySection({ className }: SecuritySectionProps) {
             whileInView="visible"
             viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
           >
-            {solutionFeatures.map((feature, index) => {
+            {solutionFeatures.map((feature) => {
               const Icon = feature.icon;
-              const isOdd = index % 2 === 1;
 
               return (
                 <motion.div
                   key={feature.title}
                   variants={fadeInUp}
-                  className={cn(
-                    "relative p-5 rounded-2xl border bg-white shadow-sm hover:shadow-md transition-shadow duration-200",
-                    feature.borderColor,
-                    isOdd && "mt-6" // Stagger effect
-                  )}
+                  className="relative p-5 rounded-2xl border border-[#00C8DC]/20 bg-white shadow-sm hover:shadow-md hover:border-[#00C8DC]/40 transition-all duration-200 flex flex-col h-full min-h-[160px]"
                 >
-                  {/* Icon */}
-                  <div
-                    className={cn(
-                      "w-12 h-12 rounded-xl flex items-center justify-center mb-4",
-                      feature.bgColor
-                    )}
-                  >
-                    <Icon className={cn("w-6 h-6", feature.color)} />
+                  {/* Icon - Kodano teal */}
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-gradient-to-br from-[#00C8DC]/10 to-[#002A35]/5">
+                    <Icon className="w-6 h-6 text-[#00C8DC]" />
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-lg font-semibold text-slate-900 mb-1">
+                  <h3 className="text-lg font-semibold text-[#002A35] mb-1">
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
+                  <p className="text-sm text-slate-600 leading-relaxed flex-grow">
                     {feature.description}
                   </p>
                 </motion.div>
@@ -178,7 +156,7 @@ export function SecuritySection({ className }: SecuritySectionProps) {
           </motion.div>
         </div>
 
-        {/* Visual connector to next section */}
+        {/* Visual connector to next section - Kodano colors */}
         <motion.div
           className="flex justify-center mt-16"
           initial={{ opacity: 0, y: 10 }}
@@ -187,13 +165,13 @@ export function SecuritySection({ className }: SecuritySectionProps) {
           transition={{ delay: 0.3 }}
         >
           <div className="flex flex-col items-center gap-2">
-            <span className="text-sm text-slate-500 font-medium">Veja como funciona na prática</span>
+            <span className="text-sm text-[#002A35]/70 font-medium">Veja como funciona na prática</span>
             <motion.div
-              className="w-6 h-6 rounded-full border-2 border-slate-300 flex items-center justify-center"
+              className="w-6 h-6 rounded-full border-2 border-[#00C8DC]/40 flex items-center justify-center"
               animate={{ y: [0, 4, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             >
-              <div className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[#00C8DC]" />
             </motion.div>
           </div>
         </motion.div>
