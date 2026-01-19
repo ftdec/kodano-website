@@ -5,11 +5,7 @@ import { ThemeProvider } from "@/components/layout/theme-provider";
 import { I18nProvider } from "@/lib/i18n/context";
 import { AIAssistantWidget } from "@/lib/ai/components/ai-assistant-widget";
 import { ErrorBoundary } from "@/components/error-boundary";
-import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
-import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { useReducedMotion } from "@/lib/animations/hooks";
-import { ScrollProgressBar } from "@/components/animations";
 
 interface ClientLayoutProps {
   children: ReactNode;
@@ -17,7 +13,6 @@ interface ClientLayoutProps {
 
 export function ClientLayout({ children }: ClientLayoutProps) {
   const pathname = usePathname();
-  const prefersReducedMotion = useReducedMotion();
 
   // Force light mode on mount and prevent any dark mode
   useEffect(() => {
@@ -57,33 +52,12 @@ export function ClientLayout({ children }: ClientLayoutProps) {
       disableTransitionOnChange
       storageKey="kodano-theme"
     >
-      <SmoothScrollProvider>
-        <I18nProvider locale="pt">
-          <ScrollProgressBar
-            height={2}
-            position="top"
-            color="bg-gradient-to-r from-[#4FACFE] via-[#00DBDE] to-[#43E97B]"
-          />
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={pathname}
-              initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 8 }}
-              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-              exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -8 }}
-              transition={{
-                duration: prefersReducedMotion ? 0 : 0.25,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              style={{ willChange: "transform, opacity" }}
-            >
-              {children}
-            </motion.div>
-          </AnimatePresence>
-          <ErrorBoundary level="component">
-            <AIAssistantWidget />
-          </ErrorBoundary>
-        </I18nProvider>
-      </SmoothScrollProvider>
+      <I18nProvider locale="pt">
+        {children}
+        <ErrorBoundary level="component">
+          <AIAssistantWidget />
+        </ErrorBoundary>
+      </I18nProvider>
     </ThemeProvider>
   );
 }

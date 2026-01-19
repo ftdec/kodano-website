@@ -1,64 +1,18 @@
 /**
  * Smooth Scroll Provider
- * Global smooth scrolling using Lenis
+ * DISABLED for performance - was causing infinite requestAnimationFrame loop
  */
 
 "use client";
 
-import { ReactNode, useEffect, useRef } from "react";
-import Lenis from "@studio-freight/lenis";
-import { usePathname } from "next/navigation";
-import { useIsLowEndDevice, useReducedMotion } from "@/lib/animations/hooks";
+import { ReactNode } from "react";
 
 interface SmoothScrollProviderProps {
   children: ReactNode;
 }
 
 export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
-  const lenisRef = useRef<Lenis | null>(null);
-  const pathname = usePathname();
-  const prefersReducedMotion = useReducedMotion();
-  const isLowEnd = useIsLowEndDevice();
-
-  useEffect(() => {
-    // Disable smooth scrolling on reduced motion or low-end devices (performance)
-    if (prefersReducedMotion || isLowEnd) return;
-
-    // Initialize Lenis
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easeOutExpo
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-      infinite: false,
-    });
-
-    lenisRef.current = lenis;
-
-    // Animation loop
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    // Cleanup
-    return () => {
-      lenis.destroy();
-      lenisRef.current = null;
-    };
-  }, [prefersReducedMotion, isLowEnd]);
-
-  // Reset scroll on route change
-  useEffect(() => {
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { immediate: true });
-    }
-  }, [pathname]);
-
+  // Lenis disabled - was running requestAnimationFrame at 60fps constantly
+  // Native browser scroll is sufficient and much more performant
   return <>{children}</>;
 }
