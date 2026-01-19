@@ -61,7 +61,7 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
           >
             <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
             <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
-              Pronto para começar?
+              Próximo passo
             </span>
           </motion.div>
 
@@ -82,9 +82,9 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
               ease: "easeInOut",
             }}
           >
-            Vamos escalar sua{" "}
+            Mais segurança para receber{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-500 to-purple-500">
-              operação financeira?
+              pagamentos relevantes
             </span>
           </motion.h2>
 
@@ -93,8 +93,7 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
             variants={fadeInUp}
             className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Nossa equipe de especialistas está pronta para desenhar a arquitetura
-            ideal para o seu negócio.
+            Converse com a Kodano e avalie se a solução faz sentido para sua operação.
           </motion.p>
 
           {/* CTA Button */}
@@ -127,7 +126,7 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
                   />
                 </>
               )}
-              <span className="relative z-10">Fale com o Kodano</span>
+              <span className="relative z-10">Agendar conversa</span>
               <motion.div
                 className="relative z-10"
                 animate={!prefersReducedMotion ? { x: [0, 4, 0] } : {}}
@@ -149,15 +148,15 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
           >
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span>Resposta em 24h</span>
+              <span>Sem compromisso</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-blue-500" />
-              <span>Consultoria Técnica</span>
+              <span>Resposta rápida</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-purple-500" />
-              <span>Sem compromisso</span>
+              <span>Conversa direta</span>
             </div>
           </motion.div>
         </motion.div>

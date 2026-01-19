@@ -7,7 +7,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Building2, Plane, Stethoscope, Briefcase, Home, Car } from "lucide-react";
+import { Plane, Building2, Car } from "lucide-react";
 import {
   fadeInUp,
   staggerContainer,
@@ -18,46 +18,25 @@ import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/ca
 
 const segments = [
   {
-    title: "Turismo Premium",
-    description: "Agências de viagem de luxo, resorts e experiências exclusivas que precisam de parcelamento flexível.",
+    title: "Automotivo",
+    description: "Concessionárias e oficinas que recebem valores elevados em serviços, peças, revisões ou entrada de veículos.",
+    icon: <Car className="w-6 h-6" />,
+    gradient: "from-red-500/10 to-rose-500/10",
+    borderGradient: "from-red-500 to-rose-500",
+  },
+  {
+    title: "Turismo",
+    description: "Agências e operadoras de viagens sob medida, com vendas consultivas e valores elevados.",
     icon: <Plane className="w-6 h-6" />,
     gradient: "from-blue-500/10 to-cyan-500/10",
     borderGradient: "from-blue-500 to-cyan-500",
   },
   {
-    title: "Clínicas Médicas",
-    description: "Tratamentos estéticos e cirurgias de alto valor que exigem soluções de pagamento especializadas.",
-    icon: <Stethoscope className="w-6 h-6" />,
-    gradient: "from-purple-500/10 to-pink-500/10",
-    borderGradient: "from-purple-500 to-pink-500",
-  },
-  {
-    title: "Consultorias B2B",
-    description: "Serviços profissionais premium que operam com tickets elevados e precisam de flexibilidade.",
-    icon: <Briefcase className="w-6 h-6" />,
+    title: "Imobiliário",
+    description: "Locações e transações de alto padrão, onde é essencial saber exatamente quem está pagando.",
+    icon: <Building2 className="w-6 h-6" />,
     gradient: "from-emerald-500/10 to-teal-500/10",
     borderGradient: "from-emerald-500 to-teal-500",
-  },
-  {
-    title: "Arquitetura & Design",
-    description: "Projetos residenciais e comerciais de luxo que requerem parcelamento customizado.",
-    icon: <Home className="w-6 h-6" />,
-    gradient: "from-orange-500/10 to-amber-500/10",
-    borderGradient: "from-orange-500 to-amber-500",
-  },
-  {
-    title: "Eventos Premium",
-    description: "Casamentos de luxo e eventos corporativos com necessidade de pré-autorização e parcelamento.",
-    icon: <Building2 className="w-6 h-6" />,
-    gradient: "from-indigo-500/10 to-violet-500/10",
-    borderGradient: "from-indigo-500 to-violet-500",
-  },
-  {
-    title: "Automotivo Premium",
-    description: "Concessionárias e customizações de alto valor que precisam de soluções especializadas.",
-    icon: <Car className="w-6 h-6" />,
-    gradient: "from-red-500/10 to-rose-500/10",
-    borderGradient: "from-red-500 to-rose-500",
   },
 ];
 
@@ -120,21 +99,20 @@ export function SegmentsSection({ className }: SegmentsSectionProps) {
             variants={fadeInUp}
             className="text-3xl md:text-4xl font-heading font-semibold leading-[1.2] text-balance mb-4"
           >
-            Soluções especializadas para seu segmento
+            Indicada para empresas que operam com valores elevados
           </motion.h2>
 
           <motion.p
             variants={fadeInUp}
             className="text-lg text-muted-foreground/80 leading-relaxed text-balance"
           >
-            Atendemos empresas de alto ticket médio que buscam soluções de pagamento
-            especializadas para seu perfil específico.
+            Funciona melhor quando cada transação é relevante e o risco precisa ser controlado.
           </motion.p>
         </motion.div>
 
         {/* Segments Grid */}
         <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid md:grid-cols-3 gap-6"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
@@ -216,6 +194,19 @@ export function SegmentsSection({ className }: SegmentsSectionProps) {
               </Card>
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* Closing Statement */}
+        <motion.div
+          className="mt-12 text-center"
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
+        >
+          <p className="text-xl md:text-2xl font-medium text-foreground/90 italic">
+            "Quando o valor é alto, a segurança precisa estar no mesmo nível."
+          </p>
         </motion.div>
       </div>
     </section>

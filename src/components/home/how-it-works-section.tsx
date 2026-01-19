@@ -7,47 +7,47 @@
 "use client";
 
 import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
-import { Layers, Zap, BarChart3, Shield, ArrowRight, Check } from "lucide-react";
+import { CreditCard, UserCheck, CheckCircle, Banknote, ArrowRight, Check } from "lucide-react";
 import { useRef } from "react";
 import { useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
 
 const steps = [
   {
-    title: "Integração Rápida",
+    title: "O cliente inicia o pagamento",
     description:
-      "Conecte-se à nossa API RESTful moderna em minutos, com documentação clara e SDKs prontos.",
-    icon: Layers,
+      "O cliente realiza o pagamento normalmente, seja presencial ou online.",
+    icon: CreditCard,
     gradient: "from-[#4FACFE] to-[#00DBDE]",
     color: "#4FACFE",
-    details: ["SDK em 5 linguagens", "Sandbox completo", "Webhooks em tempo real"],
+    details: ["Presencial ou online", "Todos os cartões", "Experiência fluida"],
   },
   {
-    title: "Configure Pagamentos",
+    title: "A Kodano realiza a verificação de identidade",
     description:
-      "Defina suas regras de negócio, métodos de pagamento aceitos e fluxo de checkout.",
-    icon: Zap,
+      "Confirmamos a identidade de quem está pagando antes de aprovar a transação.",
+    icon: UserCheck,
     gradient: "from-[#00DBDE] to-[#43E97B]",
     color: "#00DBDE",
-    details: ["Regras customizáveis", "Split automático", "Retry inteligente"],
+    details: ["Verificação segura", "Processo rápido", "Sem fricção"],
   },
   {
-    title: "Processe Transações",
+    title: "Com tudo validado, o pagamento é aprovado",
     description:
-      "Nossa tecnologia processa cada transação com otimização inteligente para maximizar aprovações.",
-    icon: BarChart3,
+      "Após a verificação, o pagamento segue para aprovação com mais segurança.",
+    icon: CheckCircle,
     gradient: "from-[#415A77] to-[#4FACFE]",
     color: "#415A77",
-    details: ["Roteamento inteligente", "Fallback automático", "Zero downtime"],
+    details: ["Aprovação segura", "Menos contestações", "Menos fraudes"],
   },
   {
-    title: "Monitore e Otimize",
+    title: "A empresa recebe com mais segurança",
     description:
-      "Acompanhe tudo em tempo real pelo dashboard e deixe nossa IA otimizar as conversões.",
-    icon: Shield,
+      "Você recebe o pagamento com a tranquilidade de saber quem pagou.",
+    icon: Banknote,
     gradient: "from-[#43E97B] to-[#4FACFE]",
     color: "#43E97B",
-    details: ["Dashboard em tempo real", "Alertas inteligentes", "Relatórios automáticos"],
+    details: ["Recebimento tranquilo", "Menos disputas", "Mais previsibilidade"],
   },
 ];
 
@@ -242,7 +242,7 @@ export function HowItWorksSection() {
           </h2>
 
           <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
-            Do setup à primeira transação em poucos passos. Role para descobrir cada etapa.
+            Um fluxo simples que adiciona segurança à sua operação de pagamentos.
           </p>
         </motion.div>
 
@@ -281,9 +281,9 @@ export function HowItWorksSection() {
               <ArrowRight className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1">
-              <div className="font-semibold text-lg">Pronto para começar?</div>
+              <div className="font-semibold text-lg">Quer saber mais?</div>
               <div className="text-sm text-muted-foreground">
-                Fale com o Kodano e tenha sua integração rodando em minutos.
+                Converse com a Kodano e avalie se faz sentido para sua operação.
               </div>
             </div>
             <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium">

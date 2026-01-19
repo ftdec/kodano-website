@@ -21,20 +21,19 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'),
   title: {
-    default: "Kodano — Infraestrutura de pagamentos com tecnologia avançada para empresas",
+    default: "Kodano — Mais segurança para pagamentos de alto valor",
     template: "%s | Kodano",
   },
-  description: "Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada. Antifraude, checkout otimizado e suporte especializado.",
+  description: "A Kodano atua no fluxo de pagamento para aumentar a segurança e reduzir riscos em transações de alto valor.",
   keywords: [
-    "infraestrutura de pagamentos",
-    "plataforma de pagamentos",
-    "APIs de pagamento",
-    "gateway de pagamentos B2B",
-    "tecnologia financeira",
-    "taxas competitivas",
-    "aprovação transações",
-    "liquidação previsível",
-    "PCI-ready",
+    "segurança pagamentos",
+    "pagamentos alto valor",
+    "verificação identidade",
+    "redução fraude",
+    "prevenção contestação",
+    "transações seguras",
+    "pagamentos B2B",
+    "proteção pagamentos",
   ],
   authors: [{ name: "Kodano" }],
   creator: "Kodano",
@@ -48,30 +47,30 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     url: "https://kodano.com.br",
-    title: "Kodano — Infraestrutura de pagamentos com tecnologia avançada",
-    description: "Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada.",
+    title: "Kodano — Mais segurança para pagamentos de alto valor",
+    description: "A Kodano atua no fluxo de pagamento para aumentar a segurança e reduzir riscos em transações de alto valor.",
     siteName: "Kodano",
     images: [
       {
         url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Kodano - Gateway de Pagamentos B2B",
+        alt: "Kodano - Segurança para pagamentos de alto valor",
         type: "image/png",
       },
       {
         url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/kodano-logo.png`,
         width: 1024,
         height: 1024,
-        alt: "Kodano - Gateway de Pagamentos B2B",
+        alt: "Kodano - Segurança para pagamentos de alto valor",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kodano — Infraestrutura de pagamentos com tecnologia avançada",
-    description: "Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada.",
+    title: "Kodano — Mais segurança para pagamentos de alto valor",
+    description: "A Kodano atua no fluxo de pagamento para aumentar a segurança e reduzir riscos em transações de alto valor.",
     images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`],
     creator: "@kodano",
   },
@@ -154,8 +153,8 @@ export default function RootLayout({
         {/* Open Graph / Facebook / WhatsApp */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://kodano.com.br" />
-        <meta property="og:title" content="Kodano — Infraestrutura de pagamentos com tecnologia avançada" />
-        <meta property="og:description" content="Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada." />
+        <meta property="og:title" content="Kodano — Mais segurança para pagamentos de alto valor" />
+        <meta property="og:description" content="A Kodano atua no fluxo de pagamento para aumentar a segurança e reduzir riscos em transações de alto valor." />
         <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -167,8 +166,8 @@ export default function RootLayout({
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://kodano.com.br" />
-        <meta name="twitter:title" content="Kodano — Infraestrutura de pagamentos com tecnologia avançada" />
-        <meta name="twitter:description" content="Infraestrutura de pagamentos com APIs modernas, taxas competitivas e tecnologia avançada." />
+        <meta name="twitter:title" content="Kodano — Mais segurança para pagamentos de alto valor" />
+        <meta name="twitter:description" content="A Kodano atua no fluxo de pagamento para aumentar a segurança e reduzir riscos em transações de alto valor." />
         <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`} />
         <meta name="twitter:creator" content="@kodano" />
         

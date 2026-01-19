@@ -7,7 +7,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Zap, Shield, BarChart3, Layers } from "lucide-react";
+import { AlertTriangle, ShieldX, Target } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Card3D } from "@/components/animations/card-3d";
 import {
@@ -22,21 +22,21 @@ import { cn } from "@/lib/utils";
 
 const features = [
   {
-    title: "Processamento Inteligente",
+    title: "Fraude",
     description:
-      "Tecnologia avançada que otimiza cada transação para maximizar taxas de aprovação e reduzir custos.",
-    icon: Layers,
+      "Um único pagamento fraudulento pode gerar prejuízo significativo.",
+    icon: AlertTriangle,
     accent: {
-      border: "from-[#4FACFE] via-[#00DBDE] to-[#43E97B]",
-      icon: "from-[#E0F2FE] via-white to-[#F4ECFF]",
-      glow: "from-[#4FACFE]/40 via-[#43E97B]/10 to-transparent",
+      border: "from-[#FF6B6B] via-[#FF8E53] to-[#FF6B6B]",
+      icon: "from-[#FEE2E2] via-white to-[#FFE4E6]",
+      glow: "from-[#FF6B6B]/40 via-[#FF8E53]/15 to-transparent",
     },
   },
   {
-    title: "Retentativas Automáticas",
+    title: "Contestação",
     description:
-      "Recuperação de vendas perdidas com retentativas inteligentes e transparentes.",
-    icon: Zap,
+      "Sem segurança adicional, disputas podem resultar na perda do valor recebido.",
+    icon: ShieldX,
     accent: {
       border: "from-[#FAD961] via-[#F76B1C] to-[#FAD961]",
       icon: "from-[#FFF7E5] via-white to-[#FFE5D0]",
@@ -44,21 +44,10 @@ const features = [
     },
   },
   {
-    title: "Conciliação Integrada",
+    title: "Risco concentrado",
     description:
-      "Dashboard unificado para controle total de todas as suas transações e recebíveis.",
-    icon: BarChart3,
-    accent: {
-      border: "from-[#A8FF78] via-[#78FFD6] to-[#A8FF78]",
-      icon: "from-[#ECFDF5] via-white to-[#DCFCE7]",
-      glow: "from-[#A8FF78]/40 via-[#78FFD6]/15 to-transparent",
-    },
-  },
-  {
-    title: "Segurança Bancária",
-    description:
-      "Certificação PCI-DSS e conformidade total com as normas do Banco Central.",
-    icon: Shield,
+      "Em valores altos, cada transação importa e o erro custa caro.",
+    icon: Target,
     accent: {
       border: "from-[#B8C6FF] via-[#6D83F2] to-[#B8C6FF]",
       icon: "from-[#EEF2FF] via-white to-[#E0E7FF]",
@@ -107,35 +96,27 @@ export function BenefitsSection() {
                 isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
               )}
             >
-              <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-emerald-400 to-sky-400 animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-red-400 to-orange-400 animate-pulse" />
               <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
-                Tecnologia proprietária
+                O Problema
               </span>
             </div>
 
             <h2 className="text-3xl md:text-4xl font-heading font-semibold leading-[1.2] text-balance">
-              Orquestração feita com precisão cirúrgica
+              Pagamentos de alto valor exigem outro nível de cuidado
             </h2>
 
             <p className="text-lg text-muted-foreground/80 leading-relaxed text-balance">
-              Processamento feito com precisão. Automatizamos regras complexas
-              de aprovação, retentativas e conciliação em uma camada inteligente
-              que otimiza cada transação para máxima eficiência.
+              Quando o valor de uma transação é relevante, fraudes, contestações e incertezas sobre quem paga se tornam riscos reais para o negócio.
             </p>
           </motion.div>
         </motion.div>
 
         {/* Features Grid */}
         <div className="relative max-w-5xl mx-auto">
-          {/* Decorative Lines */}
-          <div className="pointer-events-none absolute inset-6 hidden md:block">
-            <div className="absolute left-1/2 top-0 bottom-0 border-l border-border/50 border-dashed" />
-            <div className="absolute top-1/2 left-0 right-0 border-t border-border/50 border-dashed" />
-          </div>
-
           {/* Grid */}
           <motion.div
-            className="grid md:grid-cols-2 gap-6 relative"
+            className="grid md:grid-cols-3 gap-6 relative"
             initial="hidden"
             whileInView="visible"
             viewport={isMobile ? mobileViewport : defaultViewport}

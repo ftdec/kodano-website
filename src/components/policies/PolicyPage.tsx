@@ -108,7 +108,13 @@ function PolicyMobileNav() {
           isScrolled ? "shadow-sm" : ""
         }`}
       >
-        <Link href="/" className="flex items-center gap-3 group">
+        <button
+          onClick={() => {
+            router.push("/");
+            window.location.href = "/";
+          }}
+          className="flex items-center gap-3 group"
+        >
           <div className="relative w-10 h-10 shrink-0 transition-transform group-hover:scale-110 flex items-center justify-center">
             <Image
               src="/kodano-logo.png"
@@ -122,7 +128,7 @@ function PolicyMobileNav() {
           <span className="text-xl font-bold font-[family-name:var(--font-poppins)] text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#00A6B4] to-[#002A35] bg-[length:200%_100%] animate-gradient whitespace-nowrap">
             {BRAND.name}
           </span>
-        </Link>
+        </button>
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
           className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
@@ -207,7 +213,13 @@ export function PolicyPage({ title, subtitle, year, sections }: PolicyPageProps)
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <div className="flex items-center shrink-0">
-              <Link href="/" className="flex items-center gap-3 group">
+              <button
+                onClick={() => {
+                  router.push("/");
+                  window.location.href = "/";
+                }}
+                className="flex items-center gap-3 group"
+              >
                 <div className="relative w-10 h-10 md:w-11 md:h-11 shrink-0 transition-transform group-hover:scale-110 flex items-center justify-center">
                   <Image
                     src="/kodano-logo.png"
@@ -221,7 +233,7 @@ export function PolicyPage({ title, subtitle, year, sections }: PolicyPageProps)
                 <span className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#00A6B4] to-[#002A35] bg-[length:200%_100%] animate-gradient whitespace-nowrap">
                   {BRAND.name}
                 </span>
-              </Link>
+              </button>
             </div>
 
             {/* Desktop Navigation */}

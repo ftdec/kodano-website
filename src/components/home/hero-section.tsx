@@ -47,7 +47,7 @@ export function HeroSection({ className }: HeroSectionProps) {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-border/40 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
             <span className="text-sm font-medium text-muted-foreground">
-              Infraestrutura de Pagamentos com Tecnologia Avançada
+              Segurança proporcional ao valor da transação
             </span>
           </div>
         </FadeInView>
@@ -56,7 +56,7 @@ export function HeroSection({ className }: HeroSectionProps) {
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.05] text-balance">
           <TextReveal
             as="span"
-            text="Pagamentos inteligentes"
+            text="Mais segurança para"
             className="inline-block"
             delay={0.08}
             staggerDelay={0.04}
@@ -64,7 +64,7 @@ export function HeroSection({ className }: HeroSectionProps) {
           <br className="hidden md:block" />
           <TextRevealGradient
             as="span"
-            text="para empresas modernas"
+            text="pagamentos de alto valor"
             className="inline-block"
             delay={0.18}
             staggerDelay={0.04}
@@ -75,8 +75,7 @@ export function HeroSection({ className }: HeroSectionProps) {
         {/* Subtitle */}
         <FadeInView delay={0.25} className="mb-12">
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed text-balance">
-            Maximize aprovação, reduza custos e tenha controle total com APIs modernas e
-            orquestração inteligente de funcionalidades.
+            A Kodano participa do fluxo de pagamento para trazer mais segurança a transações de alto valor, confirmando a identidade de quem está pagando antes da aprovação.
           </p>
         </FadeInView>
 
@@ -91,7 +90,7 @@ export function HeroSection({ className }: HeroSectionProps) {
               ripple={!prefersReducedMotion}
               className="rounded-full"
             >
-              Fale com o Kodano
+              Falar com a Kodano
             </AdvancedButton>
             <AdvancedButton
               href="#process"
@@ -101,7 +100,7 @@ export function HeroSection({ className }: HeroSectionProps) {
               ripple={!prefersReducedMotion}
               className="rounded-full bg-white/80"
             >
-              Conheça nosso processo
+              Como funciona
             </AdvancedButton>
           </ButtonGroup>
         </FadeInView>

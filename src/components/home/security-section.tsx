@@ -7,7 +7,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shield, Lock, Eye, FileCheck, CheckCircle2 } from "lucide-react";
+import { UserCheck, Clock, ShieldCheck, TrendingUp, CheckCircle2 } from "lucide-react";
 import {
   fadeInUp,
   staggerContainer,
@@ -16,27 +16,27 @@ import {
 import { useReducedMotion, useIsMobile } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
 
-const securityFeatures = [
+const solutionFeatures = [
   {
-    title: "Certificação PCI-DSS",
-    description: "Padrão global de segurança para processamento de cartões, validado por auditoria rigorosa.",
-    icon: <Shield className="w-6 h-6" />,
+    title: "Verificação de identidade do pagador",
+    description: "Confirmamos quem está realizando o pagamento antes da aprovação.",
+    icon: <UserCheck className="w-6 h-6" />,
     highlight: true,
   },
   {
-    title: "Criptografia Ponta a Ponta",
-    description: "Todos os dados sensíveis são criptografados durante transmissão e armazenamento.",
-    icon: <Lock className="w-6 h-6" />,
+    title: "Atuação antes da aprovação do pagamento",
+    description: "A Kodano atua no momento certo, antes que a transação seja finalizada.",
+    icon: <Clock className="w-6 h-6" />,
   },
   {
-    title: "Tokenização Avançada",
-    description: "Armazenamento seguro de dados de cartão usando tokens, nunca armazenamos dados completos.",
-    icon: <Eye className="w-6 h-6" />,
+    title: "Redução de fraude e contestação",
+    description: "Menos disputas, menos prejuízos e mais previsibilidade na operação.",
+    icon: <ShieldCheck className="w-6 h-6" />,
   },
   {
-    title: "LGPD Compliant",
-    description: "Total conformidade com a legislação brasileira de proteção de dados pessoais.",
-    icon: <FileCheck className="w-6 h-6" />,
+    title: "Mais previsibilidade em transações relevantes",
+    description: "Tranquilidade para vender valores elevados com confiança.",
+    icon: <TrendingUp className="w-6 h-6" />,
   },
 ];
 
@@ -120,7 +120,7 @@ export function SecuritySection({ className }: SecuritySectionProps) {
           >
             <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-emerald-400 to-green-400 animate-pulse" />
             <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
-              Segurança & Confiabilidade
+              A Solução
             </span>
           </motion.div>
 
@@ -128,19 +128,18 @@ export function SecuritySection({ className }: SecuritySectionProps) {
             variants={fadeInUp}
             className="text-3xl md:text-4xl font-heading font-semibold leading-[1.2] text-balance mb-4"
           >
-            Segurança de nível bancário
+            A Kodano adiciona segurança ao pagamento
           </motion.h2>
 
           <motion.p
             variants={fadeInUp}
             className="text-lg text-muted-foreground/80 leading-relaxed text-balance"
           >
-            Infraestrutura robusta com certificações internacionais e monitoramento
-            contínuo para proteger cada transação.
+            A Kodano atua no momento da aprovação do pagamento, realizando a verificação de identidade do pagador. Isso reduz riscos, aumenta a previsibilidade da operação e dá mais tranquilidade para a empresa vender valores elevados.
           </motion.p>
         </motion.div>
 
-        {/* Security Features Grid */}
+        {/* Solution Features Grid */}
         <motion.div
           className="grid md:grid-cols-2 gap-6 mb-12"
           variants={staggerContainer}
@@ -148,7 +147,7 @@ export function SecuritySection({ className }: SecuritySectionProps) {
           whileInView="visible"
           viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
         >
-          {securityFeatures.map((feature, index) => (
+          {solutionFeatures.map((feature, index) => (
             <motion.div
               key={feature.title}
               variants={fadeInUp}
@@ -204,10 +203,10 @@ export function SecuritySection({ className }: SecuritySectionProps) {
           viewport={{ once: true }}
         >
           {[
-            "Monitoramento 24/7",
-            "Backup e Redundância",
-            "ISO 27001",
-            "Auditorias Regulares",
+            "Segurança para alto valor",
+            "Menos contestações",
+            "Menos fraudes",
+            "Mais confiança",
           ].map((item, index) => (
             <motion.div
               key={item}

@@ -72,7 +72,7 @@ function MobileNavOnePage() {
   const scrollThreshold = 20;
 
   const menuItems: Array<{ label: string; href: string; key: string }> = [
-    { label: "Produtos", href: "#concept", key: "produtos" },
+    { label: "A Solução", href: "#security", key: "solucao" },
     { label: "Como Funciona", href: "#process", key: "como-funciona" },
   ];
 
@@ -226,7 +226,7 @@ export default function Home() {
 
   // Navigation items for one-page with anchors
   const onePageNavItems: Array<{ label: string; href: string; key: string }> = [
-    { label: "Produtos", href: "#concept", key: "produtos" },
+    { label: "A Solução", href: "#security", key: "solucao" },
     { label: "Como Funciona", href: "#process", key: "como-funciona" },
   ];
 
@@ -364,19 +364,19 @@ export default function Home() {
         {/* HERO SECTION */}
         <HeroSection />
 
-        {/* BENEFITS SECTION (WHAT WE DO) */}
+        {/* O PROBLEMA - Riscos de pagamentos de alto valor */}
         <BenefitsSection />
 
-        {/* HOW IT WORKS SECTION */}
-        <HowItWorksSection />
-
-        {/* SEGMENTS SECTION (PARA QUEM É) */}
-        <SegmentsSection />
-
-        {/* SECURITY SECTION */}
+        {/* A SOLUÇÃO - Como a Kodano adiciona segurança */}
         <SecuritySection />
 
-        {/* FINAL CTA SECTION */}
+        {/* COMO FUNCIONA */}
+        <HowItWorksSection />
+
+        {/* PARA QUEM É */}
+        <SegmentsSection />
+
+        {/* CTA FINAL */}
         <FinalCTASection />
 
         {/* CONTACT */}
@@ -409,12 +409,12 @@ export default function Home() {
                   </div>
 
                   <h2 className="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight">
-                    Vamos escalar sua <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">operação financeira?</span>
+                    Fale com a <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Kodano</span>
                   </h2>
 
                   <p className="text-lg text-muted-foreground leading-relaxed max-w-md">
-                    Nossa equipe de especialistas está pronta para desenhar a arquitetura ideal para o seu negócio.
+                    Converse com nossa equipe e avalie se a solução faz sentido para sua operação.
                   </p>
                 </div>
 
@@ -424,8 +424,8 @@ export default function Home() {
                       <CheckCircle2 className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-lg">Resposta em 24h</h4>
-                      <p className="text-muted-foreground text-sm">Nosso time comercial analisa seu perfil rapidamente.</p>
+                      <h4 className="font-semibold text-lg">Sem compromisso</h4>
+                      <p className="text-muted-foreground text-sm">Conversa inicial para entender se faz sentido para você.</p>
                     </div>
                   </div>
 
@@ -434,8 +434,8 @@ export default function Home() {
                       <Shield className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-lg">Consultoria Técnica</h4>
-                      <p className="text-muted-foreground text-sm">Acesso direto aos nossos arquitetos de solução.</p>
+                      <h4 className="font-semibold text-lg">Resposta rápida</h4>
+                      <p className="text-muted-foreground text-sm">Nossa equipe retorna seu contato em até 24h.</p>
                     </div>
                   </div>
                 </div>
