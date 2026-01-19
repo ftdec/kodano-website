@@ -1,58 +1,49 @@
 /**
  * BenefitsSection Component
- * Grid showcasing Kodano's core benefits/features
- * With 3D card effects and staggered animations
+ * "O Problema" - Riscos em pagamentos de alto valor
+ * Clean, fluid design with smooth animations
  */
 
 "use client";
 
 import { motion } from "framer-motion";
 import { AlertTriangle, ShieldX, Target } from "lucide-react";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { Card3D } from "@/components/animations/card-3d";
 import {
   fadeInUp,
   staggerContainer,
-  cardHover,
   defaultViewport,
   mobileViewport,
 } from "@/lib/animations/motion-variants";
 import { useIsMobile, useReducedMotion } from "@/lib/animations/hooks";
 import { cn } from "@/lib/utils";
 
-const features = [
+const risks = [
   {
     title: "Fraude",
-    description:
-      "Um único pagamento fraudulento pode gerar prejuízo significativo.",
+    description: "Um único pagamento fraudulento pode gerar prejuízo significativo.",
     icon: AlertTriangle,
-    accent: {
-      border: "from-[#FF6B6B] via-[#FF8E53] to-[#FF6B6B]",
-      icon: "from-[#FEE2E2] via-white to-[#FFE4E6]",
-      glow: "from-[#FF6B6B]/40 via-[#FF8E53]/15 to-transparent",
-    },
+    color: "text-red-500",
+    bgColor: "bg-red-50",
+    borderColor: "border-red-100",
+    iconBg: "bg-red-100",
   },
   {
     title: "Contestação",
-    description:
-      "Sem segurança adicional, disputas podem resultar na perda do valor recebido.",
+    description: "Sem segurança adicional, disputas podem resultar na perda do valor recebido.",
     icon: ShieldX,
-    accent: {
-      border: "from-[#FAD961] via-[#F76B1C] to-[#FAD961]",
-      icon: "from-[#FFF7E5] via-white to-[#FFE5D0]",
-      glow: "from-[#FAD961]/40 via-[#F76B1C]/15 to-transparent",
-    },
+    color: "text-amber-500",
+    bgColor: "bg-amber-50",
+    borderColor: "border-amber-100",
+    iconBg: "bg-amber-100",
   },
   {
     title: "Risco concentrado",
-    description:
-      "Em valores altos, cada transação importa e o erro custa caro.",
+    description: "Em valores altos, cada transação importa e o erro custa caro.",
     icon: Target,
-    accent: {
-      border: "from-[#B8C6FF] via-[#6D83F2] to-[#B8C6FF]",
-      icon: "from-[#EEF2FF] via-white to-[#E0E7FF]",
-      glow: "from-[#B8C6FF]/40 via-[#6D83F2]/15 to-transparent",
-    },
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
+    borderColor: "border-blue-100",
+    iconBg: "bg-blue-100",
   },
 ];
 
@@ -61,135 +52,100 @@ export function BenefitsSection() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section id="concept" className="relative py-28 px-6 overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-b from-secondary/60 via-background to-background" />
-      <div
-        className={cn(
-          "absolute -top-32 right-0 w-[420px] h-[420px] bg-[radial-gradient(circle_at_center,_rgba(65,90,119,0.25),_transparent_65%)]",
-          isMobile ? "blur-[60px]" : "blur-[120px]"
-        )}
-      />
-      <div
-        className={cn(
-          "absolute bottom-[-20%] left-[-5%] w-[520px] h-[520px] bg-[radial-gradient(circle_at_center,_rgba(13,27,42,0.15),_transparent_65%)]",
-          isMobile ? "blur-[70px]" : "blur-[140px]"
-        )}
-      />
-      <div className="absolute inset-x-0 top-16 hidden md:block">
-        <div className="mx-auto w-[70%] rounded-[48px] border border-border/40 border-dashed h-[70vh] max-h-[520px] opacity-40" />
-      </div>
-
-      <div className="container relative z-10 max-w-6xl mx-auto">
+    <section id="concept" className="relative py-20 md:py-28 px-6 overflow-hidden">
+      {/* Subtle Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-white to-white" />
+      
+      <div className="container relative z-10 max-w-5xl mx-auto">
         {/* Section Header */}
         <motion.div
-          className="max-w-3xl mx-auto text-center mb-16"
+          className="max-w-2xl mx-auto text-center mb-12 md:mb-16"
           initial="hidden"
           whileInView="visible"
           viewport={isMobile ? mobileViewport : defaultViewport}
           variants={staggerContainer}
         >
-          <motion.div variants={fadeInUp} className="space-y-6">
-            <div
-              className={cn(
-                "inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/70 dark:bg-white/5 border border-border/60",
-                isMobile ? "backdrop-blur-sm" : "backdrop-blur-xl"
-              )}
-            >
-              <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-red-400 to-orange-400 animate-pulse" />
-              <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
-                O Problema
+          <motion.div variants={fadeInUp} className="space-y-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 leading-tight">
+              Pagamentos de alto valor exigem{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-600 to-slate-900">
+                outro nível de cuidado
               </span>
-            </div>
-
-            <h2 className="text-3xl md:text-4xl font-heading font-semibold leading-[1.2] text-balance">
-              Pagamentos de alto valor exigem outro nível de cuidado
             </h2>
 
-            <p className="text-lg text-muted-foreground/80 leading-relaxed text-balance">
+            <p className="text-base md:text-lg text-slate-600 leading-relaxed max-w-xl mx-auto">
               Quando o valor de uma transação é relevante, fraudes, contestações e incertezas sobre quem paga se tornam riscos reais para o negócio.
             </p>
           </motion.div>
         </motion.div>
 
-        {/* Features Grid */}
-        <div className="relative max-w-5xl mx-auto">
-          {/* Grid */}
-          <motion.div
-            className="grid md:grid-cols-3 gap-6 relative"
-            initial="hidden"
-            whileInView="visible"
-            viewport={isMobile ? mobileViewport : defaultViewport}
-            variants={staggerContainer}
-          >
-            {features.map((feature, i) => {
-              const Icon = feature.icon;
+        {/* Risk Cards - Clean horizontal layout */}
+        <motion.div
+          className="grid md:grid-cols-3 gap-4 md:gap-6"
+          initial="hidden"
+          whileInView="visible"
+          viewport={isMobile ? mobileViewport : defaultViewport}
+          variants={staggerContainer}
+        >
+          {risks.map((risk, index) => {
+            const Icon = risk.icon;
 
-              return (
-                <motion.div key={feature.title} variants={fadeInUp}>
-                  <Card3D
-                    maxRotation={8}
-                    glare={!isMobile && !prefersReducedMotion}
-                    shadow={!isMobile}
+            return (
+              <motion.div
+                key={risk.title}
+                variants={fadeInUp}
+                custom={index}
+                whileHover={
+                  !prefersReducedMotion
+                    ? { y: -4, transition: { duration: 0.2 } }
+                    : {}
+                }
+              >
+                <div
+                  className={cn(
+                    "relative h-full p-6 md:p-8 rounded-2xl border transition-all duration-300",
+                    "bg-white hover:shadow-lg hover:shadow-slate-200/50",
+                    risk.borderColor
+                  )}
+                >
+                  {/* Icon */}
+                  <div
+                    className={cn(
+                      "w-12 h-12 rounded-xl flex items-center justify-center mb-5",
+                      risk.iconBg
+                    )}
                   >
-                    <Card
-                      className={cn(
-                        "group relative h-full overflow-hidden border border-border/40 bg-white/80 dark:bg-background/40 shadow-[0_20px_50px_rgba(15,23,42,0.08)] transition-all",
-                        isMobile
-                          ? "backdrop-blur-sm duration-200"
-                          : "backdrop-blur-2xl duration-500"
-                      )}
-                    >
-                      {/* Top Border Gradient */}
-                      <div
-                        className={cn(
-                          "absolute inset-x-0 top-0 h-1 bg-gradient-to-r",
-                          feature.accent.border
-                        )}
-                      />
+                    <Icon className={cn("w-6 h-6", risk.color)} />
+                  </div>
 
-                      {/* Glow Effect on Hover */}
-                      {!isMobile && (
-                        <div className="absolute inset-0 pointer-events-none">
-                          <div
-                            className={cn(
-                              "absolute inset-x-6 -top-10 h-24 bg-gradient-to-r blur-3xl opacity-0 group-hover:opacity-70 transition-all duration-700",
-                              feature.accent.glow
-                            )}
-                          />
-                        </div>
-                      )}
+                  {/* Content */}
+                  <h3 className="text-xl font-semibold text-slate-900 mb-2">
+                    {risk.title}
+                  </h3>
+                  
+                  <p className="text-slate-600 leading-relaxed text-sm md:text-base">
+                    {risk.description}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
 
-                      <CardHeader className="relative z-10 space-y-4 p-8">
-                        {/* Icon */}
-                        <div className="flex items-start justify-between gap-4">
-                          <div
-                            className={cn(
-                              "w-14 h-14 rounded-2xl bg-gradient-to-br flex items-center justify-center text-primary shadow-inner shadow-white/60",
-                              feature.accent.icon
-                            )}
-                          >
-                            <Icon className="w-6 h-6" />
-                          </div>
-                        </div>
-
-                        {/* Title */}
-                        <CardTitle className="text-2xl leading-tight pt-2">
-                          {feature.title}
-                        </CardTitle>
-
-                        {/* Description */}
-                        <p className="text-muted-foreground/90 leading-relaxed text-base">
-                          {feature.description}
-                        </p>
-                      </CardHeader>
-                    </Card>
-                  </Card3D>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </div>
+        {/* Subtle connector line on desktop */}
+        <motion.div
+          className="hidden md:flex justify-center mt-10"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+        >
+          <div className="flex items-center gap-3 text-sm text-slate-500">
+            <div className="w-12 h-px bg-gradient-to-r from-transparent to-slate-300" />
+            <span className="font-medium">Existe uma solução</span>
+            <div className="w-12 h-px bg-gradient-to-l from-transparent to-slate-300" />
+          </div>
+        </motion.div>
       </div>
     </section>
   );
