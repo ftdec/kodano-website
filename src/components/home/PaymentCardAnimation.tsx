@@ -12,10 +12,12 @@ import { CheckCircle, Shield, User, CreditCard, Lock } from "lucide-react";
 
 type AnimationState = "payment" | "verifying" | "identity" | "approved";
 
+// Kodano Bank - Emerald Premium Colors
 const COLORS = {
-  cyanBase: "#0FA3B1",
-  cyanLight: "#1BCAD3",
-  teal: "#2FE6C8",
+  emeraldDark: "#0B5F4B",    // emerald-700
+  emeraldBase: "#0F7D63",    // emerald-500 (primary)
+  emeraldLight: "#6AAE9E",   // emerald-400
+  emeraldPale: "#95C6BA",    // emerald-300
   white: "#FFFFFF",
 } as const;
 
@@ -101,10 +103,10 @@ function PaymentCard({ state }: { state: AnimationState }) {
     <motion.div
       className="relative w-full h-full rounded-2xl overflow-hidden"
       style={{
-        background: `linear-gradient(135deg, ${COLORS.cyanLight} 0%, ${COLORS.cyanBase} 100%)`,
+        background: `linear-gradient(135deg, ${COLORS.emeraldLight} 0%, ${COLORS.emeraldBase} 50%, ${COLORS.emeraldDark} 100%)`,
         boxShadow: isApproved 
-          ? "0 25px 50px rgba(47, 230, 200, 0.25)" 
-          : "0 20px 40px rgba(15, 163, 177, 0.2)",
+          ? "0 25px 50px rgba(15, 125, 99, 0.35)" 
+          : "0 20px 40px rgba(15, 125, 99, 0.25)",
       }}
       animate={{
         scale: isApproved ? 1.02 : 1,
@@ -143,7 +145,7 @@ function PaymentCard({ state }: { state: AnimationState }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             style={{
-              background: "radial-gradient(circle at 50% 50%, rgba(47, 230, 200, 0.15), transparent 70%)",
+              background: "radial-gradient(circle at 50% 50%, rgba(149, 198, 186, 0.2), transparent 70%)",
             }}
           />
         )}
@@ -195,7 +197,7 @@ function VerificationOverlay({ state }: { state: AnimationState }) {
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
               >
-                <Shield className="w-9 h-9 text-cyan-600" />
+                <Shield className="w-9 h-9 text-emerald-600" />
               </motion.div>
             )}
             {state === "identity" && (
@@ -204,7 +206,7 @@ function VerificationOverlay({ state }: { state: AnimationState }) {
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
               >
-                <User className="w-9 h-9 text-emerald-600" />
+                <User className="w-9 h-9 text-emerald-500" />
               </motion.div>
             )}
           </motion.div>
@@ -264,8 +266,7 @@ function ProcessSteps({ state }: { state: AnimationState }) {
                 className={cn(
                   "w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300",
                   isCompleted && "bg-emerald-100",
-                  isActive && step.id === "approved" && "bg-emerald-100",
-                  isActive && step.id !== "approved" && "bg-cyan-100",
+                  isActive && "bg-emerald-100",
                   !isActive && !isCompleted && "bg-slate-100"
                 )}
                 animate={isActive ? { scale: [1, 1.1, 1] } : {}}
@@ -275,8 +276,7 @@ function ProcessSteps({ state }: { state: AnimationState }) {
                   className={cn(
                     "w-5 h-5 transition-colors duration-300",
                     isCompleted && "text-emerald-600",
-                    isActive && step.id === "approved" && "text-emerald-600",
-                    isActive && step.id !== "approved" && "text-cyan-600",
+                    isActive && "text-emerald-600",
                     !isActive && !isCompleted && "text-slate-400"
                   )}
                 />
@@ -295,7 +295,7 @@ function ProcessSteps({ state }: { state: AnimationState }) {
             {index < steps.length - 1 && (
               <div className="flex-shrink-0 w-8 h-0.5 bg-slate-200 rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-emerald-400 rounded-full"
+                  className="h-full bg-emerald-500 rounded-full"
                   initial={{ width: "0%" }}
                   animate={{ width: index < currentIndex ? "100%" : "0%" }}
                   transition={{ duration: 0.4 }}
@@ -315,7 +315,7 @@ function ProcessSteps({ state }: { state: AnimationState }) {
 
 const statusMessages: Record<AnimationState, { text: string; color: string }> = {
   payment: { text: "Cliente inicia o pagamento", color: "text-slate-600" },
-  verifying: { text: "Kodano analisa a transação", color: "text-cyan-700" },
+  verifying: { text: "Kodano analisa a transação", color: "text-emerald-700" },
   identity: { text: "Verificando identidade do pagador", color: "text-emerald-700" },
   approved: { text: "Pagamento aprovado com segurança", color: "text-emerald-700" },
 };
@@ -333,7 +333,7 @@ function StatusMessage({ state }: { state: AnimationState }) {
         transition={{ duration: 0.2 }}
         className={cn(
           "flex items-center gap-2 px-4 py-2 rounded-full",
-          state === "approved" ? "bg-emerald-50" : "bg-slate-50"
+          "bg-emerald-50"
         )}
       >
         {state === "verifying" && (
@@ -341,12 +341,12 @@ function StatusMessage({ state }: { state: AnimationState }) {
             animate={{ rotate: 360 }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
           >
-            <Lock className="w-4 h-4 text-cyan-600" />
+            <Lock className="w-4 h-4 text-emerald-600" />
           </motion.div>
         )}
         {state === "identity" && <User className="w-4 h-4 text-emerald-600" />}
         {state === "approved" && <CheckCircle className="w-4 h-4 text-emerald-600" />}
-        {state === "payment" && <CreditCard className="w-4 h-4 text-slate-500" />}
+        {state === "payment" && <CreditCard className="w-4 h-4 text-emerald-500" />}
         
         <span className={cn("text-sm font-medium", color)}>{text}</span>
       </motion.div>
@@ -364,8 +364,8 @@ function StaticApprovedCard() {
       <div
         className="relative w-full aspect-[1.6/1] rounded-2xl p-6 flex flex-col justify-between"
         style={{
-          background: `linear-gradient(135deg, ${COLORS.cyanLight}, ${COLORS.cyanBase})`,
-          boxShadow: "0 20px 40px rgba(15,163,177,0.2)",
+          background: `linear-gradient(135deg, ${COLORS.emeraldLight}, ${COLORS.emeraldBase}, ${COLORS.emeraldDark})`,
+          boxShadow: "0 20px 40px rgba(15, 125, 99, 0.25)",
         }}
       >
         <div className="flex justify-between items-start">
@@ -406,7 +406,7 @@ function StaticApprovedCard() {
               </div>
               <span className="text-xs text-slate-600">{step.label}</span>
             </div>
-            {i < 3 && <div className="w-4 h-0.5 bg-emerald-300 rounded-full" />}
+            {i < 3 && <div className="w-4 h-0.5 bg-emerald-400 rounded-full" />}
           </React.Fragment>
         ))}
       </div>
