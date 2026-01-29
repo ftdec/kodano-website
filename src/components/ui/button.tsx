@@ -20,8 +20,8 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         // New variants for Kodano brand
-        kodano: "!bg-[#002A35] hover:!bg-[#00C8DC] active:!bg-[#00C8DC] !text-white shadow-lg shadow-[#002A35]/20 hover:shadow-xl hover:shadow-[#00C8DC]/30 transition-all duration-200 focus-visible:ring-[#00C8DC]/50",
-        "kodano-outline": "border-[#002A35] dark:border-white bg-transparent hover:bg-accent/10 hover:border-[#00C8DC] hover:text-[#00C8DC] text-[#002A35] dark:text-white dark:hover:text-accent backdrop-blur-sm",
+        kodano: "bg-emerald-700 hover:bg-emerald-500 active:bg-emerald-500 text-white shadow-lg shadow-emerald-700/20 hover:shadow-xl hover:shadow-emerald-500/30 transition-all duration-200 focus-visible:ring-emerald-500/50",
+        "kodano-outline": "border-emerald-700 dark:border-white bg-transparent hover:bg-emerald-50 hover:border-emerald-500 hover:text-emerald-600 text-emerald-700 dark:text-white dark:hover:text-emerald-400 backdrop-blur-sm",
       },
       size: {
         default: "h-10 px-5 py-2",

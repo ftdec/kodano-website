@@ -406,7 +406,7 @@ export default function Home() {
 
                   <h2 className="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight">
                     Fale com a <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Kodano</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-400">Kodano</span>
                   </h2>
 
                   <p className="text-lg text-muted-foreground leading-relaxed max-w-md">

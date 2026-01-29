@@ -37,8 +37,8 @@ export function FloatingChatButton({ onClick, ariaLabel }: FloatingChatButtonPro
       {/* Popup "Fale comigo" */}
       <div
         className={`px-3 py-2 rounded-full
-          bg-[#002A35] text-white text-xs sm:text-sm font-medium
-          border border-[#00C8DC]
+          bg-emerald-700 text-white text-xs sm:text-sm font-medium
+          border border-emerald-400
           shadow-lg
           transition-all duration-300
           ${
@@ -53,7 +53,7 @@ export function FloatingChatButton({ onClick, ariaLabel }: FloatingChatButtonPro
       {/* Botão do Chat */}
       <button
         onClick={handleClick}
-        className="w-16 h-16 sm:w-14 sm:h-14 !bg-[#002A35] active:!bg-[#00C8DC] hover:!bg-[#00C8DC] !text-white rounded-full shadow-lg active:shadow-xl hover:shadow-xl transition-all duration-300 active:scale-95 hover:scale-110 flex items-center justify-center relative cursor-pointer border-2 border-[#00C8DC] touch-manipulation"
+        className="w-16 h-16 sm:w-14 sm:h-14 bg-emerald-700 active:bg-emerald-500 hover:bg-emerald-500 text-white rounded-full shadow-lg active:shadow-xl hover:shadow-xl transition-all duration-300 active:scale-95 hover:scale-110 flex items-center justify-center relative cursor-pointer border-2 border-emerald-400 touch-manipulation"
         aria-label={ariaLabel}
       >
         <svg
@@ -68,7 +68,7 @@ export function FloatingChatButton({ onClick, ariaLabel }: FloatingChatButtonPro
             clipRule="evenodd"
           />
         </svg>
-        <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-3.5 sm:h-3.5 bg-[#00C8DC] rounded-full border-2 border-[#002A35] animate-pulse" />
+        <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-3.5 sm:h-3.5 bg-emerald-400 rounded-full border-2 border-emerald-700 animate-pulse" />
       </button>
     </div>
   )
