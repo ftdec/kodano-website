@@ -19,10 +19,28 @@ export const BRAND = {
   }
 } as const;
 
+// Kodano Bank - Emerald Premium Palette
 export const COLORS = {
-  tealDark: "#002A35",      // Azul-petróleo escuro (forma angular)
-  tealLight: "#00C8DC",     // Azul-petróleo claro/ciano brilhante (forma curva)
-  cyan: "#00D4E8",          // Ciano vibrante
+  // Brand Emerald
+  emerald50: "#ECF5F3",
+  emerald100: "#D9EAE6",
+  emerald200: "#B7D8D0",
+  emerald300: "#95C6BA",
+  emerald400: "#6AAE9E",
+  emerald500: "#0F7D63",  // Primary
+  emerald600: "#0D6E57",
+  emerald700: "#0B5F4B",
+  emerald800: "#094E3D",
+  emerald900: "#07392E",
+  emerald950: "#052820",
+  
+  // Neutral
+  neutral50: "#F2EFE8",
+  neutral100: "#E4E2DB",
+  neutral950: "#07130F",
+  
+  // Legacy aliases (for compatibility)
+  primary: "#0F7D63",
   white: "#FFFFFF",
 } as const;
 

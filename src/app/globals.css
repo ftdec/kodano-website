@@ -2,8 +2,8 @@
 @import "tw-animate-css";
 @import "../styles/aurora.css";
 
-/* Dark mode disabled - only light mode */
-/* @custom-variant dark (&:is(.dark *)); */
+/* Dark mode support */
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -27,6 +27,7 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -35,6 +36,8 @@
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -43,104 +46,174 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  
+  /* Emerald brand colors for Tailwind */
+  --color-emerald-50: var(--emerald-50);
+  --color-emerald-100: var(--emerald-100);
+  --color-emerald-200: var(--emerald-200);
+  --color-emerald-300: var(--emerald-300);
+  --color-emerald-400: var(--emerald-400);
+  --color-emerald-500: var(--emerald-500);
+  --color-emerald-600: var(--emerald-600);
+  --color-emerald-700: var(--emerald-700);
+  --color-emerald-800: var(--emerald-800);
+  --color-emerald-900: var(--emerald-900);
+  --color-emerald-950: var(--emerald-950);
 }
 
 :root {
   --radius: 0.5rem; /* 8px - Stripe standard */
 
-  /* ===== Kodano Design System v5.0 - Brand Colors (PRD) ===== */
-  --kodano-primary: #0D1B2A;
-  --kodano-secondary: #1B263B;
-  --kodano-blue-medium: #415A77;
-  --kodano-blue-light: #778DA9;
-  --kodano-gray-light: #E0E1DD;
-  --kodano-white: #FFFFFF;
+  /* ===== Kodano Bank - Emerald Premium Palette ===== */
+  
+  /* Brand emerald ramp */
+  --emerald-50: #ECF5F3;
+  --emerald-100: #D9EAE6;
+  --emerald-200: #B7D8D0;
+  --emerald-300: #95C6BA;
+  --emerald-400: #6AAE9E;
+  --emerald-500: #0F7D63;
+  --emerald-600: #0D6E57;
+  --emerald-700: #0B5F4B;
+  --emerald-800: #094E3D;
+  --emerald-900: #07392E;
+  --emerald-950: #052820;
 
-  /* ===== Light Mode Colors ===== */
-  --background: #FFFFFF;
-  --foreground: #0D1B2A;
+  /* Neutral ramp */
+  --neutral-50: #F2EFE8;
+  --neutral-100: #E4E2DB;
+  --neutral-200: #D1D0CA;
+  --neutral-300: #BABAB4;
+  --neutral-400: #9DA09A;
+  --neutral-500: #818580;
+  --neutral-600: #656B66;
+  --neutral-700: #49514C;
+  --neutral-800: #313B36;
+  --neutral-900: #1E2925;
+  --neutral-950: #07130F;
+
+  /* Semantic ramps */
+  --info-50: #EEF3FC;
+  --info-500: #2B63D9;
+  --info-700: #214BA4;
+  --info-900: #142D62;
+
+  --warn-50: #FCF9F1;
+  --warn-500: #D6B04A;
+  --warn-700: #A68638;
+  --warn-900: #645122;
+
+  --danger-50: #FAEFEF;
+  --danger-500: #C53B3B;
+  --danger-700: #992D2D;
+  --danger-900: #5C1B1B;
+
+  /* ===== Light Mode Semantic Tokens ===== */
+  --background: var(--neutral-50);
+  --foreground: var(--neutral-950);
+
   --card: #FFFFFF;
-  --card-foreground: #0D1B2A;
+  --card-foreground: var(--neutral-950);
+
   --popover: #FFFFFF;
-  --popover-foreground: #0D1B2A;
+  --popover-foreground: var(--neutral-950);
 
-  /* Primary - Deep blue-black */
-  --primary: #0D1B2A;
-  --primary-foreground: #FFFFFF;
+  --muted: var(--neutral-100);
+  --muted-foreground: var(--neutral-700);
 
-  /* Secondary - Light gray */
-  --secondary: #E0E1DD;
-  --secondary-foreground: #0D1B2A;
+  --border: rgba(7, 19, 15, 0.14);
+  --input: rgba(7, 19, 15, 0.16);
 
-  /* Accent - Medium blue */
-  --accent: #415A77;
-  --accent-foreground: #FFFFFF;
+  /* Brand semantics */
+  --primary: var(--emerald-500);
+  --primary-hover: var(--emerald-600);
+  --primary-active: var(--emerald-700);
+  --primary-foreground: var(--neutral-50);
 
-  /* Muted - Light blue */
-  --muted: #E0E1DD;
-  --muted-foreground: #415A77;
+  /* Secondary - Emerald light tones */
+  --secondary: var(--emerald-100);
+  --secondary-foreground: var(--neutral-950);
 
-  /* Status colors */
-  --destructive: #B91C1C;
+  --accent: var(--emerald-50);
+  --accent-foreground: var(--neutral-950);
+
+  --ring: rgba(15, 125, 99, 0.45);
+
+  /* Alerts */
+  --destructive: var(--danger-500);
   --destructive-foreground: #FFFFFF;
 
-  /* UI elements */
-  --border: rgba(225, 225, 221, 0.5); /* Gray light with opacity */
-  --input: #E0E1DD;
-  --ring: #415A77;
+  --info: var(--info-500);
+  --warning: var(--warn-500);
+  --success: var(--emerald-500);
 
-  /* Chart colors */
-  --chart-1: #0D1B2A;
-  --chart-2: #1B263B;
-  --chart-3: #415A77;
-  --chart-4: #778DA9;
-  --chart-5: #E0E1DD;
+  /* Chart colors - Emerald themed */
+  --chart-1: var(--emerald-500);
+  --chart-2: var(--emerald-600);
+  --chart-3: var(--emerald-400);
+  --chart-4: var(--emerald-300);
+  --chart-5: var(--emerald-200);
 
   /* Sidebar */
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #0D1B2A;
-  --sidebar-primary: #0D1B2A;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #E0E1DD;
-  --sidebar-accent-foreground: #0D1B2A;
-  --sidebar-border: rgba(225, 225, 221, 0.5);
-  --sidebar-ring: #415A77;
+  --sidebar-foreground: var(--neutral-950);
+  --sidebar-primary: var(--emerald-500);
+  --sidebar-primary-foreground: var(--neutral-50);
+  --sidebar-accent: var(--emerald-50);
+  --sidebar-accent-foreground: var(--neutral-950);
+  --sidebar-border: rgba(7, 19, 15, 0.14);
+  --sidebar-ring: rgba(15, 125, 99, 0.45);
 }
 
-/* Dark mode completely disabled - Force light mode always */
-.dark,
-[data-theme="dark"],
-[class*="dark"] {
-  /* Override any dark mode with light mode values */
-  --background: #FFFFFF !important;
-  --foreground: #0D1B2A !important;
-  --card: #FFFFFF !important;
-  --card-foreground: #0D1B2A !important;
-  --popover: #FFFFFF !important;
-  --popover-foreground: #0D1B2A !important;
-  --primary: #0D1B2A !important;
-  --primary-foreground: #FFFFFF !important;
-  --secondary: #E0E1DD !important;
-  --secondary-foreground: #0D1B2A !important;
-  --accent: #415A77 !important;
-  --accent-foreground: #FFFFFF !important;
-  --muted: #E0E1DD !important;
-  --muted-foreground: #415A77 !important;
-  --destructive: #B91C1C !important;
-  --destructive-foreground: #FFFFFF !important;
-  --border: rgba(225, 225, 221, 0.5) !important;
-  --input: #E0E1DD !important;
-  --ring: #415A77 !important;
-  --sidebar: #FFFFFF !important;
-  --sidebar-foreground: #0D1B2A !important;
-  --sidebar-primary: #0D1B2A !important;
-  --sidebar-primary-foreground: #FFFFFF !important;
-  --sidebar-accent: #E0E1DD !important;
-  --sidebar-accent-foreground: #0D1B2A !important;
-  --sidebar-border: rgba(225, 225, 221, 0.5) !important;
-  --sidebar-ring: #415A77 !important;
-  background-color: #FFFFFF !important;
-  color: #0D1B2A !important;
+/* ===== Dark Mode ===== */
+.dark {
+  --background: var(--neutral-950);
+  --foreground: var(--neutral-50);
+
+  --card: var(--neutral-900);
+  --card-foreground: var(--neutral-50);
+
+  --popover: var(--neutral-900);
+  --popover-foreground: var(--neutral-50);
+
+  --muted: var(--neutral-800);
+  --muted-foreground: var(--neutral-300);
+
+  /* Brand on dark uses a lighter step for readability */
+  --primary: var(--emerald-400);
+  --primary-hover: var(--emerald-300);
+  --primary-active: var(--emerald-200);
+  --primary-foreground: var(--neutral-950);
+
+  --secondary: var(--neutral-800);
+  --secondary-foreground: var(--neutral-50);
+
+  --accent: rgba(15, 125, 99, 0.18);
+  --accent-foreground: var(--neutral-50);
+
+  --border: rgba(242, 239, 232, 0.12);
+  --input: rgba(242, 239, 232, 0.14);
+  --ring: rgba(106, 174, 158, 0.55);
+
+  --destructive: #FF6B6B;
+  --destructive-foreground: var(--neutral-950);
+
+  /* Chart colors - Dark mode */
+  --chart-1: var(--emerald-400);
+  --chart-2: var(--emerald-500);
+  --chart-3: var(--emerald-300);
+  --chart-4: var(--emerald-200);
+  --chart-5: var(--emerald-100);
+
+  /* Sidebar - Dark */
+  --sidebar: var(--neutral-900);
+  --sidebar-foreground: var(--neutral-50);
+  --sidebar-primary: var(--emerald-400);
+  --sidebar-primary-foreground: var(--neutral-950);
+  --sidebar-accent: rgba(15, 125, 99, 0.18);
+  --sidebar-accent-foreground: var(--neutral-50);
+  --sidebar-border: rgba(242, 239, 232, 0.12);
+  --sidebar-ring: rgba(106, 174, 158, 0.55);
 }
 
 @layer base {
@@ -149,37 +222,6 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-  
-  /* Force light mode - prevent dark mode completely */
-  html {
-    color-scheme: light !important;
-  }
-  
-  html.dark,
-  html[data-theme="dark"],
-  html[class*="dark"] {
-    /* Override any dark mode attempts */
-    --background: #FFFFFF !important;
-    --foreground: #0D1B2A !important;
-    --card: #FFFFFF !important;
-    --card-foreground: #0D1B2A !important;
-    --popover: #FFFFFF !important;
-    --popover-foreground: #0D1B2A !important;
-    --primary: #0D1B2A !important;
-    --primary-foreground: #FFFFFF !important;
-    --secondary: #E0E1DD !important;
-    --secondary-foreground: #0D1B2A !important;
-    --accent: #415A77 !important;
-    --accent-foreground: #FFFFFF !important;
-    --muted: #E0E1DD !important;
-    --muted-foreground: #415A77 !important;
-    --destructive: #B91C1C !important;
-    --destructive-foreground: #FFFFFF !important;
-    --border: rgba(225, 225, 221, 0.5) !important;
-    --input: #E0E1DD !important;
-    --ring: #415A77 !important;
-    color-scheme: light !important;
   }
   
   /* Remove white highlight on text selection in chatbot responses */

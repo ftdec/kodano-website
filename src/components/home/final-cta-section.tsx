@@ -1,7 +1,7 @@
 /**
  * FinalCTASection Component
  * CTA final com gradiente suave e pulso discreto
- * Stripe/CloudWalk inspired design
+ * Kodano Bank - Emerald Premium
  */
 
 "use client";
@@ -32,9 +32,9 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
         className
       )}
     >
-      {/* Simplified Background */}
+      {/* Background - Emerald tones */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-50" />
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 via-background to-emerald-100/30" />
       </div>
 
       <div className="container relative z-10 max-w-4xl mx-auto">
@@ -50,7 +50,7 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
             variants={fadeInUp}
             className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white border border-border/60 mb-6"
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
+            <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 animate-pulse" />
             <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
               Próximo passo
             </span>
@@ -74,7 +74,7 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
             }}
           >
             Mais segurança para receber{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-500 to-purple-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-700 via-emerald-500 to-emerald-400">
               pagamentos relevantes
             </span>
           </motion.h2>
@@ -91,7 +91,7 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
           <motion.div variants={fadeInUp}>
             <motion.a
               href="#contact"
-              className="inline-flex h-14 items-center px-8 rounded-full bg-foreground text-white font-semibold transition-all gap-3 justify-center shadow-2xl shadow-foreground/30 relative overflow-hidden group text-lg"
+              className="inline-flex h-14 items-center px-8 rounded-full bg-primary text-primary-foreground font-semibold transition-all gap-3 justify-center shadow-2xl shadow-primary/30 relative overflow-hidden group text-lg"
               variants={buttonPrimary}
               initial="rest"
               whileHover="hover"
@@ -112,7 +112,7 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
                     }}
                   />
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100"
+                    className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-emerald-600/20 opacity-0 group-hover:opacity-100"
                     transition={{ duration: 0.3 }}
                   />
                 </>
@@ -142,11 +142,11 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
               <span>Sem compromisso</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-blue-500" />
+              <div className="w-2 h-2 rounded-full bg-emerald-400" />
               <span>Resposta rápida</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-purple-500" />
+              <div className="w-2 h-2 rounded-full bg-emerald-300" />
               <span>Conversa direta</span>
             </div>
           </motion.div>
@@ -155,4 +155,3 @@ export function FinalCTASection({ className }: FinalCTASectionProps) {
     </section>
   );
 }
-

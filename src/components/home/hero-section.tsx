@@ -1,7 +1,7 @@
 /**
  * HeroSection Component
  * Premium hero with advanced animations
- * Stripe/CloudWalk inspired design
+ * Kodano Bank - Emerald Premium design
  */
 
 "use client";
@@ -28,14 +28,11 @@ export function HeroSection({ className }: HeroSectionProps) {
         className
       )}
     >
-      {/* Lightweight gradient background (no canvas, no blur) */}
-      <div className="absolute inset-0 -z-20 bg-gradient-to-br from-[#4FACFE]/8 via-[#00DBDE]/6 to-[#43E97B]/8" />
+      {/* Lightweight gradient background - Emerald Premium */}
+      <div className="absolute inset-0 -z-20 bg-gradient-to-br from-emerald-100/40 via-emerald-50/30 to-emerald-200/20" />
       
       {/* Subtle overlay for depth */}
       <div className="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-b from-transparent via-background/20 to-background/60" />
-
-      {/* Signature rail (disabled for performance - static gradient only) */}
-      {/* <KodanoFlowRail className="-z-10 opacity-45" enabled /> */}
 
       {/* Content */}
       <div className="container max-w-6xl mx-auto relative z-10">
@@ -45,7 +42,7 @@ export function HeroSection({ className }: HeroSectionProps) {
         {/* Badge */}
         <FadeInView className="flex justify-center lg:justify-start mb-8" delay={0.05} margin="-20px">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-border/40 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className="w-2 h-2 rounded-full bg-primary" />
             <span className="text-sm font-medium text-muted-foreground">
               Segurança proporcional ao valor da transação
             </span>
@@ -68,7 +65,7 @@ export function HeroSection({ className }: HeroSectionProps) {
             className="inline-block"
             delay={0.18}
             staggerDelay={0.04}
-            gradient="from-[#4FACFE] via-[#00DBDE] to-[#43E97B]"
+            gradient="from-emerald-600 via-emerald-500 to-emerald-400"
           />
         </h1>
 

@@ -29,7 +29,7 @@ export function Footer() {
                   priority
                 />
               </div>
-              <span className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-transparent bg-clip-text bg-gradient-to-r from-[#002A35] via-[#00A6B4] to-[#002A35] bg-[length:200%_100%] animate-gradient whitespace-nowrap flex items-center leading-none">
+              <span className="text-2xl font-bold font-[family-name:var(--font-poppins)] text-transparent bg-clip-text bg-gradient-to-r from-emerald-700 via-emerald-500 to-emerald-700 bg-[length:200%_100%] animate-gradient whitespace-nowrap flex items-center leading-none">
                 {BRAND.name}
               </span>
             </Link>

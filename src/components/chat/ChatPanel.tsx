@@ -121,9 +121,9 @@ export function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                 lg:rounded-2xl lg:shadow-2xl lg:border lg:border-slate-200
                 overflow-hidden"
             >
-              {/* Header */}
+              {/* Header - Emerald Premium */}
               <div className="flex-shrink-0 px-4 py-3 flex items-center justify-between 
-                bg-gradient-to-r from-[#002A35] to-[#003847] text-white
+                bg-gradient-to-r from-emerald-700 to-emerald-600 text-white
                 lg:rounded-t-2xl">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
@@ -132,7 +132,7 @@ export function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                   <div>
                     <p className="font-semibold text-sm">Chat Kodano</p>
                     <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
                       <p className="text-xs text-white/70">Online agora</p>
                     </div>
                   </div>
@@ -162,7 +162,7 @@ export function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                     <div
                       className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-sm ${
                         msg.sender === "user"
-                          ? "bg-[#002A35] text-white rounded-br-md"
+                          ? "bg-emerald-700 text-white rounded-br-md"
                           : "bg-white text-slate-800 rounded-bl-md border border-slate-100"
                       }`}
                     >
@@ -211,7 +211,7 @@ export function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   className="flex-1 rounded-full border border-slate-200 px-4 py-2.5 text-sm 
-                    outline-none focus:border-[#00C8DC] focus:ring-2 focus:ring-[#00C8DC]/20 
+                    outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 
                     transition-all placeholder:text-slate-400"
                   placeholder="Digite sua mensagem..."
                   autoComplete="off"
@@ -220,7 +220,7 @@ export function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                   type="submit"
                   disabled={!message.trim()}
                   className="w-10 h-10 flex items-center justify-center rounded-full 
-                    bg-[#00C8DC] hover:bg-[#00B0C2] disabled:bg-slate-200 disabled:cursor-not-allowed
+                    bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-200 disabled:cursor-not-allowed
                     text-white shadow-md transition-all 
                     hover:scale-105 active:scale-95 disabled:scale-100
                     touch-manipulation"

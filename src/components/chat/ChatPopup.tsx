@@ -76,7 +76,7 @@ export function ChatPopup({ onButtonClick }: ChatPopupProps) {
             {/* Content */}
             <div className="flex items-start gap-3">
               {/* Avatar */}
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00C8DC] to-[#002A35] 
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-700 
                 flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-lg">👋</span>
               </div>

@@ -1,6 +1,7 @@
 /**
  * SecuritySection Component
  * "A Solução" - Clean design with gradient transition
+ * Kodano Bank - Emerald Premium
  */
 
 "use client";
@@ -51,7 +52,7 @@ export function SecuritySection({ className }: SecuritySectionProps) {
     >
       {/* Background gradient - transitions to next section */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/30 via-background to-secondary/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-neutral-100/20 via-background to-secondary/20" />
       </div>
 
       <div className="container max-w-6xl mx-auto relative z-10">
@@ -66,7 +67,7 @@ export function SecuritySection({ className }: SecuritySectionProps) {
             className="text-center lg:text-left"
           >
             <div className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 rounded-full bg-white/80 border border-border/60 mb-4 sm:mb-6">
-              <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-[#00C8DC] to-[#43E97B]" />
+              <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400" />
               <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] text-muted-foreground">
                 A Solução
               </span>
@@ -74,7 +75,7 @@ export function SecuritySection({ className }: SecuritySectionProps) {
 
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-4 sm:mb-6">
               A Kodano adiciona{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00C8DC] to-[#43E97B]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-400">
                 segurança
               </span>{" "}
               ao pagamento
@@ -96,7 +97,7 @@ export function SecuritySection({ className }: SecuritySectionProps) {
                   transition={{ duration: 0.3, delay: i * 0.05 }}
                   className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/80 border border-border/40"
                 >
-                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00C8DC]" />
+                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
                   <span className="text-xs sm:text-sm font-medium text-foreground">{benefit}</span>
                 </motion.div>
               ))}
@@ -116,9 +117,9 @@ export function SecuritySection({ className }: SecuritySectionProps) {
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
-                  <div className="h-full p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/90 border border-border/40 shadow-sm hover:shadow-lg hover:border-[#00C8DC]/30 transition-all duration-300">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#00C8DC]/10 to-[#43E97B]/5 flex items-center justify-center mb-3 sm:mb-4">
-                      <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#00C8DC]" />
+                  <div className="h-full p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/90 border border-border/40 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-emerald-500/10 to-emerald-400/5 flex items-center justify-center mb-3 sm:mb-4">
+                      <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                     </div>
 
                     <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1 sm:mb-2">

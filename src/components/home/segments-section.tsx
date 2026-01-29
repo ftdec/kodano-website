@@ -1,7 +1,7 @@
 /**
  * SegmentsSection Component
  * "Para quem é" - Cards de segmentos com animações premium
- * Stripe/CloudWalk inspired design
+ * Kodano Bank - Emerald Premium
  */
 
 "use client";
@@ -21,22 +21,22 @@ const segments = [
     title: "Automotivo",
     description: "Concessionárias e oficinas que recebem valores elevados em serviços, peças, revisões ou entrada de veículos.",
     icon: <Car className="w-6 h-6" />,
-    gradient: "from-red-500/10 to-rose-500/10",
-    borderGradient: "from-red-500 to-rose-500",
+    gradient: "from-emerald-600/10 to-emerald-500/10",
+    borderGradient: "from-emerald-600 to-emerald-500",
   },
   {
     title: "Turismo",
     description: "Agências e operadoras de viagens sob medida, com vendas consultivas e valores elevados.",
     icon: <Plane className="w-6 h-6" />,
-    gradient: "from-blue-500/10 to-cyan-500/10",
-    borderGradient: "from-blue-500 to-cyan-500",
+    gradient: "from-emerald-500/10 to-emerald-400/10",
+    borderGradient: "from-emerald-500 to-emerald-400",
   },
   {
     title: "Imobiliário",
     description: "Locações e transações de alto padrão, onde é essencial saber exatamente quem está pagando.",
     icon: <Building2 className="w-6 h-6" />,
-    gradient: "from-emerald-500/10 to-teal-500/10",
-    borderGradient: "from-emerald-500 to-teal-500",
+    gradient: "from-emerald-400/10 to-emerald-300/10",
+    borderGradient: "from-emerald-400 to-emerald-300",
   },
 ];
 
@@ -56,9 +56,9 @@ export function SegmentsSection({ className }: SegmentsSectionProps) {
         className
       )}
     >
-      {/* Simplified Background */}
+      {/* Background - transitions with emerald tones */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-slate-50/50 to-white" />
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-background via-emerald-50/30 to-background" />
       </div>
 
       <div className="container relative z-10 max-w-6xl mx-auto">
@@ -74,7 +74,7 @@ export function SegmentsSection({ className }: SegmentsSectionProps) {
             variants={fadeInUp}
             className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white border border-border/60 mb-6"
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
+            <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 animate-pulse" />
             <span className="text-xs font-semibold uppercase tracking-[0.35em] text-muted-foreground">
               Para quem é
             </span>
@@ -194,4 +194,3 @@ export function SegmentsSection({ className }: SegmentsSectionProps) {
     </section>
   );
 }
-

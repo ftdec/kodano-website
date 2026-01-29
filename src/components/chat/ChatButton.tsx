@@ -13,12 +13,12 @@ export function ChatButton({ onClick }: ChatButtonProps) {
       onClick={onClick}
       className="fixed bottom-4 right-4 z-40
         w-14 h-14 sm:w-14 sm:h-14
-        bg-[#002A35] hover:bg-[#00C8DC] active:bg-[#00C8DC]
+        bg-emerald-700 hover:bg-emerald-500 active:bg-emerald-500
         text-white rounded-full
         shadow-lg hover:shadow-xl active:shadow-xl
         transition-colors duration-200
         flex items-center justify-center
-        border-2 border-[#00C8DC]
+        border-2 border-emerald-400
         cursor-pointer touch-manipulation
         safe-bottom"
       style={{
@@ -49,8 +49,8 @@ export function ChatButton({ onClick }: ChatButtonProps) {
       <span
         className="absolute -top-0.5 -right-0.5
           w-3 h-3
-          bg-[#00C8DC] rounded-full
-          border-2 border-[#002A35]
+          bg-emerald-400 rounded-full
+          border-2 border-emerald-700
           animate-pulse"
       />
     </motion.button>

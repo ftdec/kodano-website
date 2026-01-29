@@ -1,7 +1,7 @@
 /**
  * HowItWorksSection Component
  * Sophisticated scroll-driven timeline
- * Each step appears progressively as user scrolls
+ * Kodano Bank - Emerald Premium
  */
 
 "use client";
@@ -18,8 +18,8 @@ const steps = [
     description:
       "O cliente realiza o pagamento normalmente, seja presencial ou online.",
     icon: CreditCard,
-    gradient: "from-[#4FACFE] to-[#00DBDE]",
-    color: "#4FACFE",
+    gradient: "from-emerald-500 to-emerald-400",
+    color: "#0F7D63",
     details: ["Presencial ou online", "Todos os cartões", "Experiência fluida"],
   },
   {
@@ -27,8 +27,8 @@ const steps = [
     description:
       "Confirmamos a identidade de quem está pagando antes de aprovar a transação.",
     icon: UserCheck,
-    gradient: "from-[#00DBDE] to-[#43E97B]",
-    color: "#00DBDE",
+    gradient: "from-emerald-400 to-emerald-300",
+    color: "#6AAE9E",
     details: ["Verificação segura", "Processo rápido", "Sem fricção"],
   },
   {
@@ -36,8 +36,8 @@ const steps = [
     description:
       "Após a verificação, o pagamento segue para aprovação com mais segurança.",
     icon: CheckCircle,
-    gradient: "from-[#415A77] to-[#4FACFE]",
-    color: "#415A77",
+    gradient: "from-emerald-600 to-emerald-500",
+    color: "#0D6E57",
     details: ["Aprovação segura", "Menos contestações", "Menos fraudes"],
   },
   {
@@ -45,8 +45,8 @@ const steps = [
     description:
       "Você recebe o pagamento com a tranquilidade de saber quem pagou.",
     icon: Banknote,
-    gradient: "from-[#43E97B] to-[#4FACFE]",
-    color: "#43E97B",
+    gradient: "from-emerald-300 to-emerald-500",
+    color: "#95C6BA",
     details: ["Recebimento tranquilo", "Menos disputas", "Mais previsibilidade"],
   },
 ];
@@ -167,8 +167,6 @@ function StepCard({ step, index, totalSteps }: { step: typeof steps[0]; index: n
   );
 }
 
-// ScrollProgress removed for performance
-
 export function HowItWorksSection() {
   const containerRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -186,8 +184,6 @@ export function HowItWorksSection() {
       </div>
 
       <div className="container max-w-4xl mx-auto relative z-10">
-        {/* Scroll progress removed for performance */}
-
         {/* Section Header */}
         <motion.div
           ref={headerRef}
@@ -197,7 +193,7 @@ export function HowItWorksSection() {
           transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <div className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2 rounded-full bg-white/80 border border-border/60 mb-4 sm:mb-6">
-            <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-[#4FACFE] to-[#43E97B]" />
+            <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400" />
             <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.35em] text-muted-foreground">
               Processo Simplificado
             </span>
@@ -236,14 +232,14 @@ export function HowItWorksSection() {
             href="#contact"
             className={cn(
               "group relative flex items-center gap-4 p-6 rounded-2xl border border-border/50",
-              "bg-gradient-to-r from-[#4FACFE]/5 via-[#00DBDE]/5 to-[#43E97B]/5",
-              "hover:from-[#4FACFE]/10 hover:via-[#00DBDE]/10 hover:to-[#43E97B]/10",
+              "bg-gradient-to-r from-emerald-500/5 via-emerald-400/5 to-emerald-300/5",
+              "hover:from-emerald-500/10 hover:via-emerald-400/10 hover:to-emerald-300/10",
               "shadow-lg hover:shadow-xl transition-all duration-300"
             )}
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.99 }}
           >
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4FACFE] via-[#00DBDE] to-[#43E97B] flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-600 via-emerald-500 to-emerald-400 flex items-center justify-center shadow-lg">
               <ArrowRight className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1">
