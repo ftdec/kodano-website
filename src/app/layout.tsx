@@ -52,17 +52,10 @@ export const metadata: Metadata = {
     siteName: "Kodano",
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/api/og`,
         width: 1200,
         height: 630,
-        alt: "Kodano - Segurança para pagamentos de alto valor",
-        type: "image/png",
-      },
-      {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/kodano-logo.png`,
-        width: 1024,
-        height: 1024,
-        alt: "Kodano - Segurança para pagamentos de alto valor",
+        alt: "Kodano - Mais segurança para pagamentos de alto valor",
         type: "image/png",
       },
     ],
@@ -71,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kodano — Mais segurança para pagamentos de alto valor",
     description: "A Kodano atua no fluxo de pagamento para aumentar a segurança e reduzir riscos em transações de alto valor.",
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`],
+    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/api/og`],
     creator: "@kodano",
   },
   robots: {
@@ -155,11 +148,11 @@ export default function RootLayout({
         <meta property="og:url" content="https://kodano.com.br" />
         <meta property="og:title" content="Kodano — Mais segurança para pagamentos de alto valor" />
         <meta property="og:description" content="A Kodano atua no fluxo de pagamento para aumentar a segurança e reduzir riscos em transações de alto valor." />
-        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`} />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/api/og`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:alt" content="Kodano - Gateway de Pagamentos B2B" />
+        <meta property="og:image:alt" content="Kodano - Mais segurança para pagamentos de alto valor" />
         <meta property="og:site_name" content="Kodano" />
         <meta property="og:locale" content="pt_BR" />
         
@@ -168,7 +161,7 @@ export default function RootLayout({
         <meta name="twitter:url" content="https://kodano.com.br" />
         <meta name="twitter:title" content="Kodano — Mais segurança para pagamentos de alto valor" />
         <meta name="twitter:description" content="A Kodano atua no fluxo de pagamento para aumentar a segurança e reduzir riscos em transações de alto valor." />
-        <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/og-image.png`} />
+        <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://kodano.com.br'}/api/og`} />
         <meta name="twitter:creator" content="@kodano" />
         
         <OrganizationStructuredData />

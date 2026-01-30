@@ -23,16 +23,16 @@ export interface Dictionary {
 
 const enDictionary: Dictionary = {
   aiWidget: {
-    title: "AI Assistant",
+    title: "Kodano Chat",
     greeting:
-      "Hello! I'm Forgia, your AI assistant from Kodano. I can help you learn about our AI solutions and schedule a consultation. How can I assist you today?",
+      "Hi! 👋 Welcome to Kodano. We add security to high-value payments by verifying payer identity before approval. How can I help you?",
     placeholder: "Type your message...",
     thinking: "Thinking...",
     quickActions: {
-      solutions: "What solutions do you offer?",
-      cost: "How much does it cost?",
-      examples: "Show me examples",
-      consultation: "Schedule a consultation",
+      solutions: "What does Kodano do?",
+      cost: "How does it work?",
+      examples: "Who is it for?",
+      consultation: "I want to talk to someone",
     },
     toolLoadingMessages: {
       checkingAvailability: "Checking availability...",
@@ -47,14 +47,14 @@ const ptDictionary: Dictionary = {
   aiWidget: {
     title: "Chat Kodano",
     greeting:
-      "Olá! 👋 Bem-vindo à Kodano, a plataforma completa de infraestrutura de pagamentos. Sou consultor comercial e estou aqui para te ajudar. Como posso te auxiliar hoje?",
+      "Olá! 👋 Bem-vindo à Kodano. Ajudamos empresas a receberem pagamentos de alto valor com mais segurança, verificando a identidade do pagador antes da aprovação. Como posso te ajudar?",
     placeholder: "Digite sua mensagem...",
     thinking: "Pensando...",
     quickActions: {
-      solutions: "O que é a Kodano?",
-      cost: "Quais funcionalidades vocês têm?",
-      examples: "Como funciona?",
-      consultation: "Quero agendar uma demonstração",
+      solutions: "O que a Kodano faz?",
+      cost: "Como funciona?",
+      examples: "Para quem é?",
+      consultation: "Quero falar com alguém",
     },
     toolLoadingMessages: {
       checkingAvailability: "Verificando disponibilidade...",

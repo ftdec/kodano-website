@@ -60,24 +60,24 @@ interface ProductSEOProps {
 // ============================================================================
 
 const DEFAULT_SEO = {
-  title: "Kodano - Gateway de Pagamento Inteligente",
-  description: "Simplifique seus pagamentos online com o gateway mais moderno do Brasil. Aprovação superior, antifraude integrado e suporte 24/7.",
+  title: "Kodano — Mais segurança para pagamentos de alto valor",
+  description: "A Kodano atua no fluxo de pagamento para aumentar a segurança e reduzir riscos em transações de alto valor, verificando a identidade do pagador.",
   keywords: [
-    "gateway de pagamento",
-    "pagamento online",
-    "processamento de pagamento",
-    "antifraude",
-    "split de pagamento",
-    "marketplace",
-    "fintech",
-    "pagamento recorrente",
-    "checkout transparente",
+    "segurança pagamento",
+    "pagamento alto valor",
+    "verificação identidade",
+    "redução fraude",
+    "redução chargeback",
+    "transações seguras",
+    "automotivo pagamento",
+    "turismo pagamento",
+    "imobiliário pagamento",
   ],
   ogType: "website" as const,
   twitterCard: "summary_large_image" as const,
   twitterSite: "@kodano",
-  ogImage: "https://kodano.com/og-image.png",
-  siteUrl: "https://kodano.com",
+  ogImage: "https://kodano.com.br/api/og",
+  siteUrl: "https://kodano.com.br",
 };
 
 // ============================================================================
