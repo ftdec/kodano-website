@@ -23,16 +23,16 @@ export interface Dictionary {
 
 const enDictionary: Dictionary = {
   aiWidget: {
-    title: "Kodano Chat",
+    title: "Kodano",
     greeting:
-      "Hi! 👋 Welcome to Kodano. We add security to high-value payments by verifying payer identity before approval. How can I help you?",
+      "Hi. Kodano helps B2B companies receive high-value payments with more security, predictability, and control. What is your business segment?",
     placeholder: "Type your message...",
     thinking: "Thinking...",
     quickActions: {
       solutions: "What does Kodano do?",
-      cost: "How does it work?",
-      examples: "Who is it for?",
-      consultation: "I want to talk to someone",
+      cost: "Who is it for?",
+      examples: "I want to schedule a call",
+      consultation: "Talk to someone",
     },
     toolLoadingMessages: {
       checkingAvailability: "Checking availability...",
@@ -45,16 +45,16 @@ const enDictionary: Dictionary = {
 
 const ptDictionary: Dictionary = {
   aiWidget: {
-    title: "Chat Kodano",
+    title: "Kodano",
     greeting:
-      "Olá! 👋 Bem-vindo à Kodano. Ajudamos empresas a receberem pagamentos de alto valor com mais segurança, verificando a identidade do pagador antes da aprovação. Como posso te ajudar?",
+      "Olá. A Kodano ajuda empresas B2B a receberem pagamentos de alto valor com mais segurança, previsibilidade e controle. Qual é o segmento do seu negócio?",
     placeholder: "Digite sua mensagem...",
     thinking: "Pensando...",
     quickActions: {
       solutions: "O que a Kodano faz?",
-      cost: "Como funciona?",
-      examples: "Para quem é?",
-      consultation: "Quero falar com alguém",
+      cost: "Para quem é?",
+      examples: "Quero agendar uma conversa",
+      consultation: "Falar com alguém",
     },
     toolLoadingMessages: {
       checkingAvailability: "Verificando disponibilidade...",
