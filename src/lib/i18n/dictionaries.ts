@@ -25,20 +25,20 @@ const enDictionary: Dictionary = {
   aiWidget: {
     title: "Kodano",
     greeting:
-      "Hi. Kodano helps B2B companies receive high-value payments with more security, predictability, and control. What is your business segment?",
-    placeholder: "Type your message...",
+      "Hi. Kodano helps companies receive high-value payments with more security and predictability. What's your business segment?",
+    placeholder: "Type here...",
     thinking: "Thinking...",
     quickActions: {
       solutions: "What does Kodano do?",
       cost: "Who is it for?",
-      examples: "I want to schedule a call",
-      consultation: "Talk to someone",
+      examples: "I want to talk to sales",
+      consultation: "Contact form",
     },
     toolLoadingMessages: {
-      checkingAvailability: "Checking availability...",
-      bookingMeeting: "Booking your meeting...",
-      gettingDate: "Getting date...",
-      findingNextAvailability: "Finding next availability...",
+      checkingAvailability: "Checking...",
+      bookingMeeting: "Processing...",
+      gettingDate: "Loading...",
+      findingNextAvailability: "Loading...",
     },
   },
 }
@@ -47,20 +47,20 @@ const ptDictionary: Dictionary = {
   aiWidget: {
     title: "Kodano",
     greeting:
-      "Olá. A Kodano ajuda empresas B2B a receberem pagamentos de alto valor com mais segurança, previsibilidade e controle. Qual é o segmento do seu negócio?",
-    placeholder: "Digite sua mensagem...",
+      "Oi. A Kodano ajuda empresas que recebem pagamentos de alto valor a ter mais segurança e previsibilidade. Qual é o seu segmento?",
+    placeholder: "Digite aqui...",
     thinking: "Pensando...",
     quickActions: {
       solutions: "O que a Kodano faz?",
       cost: "Para quem é?",
-      examples: "Quero agendar uma conversa",
-      consultation: "Falar com alguém",
+      examples: "Quero falar com o comercial",
+      consultation: "Ir para Fale Conosco",
     },
     toolLoadingMessages: {
-      checkingAvailability: "Verificando disponibilidade...",
-      bookingMeeting: "Agendando sua reunião...",
-      gettingDate: "Obtendo data...",
-      findingNextAvailability: "Buscando próxima disponibilidade...",
+      checkingAvailability: "Verificando...",
+      bookingMeeting: "Processando...",
+      gettingDate: "Carregando...",
+      findingNextAvailability: "Carregando...",
     },
   },
 }
