@@ -65,11 +65,11 @@ export function RichTextInputClient({ placeholder = "Type a message...", onSubmi
   }
 
   return (
-    <div className="flex items-end gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl border border-gray-200 bg-gray-50 backdrop-blur-sm focus-within:border-[#00C8DC] focus-within:ring-2 focus-within:ring-[#00C8DC]/20 transition-all">
+    <div className="flex items-end gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl border border-emerald-200 bg-emerald-50/50 backdrop-blur-sm focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20 transition-all">
       <EditorContent editor={editor} className="flex-1 min-w-0" />
       <button
         onClick={handleSendClick}
-        className="shrink-0 m-1 sm:m-1.5 flex items-center justify-center w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-[#00C8DC] text-white active:bg-[#00C8DC]/80 hover:bg-[#00C8DC]/80 transition-colors touch-manipulation"
+        className="shrink-0 m-1 sm:m-1.5 flex items-center justify-center w-9 h-9 sm:w-8 sm:h-8 rounded-full bg-emerald-600 text-white active:bg-emerald-700 hover:bg-emerald-700 transition-colors touch-manipulation"
         aria-label="Send message"
       >
         <svg className="w-5 h-5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

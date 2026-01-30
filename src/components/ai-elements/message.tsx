@@ -28,8 +28,8 @@ export function Message({ children, from }: MessageProps) {
 const messageContentVariants = cva("rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 max-w-[90%] sm:max-w-[85%] break-words text-sm sm:text-base leading-relaxed", {
   variants: {
     variant: {
-      contained: "bg-[#00C8DC] text-white",
-      flat: "bg-gray-100 text-gray-900",
+      contained: "bg-emerald-600 text-white",
+      flat: "bg-emerald-50 text-gray-900",
     },
   },
   defaultVariants: {

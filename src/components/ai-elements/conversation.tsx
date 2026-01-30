@@ -41,11 +41,11 @@ export function ConversationScrollButton() {
   return (
     <button
       onClick={() => scrollToBottom()}
-      className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center justify-center w-10 h-10 bg-white backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 border border-gray-200 text-gray-600"
+      className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center justify-center w-10 h-10 bg-white backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 border border-emerald-200 text-emerald-600"
       aria-label="Scroll to bottom"
     >
       <svg
-        className="w-5 h-5 text-gray-600"
+        className="w-5 h-5 text-emerald-600"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

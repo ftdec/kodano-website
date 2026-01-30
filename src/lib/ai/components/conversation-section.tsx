@@ -69,7 +69,7 @@ export function ConversationSection({
 
         {shouldShowLoadingState && (
           <div className="px-3 sm:px-4 py-2 sm:py-3">
-            <Shimmer className="text-sm text-gray-600">
+            <Shimmer className="text-sm text-emerald-700">
               <AnimatedThinking baseText={loadingBaseText} />
             </Shimmer>
           </div>

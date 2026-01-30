@@ -57,7 +57,7 @@ export function ChatSidebar({ isOpen, onClose, children }: ChatSidebarProps) {
     <div
       ref={sidebarRef}
       style={sidebarStyle}
-      className={`fixed right-0 top-0 w-full sm:max-w-[30rem] bg-white backdrop-blur-2xl backdrop-saturate-180 ring-2 ring-gray-200 border border-gray-200 shadow-[0_32px_80px_rgba(0,0,0,0.1)] transform transition-transform duration-300 ease-in-out z-50 rounded-none sm:rounded-l-3xl touch-pan-y ${
+      className={`fixed right-0 top-0 w-full sm:max-w-[30rem] bg-white backdrop-blur-2xl backdrop-saturate-180 ring-2 ring-emerald-200 border border-emerald-100 shadow-[0_32px_80px_rgba(5,150,105,0.1)] transform transition-transform duration-300 ease-in-out z-50 rounded-none sm:rounded-l-3xl touch-pan-y ${
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
@@ -65,7 +65,7 @@ export function ChatSidebar({ isOpen, onClose, children }: ChatSidebarProps) {
       <div className="relative z-10 flex h-full flex-col" style={contentStyle}>
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 size-10 sm:size-10 shrink-0 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 active:bg-gray-200 hover:bg-gray-200 border border-gray-200 active:border-gray-300 hover:border-gray-300 transition-all duration-200 active:scale-95 hover:scale-105 shadow-md active:shadow-lg hover:shadow-lg cursor-pointer touch-manipulation"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 size-10 sm:size-10 shrink-0 flex items-center justify-center rounded-full bg-emerald-50 text-emerald-700 active:bg-emerald-100 hover:bg-emerald-100 border border-emerald-200 active:border-emerald-300 hover:border-emerald-300 transition-all duration-200 active:scale-95 hover:scale-105 shadow-md active:shadow-lg hover:shadow-lg cursor-pointer touch-manipulation"
           aria-label="Close chat"
         >
           <svg className="w-5 h-5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
