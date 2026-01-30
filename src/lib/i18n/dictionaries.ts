@@ -25,14 +25,14 @@ const enDictionary: Dictionary = {
   aiWidget: {
     title: "Kodano",
     greeting:
-      "Hi. Kodano helps companies receive high-value payments with more security and predictability. What's your business segment?",
+      "Hey! 😄 Kodano helps companies receive high-value payments with more security and predictability. What brings you here today?",
     placeholder: "Type here...",
     thinking: "Thinking...",
     quickActions: {
       solutions: "What does Kodano do?",
-      cost: "Who is it for?",
-      examples: "I want to talk to sales",
-      consultation: "Contact form",
+      cost: "How are the rates?",
+      examples: "Talk on WhatsApp",
+      consultation: "Who is it for?",
     },
     toolLoadingMessages: {
       checkingAvailability: "Checking...",
@@ -47,14 +47,14 @@ const ptDictionary: Dictionary = {
   aiWidget: {
     title: "Kodano",
     greeting:
-      "Oi. A Kodano ajuda empresas que recebem pagamentos de alto valor a ter mais segurança e previsibilidade. Qual é o seu segmento?",
+      "Oi! 😄 A Kodano ajuda empresas que recebem pagamentos de alto valor a ter mais segurança e previsibilidade. O que te traz aqui hoje?",
     placeholder: "Digite aqui...",
     thinking: "Pensando...",
     quickActions: {
       solutions: "O que a Kodano faz?",
-      cost: "Para quem é?",
-      examples: "Quero falar com o comercial",
-      consultation: "Ir para Fale Conosco",
+      cost: "Como são as taxas?",
+      examples: "Falar no WhatsApp",
+      consultation: "Para quem é?",
     },
     toolLoadingMessages: {
       checkingAvailability: "Verificando...",
