@@ -4,28 +4,15 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Don't redirect:
+  // Allow only:
   // - Root path (/)
   // - API routes (/api/*)
   // - Next.js internal routes (_next/*)
   // - Static files (favicon, robots, sitemap, etc.)
   // - Files with extensions (images, fonts, etc.)
-  // - Policy pages (required for compliance)
-  // - Other allowed routes
-  const allowedRoutes = [
+  // - Policy pages (required for legal compliance)
+  const allowedPaths = [
     "/",
-    "/contato",
-    "/sobre",
-    "/produtos",
-    "/solucoes",
-    "/precos",
-    "/como-funciona",
-    "/desenvolvedores",
-    "/fale-conosco",
-    "/seguranca",
-    "/clientes",
-    "/para-empresas",
-    "/para-adquirentes",
     "/politica-de-privacidade",
     "/politica-kyc-kyb",
     "/politica-pld-ft",
@@ -33,19 +20,18 @@ export function middleware(request: NextRequest) {
   ];
 
   if (
-    pathname === "/" ||
+    allowedPaths.includes(pathname) ||
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/") ||
     pathname.startsWith("/favicon") ||
     pathname.startsWith("/robots") ||
     pathname.startsWith("/sitemap") ||
-    pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|woff|woff2|ttf|eot|css|js|json|xml|txt)$/) ||
-    allowedRoutes.includes(pathname)
+    pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|woff|woff2|ttf|eot|css|js|json|xml|txt)$/)
   ) {
     return NextResponse.next();
   }
 
-  // Redirect all other routes to home page
+  // Redirect ALL other routes to home page (one-pager)
   return NextResponse.redirect(new URL("/", request.url));
 }
 
