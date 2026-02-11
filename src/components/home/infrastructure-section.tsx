@@ -332,23 +332,6 @@ export function InfrastructureSection({ className, onContactClick }: Infrastruct
           </div>
         </div>
 
-        {/* Bottom disclaimer */}
-        <motion.div
-          variants={itemVariants}
-          className="mt-16 sm:mt-20"
-        >
-          <motion.div 
-            className="max-w-3xl mx-auto p-6 sm:p-8 rounded-2xl bg-white/60 backdrop-blur-sm border border-border/30 text-center"
-            whileHover={{ borderColor: "rgba(16, 185, 129, 0.2)" }}
-          >
-            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              Estruturas de liquidez são avaliadas <span className="font-medium text-foreground">individualmente</span> e 
-              seguem critérios de <span className="font-medium text-foreground">elegibilidade</span>, 
-              <span className="font-medium text-foreground"> governança</span> e 
-              <span className="font-medium text-foreground"> conformidade regulatória</span>.
-            </p>
-          </motion.div>
-        </motion.div>
       </motion.div>
     </section>
   );

@@ -178,18 +178,6 @@ export function SegmentsSection({ className }: SegmentsSectionProps) {
           ))}
         </motion.div>
 
-        {/* Closing Statement */}
-        <motion.div
-          className="mt-12 text-center"
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: isMobile ? "-50px" : "-100px" }}
-        >
-          <p className="text-xl md:text-2xl font-medium text-foreground/90 italic">
-            "Quando o valor é alto, a segurança precisa estar no mesmo nível."
-          </p>
-        </motion.div>
       </div>
     </section>
   );
