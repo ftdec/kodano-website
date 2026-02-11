@@ -6,9 +6,10 @@
 
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle2, Shield } from "lucide-react";
+import { Send, CheckCircle2, Shield, Layers } from "lucide-react";
 
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -172,15 +173,32 @@ function MobileNavOnePage() {
   );
 }
 
-export default function Home() {
+// Analytics helper
+function trackEvent(eventName: string, data?: Record<string, string>) {
+  if (typeof window !== 'undefined' && (window as typeof window & { gtag?: (command: string, eventName: string, data?: Record<string, string>) => void }).gtag) {
+    (window as typeof window & { gtag: (command: string, eventName: string, data?: Record<string, string>) => void }).gtag('event', eventName, data);
+  }
+}
+
+function HomeContent() {
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [assunto, setAssunto] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // Pre-fill assunto from URL params
+  useEffect(() => {
+    const assuntoParam = searchParams.get('assunto');
+    if (assuntoParam === 'liquidez') {
+      setAssunto('Liquidez sob demanda');
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -197,8 +215,10 @@ export default function Home() {
           name: "Contato do Site",
           email,
           phone,
-          message,
-          subject: "Nova mensagem do formulário principal",
+          message: `Assunto: ${assunto || 'Não especificado'}\n\n${message}`,
+          subject: assunto === 'Liquidez sob demanda' 
+            ? "[Liquidez] Nova solicitação do site" 
+            : "Nova mensagem do formulário principal",
         }),
       });
 
@@ -214,6 +234,7 @@ export default function Home() {
       setIsSuccess(true);
       setEmail("");
       setPhone("");
+      setAssunto("");
       setMessage("");
       // Reset success state after 5 seconds
       setTimeout(() => setIsSuccess(false), 5000);
@@ -507,6 +528,22 @@ export default function Home() {
                       </div>
 
                       <div className="space-y-2">
+                        <label htmlFor="assunto" className="text-sm font-medium ml-1">Assunto</label>
+                        <select
+                          id="assunto"
+                          value={assunto}
+                          onChange={(e) => setAssunto(e.target.value)}
+                          className="w-full h-12 px-4 rounded-lg border border-border/50 bg-white text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                        >
+                          <option value="">Selecione...</option>
+                          <option value="Pagamentos de alto valor">Pagamentos de alto valor</option>
+                          <option value="Integração técnica">Integração técnica</option>
+                          <option value="Liquidez sob demanda">Liquidez sob demanda</option>
+                          <option value="Outro">Outro</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
                         <label htmlFor="message" className="text-sm font-medium ml-1">Como podemos ajudar?</label>
                         <InputGroup>
                           <InputGroupTextarea
@@ -671,11 +708,78 @@ export default function Home() {
           </div>
         </section>
 
+        {/* LIQUIDITY LAYER - Institutional Section */}
+        <section className="py-20 px-6 relative overflow-hidden border-t border-border/30">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/3 rounded-full blur-[120px]" />
+          </div>
+          
+          <div className="container max-w-4xl mx-auto relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center space-y-6"
+            >
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 mx-auto">
+                <Layers className="w-7 h-7 text-primary" />
+              </div>
+              
+              <h2 className="text-2xl md:text-3xl font-semibold text-foreground">
+                Infraestrutura que evolui com sua operação
+              </h2>
+              
+              <div className="max-w-2xl mx-auto space-y-4">
+                <p className="text-muted-foreground leading-relaxed">
+                  Para operações de alto valor, a Kodano pode ativar camadas adicionais de governança e liquidez sob demanda, integradas à sua infraestrutura de pagamentos e evidências.
+                </p>
+                <p className="text-muted-foreground leading-relaxed text-sm">
+                  Essas estruturas são desenhadas caso a caso, respeitando critérios de elegibilidade, controles internos e trilha auditável compatível com políticas de compliance.
+                </p>
+              </div>
+              
+              <div className="pt-4">
+                <a
+                  href="#contact"
+                  onClick={() => {
+                    setAssunto('Liquidez sob demanda');
+                    trackEvent('liquidez_interest_click', { source: 'home_section' });
+                  }}
+                  className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors group"
+                >
+                  Falar com especialista
+                  <svg 
+                    className="w-4 h-4 group-hover:translate-x-1 transition-transform" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
       </main>
 
       {/* FOOTER */}
       <Footer />
 
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
