@@ -58,7 +58,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
@@ -71,20 +71,18 @@ const cardVariants = {
     scale: 1,
     transition: {
       duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
 
-const floatingVariants = {
-  initial: { y: 0 },
-  animate: {
-    y: [-5, 5, -5],
-    transition: {
-      duration: 6,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
+// Floating animation config (applied directly, not as variants)
+const floatingAnimation = {
+  y: [-5, 5, -5],
+  transition: {
+    duration: 6,
+    repeat: Infinity,
+    ease: "easeInOut" as const,
   },
 };
 
@@ -118,16 +116,21 @@ export function InfrastructureSection({ className, onContactClick }: Infrastruct
         
         {/* Decorative elements */}
         <motion.div
-          variants={floatingVariants}
-          initial="initial"
-          animate="animate"
+          initial={{ y: 0 }}
+          animate={floatingAnimation}
           className="absolute top-20 right-[15%] w-32 h-32 bg-gradient-to-br from-emerald-400/10 to-teal-400/5 rounded-full blur-2xl"
         />
         <motion.div
-          variants={floatingVariants}
-          initial="initial"
-          animate="animate"
-          style={{ animationDelay: "2s" }}
+          initial={{ y: 0 }}
+          animate={{
+            y: [-5, 5, -5],
+            transition: {
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut" as const,
+              delay: 2,
+            },
+          }}
           className="absolute bottom-32 left-[10%] w-40 h-40 bg-gradient-to-br from-teal-400/10 to-cyan-400/5 rounded-full blur-2xl"
         />
         
