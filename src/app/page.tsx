@@ -397,15 +397,15 @@ function HomeContent() {
         {/* PARA QUEM É */}
         <SegmentsSection />
 
-        {/* CTA FINAL */}
-        <FinalCTASection />
-
         {/* INFRAESTRUTURA EXPANDIDA - Liquidez */}
         <InfrastructureSection 
           onContactClick={() => {
             setAssunto('Liquidez sob demanda');
           }}
         />
+
+        {/* CTA FINAL */}
+        <FinalCTASection />
 
         {/* CONTACT */}
         <section id="contact" className="scroll-mt-28 py-24 px-6 relative overflow-hidden">
