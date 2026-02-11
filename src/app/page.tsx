@@ -25,6 +25,7 @@ import { HowItWorksSection } from "@/components/home/how-it-works-section";
 import { SegmentsSection } from "@/components/home/segments-section";
 import { SecuritySection } from "@/components/home/security-section";
 import { FinalCTASection } from "@/components/home/final-cta-section";
+import { InfrastructureSection } from "@/components/home/infrastructure-section";
 
 // Removed - now handled by BenefitsSection component
 
@@ -398,6 +399,13 @@ function HomeContent() {
 
         {/* CTA FINAL */}
         <FinalCTASection />
+
+        {/* INFRAESTRUTURA EXPANDIDA - Liquidez */}
+        <InfrastructureSection 
+          onContactClick={() => {
+            setAssunto('Liquidez sob demanda');
+          }}
+        />
 
         {/* CONTACT */}
         <section id="contact" className="scroll-mt-28 py-24 px-6 relative overflow-hidden">

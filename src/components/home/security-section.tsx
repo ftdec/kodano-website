@@ -7,15 +7,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { UserCheck, Clock, ShieldCheck, TrendingUp, Check, Layers } from "lucide-react";
+import { UserCheck, Clock, ShieldCheck, TrendingUp, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-// Analytics helper
-function trackEvent(eventName: string, data?: Record<string, string>) {
-  if (typeof window !== 'undefined' && (window as typeof window & { gtag?: (command: string, eventName: string, data?: Record<string, string>) => void }).gtag) {
-    (window as typeof window & { gtag: (command: string, eventName: string, data?: Record<string, string>) => void }).gtag('event', eventName, data);
-  }
-}
 
 const features = [
   {
@@ -34,10 +27,9 @@ const features = [
     icon: ShieldCheck,
   },
   {
-    title: "Infraestrutura escalável",
-    description: "Camadas adicionais de governança e liquidez sob demanda.",
-    icon: Layers,
-    isLiquidity: true,
+    title: "Mais previsibilidade",
+    description: "Confiança para vender valores elevados.",
+    icon: TrendingUp,
   },
 ];
 
@@ -45,7 +37,7 @@ const benefits = [
   "Segurança para alto valor",
   "Menos contestações",
   "Menos fraudes",
-  "Escalável sob demanda",
+  "Mais confiança",
 ];
 
 interface SecuritySectionProps {
@@ -116,13 +108,6 @@ export function SecuritySection({ className }: SecuritySectionProps) {
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {features.map((feature, index) => {
               const Icon = feature.icon;
-              const isLiquidity = 'isLiquidity' in feature && feature.isLiquidity;
-
-              const CardWrapper = isLiquidity ? 'a' : 'div';
-              const cardProps = isLiquidity ? {
-                href: '#contact',
-                onClick: () => trackEvent('liquidez_interest_click', { source: 'security_section' }),
-              } : {};
 
               return (
                 <motion.div
@@ -131,35 +116,19 @@ export function SecuritySection({ className }: SecuritySectionProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
+                  className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/90 border border-border/40 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300"
                 >
-                  <CardWrapper 
-                    {...cardProps}
-                    className={cn(
-                      "block h-full p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/90 border border-border/40 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300",
-                      isLiquidity && "cursor-pointer group"
-                    )}
-                  >
-                    <div className={cn(
-                      "w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-emerald-500/10 to-emerald-400/5 flex items-center justify-center mb-3 sm:mb-4",
-                      isLiquidity && "group-hover:from-emerald-500/20 group-hover:to-emerald-400/10 transition-all"
-                    )}>
-                      <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-                    </div>
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-emerald-500/10 to-emerald-400/5 flex items-center justify-center mb-3 sm:mb-4">
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                  </div>
 
-                    <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1 sm:mb-2">
-                      {feature.title}
-                    </h3>
-                    
-                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                      {feature.description}
-                    </p>
-
-                    {isLiquidity && (
-                      <p className="text-xs text-primary mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        Saiba mais →
-                      </p>
-                    )}
-                  </CardWrapper>
+                  <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1 sm:mb-2">
+                    {feature.title}
+                  </h3>
+                  
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </p>
                 </motion.div>
               );
             })}
