@@ -4,18 +4,15 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Enterprise site - All main routes allowed
+  // Allow only:
+  // - Root path (/)
+  // - API routes (/api/*)
+  // - Next.js internal routes (_next/*)
+  // - Static files (favicon, robots, sitemap, etc.)
+  // - Files with extensions (images, fonts, etc.)
+  // - Policy pages (required for legal compliance)
   const allowedPaths = [
     "/",
-    "/solucao",
-    "/como-funciona",
-    "/segmentos",
-    "/integracao",
-    "/seguranca-e-compliance",
-    "/sobre",
-    "/contato",
-    "/blog",
-    // Policy pages (legal compliance)
     "/politica-de-privacidade",
     "/politica-kyc-kyb",
     "/politica-pld-ft",
@@ -34,12 +31,21 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Redirect unknown routes to home
+  // Redirect ALL other routes to home page (one-pager)
   return NextResponse.redirect(new URL("/", request.url));
 }
 
 export const config = {
   matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - robots.txt, sitemap.xml (SEO files)
+     * - Files with extensions (images, fonts, etc.)
+     */
     "/((?!api|_next/static|_next/image|favicon|robots|sitemap|.*\\..*).*)",
   ],
 };
