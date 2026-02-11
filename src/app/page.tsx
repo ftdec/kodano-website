@@ -9,7 +9,7 @@
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle2, Shield, Layers } from "lucide-react";
+import { Send, CheckCircle2, Shield } from "lucide-react";
 
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -705,61 +705,6 @@ function HomeContent() {
               </motion.div>
 
             </div>
-          </div>
-        </section>
-
-        {/* LIQUIDITY LAYER - Institutional Section */}
-        <section className="py-20 px-6 relative overflow-hidden border-t border-border/30">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/3 rounded-full blur-[120px]" />
-          </div>
-          
-          <div className="container max-w-4xl mx-auto relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center space-y-6"
-            >
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 mx-auto">
-                <Layers className="w-7 h-7 text-primary" />
-              </div>
-              
-              <h2 className="text-2xl md:text-3xl font-semibold text-foreground">
-                Infraestrutura que evolui com sua operação
-              </h2>
-              
-              <div className="max-w-2xl mx-auto space-y-4">
-                <p className="text-muted-foreground leading-relaxed">
-                  Para operações de alto valor, a Kodano pode ativar camadas adicionais de governança e liquidez sob demanda, integradas à sua infraestrutura de pagamentos e evidências.
-                </p>
-                <p className="text-muted-foreground leading-relaxed text-sm">
-                  Essas estruturas são desenhadas caso a caso, respeitando critérios de elegibilidade, controles internos e trilha auditável compatível com políticas de compliance.
-                </p>
-              </div>
-              
-              <div className="pt-4">
-                <a
-                  href="#contact"
-                  onClick={() => {
-                    setAssunto('Liquidez sob demanda');
-                    trackEvent('liquidez_interest_click', { source: 'home_section' });
-                  }}
-                  className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors group"
-                >
-                  Falar com especialista
-                  <svg 
-                    className="w-4 h-4 group-hover:translate-x-1 transition-transform" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </a>
-              </div>
-            </motion.div>
           </div>
         </section>
 
