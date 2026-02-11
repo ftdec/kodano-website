@@ -4,7 +4,7 @@ export function OrganizationStructuredData() {
     "@type": "Organization",
     name: "Kodano",
     description:
-      "Mais segurança para pagamentos de alto valor. Verificação de identidade antes da aprovação.",
+      "Infraestrutura de confiança para pagamentos de alto valor. Verificação de identidade antes da aprovação. Redução estrutural de contestação e risco.",
     url: "https://kodano.com.br",
     logo: "https://kodano.com.br/kodano-logo.png",
     foundingDate: "2024",

@@ -1,681 +1,765 @@
-/**
- * Homepage - Kodano Website
- * Premium Stripe/CloudWalk level design with advanced animations
- * Refactored to use modular components
- */
-
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle2, Shield } from "lucide-react";
+import React from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Shield,
+  AlertTriangle,
+  Scale,
+  TrendingDown,
+  CheckCircle,
+  ShieldCheck,
+  FileCheck,
+  BarChart3,
+  Car,
+  Plane,
+  Building2,
+  Briefcase,
+  Webhook,
+  Lock,
+  Code2,
+  ArrowUpRight,
+} from "lucide-react";
 
-import { Footer } from "@/components/layout/footer";
-import { Button } from "@/components/ui/button";
-import { Button as ButtonV2 } from "@/components/ui/button-v2";
-import { InputGroup, InputGroupInput, InputGroupTextarea } from "@/components/ui/input-group";
-import { cn } from "@/lib/utils";
-import { Logo } from "@/components/layout/logo";
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" as const }
+  }
+};
 
-// Premium Home Components
-import { HeroSection } from "@/components/home/hero-section";
-import { BenefitsSection } from "@/components/home/benefits-section";
-import { HowItWorksSection } from "@/components/home/how-it-works-section";
-import { SegmentsSection } from "@/components/home/segments-section";
-import { SecuritySection } from "@/components/home/security-section";
-import { FinalCTASection } from "@/components/home/final-cta-section";
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
 
-// Removed - now handled by BenefitsSection component
-
-// Mobile Nav Component for One-Page
-function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
-  return (
-    <div className="relative w-6 h-6 flex items-center justify-center">
-      <motion.div
-        className="absolute w-6 h-5 flex flex-col justify-between"
-        initial={false}
-        animate={isOpen ? "open" : "closed"}
-      >
-        <motion.span
-          className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
-          variants={{
-            closed: { rotate: 0, y: 0 },
-            open: { rotate: 45, y: 8 },
-          }}
-          transition={{ duration: 0.15, ease: "easeOut" }}
-        />
-        <motion.span
-          className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
-          variants={{
-            closed: { opacity: 1, scale: 1 },
-            open: { opacity: 0, scale: 0 },
-          }}
-          transition={{ duration: 0.15, ease: "easeOut" }}
-        />
-        <motion.span
-          className="block w-full h-0.5 bg-[#111111] rounded-full origin-center"
-          variants={{
-            closed: { rotate: 0, y: 0 },
-            open: { rotate: -45, y: -8 },
-          }}
-          transition={{ duration: 0.15, ease: "easeOut" }}
-        />
-      </motion.div>
-    </div>
-  );
-}
-
-function MobileNavOnePage() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const lastScrollY = useRef(0);
-  const scrollThreshold = 20;
-
-  const menuItems: Array<{ label: string; href: string; key: string }> = [
-    { label: "A Solução", href: "#security", key: "solucao" },
-    { label: "Como Funciona", href: "#process", key: "como-funciona" },
+// Header Component
+function Header() {
+  const navItems = [
+    { label: "Solução", href: "/solucao" },
+    { label: "Como Funciona", href: "/como-funciona" },
+    { label: "Segmentos", href: "/segmentos" },
+    { label: "Integração", href: "/integracao" },
+    { label: "Segurança", href: "/seguranca-e-compliance" },
+    { label: "Sobre", href: "/sobre" },
   ];
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setIsScrolled(currentScrollY > 4);
-      if (isOpen && currentScrollY > lastScrollY.current + scrollThreshold) {
-        setIsOpen(false);
-      }
-      lastScrollY.current = currentScrollY;
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      const navElement = document.querySelector('[data-mobile-nav]');
-      if (navElement && !navElement.contains(target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
-
   return (
-    <header
-      className="lg:hidden relative z-50 w-full bg-white"
-      data-mobile-nav
-    >
-      <div
-        className={`w-full px-4 sm:px-6 h-16 flex items-center justify-between transition-shadow duration-200 ${
-          isScrolled ? "shadow-sm" : ""
-        }`}
-      >
-        <Logo />
-        <motion.button
-          onClick={() => setIsOpen(!isOpen)}
-          className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
-          aria-label="Toggle menu"
-          aria-expanded={isOpen}
-          whileTap={{ scale: 0.95 }}
-        >
-          <HamburgerIcon isOpen={isOpen} />
-        </motion.button>
-      </div>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute left-0 right-0 top-full bg-white shadow-lg rounded-b-xl"
-            style={{
-              maxHeight: "50vh",
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.10)",
-            }}
-          >
-            <div className="overflow-y-auto" style={{ maxHeight: "50vh" }}>
-              <nav className="p-4 pb-4 space-y-1">
-                {menuItems.map((item, index) => (
-                  <motion.a
-                    key={item.key}
-                    href={item.href}
-                    onClick={() => setIsOpen(false)}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                  >
-                    {item.label}
-                  </motion.a>
-                ))}
-                <div className="pt-4 mt-4 border-t border-gray-100 pb-2 space-y-2">
-                  <motion.div whileTap={{ scale: 0.98 }}>
-                    <a
-                      href="#contact"
-                      onClick={() => setIsOpen(false)}
-                      className="block w-full px-4 py-3 text-base font-semibold text-white text-center rounded-lg bg-[#0D1B2A] hover:bg-[#415A77] active:bg-[#0D1B2A]/90 transition-all duration-200"
-                    >
-                      Fale Conosco
-                    </a>
-                  </motion.div>
-                </div>
-              </nav>
+    <header className="fixed top-0 left-0 right-0 z-50 glass glass-border">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-lg">K</span>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <span className="text-xl font-semibold text-foreground">Kodano</span>
+          </Link>
+
+          <nav className="hidden lg:flex items-center gap-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-white/5"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/contato"
+              className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover transition-all hover-glow"
+            >
+              Agendar Demonstração
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </div>
     </header>
   );
 }
 
-export default function Home() {
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [message, setMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+// Hero Section
+function HeroSection() {
+  return (
+    <section className="relative min-h-screen flex items-center pt-16 overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 gradient-hero" />
+      <div className="absolute inset-0 grid-pattern opacity-50" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] gradient-radial" />
+      
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-32">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="max-w-4xl"
+        >
+          <motion.div variants={fadeInUp} className="mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm text-primary">
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse-subtle" />
+              Infraestrutura Enterprise
+            </span>
+          </motion.div>
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+          <motion.h1 
+            variants={fadeInUp}
+            className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.1] mb-6"
+          >
+            Infraestrutura de confiança para{" "}
+            <span className="gradient-text">pagamentos de alto valor</span>
+          </motion.h1>
 
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "Contato do Site",
-          email,
-          phone,
-          message,
-          subject: "Nova mensagem do formulário principal",
-        }),
-      });
+          <motion.p 
+            variants={fadeInUp}
+            className="text-xl md:text-2xl text-muted-foreground max-w-2xl mb-10 leading-relaxed"
+          >
+            Verificação de identidade antes da aprovação. Redução estrutural de contestação e risco.
+          </motion.p>
 
-      const data = await response.json();
+          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4">
+            <Link
+              href="/contato"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-medium bg-primary text-primary-foreground rounded-xl hover:bg-primary-hover transition-all hover-glow group"
+            >
+              Agendar Demonstração
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <Link
+              href="/contato"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-medium border border-white/10 text-foreground rounded-xl hover:bg-white/5 transition-all"
+            >
+              Falar com Especialista
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
 
-      if (!response.ok) {
-        const errorMsg = data.details
-          ? `${data.error}\n\nDetalhes: ${data.details}`
-          : data.error || "Erro ao enviar mensagem";
-        throw new Error(errorMsg);
-      }
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <div className="w-6 h-10 rounded-full border-2 border-white/20 flex justify-center pt-2">
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="w-1 h-2 rounded-full bg-white/40"
+          />
+        </div>
+      </motion.div>
+    </section>
+  );
+}
 
-      setIsSuccess(true);
-      setEmail("");
-      setPhone("");
-      setMessage("");
-      // Reset success state after 5 seconds
-      setTimeout(() => setIsSuccess(false), 5000);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao enviar mensagem. Tente novamente.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Navigation items for one-page with anchors
-  const onePageNavItems: Array<{ label: string; href: string; key: string }> = [
-    { label: "A Solução", href: "#security", key: "solucao" },
-    { label: "Como Funciona", href: "#process", key: "como-funciona" },
+// Problem Section
+function ProblemSection() {
+  const problems = [
+    {
+      icon: AlertTriangle,
+      title: "Fraude em transações de alto valor",
+      description: "Um único pagamento fraudulento pode representar perdas significativas para a operação.",
+    },
+    {
+      icon: Scale,
+      title: "Chargebacks estratégicos",
+      description: "Contestações indevidas em tickets altos geram disputas custosas e demoradas.",
+    },
+    {
+      icon: TrendingDown,
+      title: "Risco operacional concentrado",
+      description: "Verticais premium operam com poucos clientes e valores elevados por transação.",
+    },
+    {
+      icon: Shield,
+      title: "Antifraude tradicional insuficiente",
+      description: "Soluções convencionais não foram desenhadas para o contexto de alto valor.",
+    },
   ];
 
-  const [isScrolled, setIsScrolled] = useState(false);
+  return (
+    <section className="py-24 lg:py-32 relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/50 to-transparent" />
+      
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="text-center mb-16"
+        >
+          <motion.span variants={fadeInUp} className="text-sm font-medium text-primary uppercase tracking-wider">
+            O Desafio
+          </motion.span>
+          <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl lg:text-5xl font-semibold mt-4 mb-6">
+            Por que transações de alto valor<br />exigem abordagem diferente
+          </motion.h2>
+          <motion.p variants={fadeInUp} className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Quando cada transação representa valor significativo, os riscos tradicionais se amplificam.
+          </motion.p>
+        </motion.div>
 
-  // Detect mobile and reduced motion preference
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(mediaQuery.matches);
-    const handleChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener("change", handleChange);
-    
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-      mediaQuery.removeEventListener("change", handleChange);
-    };
-  }, []);
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="grid md:grid-cols-2 gap-6"
+        >
+          {problems.map((problem, index) => (
+            <motion.div
+              key={index}
+              variants={fadeInUp}
+              className="p-8 rounded-2xl bg-card border border-white/5 hover:border-primary/20 transition-all hover-lift group"
+            >
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                <problem.icon className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">{problem.title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{problem.description}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
 
-  // Throttled scroll handler for better performance
-  useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 10);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Smooth scroll for anchor links
-  useEffect(() => {
-    const handleAnchorClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const anchor = target.closest('a[href^="#"]');
-      if (anchor) {
-        const href = anchor.getAttribute('href');
-        if (href && href.startsWith('#')) {
-          e.preventDefault();
-          // If href is just "#", scroll to top
-          if (href === '#') {
-            window.scrollTo({
-              top: 0,
-              behavior: 'smooth'
-            });
-            return;
-          }
-          const targetId = href.substring(1);
-          const targetElement = document.getElementById(targetId);
-          if (targetElement) {
-            const headerHeight = 64; // Header height
-            const targetPosition = targetElement.offsetTop - headerHeight;
-            window.scrollTo({
-              top: targetPosition,
-              behavior: 'smooth'
-            });
-          }
-        }
-      }
-    };
-    document.addEventListener('click', handleAnchorClick);
-    return () => document.removeEventListener('click', handleAnchorClick);
-  }, []);
+// Solution Section
+function SolutionSection() {
+  const steps = [
+    {
+      number: "01",
+      title: "Pagamento iniciado",
+      description: "Cliente inicia a transação normalmente no seu checkout ou sistema.",
+    },
+    {
+      number: "02",
+      title: "Análise de risco acionada",
+      description: "Motor de risco Kodano avalia a transação em tempo real.",
+    },
+    {
+      number: "03",
+      title: "Verificação proporcional",
+      description: "Identidade confirmada com nível de segurança adequado ao valor.",
+    },
+    {
+      number: "04",
+      title: "Evidência + Aprovação",
+      description: "Transação aprovada com evidências armazenadas para defesa.",
+    },
+  ];
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-background text-foreground overflow-x-hidden font-sans selection:bg-primary/20">
-      {/* HEADER COM MENU E LOGO ANIMADO */}
-      <>
-        {/* Mobile Navigation */}
-        <div className="lg:hidden">
-          <MobileNavOnePage />
-        </div>
-
-        {/* Desktop Header */}
-        <header
-          className={cn(
-            "hidden lg:block sticky top-0 z-50 w-full border-b transition-all duration-200 relative",
-            isScrolled
-              ? "border-border/50 bg-white shadow-sm"
-              : "border-transparent bg-white/95"
-          )}
+    <section className="py-24 lg:py-32 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] gradient-radial opacity-50" />
+      
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="text-center mb-16"
         >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 items-center justify-between">
-              {/* Logo Animado */}
-              <div className="flex items-center shrink-0">
-                <Logo />
-          </div>
+          <motion.span variants={fadeInUp} className="text-sm font-medium text-primary uppercase tracking-wider">
+            A Solução
+          </motion.span>
+          <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl lg:text-5xl font-semibold mt-4 mb-6">
+            Verificação inteligente<br />integrada ao pagamento
+          </motion.h2>
+          <motion.p variants={fadeInUp} className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Fluxo contínuo que adiciona segurança sem fricção desnecessária.
+          </motion.p>
+        </motion.div>
 
-              {/* Desktop Navigation */}
-              <nav className="hidden lg:flex items-center gap-1">
-                {onePageNavItems.map((item) => (
-            <a
-                    key={item.key}
-                    href={item.href}
-                    className="relative px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors rounded-md hover:bg-accent/5 group"
+          <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          {steps.map((step, index) => (
+            <motion.div
+              key={index}
+              variants={fadeInUp}
+              className="relative p-6 rounded-2xl bg-card border border-white/5 hover:border-primary/20 transition-all group"
             >
-                    <span className="relative">
-                      {item.label}
-                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full" />
-                    </span>
-            </a>
-                ))}
-          </nav>
+              <span className="text-5xl font-bold text-primary/20 group-hover:text-primary/30 transition-colors">
+                {step.number}
+              </span>
+              <h3 className="text-lg font-semibold mt-4 mb-2">{step.title}</h3>
+              <p className="text-sm text-muted-foreground">{step.description}</p>
+              
+              {index < steps.length - 1 && (
+                <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-white/10 to-transparent" />
+              )}
+            </motion.div>
+          ))}
+                  </motion.div>
+                </div>
+    </section>
+  );
+}
 
-              {/* CTA Button */}
-              <div className="flex items-center gap-3 shrink-0">
-                <Button
-                  asChild
-                  size="sm"
-                  variant="kodano"
-                  rounded="full"
-                  className="hidden lg:flex"
-                >
-                  <a href="#contact">Fale Conosco</a>
-                </Button>
+// Benefits Section
+function BenefitsSection() {
+  const benefits = [
+    {
+      icon: TrendingDown,
+      title: "Redução estrutural de disputas",
+      description: "Evidências robustas que sustentam contestações.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Segurança operacional elevada",
+      description: "Confiança para aprovar transações de alto valor.",
+    },
+    {
+      icon: FileCheck,
+      title: "Defensibilidade jurídica reforçada",
+      description: "Documentação completa para processos.",
+    },
+    {
+      icon: BarChart3,
+      title: "Maior confiança na aprovação",
+      description: "Decisões baseadas em identidade confirmada.",
+    },
+  ];
+
+  return (
+    <section className="py-24 lg:py-32 relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
+      
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="text-center mb-16"
+        >
+          <motion.span variants={fadeInUp} className="text-sm font-medium text-primary uppercase tracking-wider">
+            Benefícios
+          </motion.span>
+          <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl lg:text-5xl font-semibold mt-4 mb-6">
+            Resultados mensuráveis
+          </motion.h2>
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          {benefits.map((benefit, index) => (
+            <motion.div
+              key={index}
+              variants={fadeInUp}
+              className="text-center p-8 rounded-2xl bg-card/50 border border-white/5 hover:border-primary/20 transition-all hover-lift"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                <benefit.icon className="w-7 h-7 text-primary" />
               </div>
+              <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
+              <p className="text-sm text-muted-foreground">{benefit.description}</p>
+            </motion.div>
+          ))}
+        </motion.div>
             </div>
+    </section>
+  );
+}
+
+// Verticals Section
+function VerticalsSection() {
+  const verticals = [
+    {
+      icon: Car,
+      title: "Automotivo",
+      description: "Concessionárias, locadoras e serviços automotivos premium.",
+      href: "/segmentos#automotivo",
+    },
+    {
+      icon: Plane,
+      title: "Turismo Premium",
+      description: "Agências de viagens sob medida e operadoras de alto padrão.",
+      href: "/segmentos#turismo",
+    },
+    {
+      icon: Building2,
+      title: "Imobiliário",
+      description: "Locações de alto valor e transações imobiliárias.",
+      href: "/segmentos#imobiliario",
+    },
+    {
+      icon: Briefcase,
+      title: "Serviços de Alto Valor",
+      description: "Consultorias, clínicas e serviços especializados.",
+      href: "/segmentos#servicos",
+    },
+  ];
+
+  return (
+    <section className="py-24 lg:py-32 relative">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="text-center mb-16"
+        >
+          <motion.span variants={fadeInUp} className="text-sm font-medium text-primary uppercase tracking-wider">
+            Segmentos
+          </motion.span>
+          <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl lg:text-5xl font-semibold mt-4 mb-6">
+            Para quem vendemos
+          </motion.h2>
+          <motion.p variants={fadeInUp} className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Verticais que operam com tickets elevados e exigem segurança proporcional.
+          </motion.p>
+        </motion.div>
+
+              <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="grid md:grid-cols-2 gap-6"
+        >
+          {verticals.map((vertical, index) => (
+            <motion.div key={index} variants={fadeInUp}>
+              <Link
+                href={vertical.href}
+                className="flex items-start gap-6 p-8 rounded-2xl bg-card border border-white/5 hover:border-primary/20 transition-all hover-lift group"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                  <vertical.icon className="w-7 h-7 text-primary" />
+                  </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                    {vertical.title}
+                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </h3>
+                  <p className="text-muted-foreground">{vertical.description}</p>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// Integration Section
+function IntegrationSection() {
+  const features = [
+    { icon: Code2, title: "REST API", description: "Interface simples e documentada" },
+    { icon: Webhook, title: "Webhooks", description: "Eventos em tempo real" },
+    { icon: Lock, title: "Segurança", description: "Criptografia end-to-end" },
+  ];
+
+  return (
+    <section className="py-24 lg:py-32 relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/50 to-transparent" />
+      
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="grid lg:grid-cols-2 gap-16 items-center"
+        >
+          <motion.div variants={fadeInUp}>
+            <span className="text-sm font-medium text-primary uppercase tracking-wider">
+              Integração
+            </span>
+            <h2 className="text-3xl md:text-4xl font-semibold mt-4 mb-6">
+              API moderna e flexível
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8">
+              Arquitetura baseada em eventos, compatível com gateways existentes. 
+              Implementação típica em 2-4 semanas.
+            </p>
+            
+            <div className="space-y-4 mb-8">
+              {features.map((feature, index) => (
+                <div key={index} className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <feature.icon className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                    <h4 className="font-medium">{feature.title}</h4>
+                    <p className="text-sm text-muted-foreground">{feature.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <Link
+              href="/integracao"
+              className="inline-flex items-center gap-2 text-primary hover:underline"
+            >
+              Ver documentação técnica
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+              </motion.div>
+
+          <motion.div variants={fadeInUp} className="relative">
+            <div className="p-8 rounded-2xl bg-card border border-white/5">
+              <pre className="text-sm text-muted-foreground overflow-x-auto">
+                <code>{`// Exemplo de integração
+const kodano = new Kodano({
+  apiKey: process.env.KODANO_API_KEY
+});
+
+const verification = await kodano.verify({
+  transaction_id: "txn_123",
+  amount: 50000,
+  customer: {
+    document: "123.456.789-00",
+    email: "cliente@empresa.com"
+  }
+});
+
+// Verificação proporcional ao valor
+console.log(verification.status);`}</code>
+              </pre>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// Trust Section
+function TrustSection() {
+  const certifications = [
+    "LGPD Compliance",
+    "KYC/KYB",
+    "PLD/FT",
+    "Criptografia AES-256",
+    "Logs de Auditoria",
+  ];
+
+  return (
+    <section className="py-24 lg:py-32 relative">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+              <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="text-center"
+        >
+          <motion.span variants={fadeInUp} className="text-sm font-medium text-primary uppercase tracking-wider">
+            Segurança & Compliance
+          </motion.span>
+          <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl lg:text-5xl font-semibold mt-4 mb-6">
+            Confiança certificada
+          </motion.h2>
+          <motion.p variants={fadeInUp} className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12">
+            Infraestrutura construída com os mais altos padrões de segurança e conformidade regulatória.
+          </motion.p>
+
+          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mb-8">
+            {certifications.map((cert, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-white/10 text-sm"
+              >
+                <CheckCircle className="w-4 h-4 text-primary" />
+                {cert}
+              </span>
+            ))}
+          </motion.div>
+
+          <motion.div variants={fadeInUp}>
+            <Link
+              href="/seguranca-e-compliance"
+              className="inline-flex items-center gap-2 text-primary hover:underline"
+            >
+              Acessar Trust Center
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
+        </motion.div>
+                    </div>
+    </section>
+  );
+}
+
+// CTA Section
+function CTASection() {
+  return (
+    <section className="py-24 lg:py-32 relative">
+      <div className="absolute inset-0 gradient-radial" />
+      
+      <div className="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-6">
+            Pronto para elevar a segurança<br />dos seus pagamentos?
+          </motion.h2>
+          <motion.p variants={fadeInUp} className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Converse com nosso time e entenda como a Kodano pode se integrar à sua operação.
+          </motion.p>
+          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/contato"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-medium bg-primary text-primary-foreground rounded-xl hover:bg-primary-hover transition-all hover-glow group"
+            >
+              Agendar Demonstração
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <Link
+              href="/contato"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-medium border border-white/10 text-foreground rounded-xl hover:bg-white/5 transition-all"
+            >
+              Falar com Especialista
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// Footer Component
+function Footer() {
+  const links = {
+    produto: [
+      { label: "Solução", href: "/solucao" },
+      { label: "Como Funciona", href: "/como-funciona" },
+      { label: "Segmentos", href: "/segmentos" },
+      { label: "Integração", href: "/integracao" },
+    ],
+    empresa: [
+      { label: "Sobre", href: "/sobre" },
+      { label: "Segurança", href: "/seguranca-e-compliance" },
+      { label: "Contato", href: "/contato" },
+      { label: "Blog", href: "/blog" },
+    ],
+    legal: [
+      { label: "Privacidade", href: "/politica-de-privacidade" },
+      { label: "KYC/KYB", href: "/politica-kyc-kyb" },
+      { label: "PLD/FT", href: "/politica-pld-ft" },
+      { label: "Segurança da Informação", href: "/politica-seguranca-informacao" },
+    ],
+  };
+
+  return (
+    <footer className="py-16 border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+          <div className="lg:col-span-2">
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-lg">K</span>
+                  </div>
+              <span className="text-xl font-semibold">Kodano</span>
+            </Link>
+            <p className="text-muted-foreground max-w-sm">
+              Infraestrutura de confiança para pagamentos de alto valor.
+            </p>
+                    </div>
+
+          <div>
+            <h4 className="font-semibold mb-4">Produto</h4>
+            <ul className="space-y-3">
+              {links.produto.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+                      </div>
+
+          <div>
+            <h4 className="font-semibold mb-4">Empresa</h4>
+            <ul className="space-y-3">
+              {links.empresa.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+                      </div>
+
+          <div>
+            <h4 className="font-semibold mb-4">Legal</h4>
+            <ul className="space-y-3">
+              {links.legal.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+                      </div>
+                    </div>
+
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} Kodano. Todos os direitos reservados.
+          </p>
+          <div className="flex items-center gap-6">
+            <a href="https://linkedin.com/company/kodano" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              LinkedIn
+            </a>
+          </div>
         </div>
-      </header>
-      </>
+      </div>
+    </footer>
+  );
+}
 
-      <main className="flex-1 flex flex-col w-full">
-        {/* HERO SECTION */}
+// Main Page
+export default function HomePage() {
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <Header />
+      <main>
         <HeroSection />
-
-        {/* O PROBLEMA - Riscos de pagamentos de alto valor */}
+        <ProblemSection />
+        <SolutionSection />
         <BenefitsSection />
-
-        {/* A SOLUÇÃO - Como a Kodano adiciona segurança */}
-        <SecuritySection />
-
-        {/* COMO FUNCIONA */}
-        <HowItWorksSection />
-
-        {/* PARA QUEM É */}
-        <SegmentsSection />
-
-        {/* CTA FINAL */}
-        <FinalCTASection />
-
-        {/* CONTACT */}
-        <section id="contact" className="scroll-mt-28 py-24 px-6 relative overflow-hidden">
-          {/* Background Gradients */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-secondary/20 to-background" />
-            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px]" />
-            <div className="absolute top-20 left-[-100px] w-[300px] h-[300px] bg-blue-500/5 rounded-full blur-[80px]" />
-          </div>
-
-          <div className="container max-w-6xl mx-auto relative z-10">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
-
-              {/* Left Column: Content */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="space-y-8 pt-4"
-              >
-                <div className="space-y-6">
-                  <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-primary/5 border border-primary/10">
-                    <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-                    <span className="text-xs font-semibold uppercase tracking-[0.35em] text-primary">Fale Conosco</span>
-                  </div>
-
-                  <h2 className="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight">
-                    Fale com a <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-400">Kodano</span>
-                  </h2>
-
-                  <p className="text-lg text-muted-foreground leading-relaxed max-w-md">
-                    Converse com nossa equipe e avalie se a solução faz sentido para sua operação.
-                  </p>
-                </div>
-
-                <div className="space-y-6 pt-4">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mt-1">
-                      <CheckCircle2 className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-lg">Sem compromisso</h4>
-                      <p className="text-muted-foreground text-sm">Conversa inicial para entender se faz sentido para você.</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mt-1">
-                      <Shield className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-lg">Resposta rápida</h4>
-                      <p className="text-muted-foreground text-sm">Nossa equipe retorna seu contato em até 24h.</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Right Column: Form */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className="bg-white border border-border/50 rounded-2xl p-8 md:p-10 shadow-lg"
-              >
-                {isSuccess ? (
-                  <div className="flex flex-col items-center justify-center py-16 text-center h-full min-h-[400px]">
-                    <div className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mb-6 animate-in zoom-in duration-300">
-                      <CheckCircle2 className="w-10 h-10 text-green-500" />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-3">Mensagem enviada!</h3>
-                    <p className="text-muted-foreground max-w-xs mx-auto">
-                      Recebemos seu contato e retornaremos em breve para o email informado.
-                    </p>
-                    <Button
-                      variant="outline"
-                      className="mt-8"
-                      onClick={() => setIsSuccess(false)}
-                    >
-                      Enviar nova mensagem
-                    </Button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="space-y-2 mb-6">
-                      <h3 className="text-2xl font-semibold">Envie uma mensagem</h3>
-                      <p className="text-sm text-muted-foreground">Preencha os dados abaixo para iniciar a conversa.</p>
-                    </div>
-
-                    {error && (
-                      <div className="p-4 rounded-md bg-red-500/10 border border-red-500/20 text-red-500 text-sm">
-                        {error}
-                      </div>
-                    )}
-
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-medium ml-1">Email Corporativo</label>
-                        <InputGroup>
-                          <InputGroupInput
-                            id="email"
-                            type="email"
-                            placeholder="nome@empresa.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            className="h-12"
-                          />
-                        </InputGroup>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label htmlFor="phone" className="text-sm font-medium ml-1">Telefone</label>
-                        <InputGroup>
-                          <InputGroupInput
-                            id="phone"
-                            type="tel"
-                            placeholder="(11) 99999-9999"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            required
-                            className="h-12"
-                          />
-                        </InputGroup>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label htmlFor="message" className="text-sm font-medium ml-1">Como podemos ajudar?</label>
-                        <InputGroup>
-                          <InputGroupTextarea
-                            id="message"
-                            placeholder="Descreva seu volume atual e principais desafios..."
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            required
-                            rows={5}
-                            className="min-h-[120px] resize-none"
-                          />
-                        </InputGroup>
-                      </div>
-                    </div>
-
-                    <motion.div
-                      className="relative"
-                      initial={false}
-                      animate={isSubmitting ? {
-                        scale: 1,
-                      } : {}}
-                      whileHover={!isSubmitting ? { 
-                        scale: 1.02,
-                        transition: { duration: 0.2, ease: [0.32, 0, 0.67, 0] }
-                      } : {}}
-                      whileTap={!isSubmitting ? { 
-                        scale: 0.98,
-                        transition: { duration: 0.15 }
-                      } : {}}
-                    >
-                      {/* Animated pulse ring when submitting */}
-                      {isSubmitting && (
-                        <>
-                          <motion.div
-                            className="absolute inset-0 rounded-lg"
-                            animate={{
-                              boxShadow: [
-                                "0 0 0 0 rgba(59, 130, 246, 0.7)",
-                                "0 0 0 8px rgba(59, 130, 246, 0.3)",
-                                "0 0 0 16px rgba(59, 130, 246, 0)",
-                                "0 0 0 0 rgba(59, 130, 246, 0)"
-                              ],
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: "easeOut"
-                            }}
-                            style={{ pointerEvents: "none", zIndex: -1 }}
-                          />
-                          <motion.div
-                            className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                            animate={{
-                              x: ["-100%", "100%"],
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: "linear",
-                              repeatDelay: 0.5
-                            }}
-                            style={{ 
-                              pointerEvents: "none",
-                              zIndex: 1,
-                              mixBlendMode: "overlay"
-                            }}
-                          />
-                        </>
-                      )}
-                      <ButtonV2
-                      type="submit"
-                      variant="primary"
-                      size="lg"
-                        className={cn(
-                          "w-full h-12 text-base mt-2 relative overflow-hidden transition-all duration-300",
-                          isSubmitting 
-                            ? "shadow-2xl shadow-primary/50 cursor-wait" 
-                            : "shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30"
-                        )}
-                      loading={isSubmitting}
-                        shimmer={isSubmitting}
-                        rightIcon={
-                          <motion.div
-                            className="relative"
-                            animate={isSubmitting ? {
-                              rotate: [0, 10, -10, 0],
-                            } : {}}
-                            transition={isSubmitting ? {
-                              duration: 1.2,
-                              repeat: Infinity,
-                              ease: "easeInOut"
-                            } : {
-                              type: "spring",
-                              stiffness: 400,
-                              damping: 25
-                            }}
-                            whileHover={!isSubmitting ? {
-                              x: 4,
-                              transition: { duration: 0.2 }
-                            } : {}}
-                          >
-                            <Send className="w-4 h-4" />
-                            {isSubmitting && (
-                              <motion.div
-                                className="absolute inset-0"
-                                animate={{
-                                  scale: [1, 1.3, 1],
-                                  opacity: [0.5, 0, 0.5]
-                                }}
-                                transition={{
-                                  duration: 1.2,
-                                  repeat: Infinity,
-                                  ease: "easeInOut"
-                                }}
-                              >
-                                <Send className="w-4 h-4" />
-                              </motion.div>
-                            )}
-                          </motion.div>
-                        }
-                        disabled={isSubmitting}
-                      >
-                        <motion.span
-                          className="relative z-10"
-                          animate={isSubmitting ? {
-                            opacity: [1, 0.9, 1],
-                          } : {}}
-                          transition={isSubmitting ? {
-                            duration: 1.5,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                          } : {}}
-                        >
-                          {isSubmitting ? (
-                            <motion.span
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{ duration: 0.3 }}
-                            >
-                              Enviando...
-                            </motion.span>
-                          ) : (
-                            <motion.span
-                              initial={{ opacity: 1 }}
-                              animate={{ opacity: 1 }}
-                    >
-                      Solicitar Contato
-                            </motion.span>
-                          )}
-                        </motion.span>
-                      </ButtonV2>
-                    </motion.div>
-
-                    <p className="text-xs text-center text-muted-foreground mt-4">
-                      Ao enviar, você concorda com nossa Política de Privacidade.
-                    </p>
-                  </form>
-                )}
-              </motion.div>
-
-            </div>
-          </div>
-        </section>
-
+        <VerticalsSection />
+        <IntegrationSection />
+        <TrustSection />
+        <CTASection />
       </main>
-
-      {/* FOOTER */}
       <Footer />
-
     </div>
   );
 }
